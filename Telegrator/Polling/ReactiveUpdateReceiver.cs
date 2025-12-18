@@ -63,11 +63,12 @@ namespace Telegrator.Polling
                         try
                         {
                             request.Offset = update.Id + 1;
-                            await updateHandler.HandleUpdateAsync(Client, update, cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
+                            _ = updateHandler.HandleUpdateAsync(Client, update, cancellationToken);
                         }
                         catch (Exception exception2)
                         {
-                            await updateHandler.HandleErrorAsync(Client, exception2, HandleErrorSource.HandleUpdateError, cancellationToken).ConfigureAwait(false);
+                            await updateHandler.HandleErrorAsync(Client, exception2,
+                                HandleErrorSource.HandleUpdateError, cancellationToken).ConfigureAwait(false);
                         }
                     }
                 }
