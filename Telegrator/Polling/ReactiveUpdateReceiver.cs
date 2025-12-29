@@ -6,12 +6,12 @@ using Telegram.Bot.Types;
 namespace Telegrator.Polling
 {
     /// <summary>
-    /// Reactive update receiver for polling updates from Telegram.
-    /// Provides custom update receiving logic with error handling and configuration options.
+    /// Reactive implementation of <see cref="IUpdateReceiver"/> for polling updates from Telegram.
+    /// /// Provides custom update receiving logic with error handling and configuration options.
     /// </summary>
     /// <param name="client">The Telegram bot client for making API requests.</param>
     /// <param name="options">Optional receiver options for configuring update polling behavior.</param>
-    public class ReactiveUpdateReceiver(ITelegramBotClient client, ReceiverOptions? options)
+    public class ReactiveUpdateReceiver(ITelegramBotClient client, ReceiverOptions? options) : IUpdateReceiver
     {
         /// <summary>
         /// Gets the receiver options for configuring update polling behavior.
