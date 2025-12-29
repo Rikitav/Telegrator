@@ -61,57 +61,72 @@ namespace Telegrator.Polling
         /// <inheritdoc/>
         public async Task Enqueue(IEnumerable<DescribedHandlerInfo> handlers)
         {
-            Result? lastResult = null;
-            foreach (DescribedHandlerInfo handlerInfo in handlers)
+            if (ExecutingHandlersSemaphore != null)
             {
-                if (lastResult?.NextType != null)
-                {
-                    if (lastResult.NextType != handlerInfo.From.HandlerType)
-                        continue;
-                }
+                await ExecutingHandlersSemaphore.WaitAsync().ConfigureAwait(false);
+            }
 
-                if (ExecutingHandlersSemaphore != null)
-                {
-                    await ExecutingHandlersSemaphore.WaitAsync().ConfigureAwait(false);
-                }
-
+            // Offload the entire processing of this update's handlers to a background task.
+            // This allows the Receiver to continue polling for NEW updates immediately,
+            // while this update acts as a self-contained unit of work.
+            _ = Task.Run(async () =>
+            {
                 try
                 {
-                    Alligator.LogDebug("Described handler '{0}' (Update {1})", handlerInfo.DisplayString, handlerInfo.HandlingUpdate.Id);
-                    HandlerExecuting?.Invoke(handlerInfo);
-
-                    using (UpdateHandlerBase instance = handlerInfo.HandlerInstance)
+                    Result? lastResult = null;
+                    foreach (DescribedHandlerInfo handlerInfo in handlers)
                     {
-                        Task<Result> task = instance.Execute(handlerInfo);
-                        HandlerEnqueued?.Invoke(handlerInfo);
+                        if (lastResult?.NextType != null)
+                        {
+                            if (lastResult.NextType != handlerInfo.From.HandlerType)
+                                continue;
+                        }
 
-                        await task.ConfigureAwait(false);
-                        lastResult = task.Result;
-                        ExecutingHandlersSemaphore?.Release(1);
+                        try
+                        {
+                            Alligator.LogDebug("Described handler '{0}' (Update {1})", handlerInfo.DisplayString,
+                                handlerInfo.HandlingUpdate.Id);
+                            HandlerExecuting?.Invoke(handlerInfo);
+
+                            using (UpdateHandlerBase instance = handlerInfo.HandlerInstance)
+                            {
+                                Task<Result> task = instance.Execute(handlerInfo);
+                                HandlerEnqueued?.Invoke(handlerInfo);
+
+                                await task.ConfigureAwait(false);
+                                lastResult = task.Result;
+                            }
+
+                            if (lastResult.RouteNext)
+                            {
+                                Alligator.LogTrace("Handler '{0}' requested route continuation (Update {1})",
+                                    handlerInfo.DisplayString, handlerInfo.HandlingUpdate.Id);
+                            }
+                        }
+                        catch (NotImplementedException)
+                        {
+                            _ = 0xBAD + 0xC0DE;
+                        }
+                        catch (OperationCanceledException)
+                        {
+                            _ = 0xBAD + 0xC0DE;
+                            break;
+                        }
+                        catch (Exception ex)
+                        {
+                            Alligator.LogError("Failed to process handler '{0}' (Update {1})", exception: ex,
+                                handlerInfo.DisplayString, handlerInfo.HandlingUpdate.Id);
+                        }
+
+                        if (lastResult != null && !lastResult.RouteNext)
+                            break;
                     }
-
-                    if (lastResult.RouteNext)
-                    {
-                        Alligator.LogTrace("Handler '{0}' requested route continuation (Update {1})", handlerInfo.DisplayString, handlerInfo.HandlingUpdate.Id);
-                    }
                 }
-                catch (NotImplementedException)
+                finally
                 {
-                    _ = 0xBAD + 0xC0DE;
+                    ExecutingHandlersSemaphore?.Release(1);
                 }
-                catch (OperationCanceledException)
-                {
-                    _ = 0xBAD + 0xC0DE;
-                    break;
-                }
-                catch (Exception ex)
-                {
-                    Alligator.LogError("Failed to process handler '{0}' (Update {1})", exception: ex, handlerInfo.DisplayString, handlerInfo.HandlingUpdate.Id);
-                }
-
-                if (lastResult != null && !lastResult.RouteNext)
-                    break;
-            }
+            }, GlobalCancellationToken);
         }
 
         /// <summary>
