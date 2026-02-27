@@ -31,7 +31,7 @@ namespace Telegrator.Handlers.Building
         /// <param name="container">The handler container with execution context.</param>
         /// <param name="cancellation">The cancellation token.</param>
         /// <returns>A task representing the asynchronous execution.</returns>
-        public override Task<Result> Execute(IAbstractHandlerContainer<TUpdate> container, CancellationToken cancellation)
+        public override Task<Result> Execute(IHandlerContainer<TUpdate> container, CancellationToken cancellation)
             => HandlerAction.Invoke(container, cancellation);
     }
 }

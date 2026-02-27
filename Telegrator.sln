@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.14.36119.2
+# Visual Studio Version 18
+VisualStudioVersion = 18.2.11408.102 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Telegrator", "Telegrator\Telegrator.csproj", "{12D1D209-6473-4F58-BD66-846F0D85F6FD}"
 EndProject
@@ -19,6 +19,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Telegrator.Hosting.Web", "Telegrator.Hosting.Web\Telegrator.Hosting.Web.csproj", "{98AB490F-6A36-CCFF-F6E6-B029D1665965}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Telegrator.RoslynGenerators", "dev\Telegrator.RoslynGenerators\Telegrator.RoslynGenerators.csproj", "{93658B7F-C651-4C78-2CB1-2C0AE00C45B5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Telegrator.Localized", "Telegrator.Localized\Telegrator.Localized.csproj", "{0B5D9465-B5E4-4B37-92D2-6AF1D682DAD9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +65,12 @@ Global
 		{93658B7F-C651-4C78-2CB1-2C0AE00C45B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{93658B7F-C651-4C78-2CB1-2C0AE00C45B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{93658B7F-C651-4C78-2CB1-2C0AE00C45B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B5D9465-B5E4-4B37-92D2-6AF1D682DAD9}.AnalyzersDebug|Any CPU.ActiveCfg = Release|Any CPU
+		{0B5D9465-B5E4-4B37-92D2-6AF1D682DAD9}.AnalyzersDebug|Any CPU.Build.0 = Release|Any CPU
+		{0B5D9465-B5E4-4B37-92D2-6AF1D682DAD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B5D9465-B5E4-4B37-92D2-6AF1D682DAD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B5D9465-B5E4-4B37-92D2-6AF1D682DAD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B5D9465-B5E4-4B37-92D2-6AF1D682DAD9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

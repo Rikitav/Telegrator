@@ -11,7 +11,7 @@ namespace Telegrator.Handlers.Building
     /// <param name="container">The handler container with execution context.</param>
     /// <param name="cancellation">The cancellation token.</param>
     /// <returns>A task representing the asynchronous execution.</returns>
-    public delegate Task<Result> AbstractHandlerAction<TUpdate>(IAbstractHandlerContainer<TUpdate> container, CancellationToken cancellation) where TUpdate : class;
+    public delegate Task<Result> AbstractHandlerAction<TUpdate>(IHandlerContainer<TUpdate> container, CancellationToken cancellation) where TUpdate : class;
 
     /// <summary>
     /// Builder class for creating regular handlers that can process updates.

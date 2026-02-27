@@ -26,12 +26,12 @@ namespace Telegrator.Handlers
         /// <summary>
         /// Handler container for the current <see cref="InlineQuery"/> update.
         /// </summary>
-        protected IAbstractHandlerContainer<InlineQuery> QueryContainer { get; private set; } = null!;
+        protected IHandlerContainer<InlineQuery> QueryContainer { get; private set; } = null!;
 
         /// <summary>
         /// Handler container for the current <see cref="ChosenInlineResult"/> update.
         /// </summary>
-        protected IAbstractHandlerContainer<ChosenInlineResult> ChosenContainer { get; private set; } = null!;
+        protected IHandlerContainer<ChosenInlineResult> ChosenContainer { get; private set; } = null!;
 
         /// <summary>
         /// Incoming update of type <see cref="InlineQuery"/>.
@@ -44,20 +44,20 @@ namespace Telegrator.Handlers
         protected ChosenInlineResult InputChosen { get; private set; } = null!;
 
         /// <inheritdoc/>
-        public override async Task<Result> Execute(IAbstractHandlerContainer<Update> container, CancellationToken cancellation)
+        public override async Task<Result> Execute(IHandlerContainer<Update> container, CancellationToken cancellation)
         {
             switch (container.HandlingUpdate.Type)
             {
                 case UpdateType.InlineQuery:
                     {
-                        QueryContainer = AbstractHandlerContainer<InlineQuery>.From(container);
+                        QueryContainer = HandlerContainer<InlineQuery>.From(container);
                         InputQuery = QueryContainer.ActualUpdate;
                         return await Requested(QueryContainer, cancellation).ConfigureAwait(false);
                     }
 
                 case UpdateType.ChosenInlineResult:
                     {
-                        ChosenContainer = AbstractHandlerContainer<ChosenInlineResult>.From(container);
+                        ChosenContainer = HandlerContainer<ChosenInlineResult>.From(container);
                         InputChosen = ChosenContainer.ActualUpdate;
                         return await Chosen(ChosenContainer, cancellation).ConfigureAwait(false);
                     }
@@ -73,7 +73,7 @@ namespace Telegrator.Handlers
         /// <param name="container"></param>
         /// <param name="cancellation"></param>
         /// <returns></returns>
-        public abstract Task<Result> Requested(IAbstractHandlerContainer<InlineQuery> container, CancellationToken cancellation);
+        public abstract Task<Result> Requested(IHandlerContainer<InlineQuery> container, CancellationToken cancellation);
 
         /// <summary>
         /// Executes handler logic if received update is <see cref="UpdateType.ChosenInlineResult"/>
@@ -81,7 +81,7 @@ namespace Telegrator.Handlers
         /// <param name="container"></param>
         /// <param name="cancellation"></param>
         /// <returns></returns>
-        public abstract Task<Result> Chosen(IAbstractHandlerContainer<ChosenInlineResult> container, CancellationToken cancellation);
+        public abstract Task<Result> Chosen(IHandlerContainer<ChosenInlineResult> container, CancellationToken cancellation);
 
         /// <summary>
         /// Answers inline query

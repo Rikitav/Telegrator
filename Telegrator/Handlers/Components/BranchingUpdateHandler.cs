@@ -108,7 +108,7 @@ namespace Telegrator.Handlers.Components
         /// <exception cref="Exception">Thrown when the awaiting provider is not of the expected type.</exception>
         public override IHandlerContainer CreateContainer(DescribedHandlerInfo handlerInfo)
         {
-            return new AbstractHandlerContainer<TUpdate>(handlerInfo);
+            return new HandlerContainer<TUpdate>(handlerInfo);
         }
 
         /// <summary>
@@ -117,7 +117,7 @@ namespace Telegrator.Handlers.Components
         /// <param name="container">The handler container.</param>
         /// <param name="cancellation">The cancellation token.</param>
         /// <exception cref="Exception">Thrown when no branch method is set.</exception>
-        public override async Task<Result> Execute(IAbstractHandlerContainer<TUpdate> container, CancellationToken cancellation)
+        public override async Task<Result> Execute(IHandlerContainer<TUpdate> container, CancellationToken cancellation)
         {
             if (branchMethodInfo is null)
                 throw new Exception();
@@ -131,7 +131,7 @@ namespace Telegrator.Handlers.Components
         /// </summary>
         /// <param name="container">The handler container.</param>
         /// <param name="methodInfo">The method to execute.</param>
-        protected virtual async Task<Result> BranchExecuteWrapper(IAbstractHandlerContainer<TUpdate> container, MethodInfo methodInfo)
+        protected virtual async Task<Result> BranchExecuteWrapper(IHandlerContainer<TUpdate> container, MethodInfo methodInfo)
         {
             if (methodInfo.ReturnType == typeof(void))
             {

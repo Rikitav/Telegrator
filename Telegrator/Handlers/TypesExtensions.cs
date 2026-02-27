@@ -20,7 +20,7 @@ namespace Telegrator.Handlers
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         public static async Task React(
-            this IAbstractHandlerContainer<Message> container,
+            this IHandlerContainer<Message> container,
             ReactionType reaction,
             bool isBig = false,
             CancellationToken cancellationToken = default)
@@ -38,7 +38,7 @@ namespace Telegrator.Handlers
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         public static async Task React(
-            this IAbstractHandlerContainer<Message> container,
+            this IHandlerContainer<Message> container,
             IEnumerable<ReactionType> reactions,
             bool isBig = false,
             CancellationToken cancellationToken = default)
@@ -67,7 +67,7 @@ namespace Telegrator.Handlers
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The sent message.</returns>
         public static async Task<Message> Reply(
-            this IAbstractHandlerContainer<Message> container,
+            this IHandlerContainer<Message> container,
             string text,
             ParseMode parseMode = ParseMode.None,
             ReplyMarkup? replyMarkup = null,
@@ -111,8 +111,8 @@ namespace Telegrator.Handlers
         /// <param name="suggestedPostParameters"></param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The sent message.</returns>
-        public static async Task<Message> Responce(
-            this IAbstractHandlerContainer<Message> container,
+        public static async Task<Message> Response(
+            this IHandlerContainer<Message> container,
             string text,
             ParseMode parseMode = ParseMode.None,
             ReplyParameters? replyParameters = null,
@@ -158,8 +158,8 @@ namespace Telegrator.Handlers
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public static async Task<Message> Responce(
-            this IAbstractHandlerContainer<CallbackQuery> container,
+        public static async Task<Message> Response(
+            this IHandlerContainer<CallbackQuery> container,
             string text,
             ParseMode parseMode = ParseMode.None,
             ReplyParameters? replyParameters = null,
@@ -203,7 +203,7 @@ namespace Telegrator.Handlers
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
         public static async Task<Message> EditMessage(
-            this IAbstractHandlerContainer<CallbackQuery> container,
+            this IHandlerContainer<CallbackQuery> container,
             string text,
             ParseMode parseMode = ParseMode.None,
             InlineKeyboardMarkup? replyMarkup = null,
@@ -243,7 +243,7 @@ namespace Telegrator.Handlers
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         public static async Task AnswerCallbackQuery(
-            this IAbstractHandlerContainer<CallbackQuery> container,
+            this IHandlerContainer<CallbackQuery> container,
             string? text = null,
             bool showAlert = false,
             string? url = null,
@@ -269,7 +269,7 @@ namespace Telegrator.Handlers
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         public static async Task AnswerInlineQuery(
-            this IAbstractHandlerContainer<InlineQuery> container,
+            this IHandlerContainer<InlineQuery> container,
             IEnumerable<InlineQueryResult> results,
             int? cacheTime = null,
             bool isPersonal = false,

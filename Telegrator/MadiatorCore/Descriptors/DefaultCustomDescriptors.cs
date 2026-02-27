@@ -46,7 +46,7 @@ namespace Telegrator.MadiatorCore.Descriptors
         {
             internal MethodInfo Method = null!;
 
-            public override async Task<Result> Execute(IAbstractHandlerContainer<TUpdate> container, CancellationToken cancellation)
+            public override async Task<Result> Execute(IHandlerContainer<TUpdate> container, CancellationToken cancellation)
             {
                 if (Method is null)
                     throw new Exception();

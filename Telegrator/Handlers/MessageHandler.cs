@@ -88,7 +88,7 @@ namespace Telegrator.Handlers
         /// <param name="suggestedPostParameters"></param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The sent message.</returns>
-        protected async Task<Message> Responce(
+        protected async Task<Message> Response(
             string text,
             ParseMode parseMode = ParseMode.None,
             ReplyParameters? replyParameters = null,
@@ -104,7 +104,7 @@ namespace Telegrator.Handlers
             int? directMessageTopicId = null,
             SuggestedPostParameters? suggestedPostParameters = null,
             CancellationToken cancellationToken = default)
-            => await Container.Responce(
+            => await Container.Response(
                 text, parseMode, replyParameters,
                 replyMarkup, linkPreviewOptions,
                 messageThreadId, entities,
@@ -197,7 +197,7 @@ namespace Telegrator.Handlers
             int? directMessageTopicId = null,
             SuggestedPostParameters? suggestedPostParameters = null,
             CancellationToken cancellationToken = default)
-            => await Container.Responce(
+            => await Container.Response(
                 text, parseMode, replyParameters,
                 replyMarkup, linkPreviewOptions,
                 messageThreadId, entities,

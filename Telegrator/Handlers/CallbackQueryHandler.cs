@@ -77,7 +77,7 @@ namespace Telegrator.Handlers
             int? directMessageTopicId = null,
             SuggestedPostParameters? suggestedPostParameters = null,
             CancellationToken cancellationToken = default)
-            => await Container.Responce(
+            => await Container.Response(
                 text, parseMode, replyParameters,
                 replyMarkup, linkPreviewOptions,
                 messageThreadId, entities,

@@ -130,16 +130,6 @@ namespace Telegrator
         }
 
         /// <summary>
-        /// Returns an enumerable that repeats the item multiple times.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="item"></param>
-        /// <param name="times"></param>
-        /// <returns></returns>
-        public static IEnumerable<T> Repeat<T>(this T item, int times)
-            => Enumerable.Range(0, times).Select(_ => item);
-
-        /// <summary>
         /// Returns the only element of a sequence, or a default value if the sequence is empty.
         /// This method returns default if there is more than one element in the sequence.
         /// </summary>

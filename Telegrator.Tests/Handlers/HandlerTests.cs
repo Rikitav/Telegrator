@@ -70,7 +70,7 @@ namespace Telegrator.Tests.Handlers
         public async Task UpdateHandlerBase_ShouldHandleCancellation()
         {
             // Arrange
-            var mockContainer = new Mock<IAbstractHandlerContainer<Message>>();
+            var mockContainer = new Mock<IHandlerContainer<Message>>();
             var testHandler = new TestUpdateHandler();
             var cancellationTokenSource = new CancellationTokenSource();
             cancellationTokenSource.Cancel(); // Отменяем сразу

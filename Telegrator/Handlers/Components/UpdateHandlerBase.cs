@@ -1,9 +1,6 @@
-﻿using System.ComponentModel;
-using Telegram.Bot;
+﻿using Telegram.Bot;
 using Telegram.Bot.Polling;
-using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
-using Telegrator.Filters.Components;
 using Telegrator.Handlers.Diagnostics;
 using Telegrator.MadiatorCore.Descriptors;
 
@@ -12,7 +9,7 @@ namespace Telegrator.Handlers.Components
     /// <summary>
     /// Base class for update handlers, providing execution and lifetime management for Telegram updates.
     /// </summary>
-    public abstract class UpdateHandlerBase(UpdateType handlingUpdateType) : IDisposable
+    public abstract class UpdateHandlerBase(UpdateType handlingUpdateType) : IUpdateHandlerBase
     {
         /// <summary>
         /// Gets the <see cref="UpdateType"/> that this handler processes.

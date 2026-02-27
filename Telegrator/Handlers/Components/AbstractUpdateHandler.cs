@@ -10,12 +10,12 @@ namespace Telegrator.Handlers.Components
     /// <summary>
     /// Abstract handler for Telegram updates of type <typeparamref name="TUpdate"/>.
     /// </summary>
-    public abstract class AbstractUpdateHandler<TUpdate> : UpdateHandlerBase, IHandlerContainerFactory where TUpdate : class
+    public abstract class AbstractUpdateHandler<TUpdate> : UpdateHandlerBase, IHandlerContainerFactory, IAbstractUpdateHandler<TUpdate> where TUpdate : class
     {
         /// <summary>
         /// Handler container for the current update.
         /// </summary>
-        protected IAbstractHandlerContainer<TUpdate> Container { get; private set; } = default!;
+        public IHandlerContainer<TUpdate> Container { get; private set; } = default!;
 
         /// <summary>
         /// Telegram Bot client associated with the current container.
@@ -64,7 +64,7 @@ namespace Telegrator.Handlers.Components
         /// <returns>The created handler container.</returns>
         public virtual IHandlerContainer CreateContainer(DescribedHandlerInfo handlerInfo)
         {
-            return new AbstractHandlerContainer<TUpdate>(handlerInfo);
+            return new HandlerContainer<TUpdate>(handlerInfo);
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace Telegrator.Handlers.Components
         /// <returns>A task representing the asynchronous operation.</returns>
         protected override sealed async Task<Result> ExecuteInternal(IHandlerContainer container, CancellationToken cancellationToken)
         {
-            Container = (IAbstractHandlerContainer<TUpdate>)container;
+            Container = (IHandlerContainer<TUpdate>)container;
             return await Execute(Container, cancellationToken);
         }
 
@@ -85,6 +85,6 @@ namespace Telegrator.Handlers.Components
         /// <param name="container">The handler container.</param>
         /// <param name="cancellation">Cancellation token.</param>
         /// <returns>A task representing the asynchronous operation.</returns>
-        public abstract Task<Result> Execute(IAbstractHandlerContainer<TUpdate> container, CancellationToken cancellation);
+        public abstract Task<Result> Execute(IHandlerContainer<TUpdate> container, CancellationToken cancellation);
     }
 }

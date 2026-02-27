@@ -11,7 +11,7 @@ namespace Telegrator.Handlers
     /// Provides access to the update, client, filters, and other execution context.
     /// </summary>
     /// <typeparam name="TUpdate">The type of update being handled.</typeparam>
-    public class AbstractHandlerContainer<TUpdate> : IAbstractHandlerContainer<TUpdate> where TUpdate : class
+    public class HandlerContainer<TUpdate> : IHandlerContainer<TUpdate> where TUpdate : class
     {
         /// <summary>
         /// Gets the actual update object of type TUpdate.
@@ -34,10 +34,10 @@ namespace Telegrator.Handlers
         public IAwaitingProvider AwaitingProvider { get; }
 
         /// <summary>
-        /// Initializes new instance of <see cref="AbstractHandlerContainer{TUpdate}"/>
+        /// Initializes new instance of <see cref="HandlerContainer{TUpdate}"/>
         /// </summary>
         /// <param name="handlerInfo"></param>
-        public AbstractHandlerContainer(DescribedHandlerInfo handlerInfo)
+        public HandlerContainer(DescribedHandlerInfo handlerInfo)
         {
             ActualUpdate = handlerInfo.HandlingUpdate.GetActualUpdateObject<TUpdate>();
             HandlingUpdate = handlerInfo.HandlingUpdate;
@@ -48,7 +48,7 @@ namespace Telegrator.Handlers
         }
 
         /// <summary>
-        /// Initializes new instance of <see cref="AbstractHandlerContainer{TUpdate}"/>
+        /// Initializes new instance of <see cref="HandlerContainer{TUpdate}"/>
         /// </summary>
         /// <param name="actualUpdate"></param>
         /// <param name="handlingUpdate"></param>
@@ -56,7 +56,7 @@ namespace Telegrator.Handlers
         /// <param name="extraData"></param>
         /// <param name="filters"></param>
         /// <param name="awaitingProvider"></param>
-        public AbstractHandlerContainer(TUpdate actualUpdate, Update handlingUpdate, ITelegramBotClient client, Dictionary<string, object> extraData, CompletedFiltersList filters, IAwaitingProvider awaitingProvider)
+        public HandlerContainer(TUpdate actualUpdate, Update handlingUpdate, ITelegramBotClient client, Dictionary<string, object> extraData, CompletedFiltersList filters, IAwaitingProvider awaitingProvider)
         {
             ActualUpdate = actualUpdate;
             HandlingUpdate = handlingUpdate;
@@ -71,9 +71,9 @@ namespace Telegrator.Handlers
         /// </summary>
         /// <typeparam name="QUpdate"></typeparam>
         /// <returns></returns>
-        public AbstractHandlerContainer<QUpdate> CreateChild<QUpdate>() where QUpdate : class
+        public HandlerContainer<QUpdate> CreateChild<QUpdate>() where QUpdate : class
         {
-            return new AbstractHandlerContainer<QUpdate>(
+            return new HandlerContainer<QUpdate>(
                 HandlingUpdate.GetActualUpdateObject<QUpdate>(),
                 HandlingUpdate, Client, ExtraData,
                 CompletedFilters, AwaitingProvider);
@@ -85,9 +85,9 @@ namespace Telegrator.Handlers
         /// <typeparam name="QUpdate"></typeparam>
         /// <param name="other"></param>
         /// <returns></returns>
-        public static AbstractHandlerContainer<TUpdate> From<QUpdate>(IAbstractHandlerContainer<QUpdate> other) where QUpdate : class
+        public static HandlerContainer<TUpdate> From<QUpdate>(IHandlerContainer<QUpdate> other) where QUpdate : class
         {
-            return new AbstractHandlerContainer<TUpdate>(
+            return new HandlerContainer<TUpdate>(
                 other.HandlingUpdate.GetActualUpdateObject<TUpdate>(),
                 other.HandlingUpdate, other.Client, other.ExtraData,
                 other.CompletedFilters, other.AwaitingProvider);

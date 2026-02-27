@@ -13,7 +13,7 @@ namespace Telegrator.Tests
     {
         public bool WasExecuted { get; private set; }
 
-        public override Task<Result> Execute(IAbstractHandlerContainer<Message> container, CancellationToken cancellationToken)
+        public override Task<Result> Execute(IHandlerContainer<Message> container, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             WasExecuted = true;
