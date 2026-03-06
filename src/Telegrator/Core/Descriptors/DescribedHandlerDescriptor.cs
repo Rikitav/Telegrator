@@ -14,7 +14,7 @@ namespace Telegrator.Core.Descriptors
         private readonly ManualResetEventSlim ResetEvent = new ManualResetEventSlim(false);
 
         /// <summary>
-        /// descriptor from that handler was described from
+        /// Descriptor from that handler was described from.
         /// </summary>
         public HandlerDescriptor From { get; }
 
@@ -31,7 +31,7 @@ namespace Telegrator.Core.Descriptors
         /// <summary>
         /// The Telegram bot client used for this handler.
         /// </summary>
-        public  ITelegramBotClient Client { get; }
+        public ITelegramBotClient Client { get; }
 
         /// <summary>
         /// The handler instance being described.
@@ -71,9 +71,9 @@ namespace Telegrator.Core.Descriptors
         /// <summary>
         /// Initializes a new instance of the <see cref="DescribedHandlerDescriptor"/> class.
         /// </summary>
-        /// <param name="fromDescriptor">descriptor from that handler was described from</param>
-        /// <param name="awaitingProvider"></param>
+        /// <param name="fromDescriptor">The descriptor from which this handler was described.</param>
         /// <param name="updateRouter">The update router.</param>
+        /// <param name="awaitingProvider">The awaiting provider.</param>
         /// <param name="client">The Telegram bot client.</param>
         /// <param name="handlerInstance">The handler instance.</param>
         /// <param name="filterContext">The filter execution context.</param>
@@ -98,6 +98,10 @@ namespace Telegrator.Core.Descriptors
             DisplayString = displayString ?? fromDescriptor.HandlerType.Name;
         }
 
+        /// <summary>
+        /// Waits for the handler execution result.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
         public async Task AwaitResult(CancellationToken cancellationToken)
         {
             await Task.Yield();
@@ -105,6 +109,10 @@ namespace Telegrator.Core.Descriptors
             ResetEvent.Wait(cancellationToken);
         }
 
+        /// <summary>
+        /// Reports the execution result and signals completion.
+        /// </summary>
+        /// <param name="result">The execution result.</param>
         public void ReportResult(Result? result)
         {
             if (result != null)

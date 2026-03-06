@@ -49,11 +49,12 @@ namespace Telegrator.Hosting.Web
         /// Initializes a new instance of the <see cref="WebApplicationBuilder"/> class.
         /// </summary>
         /// <param name="webApplicationBuilder">The proxied instance of host builder.</param>
-        /// <param name="handlers"></param>
-        public TelegramBotWebHost(WebApplicationBuilder webApplicationBuilder, IHandlersCollection handlers)
+        public TelegramBotWebHost(WebApplicationBuilder webApplicationBuilder)
         {
             // Registering this host in services for easy access
-            RegisterHostServices(webApplicationBuilder.Services, handlers);
+            webApplicationBuilder.Services.AddSingleton<ITelegramBotHost>(this);
+            webApplicationBuilder.Services.AddSingleton<ITelegramBotWebHost>(this);
+            webApplicationBuilder.Services.AddSingleton<ITelegratorBot>(this);
 
             // Building proxy application
             _innerApp = webApplicationBuilder.Build();
@@ -160,16 +161,6 @@ namespace Telegrator.Hosting.Web
 
             GC.SuppressFinalize(this);
             _disposed = true;
-        }
-
-        private void RegisterHostServices(IServiceCollection services, IHandlersCollection handlers)
-        {
-            //service.RemoveAll<IHost>();
-            //service.AddSingleton<IHost>(this);
-
-            services.AddSingleton<ITelegramBotHost>(this);
-            services.AddSingleton<ITelegramBotWebHost>(this);
-            services.AddSingleton<ITelegratorBot>(this);
         }
     }
 }

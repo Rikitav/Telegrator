@@ -46,6 +46,8 @@ namespace Telegrator.Hosting.Web
             _innerBuilder = webApplicationBuilder ?? throw new ArgumentNullException(nameof(webApplicationBuilder));
             _settings = settings ?? throw new ArgumentNullException(nameof(settings));
             _handlers = new HostHandlersCollection(Services, _settings);
+
+            _innerBuilder.AddTelegratorWeb(settings);
         }
 
         /// <summary>
@@ -60,7 +62,7 @@ namespace Telegrator.Hosting.Web
             _settings = settings ?? throw new ArgumentNullException(nameof(settings));
             _handlers = handlers ?? throw new ArgumentNullException(nameof(settings));
 
-            _innerBuilder.AddTelegratorWeb(settings);
+            _innerBuilder.AddTelegratorWeb(settings, handlers);
         }
 
         /// <summary>
@@ -69,38 +71,7 @@ namespace Telegrator.Hosting.Web
         /// <returns></returns>
         public TelegramBotWebHost Build()
         {
-            if (_handlers is IHostHandlersCollection hostHandlers)
-            {
-                foreach (PreBuildingRoutine preBuildRoutine in hostHandlers.PreBuilderRoutines)
-                {
-                    try
-                    {
-                        preBuildRoutine.Invoke(this);
-                    }
-                    catch (NotImplementedException)
-                    {
-                        _ = 0xBAD + 0xC0DE;
-                    }
-                }
-            }
-
-            if (!_settings.DisableAutoConfigure)
-            {
-                Services.Configure<TelegratorWebOptions>(Configuration.GetSection(nameof(TelegratorWebOptions)));
-                Services.Configure<TelegramBotClientOptions>(Configuration.GetSection(nameof(TelegramBotClientOptions)), new TelegramBotClientOptionsProxy());
-            }
-            else
-            {
-                if (null == Services.SingleOrDefault(srvc => srvc.ImplementationType == typeof(IOptions<TelegratorWebOptions>)))
-                    throw new MissingMemberException("Auto configuration disabled, yet no options of type 'TelegratorWebOptions' wasn't registered. This configuration is runtime required!");
-
-                if (null == Services.SingleOrDefault(srvc => srvc.ImplementationType == typeof(IOptions<TelegramBotClientOptions>)))
-                    throw new MissingMemberException("Auto configuration disabled, yet no options of type 'TelegramBotClientOptions' wasn't registered. This configuration is runtime required!");
-            }
-
-            Services.AddSingleton<IConfigurationManager>(Configuration);
-            Services.AddSingleton<IOptions<TelegratorOptions>>(Options.Create(_settings));
-            return new TelegramBotWebHost(_innerBuilder, _handlers);
+            return new TelegramBotWebHost(_innerBuilder);
         }
     }
 }

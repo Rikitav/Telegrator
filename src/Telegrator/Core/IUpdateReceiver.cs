@@ -4,8 +4,8 @@ using Telegram.Bot.Types;
 namespace Telegrator.Core;
 
 /// <summary>
-/// Requests new <see cref="Update"/>s and processes them using provided <see cref="IUpdateHandler"/> instance<
-/// /summary>
+/// Requests new <see cref="Update"/>s and processes them using provided <see cref="IUpdateHandler"/> instance.
+/// </summary>
 public interface IUpdateReceiver
 {
     /// <summary>

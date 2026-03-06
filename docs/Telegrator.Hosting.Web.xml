@@ -34,12 +34,11 @@
             This application's logger
             </summary>
         </member>
-        <member name="M:Telegrator.Hosting.Web.TelegramBotWebHost.#ctor(Microsoft.AspNetCore.Builder.WebApplicationBuilder,Telegrator.Core.IHandlersCollection)">
+        <member name="M:Telegrator.Hosting.Web.TelegramBotWebHost.#ctor(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
             <summary>
             Initializes a new instance of the <see cref="T:Microsoft.AspNetCore.Builder.WebApplicationBuilder"/> class.
             </summary>
             <param name="webApplicationBuilder">The proxied instance of host builder.</param>
-            <param name="handlers"></param>
         </member>
         <member name="M:Telegrator.Hosting.Web.TelegramBotWebHost.CreateBuilder(Telegrator.Hosting.Web.TelegramBotWebOptions)">
             <summary>
@@ -209,6 +208,14 @@
             Provides method to configure <see cref="T:Telegrator.Hosting.Web.ITelegramBotWebHost"/>
             </summary>
         </member>
+        <member name="F:Telegrator.ServicesCollectionExtensions.HandlersCollectionPropertyKey">
+            <summary>
+            The key used to store the <see cref="T:Telegrator.Core.IHandlersCollection"/> in the builder properties.
+            </summary>
+        </member>
+        <member name="M:Telegrator.ServicesCollectionExtensions.get_Handlers(Microsoft.Extensions.Hosting.IHostApplicationBuilder)">
+            <inheritdoc cref="P:Telegrator.ServicesCollectionExtensions.&lt;G&gt;$605D8CCF64349EA050C790D67C500BD9.Handlers"/>
+        </member>
         <member name="M:Telegrator.ServicesCollectionExtensions.AddTelegratorWeb(Microsoft.AspNetCore.Builder.WebApplicationBuilder,Telegrator.Hosting.Web.TelegramBotWebOptions,Telegrator.Core.IHandlersCollection)">
             <summary>
             Replaces TelegramBotWebHostBuilder. Configures DI, options, and handlers.
@@ -226,6 +233,11 @@
             </summary>
             <param name="services"></param>
             <returns></returns>
+        </member>
+        <member name="P:Telegrator.ServicesCollectionExtensions.&lt;G&gt;$605D8CCF64349EA050C790D67C500BD9.Handlers">
+            <summary>
+            Gets the <see cref="T:Telegrator.Core.IHandlersCollection"/> from the builder properties.
+            </summary>
         </member>
     </members>
 </doc>

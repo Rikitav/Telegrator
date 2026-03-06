@@ -2,10 +2,9 @@
 using Telegram.Bot.Types;
 using Telegrator.Core.Handlers;
 
-namespace Telegrator.Localized
+namespace Telegrator.Localized;
+
+public interface ILocalizedHandler<T> : IAbstractUpdateHandler<Message> where T : class
 {
-    public interface ILocalizedHandler<T> : IAbstractUpdateHandler<Message> where T : class
-    {
-        public IStringLocalizer LocalizationProvider { get; }
-    }
+    public IStringLocalizer LocalizationProvider { get; }
 }

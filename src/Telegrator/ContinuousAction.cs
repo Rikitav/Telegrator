@@ -5,6 +5,9 @@ using Telegrator.Logging;
 
 namespace Telegrator;
 
+/// <summary>
+/// Represents a continuous chat action that runs in the background until cancelled or disposed.
+/// </summary>
 public class ContinuousAction : IDisposable
 {
     private readonly ITelegramBotClient _client;
@@ -17,6 +20,14 @@ public class ContinuousAction : IDisposable
 
     private int _disposed;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ContinuousAction"/> class.
+    /// </summary>
+    /// <param name="client">The Telegram bot client.</param>
+    /// <param name="chat">The target chat.</param>
+    /// <param name="action">The action to perform continuously.</param>
+    /// <param name="delay">The delay between actions. Defaults to 4 seconds.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
     public ContinuousAction(ITelegramBotClient client, ChatId chat, ChatAction action, TimeSpan? delay = null, CancellationToken cancellationToken = default)
     {
         _client = client;
@@ -52,6 +63,9 @@ public class ContinuousAction : IDisposable
         }
     }
 
+    /// <summary>
+    /// Cancels the continuous action.
+    /// </summary>
     public void Cancel()
     {
         if (Interlocked.CompareExchange(ref _disposed, 0, 0) == 0)
@@ -67,11 +81,17 @@ public class ContinuousAction : IDisposable
         }
     }
 
+    /// <summary>
+    /// Waits for the background worker task to complete.
+    /// </summary>
     public async Task WaitAsync()
     {
         await _workerTask.ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Disposes the instance and stops the continuous action.
+    /// </summary>
     public void Dispose()
     {
         if (Interlocked.Exchange(ref _disposed, 1) == 1)
@@ -85,5 +105,7 @@ public class ContinuousAction : IDisposable
         {
             _linkedCts.Dispose();
         }
+
+        GC.SuppressFinalize(this);
     }
 }

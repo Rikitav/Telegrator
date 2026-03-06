@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Diagnostics;
@@ -21,6 +22,19 @@ namespace Telegrator
     public static class ServicesCollectionExtensions
     {
         /// <summary>
+        /// The key used to store the <see cref="IHandlersCollection"/> in the builder properties.
+        /// </summary>
+        public const string HandlersCollectionPropertyKey = nameof(IHandlersCollection);
+
+        extension(IHostApplicationBuilder builder)
+        {
+            /// <summary>
+            /// Gets the <see cref="IHandlersCollection"/> from the builder properties.
+            /// </summary>
+            public IHandlersCollection Handlers => (IHandlersCollection)builder.Properties[HandlersCollectionPropertyKey];
+        }
+
+        /// <summary>
         /// Replaces TelegramBotWebHostBuilder. Configures DI, options, and handlers.
         /// </summary>
         public static WebApplicationBuilder AddTelegratorWeb(this WebApplicationBuilder builder, TelegramBotWebOptions settings, IHandlersCollection? handlers = null)
@@ -32,6 +46,7 @@ namespace Telegrator
             ConfigurationManager configuration = builder.Configuration;
 
             handlers ??= new HostHandlersCollection(services, settings);
+            builder.Host.Properties.Add(HandlersCollectionPropertyKey, handlers);
 
             if (handlers is IHostHandlersCollection hostHandlers)
             {
@@ -53,6 +68,7 @@ namespace Telegrator
             if (!settings.DisableAutoConfigure)
             {
                 services.Configure<TelegratorWebOptions>(configuration.GetSection(nameof(TelegratorWebOptions)));
+                services.Configure<TelegratorWebOptions>(configuration.GetSection(nameof(TelegramBotClientOptions)));
             }
             else
             {
@@ -92,8 +108,12 @@ namespace Telegrator
             ILoggerFactory loggerFactory = app.Services.GetRequiredService<ILoggerFactory>();
             ILogger logger = loggerFactory.CreateLogger("Telegrator.Hosting.Web.TelegratorHost");
 
-            logger.LogInformation("Telegrator Bot ASP.NET WebHost started");
-            logger.LogHandlers(handlers);
+            if (logger.IsEnabled(LogLevel.Information))
+            {
+                logger.LogInformation("Telegrator Bot ASP.NET WebHost started");
+                logger.LogInformation("Telegram Bot : {firstname}, @{usrname}, id:{id},", info.User.FirstName ?? "[NULL]", info.User.Username ?? "[NULL]", info.User.Id);
+                logger.LogHandlers(handlers);
+            }
 
             return app;
         }

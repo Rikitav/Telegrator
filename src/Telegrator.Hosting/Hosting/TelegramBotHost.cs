@@ -36,7 +36,8 @@ namespace Telegrator.Hosting
         public TelegramBotHost(HostApplicationBuilder hostApplicationBuilder, IHandlersCollection handlers)
         {
             // Registering this host in services for easy access
-            RegisterHostServices(hostApplicationBuilder.Services, handlers);
+            hostApplicationBuilder.Services.AddSingleton<ITelegramBotHost>(this);
+            hostApplicationBuilder.Services.AddSingleton<ITelegratorBot>(this);
 
             // Building proxy hoster
             _innerHost = hostApplicationBuilder.Build();
@@ -121,15 +122,6 @@ namespace Telegrator.Hosting
 
             GC.SuppressFinalize(this);
             _disposed = true;
-        }
-
-        private void RegisterHostServices(IServiceCollection services, IHandlersCollection handlers)
-        {
-            //services.RemoveAll<IHost>();
-            //services.AddSingleton<IHost>(this);
-
-            services.AddSingleton<ITelegramBotHost>(this);
-            services.AddSingleton<ITelegratorBot>(this);
         }
     }
 }

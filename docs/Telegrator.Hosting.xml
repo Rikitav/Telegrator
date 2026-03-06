@@ -396,9 +396,27 @@
             </summary>
             <returns>The configured TelegramBotClientOptions instance.</returns>
         </member>
+        <member name="T:Telegrator.HostBuilderExtensions">
+            <summary>
+            Provides extension methods for <see cref="T:Microsoft.Extensions.Hosting.IHostApplicationBuilder"/> to configure Telegrator.
+            </summary>
+        </member>
+        <member name="F:Telegrator.HostBuilderExtensions.HandlersCollectionPropertyKey">
+            <summary>
+            The key used to store the <see cref="T:Telegrator.Core.IHandlersCollection"/> in the builder properties.
+            </summary>
+        </member>
+        <member name="M:Telegrator.HostBuilderExtensions.get_Handlers(Microsoft.Extensions.Hosting.IHostApplicationBuilder)">
+            <inheritdoc cref="P:Telegrator.HostBuilderExtensions.&lt;G&gt;$605D8CCF64349EA050C790D67C500BD9.Handlers"/>
+        </member>
         <member name="M:Telegrator.HostBuilderExtensions.AddTelegrator(Microsoft.Extensions.Hosting.IHostApplicationBuilder,Telegrator.Hosting.TelegramBotHostBuilderSettings,Telegrator.Core.IHandlersCollection)">
             <summary>
             Replaces TelegramBotWebHostBuilder. Configures DI, options, and handlers.
+            </summary>
+        </member>
+        <member name="P:Telegrator.HostBuilderExtensions.&lt;G&gt;$605D8CCF64349EA050C790D67C500BD9.Handlers">
+            <summary>
+            Gets the <see cref="T:Telegrator.Core.IHandlersCollection"/> from the builder properties.
             </summary>
         </member>
         <member name="T:Telegrator.ServicesCollectionExtensions">
@@ -475,6 +493,18 @@
             <param name="handlerType">The type to check.</param>
             <param name="routineMethod"></param>
             <returns>True if the type implements IPreBuildingRoutine; otherwise, false.</returns>
+        </member>
+        <member name="T:Telegrator.LoggerExtensions">
+            <summary>
+            Provides extension methods for logging Telegrator-related information.
+            </summary>
+        </member>
+        <member name="M:Telegrator.LoggerExtensions.LogHandlers(Microsoft.Extensions.Logging.ILogger,Telegrator.Core.IHandlersCollection)">
+            <summary>
+            Logs the registered handlers to the specified logger.
+            </summary>
+            <param name="logger">The logger to write to.</param>
+            <param name="handlers">The collection of handlers to log.</param>
         </member>
     </members>
 </doc>

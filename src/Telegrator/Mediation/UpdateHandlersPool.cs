@@ -18,8 +18,14 @@ namespace Telegrator.Mediation
         /// </summary>
         protected readonly object SyncObj = new object();
 
+        /// <summary>
+        /// The task responsible for reading and processing handlers from the channel.
+        /// </summary>
         protected readonly Task ChannelReaderTask;
 
+        /// <summary>
+        /// The channel used to queue handlers for execution.
+        /// </summary>
         protected readonly Channel<DescribedHandlerDescriptor> ExecutionChannel;
 
         /// <summary>
@@ -27,6 +33,9 @@ namespace Telegrator.Mediation
         /// </summary>
         protected readonly SemaphoreSlim? ExecutionLimiter;
 
+        /// <summary>
+        /// The update router associated with this pool.
+        /// </summary>
         protected readonly IUpdateRouter UpdateRouter;
 
         /// <summary>
