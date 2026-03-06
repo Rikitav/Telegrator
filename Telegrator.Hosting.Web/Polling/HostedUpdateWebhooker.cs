@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using System.Text.Json;
 using Telegram.Bot;
 using Telegram.Bot.Types;
-using Telegrator.Hosting.Web.Components;
 using Telegrator.MadiatorCore;
 
 namespace Telegrator.Hosting.Web.Polling
@@ -18,7 +18,7 @@ namespace Telegrator.Hosting.Web.Polling
     {
         private const string SecretTokenHeader = "X-Telegram-Bot-Api-Secret-Token";
 
-        private readonly ITelegramBotWebHost _botHost;
+        private readonly IEndpointRouteBuilder _botHost;
         private readonly ITelegramBotClient _botClient;
         private readonly IUpdateRouter _updateRouter;
         private readonly TelegratorWebOptions _options;
@@ -31,7 +31,7 @@ namespace Telegrator.Hosting.Web.Polling
         /// <param name="updateRouter"></param>
         /// <param name="options"></param>
         /// <exception cref="ArgumentNullException"></exception>
-        public HostedUpdateWebhooker(ITelegramBotWebHost botHost, ITelegramBotClient botClient, IUpdateRouter updateRouter, IOptions<TelegratorWebOptions> options)
+        public HostedUpdateWebhooker(IEndpointRouteBuilder botHost, ITelegramBotClient botClient, IUpdateRouter updateRouter, IOptions<TelegratorWebOptions> options)
         {
             if (string.IsNullOrEmpty(options.Value.WebhookUri))
                 throw new ArgumentNullException(nameof(options), "Option \"WebhookUrl\" must be set to subscribe for update recieving");
@@ -57,8 +57,9 @@ namespace Telegrator.Hosting.Web.Polling
             await _botClient.SetWebhook(
                 url: _options.WebhookUri,
                 maxConnections: _options.MaxConnections,
-                allowedUpdates: _botHost.UpdateRouter.HandlersProvider.AllowedTypes,
+                allowedUpdates: _updateRouter.HandlersProvider.AllowedTypes,
                 dropPendingUpdates: _options.DropPendingUpdates,
+                secretToken: _options.SecretToken,
                 cancellationToken: cancellationToken);
         }
 

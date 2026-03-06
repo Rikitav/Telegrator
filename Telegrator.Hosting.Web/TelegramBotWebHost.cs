@@ -64,16 +64,11 @@ namespace Telegrator.Hosting.Web
 
             // Building proxy application
             _innerApp = webApplicationBuilder.Build();
-
-            // Initializing bot info, as it requires to make a request via tg bot
-            Services.GetRequiredService<ITelegramBotInfo>();
+            _innerApp.UseTelegratorWeb();
 
             // Reruesting services for this host
             _updateRouter = Services.GetRequiredService<IUpdateRouter>();
             _logger = Services.GetRequiredService<ILogger<TelegramBotWebHost>>();
-
-            // Logging registering handlers in DEBUG purposes
-            LogHandlers(handlers);
         }
 
         /// <summary>
@@ -174,28 +169,6 @@ namespace Telegrator.Hosting.Web
             _disposed = true;
         }
 
-        private void LogHandlers(IHandlersCollection handlers)
-        {
-            StringBuilder logBuilder = new StringBuilder("Registered handlers : ");
-            if (!handlers.Keys.Any())
-                throw new Exception();
-
-            foreach (UpdateType updateType in handlers.Keys)
-            {
-                HandlerDescriptorList descriptors = handlers[updateType];
-                logBuilder.Append("\n\tUpdateType." + updateType + " :");
-
-                foreach (HandlerDescriptor descriptor in descriptors.Reverse())
-                {
-                    logBuilder.AppendFormat("\n\t* {0} - {1}",
-                        descriptor.Indexer.ToString(),
-                        descriptor.ToString());
-                }
-            }
-
-            Logger.LogInformation(logBuilder.ToString());
-        }
-
         private void RegisterHostServices(IServiceCollection services, IHandlersCollection handlers)
         {
             //service.RemoveAll<IHost>();
@@ -204,14 +177,6 @@ namespace Telegrator.Hosting.Web
             services.AddSingleton<ITelegramBotHost>(this);
             services.AddSingleton<ITelegramBotWebHost>(this);
             services.AddSingleton<ITelegratorBot>(this);
-            services.AddSingleton(handlers);
-
-            if (handlers is IHandlersManager manager)
-            {
-                services.RemoveAll<IHandlersProvider>();
-                services.AddSingleton<IHandlersProvider>(manager);
-                services.AddSingleton(manager);
-            }
         }
     }
 }

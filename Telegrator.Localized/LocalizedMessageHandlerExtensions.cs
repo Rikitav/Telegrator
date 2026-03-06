@@ -10,8 +10,8 @@ namespace Telegrator.Localized
     {
         public static async Task<Message> ResponseLocalized(this ILocalizedHandler<Message> localizedHandler, string localizedReplyIdentifier, params IEnumerable<string> formatArgs)
         {
-            LocalizedString localizedString = localizedHandler.LocalizationProvider[localizedReplyIdentifier];
-            localizedHandler.Container.Response();
+            LocalizedString localizedString = localizedHandler.LocalizationProvider[localizedReplyIdentifier, formatArgs];
+            return await localizedHandler.Container.Responce(localizedString.Value);
         }
     }
 }

@@ -61,6 +61,8 @@ namespace Telegrator.Hosting.Web
             _innerBuilder = webApplicationBuilder ?? throw new ArgumentNullException(nameof(webApplicationBuilder));
             _settings = settings ?? throw new ArgumentNullException(nameof(settings));
             _handlers = handlers ?? throw new ArgumentNullException(nameof(settings));
+
+            _innerBuilder.AddTelegratorWeb(settings);
         }
 
         /// <summary>
