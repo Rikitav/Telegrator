@@ -63,7 +63,10 @@ public static class HostBuilderExtensions
                 throw new MissingMemberException("Auto configuration disabled, yet no options of type 'TelegratorOptions' wasn't registered. This configuration is runtime required!");
         }
 
+        CancellationTokenSource globallCancell = new CancellationTokenSource();
+        options.GlobalCancellationToken = globallCancell.Token;
         services.AddSingleton(Options.Create(options));
+        services.AddKeyedSingleton("cancell", globallCancell);
 
         if (handlers != null)
         {
