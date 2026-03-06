@@ -5,7 +5,6 @@ using Telegrator.Core.Attributes;
 using Telegrator.Core.Descriptors;
 using Telegrator.Core.Filters;
 using Telegrator.Handlers;
-using Telegrator.MadiatorCore;
 
 namespace Telegrator.Core.Handlers
 {

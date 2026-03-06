@@ -3,7 +3,6 @@ using Telegram.Bot.Polling;
 using Telegrator.Core;
 using Telegrator.Logging;
 using Telegrator.Mediation;
-using Telegrator.Polling;
 using Telegrator.Providers;
 
 namespace Telegrator

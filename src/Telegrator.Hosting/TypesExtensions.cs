@@ -17,7 +17,6 @@ using Telegrator.Core;
 using Telegrator.Core.Descriptors;
 using Telegrator.Handlers;
 using Telegrator.Hosting;
-using Telegrator.Hosting.Configuration;
 using Telegrator.Logging;
 using Telegrator.Polling;
 using Telegrator.Providers;

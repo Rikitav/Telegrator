@@ -1,8 +1,6 @@
 ﻿using System.Collections;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
-using Telegrator.Configuration;
-using Telegrator.Core;
 
 namespace Telegrator.Core.Descriptors
 {

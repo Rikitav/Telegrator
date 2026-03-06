@@ -7,7 +7,6 @@ using Microsoft.Extensions.Options;
 using Telegram.Bot;
 using Telegrator;
 using Telegrator.Core;
-using Telegrator.Hosting.Configuration;
 using Telegrator.Providers;
 
 #pragma warning disable IDE0001

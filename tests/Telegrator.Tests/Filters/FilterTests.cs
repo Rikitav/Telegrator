@@ -1,7 +1,7 @@
 using FluentAssertions;
 using Telegram.Bot.Types;
+using Telegrator.Core.Filters;
 using Telegrator.Filters;
-using Telegrator.Filters.Components;
 using Xunit;
 
 #pragma warning disable CS8625

@@ -1,5 +1,4 @@
-﻿using System.Runtime.InteropServices;
-using System.Text;
+﻿using System.Text;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
@@ -10,7 +9,6 @@ using Telegrator.Core.Filters;
 using Telegrator.Core.Handlers;
 using Telegrator.Handlers.Diagnostics;
 using Telegrator.Logging;
-using Telegrator.Polling;
 
 namespace Telegrator.Mediation
 {

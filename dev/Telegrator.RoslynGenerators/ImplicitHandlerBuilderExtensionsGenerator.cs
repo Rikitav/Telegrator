@@ -17,7 +17,7 @@ namespace Telegrator.RoslynGenerators
         private static readonly string[] DefaultUsings =
         [
             "Telegrator.Handlers.Building",
-            "Telegrator.Handlers.Building.Components"
+            "Telegrator.Core.Handlers.Building"
         ];
          
         private static readonly ParameterSyntax ExtensionMethodThisParam = SyntaxFactory.Parameter(SyntaxFactory.Identifier("builder")).WithType(SyntaxFactory.IdentifierName("TBuilder").WithLeadingTrivia(SyntaxFactory.SyntaxTrivia(SyntaxKind.WhitespaceTrivia, " ")).WithTrailingTrivia(WhitespaceTrivia)).WithModifiers([SyntaxFactory.Token(SyntaxKind.ThisKeyword)]);

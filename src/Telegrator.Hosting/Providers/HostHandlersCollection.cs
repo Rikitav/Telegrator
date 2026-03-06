@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
-using Telegrator.Configuration;
 using Telegrator.Core;
 using Telegrator.Core.Descriptors;
 using Telegrator.Hosting;

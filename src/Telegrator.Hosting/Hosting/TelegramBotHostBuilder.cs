@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Telegrator.Core;
-using Telegrator.Hosting.Providers;
+using Telegrator.Providers;
 
 #pragma warning disable IDE0001
 namespace Telegrator.Hosting
