@@ -1,6 +1,6 @@
 ﻿using Telegram.Bot.Types.Enums;
-using Telegrator.Attributes.Components;
-using Telegrator.Handlers.Components;
+using Telegrator.Core.Attributes;
+using Telegrator.Core.Handlers;
 
 namespace Telegrator.Attributes
 {

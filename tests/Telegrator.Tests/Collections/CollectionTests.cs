@@ -1,7 +1,7 @@
 using FluentAssertions;
 using Telegram.Bot.Types.Enums;
+using Telegrator.Core.Descriptors;
 using Telegrator.Filters.Components;
-using Telegrator.MadiatorCore.Descriptors;
 using Xunit;
 
 namespace Telegrator.Tests.Collections

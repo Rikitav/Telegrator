@@ -1,7 +1,7 @@
 ﻿using Telegrator.Aspects;
-using Telegrator.Handlers.Components;
+using Telegrator.Core;
+using Telegrator.Core.Handlers;
 using Telegrator.Handlers.Diagnostics;
-using Telegrator.MadiatorCore;
 
 namespace Telegrator
 {

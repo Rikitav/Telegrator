@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 using Telegram.Bot.Types;
-using Telegrator.Filters.Components;
+using Telegrator.Core.Filters;
 
 namespace Telegrator.Filters
 {

@@ -1,13 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using Telegrator.Configuration;
-using Telegrator.Hosting.Components;
-using Telegrator.Hosting.Providers.Components;
-using Telegrator.MadiatorCore;
-using Telegrator.MadiatorCore.Descriptors;
-using Telegrator.Providers;
+using Telegrator.Core;
+using Telegrator.Core.Descriptors;
+using Telegrator.Hosting;
 
-namespace Telegrator.Hosting.Providers
+namespace Telegrator.Providers
 {
     /// <summary>
     /// Pre host building task
@@ -16,7 +14,7 @@ namespace Telegrator.Hosting.Providers
     public delegate void PreBuildingRoutine(ITelegramBotHostBuilder builder);
 
     /// <inheritdoc/>
-    public class HostHandlersCollection(IServiceCollection hostServiceColletion, ITelegratorOptions options) : HandlersCollection(options), IHostHandlersCollection
+    public class HostHandlersCollection(IServiceCollection hostServiceColletion, TelegratorOptions options) : HandlersCollection(options), IHostHandlersCollection
     {
         private readonly IServiceCollection Services = hostServiceColletion;
 

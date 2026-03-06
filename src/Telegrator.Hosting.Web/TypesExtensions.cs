@@ -6,14 +6,13 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Diagnostics;
 using Telegram.Bot;
-using Telegrator.Configuration;
-using Telegrator.Hosting.Providers;
-using Telegrator.Hosting.Providers.Components;
-using Telegrator.Hosting.Web.Components;
-using Telegrator.Hosting.Web.Polling;
-using Telegrator.MadiatorCore;
+using Telegrator;
+using Telegrator.Core;
+using Telegrator.Hosting.Web;
+using Telegrator.Mediation;
+using Telegrator.Providers;
 
-namespace Telegrator.Hosting.Web
+namespace Telegrator
 {
     /// <summary>
     /// Contains extensions for <see cref="IServiceCollection"/>

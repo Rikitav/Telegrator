@@ -3,11 +3,10 @@ using Microsoft.Extensions.Options;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
-using Telegrator.Configuration;
-using Telegrator.MadiatorCore;
-using Telegrator.Polling;
+using Telegrator.Core;
+using Telegrator.Mediation;
 
-namespace Telegrator.Hosting.Polling
+namespace Telegrator.Polling
 {
     /// <inheritdoc/>
     public class HostUpdateRouter : UpdateRouter

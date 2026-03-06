@@ -1,9 +1,9 @@
 ﻿using Telegram.Bot.Types;
 using Telegrator.Annotations.StateKeeping;
-using Telegrator.Filters.Components;
-using Telegrator.Handlers.Building.Components;
+using Telegrator.Core.Filters;
+using Telegrator.Core.Handlers.Building;
+using Telegrator.Core.StateKeeping;
 using Telegrator.StateKeeping;
-using Telegrator.StateKeeping.Components;
 
 namespace Telegrator.Handlers.Building
 {

@@ -4,14 +4,13 @@ using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.Payments;
 using Telegrator.Annotations;
 using Telegrator.Attributes;
+using Telegrator.Core;
+using Telegrator.Core.Descriptors;
+using Telegrator.Core.Handlers;
+using Telegrator.Core.Handlers.Building;
+using Telegrator.Core.StateKeeping;
 using Telegrator.Handlers.Building;
-using Telegrator.Handlers.Building.Components;
-using Telegrator.Handlers.Components;
-using Telegrator.MadiatorCore;
-using Telegrator.MadiatorCore.Descriptors;
-using Telegrator.Providers;
 using Telegrator.StateKeeping;
-using Telegrator.StateKeeping.Components;
 
 namespace Telegrator
 {
@@ -121,7 +120,7 @@ namespace Telegrator
             if (!message.IsCommand(out _, out string? argsStr))
                 throw new InvalidDataException("Message does not contain a command");
 
-            return argsStr.Split([' '], StringSplitOptions.RemoveEmptyEntries);
+            return argsStr?.Split([' '], StringSplitOptions.RemoveEmptyEntries) ?? [];
         }
 
         /// <summary>

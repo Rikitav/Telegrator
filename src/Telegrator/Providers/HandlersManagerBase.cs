@@ -1,10 +1,9 @@
 ﻿using System.Reflection;
 using Telegram.Bot.Types.Enums;
 using Telegrator.Annotations;
-using Telegrator.Configuration;
-using Telegrator.Handlers.Components;
-using Telegrator.MadiatorCore;
-using Telegrator.MadiatorCore.Descriptors;
+using Telegrator.Core;
+using Telegrator.Core.Descriptors;
+using Telegrator.Core.Handlers;
 
 namespace Telegrator.Providers
 {
@@ -13,7 +12,7 @@ namespace Telegrator.Providers
     /// Minimum implementation of <see cref="IHandlersManager"/>. Abstract class, still requires handler instance resolving.
     /// </summary>
     /// <param name="options"></param>
-    public abstract class HandlersManagerBase(ITelegratorOptions options) : IHandlersManager
+    public abstract class HandlersManagerBase(TelegratorOptions options) : IHandlersManager
     {
         /// <summary>
         /// Dictionary that organizes handler descriptors by update type.
@@ -28,7 +27,7 @@ namespace Telegrator.Providers
         /// <summary>
         /// Configuration options for handler collecting.
         /// </summary>
-        protected readonly ITelegratorOptions? Options = options;
+        protected readonly TelegratorOptions? Options = options;
 
         /// <summary>
         /// Gets whether handlers must have a parameterless constructor.

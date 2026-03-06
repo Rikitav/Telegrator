@@ -1,9 +1,8 @@
 ﻿using System.Reflection;
 using Telegram.Bot.Types.Enums;
 using Telegrator.Annotations;
-using Telegrator.Configuration;
-using Telegrator.MadiatorCore;
-using Telegrator.MadiatorCore.Descriptors;
+using Telegrator.Core;
+using Telegrator.Core.Descriptors;
 
 namespace Telegrator.Providers
 {
@@ -12,7 +11,7 @@ namespace Telegrator.Providers
     /// Provides functionality for collecting, adding, and organizing handlers.
     /// </summary>
     /// <param name="options">Optional configuration options for handler collecting.</param>
-    public class HandlersCollection(ITelegratorOptions? options) : IHandlersCollection
+    public class HandlersCollection(TelegratorOptions? options) : IHandlersCollection
     {
         /// <summary>
         /// Gets the collection of <see cref="UpdateType"/>'s allowed by registered handlers
@@ -27,7 +26,7 @@ namespace Telegrator.Providers
         /// <summary>
         /// Configuration options for handler collecting.
         /// </summary>
-        protected readonly ITelegratorOptions? Options = options;
+        protected readonly TelegratorOptions? Options = options;
         
         /// <summary>
         /// Gets whether handlers must have a parameterless constructor.

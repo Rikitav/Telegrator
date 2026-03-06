@@ -4,9 +4,9 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-	  <LangVersion>latest</LangVersion>
-	  <BaseOutputPath>..\..\bin</BaseOutputPath>
-	  <DocumentationFile>..\..\docs\$(AssemblyName).xml</DocumentationFile>
+	<LangVersion>latest</LangVersion>
+	<BaseOutputPath>..\..\bin</BaseOutputPath>
+	<DocumentationFile>..\..\docs\$(AssemblyName).xml</DocumentationFile>
 	  
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
@@ -15,8 +15,8 @@
 	  
     <Title>Telegrator : Telegram.Bot mediator framework</Title>
     <Version>1.16.0</Version>
-	  <Authors>Rikitav Tim4ik</Authors>
-	  <Company>Rikitav Tim4ik</Company>
+	<Authors>Rikitav Tim4ik</Authors>
+	<Company>Rikitav Tim4ik</Company>
     <RepositoryUrl>https://github.com/Rikitav/Telegrator</RepositoryUrl>
     <PackageTags>telegram;bot;mediator;attributes;aspect;hosting;host;framework;easy;simple;handlers</PackageTags>
 	  

@@ -1,7 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
-using Telegrator.Filters.Components;
+using Telegrator.Core.Filters;
 
 namespace Telegrator.Filters
 {

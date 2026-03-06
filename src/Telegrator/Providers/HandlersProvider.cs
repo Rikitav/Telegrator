@@ -1,10 +1,10 @@
 ﻿using System.Collections.ObjectModel;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
-using Telegrator.Handlers.Components;
+using Telegrator.Core;
+using Telegrator.Core.Descriptors;
+using Telegrator.Core.Handlers;
 using Telegrator.Logging;
-using Telegrator.MadiatorCore;
-using Telegrator.MadiatorCore.Descriptors;
 
 namespace Telegrator.Providers
 {
@@ -40,7 +40,7 @@ namespace Telegrator.Providers
             AllowedTypes = handlers.AllowedTypes;
             HandlersDictionary = handlers.Values.ForEach(list => list.Freeze()).ToReadOnlyDictionary(list => list.HandlingType);
             Options = options ?? throw new ArgumentNullException(nameof(options));
-            Alligator.LogTrace("{0} created!", GetType().Name);
+            TelegratorLogging.LogTrace("{0} created!", GetType().Name);
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace Telegrator.Providers
             AllowedTypes = Update.AllTypes;
             HandlersDictionary = handlers.ForEach(list => list.Freeze()).ToReadOnlyDictionary(list => list.HandlingType);
             Options = options ?? throw new ArgumentNullException(nameof(options));
-            Alligator.LogTrace("{0} created!", GetType().Name);
+            TelegratorLogging.LogTrace("{0} created!", GetType().Name);
         }
 
         /// <inheritdoc/>
@@ -82,7 +82,7 @@ namespace Telegrator.Providers
             }
             catch (Exception ex)
             {
-                Alligator.LogError("Failed to create instance of '{0}'", exception: ex, descriptor.ToString());
+                TelegratorLogging.LogError("Failed to create instance of '{0}'", exception: ex, descriptor.ToString());
                 throw;
             }
         }

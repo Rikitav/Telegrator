@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Localization;
 using Telegram.Bot.Types;
-using Telegrator.Handlers.Components;
+using Telegrator.Core.Handlers;
 
 namespace Telegrator.Localized
 {

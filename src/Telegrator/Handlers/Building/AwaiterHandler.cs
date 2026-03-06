@@ -1,7 +1,7 @@
 ﻿using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
-using Telegrator.Handlers.Components;
-using Telegrator.MadiatorCore.Descriptors;
+using Telegrator.Core.Descriptors;
+using Telegrator.Core.Handlers;
 
 namespace Telegrator.Handlers.Building
 {

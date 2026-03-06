@@ -1,5 +1,5 @@
 ﻿using Telegram.Bot.Types;
-using Telegrator.StateKeeping.Components;
+using Telegrator.Core.StateKeeping;
 
 namespace Telegrator.StateKeeping
 {

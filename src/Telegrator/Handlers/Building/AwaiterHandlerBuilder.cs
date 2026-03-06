@@ -2,10 +2,10 @@
 using Telegram.Bot.Types.Enums;
 using Telegrator.Filters;
 using Telegrator.StateKeeping;
-using Telegrator.Handlers.Building.Components;
-using Telegrator.MadiatorCore;
-using Telegrator.MadiatorCore.Descriptors;
-using Telegrator.StateKeeping.Components;
+using Telegrator.Core;
+using Telegrator.Core.Handlers.Building;
+using Telegrator.Core.Descriptors;
+using Telegrator.Core.StateKeeping;
 
 namespace Telegrator.Handlers.Building
 {

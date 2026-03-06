@@ -1,4 +1,4 @@
-﻿using Telegrator.Filters.Components;
+﻿using Telegrator.Core.Filters;
 
 namespace Telegrator.Filters
 {

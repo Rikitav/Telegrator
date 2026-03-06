@@ -12,18 +12,17 @@ using Telegram.Bot;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
-using Telegrator.Configuration;
-using Telegrator.Hosting.Components;
+using Telegrator;
+using Telegrator.Core;
+using Telegrator.Core.Descriptors;
+using Telegrator.Handlers;
+using Telegrator.Hosting;
 using Telegrator.Hosting.Configuration;
-using Telegrator.Hosting.Logging;
-using Telegrator.Hosting.Polling;
-using Telegrator.Hosting.Providers;
-using Telegrator.Hosting.Providers.Components;
 using Telegrator.Logging;
-using Telegrator.MadiatorCore;
-using Telegrator.MadiatorCore.Descriptors;
+using Telegrator.Polling;
+using Telegrator.Providers;
 
-namespace Telegrator.Hosting
+namespace Telegrator
 {
     public static class HostBuilderExtensions
     {
@@ -196,7 +195,7 @@ namespace Telegrator.Hosting
             ILogger logger = loggerFactory.CreateLogger("Telegrator");
 
             MicrosoftLoggingAdapter adapter = new MicrosoftLoggingAdapter(logger);
-            Alligator.AddAdapter(adapter);
+            TelegratorLogging.AddAdapter(adapter);
             return host;
         }
     }

@@ -1,4 +1,4 @@
-﻿using Telegrator.Attributes.Components;
+﻿using Telegrator.Core.Attributes;
 
 namespace Telegrator.Handlers.Diagnostics
 {

@@ -3,11 +3,11 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
-using Telegrator.Hosting.Components;
-using Telegrator.MadiatorCore;
-using Telegrator.Polling;
+using Telegrator.Core;
+using Telegrator.Hosting;
+using Telegrator.Mediation;
 
-namespace Telegrator.Hosting.Polling
+namespace Telegrator.Polling
 {
     /// <summary>
     /// Service for receiving updates for Hosted telegram bots

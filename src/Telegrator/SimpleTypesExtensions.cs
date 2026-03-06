@@ -1,8 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 using System.Reflection;
-using Telegrator.Filters.Components;
-using Telegrator.Handlers.Components;
-using Telegrator.Providers;
+using Telegrator.Core;
+using Telegrator.Core.Filters;
+using Telegrator.Core.Handlers;
 
 namespace Telegrator
 {

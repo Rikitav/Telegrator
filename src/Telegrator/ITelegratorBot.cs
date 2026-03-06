@@ -1,4 +1,4 @@
-﻿using Telegrator.MadiatorCore;
+﻿using Telegrator.Core;
 
 namespace Telegrator
 {

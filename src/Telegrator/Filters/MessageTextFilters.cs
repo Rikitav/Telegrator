@@ -1,5 +1,5 @@
 ﻿using Telegram.Bot.Types;
-using Telegrator.Filters.Components;
+using Telegrator.Core.Filters;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace Telegrator.Filters

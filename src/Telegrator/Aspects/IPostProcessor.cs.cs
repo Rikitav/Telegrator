@@ -1,4 +1,4 @@
-﻿using Telegrator.Handlers.Components;
+﻿using Telegrator.Core.Handlers;
 
 namespace Telegrator.Aspects
 {

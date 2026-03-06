@@ -1,4 +1,4 @@
-﻿using Telegrator.MadiatorCore.Descriptors;
+﻿using Telegrator.Core.Descriptors;
 
 namespace Telegrator
 {

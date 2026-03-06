@@ -1,12 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Telegrator.Handlers.Components;
-using Telegrator.MadiatorCore;
-using Telegrator.MadiatorCore.Descriptors;
-using Telegrator.Providers;
+using Telegrator.Core;
+using Telegrator.Core.Descriptors;
+using Telegrator.Core.Handlers;
 
-namespace Telegrator.Hosting.Providers
+namespace Telegrator.Providers
 {
     /// <inheritdoc/>
     public class HostHandlersProvider : HandlersProvider

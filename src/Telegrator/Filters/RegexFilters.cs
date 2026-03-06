@@ -1,5 +1,5 @@
 ﻿using System.Text.RegularExpressions;
-using Telegrator.Filters.Components;
+using Telegrator.Core.Filters;
 
 namespace Telegrator.Filters
 {

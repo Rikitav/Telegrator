@@ -1,8 +1,8 @@
 ﻿using Telegram.Bot;
 using Telegram.Bot.Polling;
-using Telegrator.Configuration;
+using Telegrator.Core;
 using Telegrator.Logging;
-using Telegrator.MadiatorCore;
+using Telegrator.Mediation;
 using Telegrator.Polling;
 using Telegrator.Providers;
 
@@ -80,7 +80,7 @@ namespace Telegrator
             updateRouter = new UpdateRouter(handlerProvider, awaitingProvider, Options, BotInfo);
             
             // Log startup
-            Alligator.LogInformation($"Telegrator bot starting up - BotId: {BotInfo.User.Id}, Username: {BotInfo.User.Username}, MaxParallelHandlers: {Options.MaximumParallelWorkingHandlers ?? -1}");
+            TelegratorLogging.LogInformation($"Telegrator bot starting up - BotId: {BotInfo.User.Id}, Username: {BotInfo.User.Username}, MaxParallelHandlers: {Options.MaximumParallelWorkingHandlers ?? -1}");
 
             StartReceivingInternal(receiverOptions, cancellationToken);
         }
@@ -111,7 +111,7 @@ namespace Telegrator
             catch (OperationCanceledException)
             {
                 // Cancelled
-                Alligator.LogInformation("Telegrator bot stopped (cancelled)");
+                TelegratorLogging.LogInformation("Telegrator bot stopped (cancelled)");
             }
         }
 

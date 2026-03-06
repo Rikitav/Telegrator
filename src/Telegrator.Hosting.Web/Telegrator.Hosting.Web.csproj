@@ -5,6 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 	<LangVersion>latest</LangVersion>
+	<RootNamespace>Telegrator</RootNamespace>
 	<BaseOutputPath>..\..\bin</BaseOutputPath>
 	<DocumentationFile>..\..\docs\$(AssemblyName).xml</DocumentationFile>
 	  

@@ -1,5 +1,5 @@
 ﻿using Telegrator.Annotations.StateKeeping;
-using Telegrator.Handlers.Components;
+using Telegrator.Core.Handlers;
 
 namespace Telegrator.StateKeeping
 {

@@ -1,6 +1,6 @@
 ﻿using Telegram.Bot.Types.Enums;
-using Telegrator.MadiatorCore;
-using Telegrator.MadiatorCore.Descriptors;
+using Telegrator.Core;
+using Telegrator.Core.Descriptors;
 
 namespace Telegrator.Providers
 {

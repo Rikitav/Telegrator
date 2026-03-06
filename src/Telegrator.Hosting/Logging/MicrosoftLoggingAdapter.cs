@@ -1,7 +1,6 @@
 using Microsoft.Extensions.Logging;
-using Telegrator.Logging;
 
-namespace Telegrator.Hosting.Logging
+namespace Telegrator.Logging
 {
     /// <summary>
     /// Adapter for Microsoft.Extensions.Logging to work with Telegrator logging system.
@@ -21,7 +20,7 @@ namespace Telegrator.Hosting.Logging
         }
 
         /// <inheritdoc/>
-        public void Log(Telegrator.Logging.LogLevel level, string message, Exception? exception = null)
+        public void Log(LogLevel level, string message, Exception? exception = null)
         {
             var msLogLevel = level switch
             {
