@@ -18,8 +18,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Telegrator\Telegrator.csproj" />
-    <ProjectReference Include="..\Telegrator.Hosting\Telegrator.Hosting.csproj" />
+    <ProjectReference Include="..\..\src\Telegrator\Telegrator.csproj" />
+    <ProjectReference Include="..\..\src\Telegrator.Hosting\Telegrator.Hosting.csproj" />
   </ItemGroup>
 
 </Project>
