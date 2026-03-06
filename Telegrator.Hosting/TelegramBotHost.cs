@@ -1,13 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using System.Text;
-using Telegram.Bot.Types.Enums;
-using Telegrator.Configuration;
 using Telegrator.Hosting.Components;
 using Telegrator.MadiatorCore;
-using Telegrator.MadiatorCore.Descriptors;
 
 namespace Telegrator.Hosting
 {
@@ -47,16 +42,14 @@ namespace Telegrator.Hosting
             // Building proxy hoster
             _innerHost = hostApplicationBuilder.Build();
             _serviceProvider = _innerHost.Services;
-
-            // Initializing bot info, as it requires to make a request via tg bot
-            Services.GetRequiredService<ITelegramBotInfo>();
+            _innerHost.UseTelegrator();
 
             // Reruesting services for this host
             _updateRouter = Services.GetRequiredService<IUpdateRouter>();
             _logger = Services.GetRequiredService<ILogger<TelegramBotHost>>();
 
             // Logging registering handlers in DEBUG purposes
-            LogHandlers(handlers);
+            _logger.LogHandlers(handlers);
         }
 
         /// <summary>
@@ -131,28 +124,6 @@ namespace Telegrator.Hosting
             _disposed = true;
         }
 
-        private void LogHandlers(IHandlersCollection handlers)
-        {
-            StringBuilder logBuilder = new StringBuilder("Registered handlers : ");
-            if (!handlers.Keys.Any())
-                throw new Exception();
-
-            foreach (UpdateType updateType in handlers.Keys)
-            {
-                HandlerDescriptorList descriptors = handlers[updateType];
-                logBuilder.Append("\n\tUpdateType." + updateType + " :");
-
-                foreach (HandlerDescriptor descriptor in descriptors.Reverse())
-                {
-                    logBuilder.AppendFormat("\n\t* {0} - {1}",
-                        descriptor.Indexer.ToString(),
-                        descriptor.ToString());
-                }
-            }
-
-            Logger.LogInformation(logBuilder.ToString());
-        }
-
         private void RegisterHostServices(IServiceCollection services, IHandlersCollection handlers)
         {
             //services.RemoveAll<IHost>();
@@ -160,14 +131,6 @@ namespace Telegrator.Hosting
 
             services.AddSingleton<ITelegramBotHost>(this);
             services.AddSingleton<ITelegratorBot>(this);
-            services.AddSingleton(handlers);
-
-            if (handlers is IHandlersManager manager)
-            {
-                services.RemoveAll<IHandlersProvider>();
-                services.AddSingleton<IHandlersProvider>(manager);
-                services.AddSingleton(manager);
-            }
         }
     }
 }

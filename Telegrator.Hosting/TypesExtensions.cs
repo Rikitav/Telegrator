@@ -1,22 +1,95 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
+using System.Text;
 using Telegram.Bot;
+using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.Enums;
 using Telegrator.Configuration;
 using Telegrator.Hosting.Components;
 using Telegrator.Hosting.Configuration;
 using Telegrator.Hosting.Logging;
 using Telegrator.Hosting.Polling;
 using Telegrator.Hosting.Providers;
+using Telegrator.Hosting.Providers.Components;
 using Telegrator.Logging;
 using Telegrator.MadiatorCore;
+using Telegrator.MadiatorCore.Descriptors;
 
 namespace Telegrator.Hosting
 {
+    public static class HostBuilderExtensions
+    {
+        /// <summary>
+        /// Replaces TelegramBotWebHostBuilder. Configures DI, options, and handlers.
+        /// </summary>
+        public static IHostApplicationBuilder AddTelegrator(this IHostApplicationBuilder builder, TelegramBotHostBuilderSettings settings, IHandlersCollection? handlers = null)
+        {
+            if (settings is null)
+                throw new ArgumentNullException(nameof(settings));
+
+            IServiceCollection services = builder.Services;
+            IConfigurationManager configuration = builder.Configuration;
+
+            handlers ??= new HostHandlersCollection(services, settings);
+
+            if (handlers is IHostHandlersCollection hostHandlers)
+            {
+                foreach (PreBuildingRoutine preBuildRoutine in hostHandlers.PreBuilderRoutines)
+                {
+                    try
+                    {
+                        // TODO: fix
+                        //preBuildRoutine.Invoke(builder);
+                        Debug.WriteLine("Pre-Building routine was not executed");
+                    }
+                    catch (NotImplementedException)
+                    {
+                        _ = 0xBAD + 0xC0DE;
+                    }
+                }
+            }
+
+            if (!settings.DisableAutoConfigure)
+            {
+                services.Configure<ReceiverOptions>(configuration.GetSection(nameof(ReceiverOptions)));
+                services.Configure(configuration.GetSection(nameof(TelegramBotClientOptions)), new TelegramBotClientOptionsProxy());
+            }
+            else
+            {
+                /*
+                if (null == Services.SingleOrDefault(srvc => srvc.ImplementationType == typeof(IOptions<ReceiverOptions>)))
+                    throw new MissingMemberException("Auto configuration disabled, yet no options of type 'ReceiverOptions' wasn't registered. This configuration is runtime required!");
+                */
+
+                if (null == services.SingleOrDefault(srvc => srvc.ImplementationType == typeof(IOptions<TelegramBotClientOptions>)))
+                    throw new MissingMemberException("Auto configuration disabled, yet no options of type 'TelegramBotClientOptions' wasn't registered. This configuration is runtime required!");
+            }
+
+            IOptions<TelegramBotHostBuilderSettings> options = Options.Create(settings);
+            services.AddSingleton((IOptions<TelegratorOptions>)options);
+            services.AddTelegramBotHostDefaults();
+            services.AddSingleton(options);
+            services.AddSingleton(handlers);
+
+            if (handlers is IHandlersManager manager)
+            {
+                ServiceDescriptor descriptor = new ServiceDescriptor(typeof(IHandlersProvider), manager);
+                services.Replace(descriptor);
+                services.AddSingleton(manager);
+            }
+
+            return builder;
+        }
+    }
+
     /// <summary>
     /// Contains extensions for <see cref="IServiceCollection"/>
     /// Provides method to configure <see cref="ITelegramBotHost"/>
@@ -82,14 +155,33 @@ namespace Telegrator.Hosting
     public static class TelegramBotHostExtensions
     {
         /// <summary>
+        /// Replaces the initialization logic from TelegramBotWebHost constructor. 
+        /// Initializes the bot and logs handlers on application startup.
+        /// </summary>
+        public static IHost UseTelegrator(this IHost botHost)
+        {
+            ITelegramBotInfo info = botHost.Services.GetRequiredService<ITelegramBotInfo>();
+            IHandlersCollection handlers = botHost.Services.GetRequiredService<IHandlersCollection>();
+            ILoggerFactory loggerFactory = botHost.Services.GetRequiredService<ILoggerFactory>();
+            ILogger logger = loggerFactory.CreateLogger("Telegrator.Hosting.Web.TelegratorHost");
+
+            logger.LogInformation("Telegrator Bot .NET Host started");
+            logger.LogHandlers(handlers);
+
+            return botHost;
+        }
+
+        /// <summary>
         /// Configures bots available commands depending on what handlers was registered
         /// </summary>
         /// <param name="botHost"></param>
         /// <returns></returns>
-        public static ITelegramBotHost SetBotCommands(this ITelegramBotHost botHost)
+        public static IHost SetBotCommands(this IHost botHost)
         {
             ITelegramBotClient client = botHost.Services.GetRequiredService<ITelegramBotClient>();
-            IEnumerable<BotCommand> aliases = botHost.UpdateRouter.HandlersProvider.GetBotCommands();
+            IUpdateRouter router = botHost.Services.GetRequiredService<IUpdateRouter>();
+
+            IEnumerable<BotCommand> aliases = router.HandlersProvider.GetBotCommands();
             client.SetMyCommands(aliases).Wait();
             return botHost;
         }
@@ -98,10 +190,11 @@ namespace Telegrator.Hosting
         /// Adds a Microsoft.Extensions.Logging adapter to Alligator using a logger factory.
         /// </summary>
         /// <param name="host"></param>
-        public static ITelegramBotHost AddLoggingAdapter(this ITelegramBotHost host)
+        public static IHost AddLoggingAdapter(this IHost host)
         {
             ILoggerFactory loggerFactory = host.Services.GetRequiredService<ILoggerFactory>();
             ILogger logger = loggerFactory.CreateLogger("Telegrator");
+
             MicrosoftLoggingAdapter adapter = new MicrosoftLoggingAdapter(logger);
             Alligator.AddAdapter(adapter);
             return host;
@@ -127,6 +220,31 @@ namespace Telegrator.Hosting
 
             routineMethod = handlerType.GetMethod(nameof(IPreBuildingRoutine.PreBuildingRoutine), BindingFlags.Static | BindingFlags.Public);
             return routineMethod != null;
+        }
+    }
+
+    public static class LoggerExtensions
+    {
+        public static void LogHandlers(this ILogger logger, IHandlersCollection handlers)
+        {
+            StringBuilder logBuilder = new StringBuilder("Registered handlers : ");
+            if (!handlers.Keys.Any())
+                throw new Exception();
+
+            foreach (UpdateType updateType in handlers.Keys)
+            {
+                HandlerDescriptorList descriptors = handlers[updateType];
+                logBuilder.Append("\n\tUpdateType." + updateType + " :");
+
+                foreach (HandlerDescriptor descriptor in descriptors.Reverse())
+                {
+                    logBuilder.AppendFormat("\n\t* {0} - {1}",
+                        descriptor.Indexer.ToString(),
+                        descriptor.ToString());
+                }
+            }
+
+            logger.LogInformation(logBuilder.ToString());
         }
     }
 }

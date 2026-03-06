@@ -5,16 +5,13 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Diagnostics;
-using System.Text;
 using Telegram.Bot;
-using Telegram.Bot.Types.Enums;
 using Telegrator.Configuration;
 using Telegrator.Hosting.Providers;
 using Telegrator.Hosting.Providers.Components;
 using Telegrator.Hosting.Web.Components;
 using Telegrator.Hosting.Web.Polling;
 using Telegrator.MadiatorCore;
-using Telegrator.MadiatorCore.Descriptors;
 
 namespace Telegrator.Hosting.Web
 {
@@ -96,8 +93,8 @@ namespace Telegrator.Hosting.Web
             ILoggerFactory loggerFactory = app.Services.GetRequiredService<ILoggerFactory>();
             ILogger logger = loggerFactory.CreateLogger("Telegrator.Hosting.Web.TelegratorHost");
 
-            logger.LogInformation("Telegrator Bot WebHost started");
-            LogHandlers(handlers, logger);
+            logger.LogInformation("Telegrator Bot ASP.NET WebHost started");
+            logger.LogHandlers(handlers);
 
             return app;
         }
@@ -116,27 +113,5 @@ namespace Telegrator.Hosting.Web
 
         private static ITelegramBotClient TypedTelegramBotClientFactory(HttpClient httpClient, IServiceProvider provider)
             => new TelegramBotClient(provider.GetRequiredService<IOptions<TelegramBotClientOptions>>().Value, httpClient);
-
-        private static void LogHandlers(IHandlersCollection handlers, ILogger logger)
-        {
-            if (!handlers.Keys.Any())
-                throw new Exception("No handlers were registered for the bot.");
-
-            StringBuilder logBuilder = new StringBuilder("Registered handlers : ");
-            foreach (UpdateType updateType in handlers.Keys)
-            {
-                HandlerDescriptorList descriptors = handlers[updateType];
-                logBuilder.Append("\n\tUpdateType." + updateType + " :");
-
-                foreach (HandlerDescriptor descriptor in Enumerable.Reverse(descriptors))
-                {
-                    logBuilder.AppendFormat("\n\t* {0} - {1}",
-                        descriptor.Indexer.ToString(),
-                        descriptor.ToString());
-                }
-            }
-
-            logger.LogInformation(logBuilder.ToString());
-        }
     }
 }

@@ -13,7 +13,7 @@ namespace Telegrator.Hosting.Providers
     /// Pre host building task
     /// </summary>
     /// <param name="builder"></param>
-    public delegate void PreBuildingRoutine(IApplicationBuilder builder);
+    public delegate void PreBuildingRoutine(ITelegramBotHostBuilder builder);
 
     /// <inheritdoc/>
     public class HostHandlersCollection(IServiceCollection hostServiceColletion, ITelegratorOptions options) : HandlersCollection(options), IHostHandlersCollection
