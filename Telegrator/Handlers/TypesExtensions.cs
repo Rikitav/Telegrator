@@ -92,7 +92,7 @@ namespace Telegrator.Handlers
                 suggestedPostParameters, cancellationToken);
 
         /// <summary>
-        /// Sends a response message to the current chat.
+        /// Sends a responce message to the current chat.
         /// </summary>
         /// <param name="container"></param>
         /// <param name="text">The text of the message to send.</param>
@@ -111,7 +111,7 @@ namespace Telegrator.Handlers
         /// <param name="suggestedPostParameters"></param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The sent message.</returns>
-        public static async Task<Message> Response(
+        public static async Task<Message> Responce(
             this IHandlerContainer<Message> container,
             string text,
             ParseMode parseMode = ParseMode.None,
@@ -138,7 +138,7 @@ namespace Telegrator.Handlers
                 suggestedPostParameters, cancellationToken);
 
         /// <summary>
-        /// Responnces to message that this CallbackQuery was originated from
+        /// Responces to message that this CallbackQuery was originated from
         /// </summary>
         /// <param name="container"></param>
         /// <param name="text"></param>
@@ -158,7 +158,7 @@ namespace Telegrator.Handlers
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public static async Task<Message> Response(
+        public static async Task<Message> Responce(
             this IHandlerContainer<CallbackQuery> container,
             string text,
             ParseMode parseMode = ParseMode.None,

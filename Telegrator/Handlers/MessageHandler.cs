@@ -70,7 +70,7 @@ namespace Telegrator.Handlers
                 suggestedPostParameters, cancellationToken);
 
         /// <summary>
-        /// Sends a response message to the current chat.
+        /// Sends a responce message to the current chat.
         /// </summary>
         /// <param name="text">The text of the message to send.</param>
         /// <param name="parseMode">The parse mode for the message text.</param>
@@ -88,7 +88,7 @@ namespace Telegrator.Handlers
         /// <param name="suggestedPostParameters"></param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The sent message.</returns>
-        protected async Task<Message> Response(
+        protected async Task<Message> Responce(
             string text,
             ParseMode parseMode = ParseMode.None,
             ReplyParameters? replyParameters = null,
@@ -104,7 +104,7 @@ namespace Telegrator.Handlers
             int? directMessageTopicId = null,
             SuggestedPostParameters? suggestedPostParameters = null,
             CancellationToken cancellationToken = default)
-            => await Container.Response(
+            => await Container.Responce(
                 text, parseMode, replyParameters,
                 replyMarkup, linkPreviewOptions,
                 messageThreadId, entities,
