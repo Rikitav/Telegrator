@@ -18,8 +18,8 @@ namespace Telegrator.Hosting.Web
     public class TelegramBotWebHostBuilder : ITelegramBotHostBuilder
     {
         private readonly WebApplicationBuilder _innerBuilder;
-        private readonly TelegramBotWebOptions _settings;
-        private readonly IHandlersCollection _handlers;
+        private readonly WebApplicationOptions _settings;
+        internal IHandlersCollection _handlers = null!;
 
         /// <inheritdoc/>
         public IHandlersCollection Handlers => _handlers;
@@ -41,11 +41,10 @@ namespace Telegrator.Hosting.Web
         /// </summary>
         /// <param name="webApplicationBuilder"></param>
         /// <param name="settings"></param>
-        public TelegramBotWebHostBuilder(WebApplicationBuilder webApplicationBuilder, TelegramBotWebOptions settings)
+        public TelegramBotWebHostBuilder(WebApplicationBuilder webApplicationBuilder, WebApplicationOptions settings)
         {
             _innerBuilder = webApplicationBuilder ?? throw new ArgumentNullException(nameof(webApplicationBuilder));
             _settings = settings ?? throw new ArgumentNullException(nameof(settings));
-            _handlers = new HostHandlersCollection(Services, _settings);
 
             _innerBuilder.AddTelegratorWeb(settings);
         }
@@ -56,13 +55,12 @@ namespace Telegrator.Hosting.Web
         /// <param name="webApplicationBuilder"></param>
         /// <param name="handlers"></param>
         /// <param name="settings"></param>
-        public TelegramBotWebHostBuilder(WebApplicationBuilder webApplicationBuilder, TelegramBotWebOptions settings, IHandlersCollection handlers)
+        public TelegramBotWebHostBuilder(WebApplicationBuilder webApplicationBuilder, IHandlersCollection handlers, WebApplicationOptions settings)
         {
             _innerBuilder = webApplicationBuilder ?? throw new ArgumentNullException(nameof(webApplicationBuilder));
             _settings = settings ?? throw new ArgumentNullException(nameof(settings));
-            _handlers = handlers ?? throw new ArgumentNullException(nameof(settings));
 
-            _innerBuilder.AddTelegratorWeb(settings, handlers);
+            _innerBuilder.AddTelegratorWeb(settings, null, handlers);
         }
 
         /// <summary>
@@ -71,7 +69,9 @@ namespace Telegrator.Hosting.Web
         /// <returns></returns>
         public TelegramBotWebHost Build()
         {
-            return new TelegramBotWebHost(_innerBuilder);
+            TelegramBotWebHost host = new TelegramBotWebHost(_innerBuilder);
+            host.UseTelegrator();
+            return host;
         }
     }
 }

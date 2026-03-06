@@ -5,10 +5,9 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System.Diagnostics;
 using Telegram.Bot;
-using Telegrator;
 using Telegrator.Core;
+using Telegrator.Hosting;
 using Telegrator.Hosting.Web;
 using Telegrator.Mediation;
 using Telegrator.Providers;
@@ -17,7 +16,7 @@ namespace Telegrator
 {
     /// <summary>
     /// Contains extensions for <see cref="IServiceCollection"/>
-    /// Provides method to configure <see cref="ITelegramBotWebHost"/>
+    /// Provides method to configure Telegram Bot WebHost
     /// </summary>
     public static class ServicesCollectionExtensions
     {
@@ -31,69 +30,78 @@ namespace Telegrator
             /// <summary>
             /// Gets the <see cref="IHandlersCollection"/> from the builder properties.
             /// </summary>
-            public IHandlersCollection Handlers => (IHandlersCollection)builder.Properties[HandlersCollectionPropertyKey];
+            public IHandlersCollection Handlers
+            {
+                get
+                {
+                    if (builder is TelegramBotHostBuilder botHostBuilder)
+                        return botHostBuilder.Handlers;
+
+                    if (builder is TelegramBotWebHostBuilder webBotHostBuilder)
+                        return webBotHostBuilder.Handlers;
+
+                    return (IHandlersCollection)builder.Properties[HandlersCollectionPropertyKey];
+                }
+            }
         }
 
         /// <summary>
         /// Replaces TelegramBotWebHostBuilder. Configures DI, options, and handlers.
         /// </summary>
-        public static WebApplicationBuilder AddTelegratorWeb(this WebApplicationBuilder builder, TelegramBotWebOptions settings, IHandlersCollection? handlers = null)
+        public static IHostApplicationBuilder AddTelegratorWeb(this IHostApplicationBuilder builder, WebApplicationOptions settings, TelegratorOptions? options = null, IHandlersCollection? handlers = null)
         {
             if (settings is null)
                 throw new ArgumentNullException(nameof(settings));
 
             IServiceCollection services = builder.Services;
-            ConfigurationManager configuration = builder.Configuration;
+            IConfigurationManager configuration = builder.Configuration;
 
-            handlers ??= new HostHandlersCollection(services, settings);
-            builder.Host.Properties.Add(HandlersCollectionPropertyKey, handlers);
-
-            if (handlers is IHostHandlersCollection hostHandlers)
+            if (options == null)
             {
-                foreach (PreBuildingRoutine preBuildRoutine in hostHandlers.PreBuilderRoutines)
+                options = configuration.GetSection(nameof(TelegratorOptions)).Get<TelegratorOptions>();
+                if (options == null)
+                    throw new MissingMemberException("Auto configuration disabled, yet no options of type 'TelegratorOptions' wasn't registered. This configuration is runtime required!");
+            }
+
+            services.AddSingleton(Options.Create(options));
+
+            if (handlers != null)
+            {
+                if (handlers is IHandlersManager manager)
                 {
-                    try
-                    {
-                        // TODO: fix
-                        //preBuildRoutine.Invoke(builder);
-                        Debug.WriteLine("Pre-Building routine was not executed");
-                    }
-                    catch (NotImplementedException)
-                    {
-                        _ = 0xBAD + 0xC0DE;
-                    }
+                    ServiceDescriptor descriptor = new ServiceDescriptor(typeof(IHandlersProvider), manager);
+                    services.Replace(descriptor);
+                    services.AddSingleton(manager);
                 }
             }
 
-            if (!settings.DisableAutoConfigure)
-            {
-                services.Configure<TelegratorWebOptions>(configuration.GetSection(nameof(TelegratorWebOptions)));
-                services.Configure<TelegratorWebOptions>(configuration.GetSection(nameof(TelegramBotClientOptions)));
-            }
-            else
-            {
-                if (!services.Any(srvc => srvc.ImplementationType == typeof(IOptions<TelegratorWebOptions>)))
-                    throw new MissingMemberException("Auto configuration disabled, yet no options of type 'TelegratorWebOptions' wasn't registered. This configuration is runtime required!");
-
-                if (!services.Any(srvc => srvc.ImplementationType == typeof(IOptions<TelegramBotClientOptions>)))
-                    throw new MissingMemberException("Auto configuration disabled, yet no options of type 'TelegramBotClientOptions' wasn't registered. This configuration is runtime required!");
-            }
-
-            IOptions<TelegramBotWebOptions> options = Options.Create(settings);
-            services.AddSingleton((IOptions<TelegratorOptions>)options);
-            services.AddSingleton(options);
+            handlers ??= new HostHandlersCollection(services, options);
             services.AddSingleton(handlers);
 
-            if (handlers is IHandlersManager manager)
+            builder.Properties.Add(HandlersCollectionPropertyKey, handlers);
+            if (builder is TelegramBotWebHostBuilder botHostBuilder)
+                botHostBuilder._handlers = handlers;
+
+            if (!services.Any(srvc => srvc.ImplementationType == typeof(IOptions<WebhookerOptions>)))
             {
-                ServiceDescriptor descriptor = new ServiceDescriptor(typeof(IHandlersProvider), manager);
-                services.Replace(descriptor);
-                services.AddSingleton(manager);
+                WebhookerOptions? webhookerOptions = configuration.GetSection(nameof(WebhookerOptions)).Get<WebhookerOptions>();
+                if (webhookerOptions == null)
+                    throw new MissingMemberException("Auto configuration disabled, yet no options of type 'WebhookerOptions' wasn't registered. This configuration is runtime required!");
+
+                services.AddSingleton(Options.Create(webhookerOptions));
+            }
+
+            if (!services.Any(srvc => srvc.ImplementationType == typeof(IOptions<TelegramBotClientOptions>)))
+            {
+                services.AddSingleton(Options.Create(new TelegramBotClientOptions(options.Token, options.BaseUrl, options.UseTestEnvironment)
+                {
+                    RetryCount = options.RetryCount,
+                    RetryThreshold = options.RetryThreshold
+                }));
             }
 
             services.AddTelegramBotHostDefaults();
             services.AddTelegramWebhook();
-
             return builder;
         }
 

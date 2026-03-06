@@ -4,18 +4,13 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
 using System.Text;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
-using Telegrator;
 using Telegrator.Core;
 using Telegrator.Core.Descriptors;
-using Telegrator.Handlers;
 using Telegrator.Hosting;
 using Telegrator.Logging;
 using Telegrator.Polling;
@@ -38,13 +33,22 @@ public static class HostBuilderExtensions
         /// <summary>
         /// Gets the <see cref="IHandlersCollection"/> from the builder properties.
         /// </summary>
-        public IHandlersCollection Handlers => (IHandlersCollection)builder.Properties[HandlersCollectionPropertyKey];
+        public IHandlersCollection Handlers
+        {
+            get
+            {
+                if (builder is TelegramBotHostBuilder botHostBuilder)
+                    return botHostBuilder.Handlers;
+
+                return (IHandlersCollection)builder.Properties[HandlersCollectionPropertyKey];
+            }
+        }
     }
 
     /// <summary>
     /// Replaces TelegramBotWebHostBuilder. Configures DI, options, and handlers.
     /// </summary>
-    public static IHostApplicationBuilder AddTelegrator(this IHostApplicationBuilder builder, TelegramBotHostBuilderSettings settings, IHandlersCollection? handlers = null)
+    public static IHostApplicationBuilder AddTelegrator(this IHostApplicationBuilder builder, HostApplicationBuilderSettings settings, TelegratorOptions? options = null, IHandlersCollection? handlers = null)
     {
         if (settings is null)
             throw new ArgumentNullException(nameof(settings));
@@ -52,53 +56,52 @@ public static class HostBuilderExtensions
         IServiceCollection services = builder.Services;
         IConfigurationManager configuration = builder.Configuration;
 
-        handlers ??= new HostHandlersCollection(services, settings);
-        builder.Properties.Add(HandlersCollectionPropertyKey, handlers);
-
-        if (handlers is IHostHandlersCollection hostHandlers)
+        if (options == null)
         {
-            foreach (PreBuildingRoutine preBuildRoutine in hostHandlers.PreBuilderRoutines)
+            options = configuration.GetSection(nameof(TelegratorOptions)).Get<TelegratorOptions>();
+            if (options == null)
+                throw new MissingMemberException("Auto configuration disabled, yet no options of type 'TelegratorOptions' wasn't registered. This configuration is runtime required!");
+        }
+
+        services.AddSingleton(Options.Create(options));
+
+        if (handlers != null)
+        {
+            if (handlers is IHandlersManager manager)
             {
-                try
-                {
-                    // TODO: fix
-                    //preBuildRoutine.Invoke(builder);
-                    Debug.WriteLine("Pre-Building routine was not executed");
-                }
-                catch (NotImplementedException)
-                {
-                    _ = 0xBAD + 0xC0DE;
-                }
+                ServiceDescriptor descriptor = new ServiceDescriptor(typeof(IHandlersProvider), manager);
+                services.Replace(descriptor);
+                services.AddSingleton(manager);
             }
         }
 
-        if (!settings.DisableAutoConfigure)
-        {
-            services.Configure<ReceiverOptions>(configuration.GetSection(nameof(ReceiverOptions)));
-            services.Configure(configuration.GetSection(nameof(TelegramBotClientOptions)), new TelegramBotClientOptionsProxy());
-        }
-        else
-        {
-            if (null == services.SingleOrDefault(srvc => srvc.ImplementationType == typeof(IOptions<ReceiverOptions>)))
-                throw new MissingMemberException("Auto configuration disabled, yet no options of type 'ReceiverOptions' wasn't registered. This configuration is runtime required!");
-
-            if (null == services.SingleOrDefault(srvc => srvc.ImplementationType == typeof(IOptions<TelegramBotClientOptions>)))
-                throw new MissingMemberException("Auto configuration disabled, yet no options of type 'TelegramBotClientOptions' wasn't registered. This configuration is runtime required!");
-        }
-
-        IOptions<TelegramBotHostBuilderSettings> options = Options.Create(settings);
-        services.AddSingleton((IOptions<TelegratorOptions>)options);
-        services.AddTelegramBotHostDefaults();
-        services.AddSingleton(options);
+        handlers ??= new HostHandlersCollection(services, options);
         services.AddSingleton(handlers);
 
-        if (handlers is IHandlersManager manager)
+        builder.Properties.Add(HandlersCollectionPropertyKey, handlers);
+        if (builder is TelegramBotHostBuilder botHostBuilder)
+            botHostBuilder._handlers = handlers;
+
+        if (!services.Any(srvc => srvc.ImplementationType == typeof(IOptions<ReceiverOptions>)))
         {
-            ServiceDescriptor descriptor = new ServiceDescriptor(typeof(IHandlersProvider), manager);
-            services.Replace(descriptor);
-            services.AddSingleton(manager);
+            ReceiverOptions? receiverOptions = configuration.GetSection(nameof(ReceiverOptions)).Get<ReceiverOptions>();
+            if (receiverOptions == null)
+                throw new MissingMemberException("Auto configuration disabled, yet no options of type 'ReceiverOptions' wasn't registered. This configuration is runtime required!");
+
+            services.AddSingleton(Options.Create(receiverOptions));
         }
 
+        if (!services.Any(srvc => srvc.ImplementationType == typeof(IOptions<TelegramBotClientOptions>)))
+        {
+            services.AddSingleton(Options.Create(new TelegramBotClientOptions(options.Token, options.BaseUrl, options.UseTestEnvironment)
+            {
+                RetryCount = options.RetryCount,
+                RetryThreshold = options.RetryThreshold
+            }));
+        }
+
+        services.AddTelegramReceiver();
+        services.AddTelegramBotHostDefaults();
         return builder;
     }
 }
@@ -109,20 +112,6 @@ public static class HostBuilderExtensions
 /// </summary>
 public static class ServicesCollectionExtensions
 {
-    /// <summary>
-    /// Registers a configuration instance that strongly-typed <typeparamref name="TOptions"/> will bind against using <see cref="ConfigureOptionsProxy{TOptions}"/>.
-    /// </summary>
-    /// <typeparam name="TOptions"></typeparam>
-    /// <param name="services"></param>
-    /// <param name="configuration"></param>
-    /// <param name="optionsProxy"></param>
-    /// <returns></returns>
-    public static IServiceCollection Configure<TOptions>(this IServiceCollection services, IConfiguration configuration, ConfigureOptionsProxy<TOptions> optionsProxy) where TOptions : class
-    {
-        optionsProxy.Configure(services, configuration);
-        return services;
-    }
-
     /// <summary>
     /// Registers <see cref="TelegramBotHost"/> default services
     /// </summary>
@@ -163,7 +152,7 @@ public static class ServicesCollectionExtensions
 }
 
 /// <summary>
-/// Provides useful methods to adjust <see cref="ITelegramBotHost"/>
+/// Provides useful methods to adjust Telegram bot Host
 /// </summary>
 public static class TelegramBotHostExtensions
 {
@@ -215,28 +204,6 @@ public static class TelegramBotHostExtensions
         MicrosoftLoggingAdapter adapter = new MicrosoftLoggingAdapter(logger);
         TelegratorLogging.AddAdapter(adapter);
         return host;
-    }
-}
-
-/// <summary>
-/// Provides extension methods for reflection and type inspection.
-/// </summary>
-public static class ReflectionExtensions
-{
-    /// <summary>
-    /// Checks if a type implements the <see cref="IPreBuildingRoutine"/> interface.
-    /// </summary>
-    /// <param name="handlerType">The type to check.</param>
-    /// <param name="routineMethod"></param>
-    /// <returns>True if the type implements IPreBuildingRoutine; otherwise, false.</returns>
-    public static bool IsPreBuildingRoutine(this Type handlerType, [NotNullWhen(true)] out MethodInfo? routineMethod)
-    {
-        routineMethod = null;
-        if (handlerType.GetInterface(nameof(IPreBuildingRoutine)) == null)
-            return false;
-
-        routineMethod = handlerType.GetMethod(nameof(IPreBuildingRoutine.PreBuildingRoutine), BindingFlags.Static | BindingFlags.Public);
-        return routineMethod != null;
     }
 }
 

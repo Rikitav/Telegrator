@@ -22,7 +22,7 @@ namespace Telegrator.Mediation
         private readonly IEndpointRouteBuilder _botHost;
         private readonly ITelegramBotClient _botClient;
         private readonly IUpdateRouter _updateRouter;
-        private readonly TelegratorWebOptions _options;
+        private readonly WebhookerOptions _options;
 
         /// <summary>
         /// Initiallizes new instance of <see cref="HostedUpdateWebhooker"/>
@@ -32,7 +32,7 @@ namespace Telegrator.Mediation
         /// <param name="updateRouter"></param>
         /// <param name="options"></param>
         /// <exception cref="ArgumentNullException"></exception>
-        public HostedUpdateWebhooker(IEndpointRouteBuilder botHost, ITelegramBotClient botClient, IUpdateRouter updateRouter, IOptions<TelegratorWebOptions> options)
+        public HostedUpdateWebhooker(IEndpointRouteBuilder botHost, ITelegramBotClient botClient, IUpdateRouter updateRouter, IOptions<WebhookerOptions> options)
         {
             if (string.IsNullOrEmpty(options.Value.WebhookUri))
                 throw new ArgumentNullException(nameof(options), "Option \"WebhookUrl\" must be set to subscribe for update recieving");

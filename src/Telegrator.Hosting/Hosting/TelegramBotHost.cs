@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Telegrator.Core;
@@ -8,7 +9,7 @@ namespace Telegrator.Hosting
     /// <summary>
     /// Represents a hosted telegram bot
     /// </summary>
-    public class TelegramBotHost : ITelegramBotHost
+    public class TelegramBotHost : IHost, ITelegratorBot
     {
         private readonly IHost _innerHost;
         private readonly IServiceProvider _serviceProvider;
@@ -33,10 +34,9 @@ namespace Telegrator.Hosting
         /// </summary>
         /// <param name="hostApplicationBuilder">The proxied instance of host builder.</param>
         /// <param name="handlers"></param>
-        public TelegramBotHost(HostApplicationBuilder hostApplicationBuilder, IHandlersCollection handlers)
+        public TelegramBotHost(HostApplicationBuilder hostApplicationBuilder)
         {
             // Registering this host in services for easy access
-            hostApplicationBuilder.Services.AddSingleton<ITelegramBotHost>(this);
             hostApplicationBuilder.Services.AddSingleton<ITelegratorBot>(this);
 
             // Building proxy hoster
@@ -47,9 +47,6 @@ namespace Telegrator.Hosting
             // Reruesting services for this host
             _updateRouter = Services.GetRequiredService<IUpdateRouter>();
             _logger = Services.GetRequiredService<ILogger<TelegramBotHost>>();
-
-            // Logging registering handlers in DEBUG purposes
-            _logger.LogHandlers(handlers);
         }
 
         /// <summary>
@@ -60,6 +57,7 @@ namespace Telegrator.Hosting
         {
             HostApplicationBuilder innerBuilder = new HostApplicationBuilder(settings: null);
             TelegramBotHostBuilder builder = new TelegramBotHostBuilder(innerBuilder, null);
+
             builder.Services.AddTelegramBotHostDefaults();
             builder.Services.AddTelegramReceiver();
             return builder;
@@ -69,10 +67,11 @@ namespace Telegrator.Hosting
         /// Creates new <see cref="TelegramBotHostBuilder"/> with default services and long-polling update receiving scheme
         /// </summary>
         /// <returns></returns>
-        public static TelegramBotHostBuilder CreateBuilder(TelegramBotHostBuilderSettings? settings)
+        public static TelegramBotHostBuilder CreateBuilder(HostApplicationBuilderSettings? settings)
         {
-            HostApplicationBuilder innerBuilder = new HostApplicationBuilder(settings?.ToApplicationBuilderSettings());
+            HostApplicationBuilder innerBuilder = new HostApplicationBuilder(settings);
             TelegramBotHostBuilder builder = new TelegramBotHostBuilder(innerBuilder, settings);
+
             builder.Services.AddTelegramBotHostDefaults();
             builder.Services.AddTelegramReceiver();
             return builder;
@@ -92,7 +91,7 @@ namespace Telegrator.Hosting
         /// Creates new EMPTY <see cref="TelegramBotHostBuilder"/> WITHOUT any services or update receiving schemes
         /// </summary>
         /// <returns></returns>
-        public static TelegramBotHostBuilder CreateEmptyBuilder(TelegramBotHostBuilderSettings? settings)
+        public static TelegramBotHostBuilder CreateEmptyBuilder(HostApplicationBuilderSettings? settings)
         {
             HostApplicationBuilder innerBuilder = Host.CreateEmptyApplicationBuilder(null);
             return new TelegramBotHostBuilder(innerBuilder, settings);

@@ -4,7 +4,6 @@ using Microsoft.Extensions.Options;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
 using Telegrator.Core;
-using Telegrator.Hosting;
 using Telegrator.Mediation;
 
 namespace Telegrator.Polling
@@ -17,7 +16,7 @@ namespace Telegrator.Polling
     /// <param name="updateRouter"></param>
     /// <param name="options"></param>
     /// <param name="logger"></param>
-    public class HostedUpdateReceiver(ITelegramBotHost botHost, ITelegramBotClient botClient, IUpdateRouter updateRouter, IOptions<ReceiverOptions> options, ILogger<HostedUpdateReceiver> logger) : BackgroundService
+    public class HostedUpdateReceiver(ITelegramBotClient botClient, IUpdateRouter updateRouter, IOptions<ReceiverOptions> options, ILogger<HostedUpdateReceiver> logger) : BackgroundService
     {
         private readonly ReceiverOptions _receiverOptions = options.Value;
         private readonly IUpdateRouter _updateRouter = updateRouter;
@@ -26,7 +25,7 @@ namespace Telegrator.Polling
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             logger.LogInformation("Starting receiving updates via long-polling");
-            _receiverOptions.AllowedUpdates = botHost.UpdateRouter.HandlersProvider.AllowedTypes.ToArray();
+            _receiverOptions.AllowedUpdates = _updateRouter.HandlersProvider.AllowedTypes.ToArray();
             DefaultUpdateReceiver updateReceiver = new DefaultUpdateReceiver(botClient, _receiverOptions);
             await updateReceiver.ReceiveAsync(_updateRouter, stoppingToken).ConfigureAwait(false);
         }

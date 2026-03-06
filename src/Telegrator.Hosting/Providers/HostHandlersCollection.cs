@@ -1,36 +1,20 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
 using Telegrator.Core;
 using Telegrator.Core.Descriptors;
-using Telegrator.Hosting;
 
 namespace Telegrator.Providers
 {
-    /// <summary>
-    /// Pre host building task
-    /// </summary>
-    /// <param name="builder"></param>
-    public delegate void PreBuildingRoutine(ITelegramBotHostBuilder builder);
-
     /// <inheritdoc/>
-    public class HostHandlersCollection(IServiceCollection hostServiceColletion, TelegratorOptions options) : HandlersCollection(options), IHostHandlersCollection
+    public class HostHandlersCollection(IServiceCollection hostServiceColletion, TelegratorOptions options) : HandlersCollection(options)
     {
         private readonly IServiceCollection Services = hostServiceColletion;
 
         /// <inheritdoc/>
         protected override bool MustHaveParameterlessCtor => false;
 
-        /// <summary>
-        /// List of tasks that should be completed right before building the bot
-        /// </summary>
-        public List<PreBuildingRoutine> PreBuilderRoutines { get; } = [];
-
         /// <inheritdoc/>
         public override IHandlersCollection AddDescriptor(HandlerDescriptor descriptor)
         {
-            if (descriptor.HandlerType.IsPreBuildingRoutine(out MethodInfo? routineMethod))
-                PreBuilderRoutines.Add(routineMethod.CreateDelegate<PreBuildingRoutine>(null));
-
             switch (descriptor.Type)
             {
                 case DescriptorType.General:

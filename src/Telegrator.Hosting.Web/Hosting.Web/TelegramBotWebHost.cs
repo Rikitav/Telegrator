@@ -12,7 +12,7 @@ namespace Telegrator.Hosting.Web
     /// <summary>
     /// Represents a web hosted telegram bot
     /// </summary>
-    public class TelegramBotWebHost : ITelegramBotWebHost
+    public class TelegramBotWebHost : IHost, IApplicationBuilder, IEndpointRouteBuilder, IAsyncDisposable
     {
         private readonly WebApplication _innerApp;
         private readonly IUpdateRouter _updateRouter;
@@ -51,11 +51,6 @@ namespace Telegrator.Hosting.Web
         /// <param name="webApplicationBuilder">The proxied instance of host builder.</param>
         public TelegramBotWebHost(WebApplicationBuilder webApplicationBuilder)
         {
-            // Registering this host in services for easy access
-            webApplicationBuilder.Services.AddSingleton<ITelegramBotHost>(this);
-            webApplicationBuilder.Services.AddSingleton<ITelegramBotWebHost>(this);
-            webApplicationBuilder.Services.AddSingleton<ITelegratorBot>(this);
-
             // Building proxy application
             _innerApp = webApplicationBuilder.Build();
             _innerApp.UseTelegratorWeb();
@@ -69,11 +64,12 @@ namespace Telegrator.Hosting.Web
         /// Creates new <see cref="TelegramBotHostBuilder"/> with default services and webhook update receiving scheme
         /// </summary>
         /// <returns></returns>
-        public static TelegramBotWebHostBuilder CreateBuilder(TelegramBotWebOptions settings)
+        public static TelegramBotWebHostBuilder CreateBuilder(WebApplicationOptions settings)
         {
             ArgumentNullException.ThrowIfNull(settings, nameof(settings));
-            WebApplicationBuilder innerApp = WebApplication.CreateBuilder(settings.ToWebApplicationOptions());
+            WebApplicationBuilder innerApp = WebApplication.CreateBuilder(settings);
             TelegramBotWebHostBuilder builder = new TelegramBotWebHostBuilder(innerApp, settings);
+
             builder.Services.AddTelegramBotHostDefaults();
             builder.Services.AddTelegramWebhook();
             return builder;
@@ -83,11 +79,12 @@ namespace Telegrator.Hosting.Web
         /// Creates new SLIM <see cref="TelegramBotHostBuilder"/> with default services and webhook update receiving scheme
         /// </summary>
         /// <returns></returns>
-        public static TelegramBotWebHostBuilder CreateSlimBuilder(TelegramBotWebOptions settings)
+        public static TelegramBotWebHostBuilder CreateSlimBuilder(WebApplicationOptions settings)
         {
             ArgumentNullException.ThrowIfNull(settings, nameof(settings));
-            WebApplicationBuilder innerApp = WebApplication.CreateSlimBuilder(settings.ToWebApplicationOptions());
+            WebApplicationBuilder innerApp = WebApplication.CreateSlimBuilder(settings);
             TelegramBotWebHostBuilder builder = new TelegramBotWebHostBuilder(innerApp, settings);
+
             builder.Services.AddTelegramBotHostDefaults();
             builder.Services.AddTelegramWebhook();
             return builder;
@@ -97,10 +94,10 @@ namespace Telegrator.Hosting.Web
         /// Creates new EMPTY <see cref="TelegramBotHostBuilder"/> WITHOUT any services or update receiving schemes
         /// </summary>
         /// <returns></returns>
-        public static TelegramBotWebHostBuilder CreateEmptyBuilder(TelegramBotWebOptions settings)
+        public static TelegramBotWebHostBuilder CreateEmptyBuilder(WebApplicationOptions settings)
         {
             ArgumentNullException.ThrowIfNull(settings, nameof(settings));
-            WebApplicationBuilder innerApp = WebApplication.CreateEmptyBuilder(settings.ToWebApplicationOptions());
+            WebApplicationBuilder innerApp = WebApplication.CreateEmptyBuilder(settings);
             return new TelegramBotWebHostBuilder(innerApp, settings);
         }
 
@@ -154,10 +151,8 @@ namespace Telegrator.Hosting.Web
             if (_disposed)
                 return;
 
-            // Sorry for this, i really dont know how to handle such cases
             ValueTask disposeTask = _innerApp.DisposeAsync();
-            while (!disposeTask.IsCompleted)
-                Thread.Sleep(100);
+            disposeTask.AsTask().Wait();
 
             GC.SuppressFinalize(this);
             _disposed = true;
