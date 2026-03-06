@@ -44,6 +44,7 @@ namespace Telegrator
         public static bool IsCommand(this Message message, out string? command)
         {
             command = null;
+
             if (message is not { Entities.Length: > 0, Text.Length: > 0 })
                 return false;
 
@@ -69,10 +70,13 @@ namespace Telegrator
         /// </summary>
         /// <param name="message"></param>
         /// <param name="command"></param>
+        /// <param name="args"></param>
         /// <returns></returns>
         public static bool IsCommand(this Message message, out string? command, out string? args)
         {
             command = null;
+            args = null;
+
             if (message is not { Entities.Length: > 0, Text.Length: > 0 })
                 return false;
 
@@ -128,6 +132,8 @@ namespace Telegrator
         /// <returns></returns>
         public static bool TrySplitArgs(this Message message, out string[]? args)
         {
+            args = null;
+
             if (message is not { Text.Length: > 0 })
                 return false;
 
@@ -135,10 +141,10 @@ namespace Telegrator
                 return false;
 
             args = null;
-            if (!message.IsCommand(out _, out string> argsStr))
+            if (!message.IsCommand(out _, out string? argsStr))
                 return false;
 
-            args = argsStr.Split([' '], StringSplitOptions.RemoveEmptyEntries);
+            args = argsStr?.Split([' '], StringSplitOptions.RemoveEmptyEntries);
             return true;
         }
     }
@@ -305,7 +311,7 @@ namespace Telegrator
             "StackExchange", "RabbitMQ", "Quartz", "Hangfire", "Npgsql", "MySql", "Oracle",
             "Bogus", "CsvHelper", "Grpc", "Swashbuckle", "MassTransit", "AngleSharp",
             "Ocelot", "BouncyCastle", "IdentityModel", "Telegrator"
-        ]
+        ];
 
         /// <summary>
         /// Collects all public handlers from the current app domain.
@@ -318,7 +324,7 @@ namespace Telegrator
             AppDomain.CurrentDomain
                 .GetAssemblies()
                 .Where(ass => skippingAssemblies.All(skip => !ass.FullName.StartsWith(skip)))
-                .ForEach(ass => ass.CollectHandlersAssemblyWide());
+                .ForEach(ass => handlers.CollectHandlersAssemblyWide(ass));
 
             return handlers;
         }
@@ -329,7 +335,7 @@ namespace Telegrator
         /// </summary>
         /// <returns>This collection instance for method chaining.</returns>
         /// <exception cref="Exception">Thrown when the entry assembly cannot be found.</exception>
-        public static IHandlersCollection CollectHandlersAssemblyWide(this IHandlersCollection handlers, Assembly collectingTarget = null)
+        public static IHandlersCollection CollectHandlersAssemblyWide(this IHandlersCollection handlers, Assembly? collectingTarget = null)
         {
             (collectingTarget ?? Assembly.GetCallingAssembly())
                 .GetExportedTypes()
