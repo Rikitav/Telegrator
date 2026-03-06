@@ -5,10 +5,13 @@
 
 Rule ID | Category | Severity | Notes
 --------|----------|----------|-------
-TG_1001 | Modelling | Error | GeneratedKeyboardMarkupGenerator
-TG_1002 | Modelling | Error | GeneratedKeyboardMarkupGenerator
-TG_1003 | Modelling | Error | GeneratedKeyboardMarkupGenerator
-TG_1004 | Modelling | Error | GeneratedKeyboardMarkupGenerator
-TG_1005 | Modelling | Error | GeneratedKeyboardMarkupGenerator
-TG_1006 | Modelling | Error | GeneratedKeyboardMarkupGenerator
-TG_1007 | Modelling | Error | GeneratedKeyboardMarkupGenerator
+TLG201 | Telegrator.Modelling | Error | GeneratedKeyboardMarkupGenerator
+TLG202 | Telegrator.Modelling | Error | GeneratedKeyboardMarkupGenerator
+TLG203 | Telegrator.Modelling | Error | GeneratedKeyboardMarkupGenerator
+TLG204 | Telegrator.Modelling | Error | GeneratedKeyboardMarkupGenerator
+TLG205 | Telegrator.Modelling | Error | GeneratedKeyboardMarkupGenerator
+TLG206 | Telegrator.Modelling | Error | GeneratedKeyboardMarkupGenerator
+TLG207 | Telegrator.Modelling | Error | GeneratedKeyboardMarkupGenerator
+TLG101 | Telegrator.Design | Warning | DeveloperHelperAnalyzer
+TLG102 | Telegrator.Design | Warning | DeveloperHelperAnalyzer
+TLG103 | Telegrator.Design | Warning | DeveloperHelperAnalyzer

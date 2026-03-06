@@ -104,7 +104,7 @@ namespace Telegrator.MadiatorCore.Descriptors
             ResetEvent.Wait(cancellationToken);
         }
 
-        public void ReportResult(Result result)
+        public void ReportResult(Result? result)
         {
             if (result != null)
                 throw new InvalidOperationException("Result already reported");

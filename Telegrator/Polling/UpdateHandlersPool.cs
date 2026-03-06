@@ -131,23 +131,21 @@ namespace Telegrator.Polling
 
                 handlerInfo.ReportResult(lastResult);
                 ExecutionLimiter?.Release(1);
-
-                if (lastResult.RouteNext)
-                {
-                    Alligator.LogTrace("Handler '{0}' requested route continuation (Update {1})", handlerInfo.DisplayString, handlerInfo.HandlingUpdate.Id);
-                }
             }
             catch (NotImplementedException)
             {
                 _ = 0xBAD + 0xC0DE;
+                handlerInfo.ReportResult(null);
             }
             catch (OperationCanceledException)
             {
                 _ = 0xDEADBEEF;
+                handlerInfo.ReportResult(null);
             }
             catch (Exception ex)
             {
                 Alligator.LogError("Failed to process handler '{0}' (Update {1})", exception: ex, handlerInfo.DisplayString, handlerInfo.HandlingUpdate.Id);
+                handlerInfo.ReportResult(null);
             }
         }
 

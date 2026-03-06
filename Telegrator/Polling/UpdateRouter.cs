@@ -128,6 +128,8 @@ namespace Telegrator.Polling
 
                     if (lastResult != null && !lastResult.RouteNext)
                         break;
+
+                    Alligator.LogTrace("Handler '{0}' requested route continuation (Update {1})", handlerInfo.DisplayString, handlerInfo.HandlingUpdate.Id);
                 }
 
                 // Checking if awaiting handlers has exclusive routing

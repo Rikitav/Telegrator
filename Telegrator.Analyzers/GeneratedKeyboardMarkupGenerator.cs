@@ -1,455 +1,488 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Text;
 using System.Collections.Immutable;
-using Telegrator.Analyzers.RoslynExtensions;
+using System.Text;
 
-namespace Telegrator.Analyzers
+namespace Telegrator.Analyzers;
+
+[Generator(LanguageNames.CSharp)]
+public class GeneratedKeyboardMarkupGenerator : IIncrementalGenerator
 {
-    [Generator(LanguageNames.CSharp)]
-    public class GeneratedKeyboardMarkupGenerator : IIncrementalGenerator
+    // Return types
+    private const string InlineReturnType = "InlineKeyboardMarkup";
+    private const string ReplyReturnType = "ReplyKeyboardMarkup";
+
+    // Attribute names
+    private const string CallbackDataAttribute = "CallbackButton";
+    private const string CallbackGameAttribute = "GameButton";
+    private const string CopyTextAttribute = "CopyTextButton";
+    private const string LoginRequestAttribute = "LoginRequestButton";
+    private const string PayRequestAttribute = "PayRequestButton";
+    private const string SwitchQueryAttribute = "SwitchQueryButton";
+    private const string QueryChosenAttribute = "QueryChosenButton";
+    private const string QueryCurrentAttribute = "QueryCurrentButton";
+    private const string UrlRedirectAttribute = "UrlRedirectButton";
+    private const string RequestChatAttribute = "RequestChatButton";
+    private const string RequestContactAttribute = "RequestContactButton";
+    private const string RequestLocationAttribute = "RequestLocationButton";
+    private const string RequestPoolAttribute = "RequestPoolButton";
+    private const string RequestUsersAttribute = "RequestUsersButton";
+    private const string WebAppAttribute = "WebApp";
+
+    // Markup lists
+    private static readonly string[] InlineAttributes = [CallbackDataAttribute, CallbackGameAttribute, CopyTextAttribute, LoginRequestAttribute, PayRequestAttribute, UrlRedirectAttribute, WebAppAttribute, SwitchQueryAttribute, QueryChosenAttribute, QueryCurrentAttribute];
+    private static readonly string[] ReplyAttributes = [RequestChatAttribute, RequestContactAttribute, RequestLocationAttribute, RequestPoolAttribute, RequestUsersAttribute, WebAppAttribute];
+
+    // Usings
+    private static readonly string[] DefaultUsings = ["Telegram.Bot.Types.ReplyMarkups"];
+
+    // Markup layouts
+    private static readonly Dictionary<string, MemberAccessExpressionSyntax> InlineKeyboardLayout = new Dictionary<string, MemberAccessExpressionSyntax>()
     {
-        // Return types
-        private const string InlineReturnType = "InlineKeyboardMarkup";
-        private const string ReplyReturnType = "ReplyKeyboardMarkup";
+        { CallbackDataAttribute, AccessExpression("InlineKeyboardButton", "WithCallbackData") },
+        { CallbackGameAttribute, AccessExpression("InlineKeyboardButton", "WithCallbackGame") },
+        { CopyTextAttribute, AccessExpression("InlineKeyboardButton", "WithCopyText") },
+        { LoginRequestAttribute, AccessExpression("InlineKeyboardButton", "WithLoginUrl") },
+        { PayRequestAttribute, AccessExpression("InlineKeyboardButton", "WithPay") },
+        { SwitchQueryAttribute, AccessExpression("InlineKeyboardButton", "WithSwitchInlineQuery") },
+        { QueryChosenAttribute, AccessExpression("InlineKeyboardButton", "WithSwitchInlineQueryChosenChat") },
+        { QueryCurrentAttribute, AccessExpression("InlineKeyboardButton", "WithSwitchInlineQueryCurrentChat") },
+        { UrlRedirectAttribute, AccessExpression("InlineKeyboardButton", "WithUrl") },
+        { WebAppAttribute, AccessExpression("InlineKeyboardButton", "WithWebApp") },
+    };
 
-        // Attribute names
-        private const string CallbackDataAttribute = "CallbackButton";
-        private const string CallbackGameAttribute = "GameButton";
-        private const string CopyTextAttribute = "CopyTextButton";
-        private const string LoginRequestAttribute = "LoginRequestButton";
-        private const string PayRequestAttribute = "PayRequestButton";
-        private const string SwitchQueryAttribute = "SwitchQueryButton";
-        private const string QueryChosenAttribute = "QueryChosenButton";
-        private const string QueryCurrentAttribute = "QueryCurrentButton";
-        private const string UrlRedirectAttribute = "UrlRedirectButton";
-        private const string RequestChatAttribute = "RequestChatButton";
-        private const string RequestContactAttribute = "RequestContactButton";
-        private const string RequestLocationAttribute = "RequestLocationButton";
-        private const string RequestPoolAttribute = "RequestPoolButton";
-        private const string RequestUsersAttribute = "RequestUsersButton";
-        private const string WebAppAttribute = "WebApp";
+    private static readonly Dictionary<string, MemberAccessExpressionSyntax> ReplyKeyboardLayout = new Dictionary<string, MemberAccessExpressionSyntax>()
+    {
+        { RequestChatAttribute, AccessExpression("KeyboardButton", "WithRequestChat") },
+        { RequestContactAttribute, AccessExpression("KeyboardButton", "WithRequestContact") },
+        { RequestLocationAttribute, AccessExpression("KeyboardButton", "WithRequestLocation") },
+        { RequestPoolAttribute, AccessExpression("KeyboardButton", "WithRequestPoll") },
+        { RequestUsersAttribute, AccessExpression("KeyboardButton", "WithRequestUsers") },
+        { WebAppAttribute, AccessExpression("KeyboardButton", "WithWebApp") }
+    };
 
-        // Markup lists
-        private static readonly string[] InlineAttributes = [CallbackDataAttribute, CallbackGameAttribute, CopyTextAttribute, LoginRequestAttribute, PayRequestAttribute, UrlRedirectAttribute, WebAppAttribute, SwitchQueryAttribute, QueryChosenAttribute, QueryCurrentAttribute];
-        private static readonly string[] ReplyAttributes = [RequestChatAttribute, RequestContactAttribute, RequestLocationAttribute, RequestPoolAttribute, RequestUsersAttribute, WebAppAttribute];
-        
-        // Usings
-        private static readonly string[] DefaultUsings = ["Telegram.Bot.Types.ReplyMarkups"];
+    // Markup map
+    private static readonly Dictionary<string, Dictionary<string, MemberAccessExpressionSyntax>> LayoutNames = new Dictionary<string, Dictionary<string, MemberAccessExpressionSyntax>>()
+    {
+        { InlineReturnType, InlineKeyboardLayout },
+        { ReplyReturnType, ReplyKeyboardLayout }
+    };
 
-        // Markup layouts
-        private static readonly Dictionary<string, MemberAccessExpressionSyntax> InlineKeyboardLayout = new Dictionary<string, MemberAccessExpressionSyntax>()
+    // Diagnostic descriptors
+    private static readonly DiagnosticDescriptor WrongReturnType = new DiagnosticDescriptor("TLG201", "Wrong return type", string.Empty, "Telegrator.Modelling", DiagnosticSeverity.Error, true);
+    private static readonly DiagnosticDescriptor UnsupportedAttribute = new DiagnosticDescriptor("TLG202", "Unsupported or invalid attribute", string.Empty, "Telegrator.Modelling", DiagnosticSeverity.Error, true);
+    private static readonly DiagnosticDescriptor NotPartialMethod = new DiagnosticDescriptor("TLG203", "Not a partial member", string.Empty, "Telegrator.Modelling", DiagnosticSeverity.Error, true);
+    private static readonly DiagnosticDescriptor UseBodylessMethod = new DiagnosticDescriptor("TLG204", "Use bodyless method", string.Empty, "Telegrator.Modelling", DiagnosticSeverity.Error, true);
+    private static readonly DiagnosticDescriptor UseParametrlessMethod = new DiagnosticDescriptor("TLG205", "Use parametrless method", string.Empty, "Telegrator.Modelling", DiagnosticSeverity.Error, true);
+    private static readonly DiagnosticDescriptor UseGetOnlyProperty = new DiagnosticDescriptor("TLG206", "Use property with only get accessor", string.Empty, "Telegrator.Modelling", DiagnosticSeverity.Error, true);
+    private static readonly DiagnosticDescriptor UseBodylessGetAccessor = new DiagnosticDescriptor("TLG207", "Use bodyless get accessor", string.Empty, "Telegrator.Modelling", DiagnosticSeverity.Error, true);
+
+    public void Initialize(IncrementalGeneratorInitializationContext context)
+    {
+        IncrementalValueProvider<ImmutableArray<MethodDeclarationSyntax>> methodsPipeline = context.SyntaxProvider.CreateSyntaxProvider(ProvideMethods, TransformMethods).Where(x => x != null).Collect();
+        IncrementalValueProvider<ImmutableArray<PropertyDeclarationSyntax>> propertiesPipeline = context.SyntaxProvider.CreateSyntaxProvider(ProvideProperties, TransformProperties).Where(x => x != null).Collect();
+
+        context.RegisterSourceOutput(methodsPipeline, ExecuteMethodsPipeline);
+        context.RegisterSourceOutput(propertiesPipeline, ExecutePropertiesPipeline);
+    }
+
+    private static bool ProvideMethods(SyntaxNode syntaxNode, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        if (syntaxNode is not MethodDeclarationSyntax method)
+            return false;
+
+        if (!HasGenAttributes(method))
+            return false;
+
+        return true;
+    }
+
+    private static bool ProvideProperties(SyntaxNode syntaxNode, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        if (syntaxNode is not PropertyDeclarationSyntax property)
+            return false;
+
+        if (!HasGenAttributes(property))
+            return false;
+
+        return true;
+    }
+
+    private static MethodDeclarationSyntax TransformMethods(GeneratorSyntaxContext context, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        return (MethodDeclarationSyntax)context.Node;
+    }
+
+    private static PropertyDeclarationSyntax TransformProperties(GeneratorSyntaxContext context, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        return (PropertyDeclarationSyntax)context.Node;
+    }
+
+    private static void ExecutePropertiesPipeline(SourceProductionContext context, ImmutableArray<PropertyDeclarationSyntax> properties)
+    {
+        List<GeneratedMarkupPropertyModel> models = new List<GeneratedMarkupPropertyModel>();
+
+        foreach (PropertyDeclarationSyntax prop in properties)
         {
-            { CallbackDataAttribute, AccessExpression("InlineKeyboardButton", "WithCallbackData") },
-            { CallbackGameAttribute, AccessExpression("InlineKeyboardButton", "WithCallbackGame") },
-            { CopyTextAttribute, AccessExpression("InlineKeyboardButton", "WithCopyText") },
-            { LoginRequestAttribute, AccessExpression("InlineKeyboardButton", "WithLoginUrl") },
-            { PayRequestAttribute, AccessExpression("InlineKeyboardButton", "WithPay") },
-            { SwitchQueryAttribute, AccessExpression("InlineKeyboardButton", "WithSwitchInlineQuery") },
-            { QueryChosenAttribute, AccessExpression("InlineKeyboardButton", "WithSwitchInlineQueryChosenChat") },
-            { QueryCurrentAttribute, AccessExpression("InlineKeyboardButton", "WithSwitchInlineQueryCurrentChat") },
-            { UrlRedirectAttribute, AccessExpression("InlineKeyboardButton", "WithUrl") },
-            { WebAppAttribute, AccessExpression("InlineKeyboardButton", "WithWebApp") },
-        };
-
-        private static readonly Dictionary<string, MemberAccessExpressionSyntax> ReplyKeyboardLayout = new Dictionary<string, MemberAccessExpressionSyntax>()
-        {
-            { RequestChatAttribute, AccessExpression("KeyboardButton", "WithRequestChat") },
-            { RequestContactAttribute, AccessExpression("KeyboardButton", "WithRequestContact") },
-            { RequestLocationAttribute, AccessExpression("KeyboardButton", "WithRequestLocation") },
-            { RequestPoolAttribute, AccessExpression("KeyboardButton", "WithRequestPoll") },
-            { RequestUsersAttribute, AccessExpression("KeyboardButton", "WithRequestUsers") },
-            { WebAppAttribute, AccessExpression("KeyboardButton", "WithWebApp") }
-        };
-
-        // Markup map
-        private static readonly Dictionary<string, Dictionary<string, MemberAccessExpressionSyntax>> LayoutNames = new Dictionary<string, Dictionary<string, MemberAccessExpressionSyntax>>()
-        {
-            { InlineReturnType, InlineKeyboardLayout },
-            { ReplyReturnType, ReplyKeyboardLayout }
-        };
-
-        // Diagnostic descriptors
-        private static readonly DiagnosticDescriptor WrongReturnType = new DiagnosticDescriptor("TG_1001", "Wrong return type", string.Empty, "Modelling", DiagnosticSeverity.Error, true);
-        private static readonly DiagnosticDescriptor UnsupportedAttribute = new DiagnosticDescriptor("TG_1002", "Unsupported or invalid attribute", string.Empty, "Modelling", DiagnosticSeverity.Error, true);
-        private static readonly DiagnosticDescriptor NotPartialMethod = new DiagnosticDescriptor("TG_1003", "Not a partial member", string.Empty, "Modelling", DiagnosticSeverity.Error, true);
-        private static readonly DiagnosticDescriptor UseBodylessMethod = new DiagnosticDescriptor("TG_1004", "Use bodyless method", string.Empty, "Modelling", DiagnosticSeverity.Error, true);
-        private static readonly DiagnosticDescriptor UseParametrlessMethod = new DiagnosticDescriptor("TG_1005", "Use parametrless method", string.Empty, "Modelling", DiagnosticSeverity.Error, true);
-        private static readonly DiagnosticDescriptor UseGetOnlyProperty = new DiagnosticDescriptor("TG_1006", "Use property with only get accessor", string.Empty, "Modelling", DiagnosticSeverity.Error, true);
-        private static readonly DiagnosticDescriptor UseBodylessGetAccessor = new DiagnosticDescriptor("TG_1007", "Use bodyless get accessor", string.Empty, "Modelling", DiagnosticSeverity.Error, true);
-
-        // Trivias
-        private static SyntaxTrivia TabulationTrivia => SyntaxFactory.SyntaxTrivia(SyntaxKind.WhitespaceTrivia, "\t");
-        private static SyntaxTrivia WhitespaceTrivia => SyntaxFactory.SyntaxTrivia(SyntaxKind.WhitespaceTrivia, " ");
-        private static SyntaxTrivia NewLineTrivia => SyntaxFactory.SyntaxTrivia(SyntaxKind.EndOfLineTrivia, "\n");
-        private static SyntaxToken Semicolon => SyntaxFactory.Token(SyntaxKind.SemicolonToken);
-
-        public void Initialize(IncrementalGeneratorInitializationContext context)
-        {
-            IncrementalValueProvider<ImmutableArray<MethodDeclarationSyntax>> methodsPipeline = context.SyntaxProvider.CreateSyntaxProvider(ProvideMethods, TransformMethods).Where(x => x != null).Collect();
-            IncrementalValueProvider<ImmutableArray<PropertyDeclarationSyntax>> propertiesPipeline = context.SyntaxProvider.CreateSyntaxProvider(ProvideProperties, TransformProperties).Where(x => x != null).Collect();
-
-            context.RegisterSourceOutput(methodsPipeline, ExecuteMethodsPipeline);
-            context.RegisterSourceOutput(propertiesPipeline, ExecutePropertiessPipeline);
-        }
-
-        private static bool ProvideMethods(SyntaxNode syntaxNode, CancellationToken cancellationToken)
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-            if (syntaxNode is not MethodDeclarationSyntax method)
-                return false;
-
-            if (!HasGenAttributes(method))
-                return false;
-
-            return true;
-        }
-
-        private static bool ProvideProperties(SyntaxNode syntaxNode, CancellationToken cancellationToken)
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-            if (syntaxNode is not PropertyDeclarationSyntax property)
-                return false;
-
-            if (!HasGenAttributes(property))
-                return false;
-
-            return true;
-        }
-
-        private static MethodDeclarationSyntax TransformMethods(GeneratorSyntaxContext context, CancellationToken cancellationToken)
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-            return (MethodDeclarationSyntax)context.Node;
-        }
-
-        private static PropertyDeclarationSyntax TransformProperties(GeneratorSyntaxContext context, CancellationToken cancellationToken)
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-            return (PropertyDeclarationSyntax)context.Node;
-        }
-
-        private static void ExecutePropertiessPipeline(SourceProductionContext context, ImmutableArray<PropertyDeclarationSyntax> properties)
-        {
-            List<GeneratedMarkupPropertyModel> models = [];
-            foreach (PropertyDeclarationSyntax prop in properties)
-            {
-                context.CancellationToken.ThrowIfCancellationRequested();
-                try
-                {
-                    string methodName = prop.Identifier.Text;
-                    string returnType = prop.Type.ToString();
-                    bool anyErrors = false;
-
-                    if (!LayoutNames.TryGetValue(returnType, out var layout))
-                    {
-                        WrongReturnType.Report(context, prop.Type.GetLocation());
-                        anyErrors = true;
-                    }
-
-                    if (!prop.Modifiers.HasModifiers("partial"))
-                    {
-                        NotPartialMethod.Report(context, prop.Identifier.GetLocation());
-                        anyErrors = true;
-                    }
-
-                    if (prop.Initializer != null)
-                    {
-                        UseGetOnlyProperty.Report(context, prop.Initializer.GetLocation());
-                        anyErrors = true;
-                    }
-
-                    if (prop.ExpressionBody != null)
-                    {
-                        UseGetOnlyProperty.Report(context, prop.ExpressionBody.GetLocation());
-                        anyErrors = true;
-                    }
-
-                    if (prop.AccessorList != null)
-                    {
-                        foreach (AccessorDeclarationSyntax accessor in prop.AccessorList.Accessors)
-                        {
-                            if (accessor.IsKind(SyntaxKind.SetAccessorDeclaration))
-                            {
-                                UseGetOnlyProperty.Report(context, accessor.GetLocation());
-                                anyErrors = true;
-                                continue;
-                            }
-
-                            if (accessor.Body != null)
-                            {
-                                UseBodylessGetAccessor.Report(context, accessor.Body.GetLocation());
-                                anyErrors = true;
-                                continue;
-                            }
-
-                            if (accessor.ExpressionBody != null)
-                            {
-                                UseBodylessGetAccessor.Report(context, accessor.ExpressionBody.GetLocation());
-                                anyErrors = true;
-                                continue;
-                            }
-                        }
-                    }
-
-                    if (anyErrors)
-                        return;
-
-                    SeparatedSyntaxList<CollectionElementSyntax> matrix = ParseAttributesMatrix(context, layout, prop);
-                    PropertyDeclarationSyntax genProp = GeneratedPropertyDeclaration(prop, SyntaxFactory.CollectionExpression(matrix));
-                    models.Add(new GeneratedMarkupPropertyModel(prop, genProp));
-                }
-                catch (Exception ex)
-                {
-                    context.AddSource(prop.Identifier.ToString(), ex.ToString());
-                }
-            }
-
             context.CancellationToken.ThrowIfCancellationRequested();
-            CompilationUnitSyntax compilationUnit = SyntaxFactory.CompilationUnit();
-            SyntaxList<UsingDirectiveSyntax> usingDirectives = ParseUsings(DefaultUsings).ToSyntaxList();
-
-            foreach (GeneratedMarkupPropertyModel model in models)
+            try
             {
-                context.CancellationToken.ThrowIfCancellationRequested();
+                string returnType = prop.Type.ToString();
+                bool anyErrors = false;
 
-                try
+                Dictionary<string, MemberAccessExpressionSyntax> layout;
+                if (!LayoutNames.TryGetValue(returnType, out layout!))
                 {
-                    if (model.OriginalProperty.Parent is not ClassDeclarationSyntax)
-                        throw new MissingMemberException();
+                    context.ReportDiagnostic(Diagnostic.Create(WrongReturnType, prop.Type.GetLocation()));
+                    anyErrors = true;
+                }
 
-                    NamespaceDeclarationSyntax genNamespace = GeneratedNamespaceDeclaration(model.OriginalProperty, [model.GeneratedProperty]);
-                    compilationUnit = compilationUnit.AddMembers(genNamespace);
-                }
-                catch (Exception ex)
+                if (!prop.Modifiers.Any(SyntaxKind.PartialKeyword))
                 {
-                    context.AddSource(model.OriginalProperty.Identifier.ToString(), ex.ToString());
+                    context.ReportDiagnostic(Diagnostic.Create(NotPartialMethod, prop.Identifier.GetLocation()));
+                    anyErrors = true;
                 }
+
+                if (prop.Initializer != null)
+                {
+                    context.ReportDiagnostic(Diagnostic.Create(UseGetOnlyProperty, prop.Initializer.GetLocation()));
+                    anyErrors = true;
+                }
+
+                if (prop.ExpressionBody != null)
+                {
+                    context.ReportDiagnostic(Diagnostic.Create(UseGetOnlyProperty, prop.ExpressionBody.GetLocation()));
+                    anyErrors = true;
+                }
+
+                if (prop.AccessorList != null)
+                {
+                    foreach (AccessorDeclarationSyntax accessor in prop.AccessorList.Accessors)
+                    {
+                        if (accessor.IsKind(SyntaxKind.SetAccessorDeclaration))
+                        {
+                            context.ReportDiagnostic(Diagnostic.Create(UseGetOnlyProperty, accessor.GetLocation()));
+                            anyErrors = true;
+                            continue;
+                        }
+
+                        if (accessor.Body != null)
+                        {
+                            context.ReportDiagnostic(Diagnostic.Create(UseBodylessGetAccessor, accessor.Body.GetLocation()));
+                            anyErrors = true;
+                            continue;
+                        }
+
+                        if (accessor.ExpressionBody != null)
+                        {
+                            context.ReportDiagnostic(Diagnostic.Create(UseBodylessGetAccessor, accessor.ExpressionBody.GetLocation()));
+                            anyErrors = true;
+                            continue;
+                        }
+                    }
+                }
+
+                if (anyErrors || layout == null)
+                    continue;
+
+                SeparatedSyntaxList<CollectionElementSyntax> matrix = ParseAttributesMatrix(context, layout, prop);
+                PropertyDeclarationSyntax genProp = GeneratedPropertyDeclaration(prop, SyntaxFactory.CollectionExpression(matrix));
+                models.Add(new GeneratedMarkupPropertyModel(prop, genProp));
             }
-
-            compilationUnit = compilationUnit.WithUsings(usingDirectives);
-            context.AddSource("GeneratedKeyboards.Properties.g", compilationUnit.ToFullString());
+            catch (Exception ex)
+            {
+                context.AddSource($"{prop.Identifier}_Error.g.cs", SourceText.From($"/* {ex} */", Encoding.UTF8));
+            }
         }
 
-        private static void ExecuteMethodsPipeline(SourceProductionContext context, ImmutableArray<MethodDeclarationSyntax> methods)
+        if (models.Count == 0)
+            return;
+
+        CompilationUnitSyntax compilationUnit = SyntaxFactory.CompilationUnit();
+        SyntaxList<UsingDirectiveSyntax> usingDirectives = SyntaxFactory.List(ParseUsings(DefaultUsings));
+
+        foreach (GeneratedMarkupPropertyModel model in models)
         {
-            List<GeneratedMarkupMethodModel> models = [];
-            foreach (MethodDeclarationSyntax method in methods)
-            {
-                context.CancellationToken.ThrowIfCancellationRequested();
-                try
-                {
-                    string methodName = method.Identifier.Text;
-                    string returnType = method.ReturnType.ToString();
-                    bool anyErrors = false;
-
-                    if (!LayoutNames.TryGetValue(returnType, out var layout))
-                    {
-                        WrongReturnType.Report(context, method.ReturnType.GetLocation());
-                        anyErrors = true;
-                    }
-
-                    if (!method.Modifiers.HasModifiers("partial"))
-                    {
-                        NotPartialMethod.Report(context, method.Identifier.GetLocation());
-                        anyErrors = true;
-                    }
-
-                    if (method.ParameterList.Parameters.Any())
-                    {
-                        UseParametrlessMethod.Report(context, method.ParameterList.GetLocation());
-                        anyErrors = true;
-                    }
-
-                    if (method.ExpressionBody != null)
-                    {
-                        UseBodylessMethod.Report(context, method.ExpressionBody.GetLocation());
-                        anyErrors = true;
-                    }
-
-                    if (method.Body != null)
-                    {
-                        UseBodylessMethod.Report(context, method.Body.GetLocation());
-                        anyErrors = true;
-                    }
-
-                    if (anyErrors)
-                        return;
-
-                    SeparatedSyntaxList<CollectionElementSyntax> matrix = ParseAttributesMatrix(context, layout, method);
-                    FieldDeclarationSyntax genField = GeneratedFieldDeclaration(methodName, method.ReturnType.WithoutTrivia(), SyntaxFactory.CollectionExpression(matrix));
-                    MethodDeclarationSyntax genMethod = GeneratedMethodDeclaration(methodName, method.Modifiers, method.ReturnType, genField);
-                    models.Add(new GeneratedMarkupMethodModel(method, genField, genMethod));
-                }
-                catch (Exception ex)
-                {
-                    context.AddSource(method.Identifier.ToString(), ex.ToString());
-                }
-            }
-
             context.CancellationToken.ThrowIfCancellationRequested();
-            CompilationUnitSyntax compilationUnit = SyntaxFactory.CompilationUnit();
-            SyntaxList<UsingDirectiveSyntax> usingDirectives = ParseUsings(DefaultUsings).ToSyntaxList();
+            try
+            {
+                MemberDeclarationSyntax wrappedMember = WrapInParentDeclarations(model.OriginalProperty, new List<MemberDeclarationSyntax> { model.GeneratedProperty });
+                compilationUnit = compilationUnit.AddMembers(wrappedMember);
+            }
+            catch (Exception ex)
+            {
+                context.AddSource($"{model.OriginalProperty.Identifier}_GenError.g.cs", SourceText.From($"/* {ex} */", Encoding.UTF8));
+            }
+        }
 
-            foreach (GeneratedMarkupMethodModel model in models)
+        compilationUnit = compilationUnit.WithUsings(usingDirectives).NormalizeWhitespace();
+        context.AddSource("GeneratedKeyboards.Properties.g.cs", SourceText.From(compilationUnit.ToFullString(), Encoding.UTF8));
+    }
+
+    private static void ExecuteMethodsPipeline(SourceProductionContext context, ImmutableArray<MethodDeclarationSyntax> methods)
+    {
+        List<GeneratedMarkupMethodModel> models = new List<GeneratedMarkupMethodModel>();
+
+        foreach (MethodDeclarationSyntax method in methods)
+        {
+            context.CancellationToken.ThrowIfCancellationRequested();
+            try
+            {
+                string methodName = method.Identifier.Text;
+                string returnType = method.ReturnType.ToString();
+                bool anyErrors = false;
+
+                Dictionary<string, MemberAccessExpressionSyntax> layout;
+                if (!LayoutNames.TryGetValue(returnType, out layout!))
+                {
+                    context.ReportDiagnostic(Diagnostic.Create(WrongReturnType, method.ReturnType.GetLocation()));
+                    anyErrors = true;
+                }
+
+                if (!method.Modifiers.Any(SyntaxKind.PartialKeyword))
+                {
+                    context.ReportDiagnostic(Diagnostic.Create(NotPartialMethod, method.Identifier.GetLocation()));
+                    anyErrors = true;
+                }
+
+                if (method.ParameterList.Parameters.Count > 0)
+                {
+                    context.ReportDiagnostic(Diagnostic.Create(UseParametrlessMethod, method.ParameterList.GetLocation()));
+                    anyErrors = true;
+                }
+
+                if (method.ExpressionBody != null)
+                {
+                    context.ReportDiagnostic(Diagnostic.Create(UseBodylessMethod, method.ExpressionBody.GetLocation()));
+                    anyErrors = true;
+                }
+
+                if (method.Body != null)
+                {
+                    context.ReportDiagnostic(Diagnostic.Create(UseBodylessMethod, method.Body.GetLocation()));
+                    anyErrors = true;
+                }
+
+                if (anyErrors || layout == null)
+                    continue;
+
+                SeparatedSyntaxList<CollectionElementSyntax> matrix = ParseAttributesMatrix(context, layout, method);
+                FieldDeclarationSyntax genField = GeneratedFieldDeclaration(methodName, method.ReturnType, SyntaxFactory.CollectionExpression(matrix));
+                MethodDeclarationSyntax genMethod = GeneratedMethodDeclaration(methodName, method.Modifiers, method.ReturnType, genField);
+                models.Add(new GeneratedMarkupMethodModel(method, genField, genMethod));
+            }
+            catch (Exception ex)
+            {
+                context.AddSource($"{method.Identifier}_Error.g.cs", SourceText.From($"/* {ex} */", Encoding.UTF8));
+            }
+        }
+
+        if (models.Count == 0)
+            return;
+
+        CompilationUnitSyntax compilationUnit = SyntaxFactory.CompilationUnit();
+        SyntaxList<UsingDirectiveSyntax> usingDirectives = SyntaxFactory.List(ParseUsings(DefaultUsings));
+
+        foreach (GeneratedMarkupMethodModel model in models)
+        {
+            context.CancellationToken.ThrowIfCancellationRequested();
+            try
+            {
+                MemberDeclarationSyntax wrappedMembers = WrapInParentDeclarations(model.OriginalMethod, new List<MemberDeclarationSyntax> { model.GeneratedField, model.GeneratedMethod });
+                compilationUnit = compilationUnit.AddMembers(wrappedMembers);
+            }
+            catch (Exception ex)
+            {
+                context.AddSource($"{model.OriginalMethod.Identifier}_GenError.g.cs", SourceText.From($"/* {ex} */", Encoding.UTF8));
+            }
+        }
+
+        compilationUnit = compilationUnit.WithUsings(usingDirectives).NormalizeWhitespace();
+        context.AddSource("GeneratedKeyboards.Methods.g.cs", SourceText.From(compilationUnit.ToFullString(), Encoding.UTF8));
+    }
+
+    private static SeparatedSyntaxList<CollectionElementSyntax> ParseAttributesMatrix(SourceProductionContext context, Dictionary<string, MemberAccessExpressionSyntax> layout, MemberDeclarationSyntax member)
+    {
+        SeparatedSyntaxList<CollectionElementSyntax> vertical = new SeparatedSyntaxList<CollectionElementSyntax>();
+
+        foreach (AttributeListSyntax attributeList in member.AttributeLists)
+        {
+            context.CancellationToken.ThrowIfCancellationRequested();
+            SeparatedSyntaxList<CollectionElementSyntax> horizontal = new SeparatedSyntaxList<CollectionElementSyntax>();
+
+            foreach (AttributeSyntax attribute in attributeList.Attributes)
             {
                 context.CancellationToken.ThrowIfCancellationRequested();
 
-                try
+                MemberAccessExpressionSyntax accessSyntax;
+                if (!layout.TryGetValue(attribute.Name.ToString(), out accessSyntax!))
                 {
-                    if (model.OriginalMethod.Parent is not ClassDeclarationSyntax)
-                        throw new MissingMemberException();
+                    context.ReportDiagnostic(Diagnostic.Create(UnsupportedAttribute, attribute.Name.GetLocation()));
+                    continue;
+                }
 
-                    NamespaceDeclarationSyntax genNamespace = GeneratedNamespaceDeclaration(model.OriginalMethod, [model.GeneratedField, model.GeneratedMethod]);
-                    compilationUnit = compilationUnit.AddMembers(genNamespace);
-                }
-                catch (Exception ex)
-                {
-                    context.AddSource(model.OriginalMethod.Identifier.ToString(), ex.ToString());
-                }
+                InvocationExpressionSyntax expression = SyntaxFactory.InvocationExpression(accessSyntax, ConvertArguments(attribute.ArgumentList));
+                horizontal = horizontal.Add(SyntaxFactory.ExpressionElement(expression));
             }
 
-            compilationUnit = compilationUnit.WithUsings(usingDirectives);
-            context.AddSource("GeneratedKeyboards.Methods.g", compilationUnit.ToFullString());
+            ExpressionElementSyntax element = SyntaxFactory.ExpressionElement(SyntaxFactory.CollectionExpression(horizontal));
+            vertical = vertical.Add(element);
         }
 
-        private static SeparatedSyntaxList<CollectionElementSyntax> ParseAttributesMatrix(SourceProductionContext context, Dictionary<string, MemberAccessExpressionSyntax> layout, MemberDeclarationSyntax member)
+        return vertical;
+    }
+
+    private static PropertyDeclarationSyntax GeneratedPropertyDeclaration(PropertyDeclarationSyntax property, CollectionExpressionSyntax collection)
+    {
+        return SyntaxFactory.PropertyDeclaration(property.Type, property.Identifier)
+            .WithExpressionBody(SyntaxFactory.ArrowExpressionClause(collection))
+            .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken));
+    }
+
+    private static MethodDeclarationSyntax GeneratedMethodDeclaration(string identifier, SyntaxTokenList modifiers, TypeSyntax returnType, FieldDeclarationSyntax field)
+    {
+        VariableDeclaratorSyntax targetVariable = field.Declaration.Variables.First();
+
+        return SyntaxFactory.MethodDeclaration(returnType, identifier)
+            .WithModifiers(modifiers)
+            .WithExpressionBody(SyntaxFactory.ArrowExpressionClause(SyntaxFactory.IdentifierName(targetVariable.Identifier)))
+            .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken));
+    }
+
+    private static FieldDeclarationSyntax GeneratedFieldDeclaration(string identifier, TypeSyntax returnType, CollectionExpressionSyntax collection)
+    {
+        ArgumentSyntax argument = SyntaxFactory.Argument(collection);
+        ArgumentListSyntax arguments = SyntaxFactory.ArgumentList(SyntaxFactory.SingletonSeparatedList(argument));
+        ObjectCreationExpressionSyntax objectCreation = SyntaxFactory.ObjectCreationExpression(returnType, arguments, null);
+
+        VariableDeclaratorSyntax declarator = SyntaxFactory.VariableDeclarator(identifier + "_generatedMarkup")
+            .WithInitializer(SyntaxFactory.EqualsValueClause(objectCreation));
+
+        SyntaxTokenList fieldModifiers = SyntaxFactory.TokenList(
+            SyntaxFactory.Token(SyntaxKind.PrivateKeyword),
+            SyntaxFactory.Token(SyntaxKind.StaticKeyword),
+            SyntaxFactory.Token(SyntaxKind.ReadOnlyKeyword));
+
+        return SyntaxFactory.FieldDeclaration(SyntaxFactory.VariableDeclaration(returnType).AddVariables(declarator))
+            .WithModifiers(fieldModifiers);
+    }
+
+    private static ArgumentListSyntax ConvertArguments(AttributeArgumentListSyntax? attributeArgs)
+    {
+        if (attributeArgs == null)
+            return SyntaxFactory.ArgumentList();
+
+        IEnumerable<ArgumentSyntax> arguments = attributeArgs.Arguments.Select(CastArgument);
+        return SyntaxFactory.ArgumentList(SyntaxFactory.SeparatedList(arguments));
+    }
+
+    private static ArgumentSyntax CastArgument(AttributeArgumentSyntax argument)
+    {
+        if (argument.NameColon != null)
         {
-            SeparatedSyntaxList<CollectionElementSyntax> vertical = new SeparatedSyntaxList<CollectionElementSyntax>();
-            foreach (AttributeListSyntax attributeList in member.AttributeLists)
+            return SyntaxFactory.Argument(argument.Expression).WithNameColon(argument.NameColon);
+        }
+
+        return SyntaxFactory.Argument(argument.Expression);
+    }
+
+    private static MemberDeclarationSyntax WrapInParentDeclarations(MemberDeclarationSyntax originalMember, List<MemberDeclarationSyntax> generatedMembers)
+    {
+        SyntaxNode? parentNode = originalMember.Parent;
+
+        if (parentNode is not ClassDeclarationSyntax)
+        {
+            throw new InvalidOperationException("Generated member must be contained within a class.");
+        }
+
+        MemberDeclarationSyntax currentDeclaration = SyntaxFactory.ClassDeclaration(((ClassDeclarationSyntax)parentNode).Identifier)
+            .WithMembers(SyntaxFactory.List(generatedMembers))
+            .WithModifiers(((ClassDeclarationSyntax)parentNode).Modifiers);
+
+        if (!currentDeclaration.Modifiers.Any(SyntaxKind.PartialKeyword))
+        {
+            currentDeclaration = ((ClassDeclarationSyntax)currentDeclaration).AddModifiers(SyntaxFactory.Token(SyntaxKind.PartialKeyword));
+        }
+
+        parentNode = parentNode.Parent;
+
+        while (parentNode is TypeDeclarationSyntax typeDeclaration)
+        {
+            ClassDeclarationSyntax wrappingClass = SyntaxFactory.ClassDeclaration(typeDeclaration.Identifier)
+                .WithMembers(SyntaxFactory.SingletonList(currentDeclaration))
+                .WithModifiers(typeDeclaration.Modifiers);
+
+            if (!wrappingClass.Modifiers.Any(SyntaxKind.PartialKeyword))
             {
-                context.CancellationToken.ThrowIfCancellationRequested();
-                SeparatedSyntaxList<CollectionElementSyntax> horizontal = new SeparatedSyntaxList<CollectionElementSyntax>();
-
-                foreach (AttributeSyntax attribute in attributeList.Attributes)
-                {
-                    context.CancellationToken.ThrowIfCancellationRequested();
-                    if (!layout.TryGetValue(attribute.Name.ToString(), out var accessSyntax))
-                    {
-                        UnsupportedAttribute.Report(context, attribute.Name.GetLocation());
-                        continue;
-                    }
-
-                    InvocationExpressionSyntax expression = SyntaxFactory.InvocationExpression(accessSyntax, ConvertArguments(attribute.ArgumentList));
-                    horizontal = horizontal.Add(SyntaxFactory.ExpressionElement(expression));
-                }
-
-                ExpressionElementSyntax element = SyntaxFactory.ExpressionElement(SyntaxFactory.CollectionExpression(horizontal));
-                vertical = vertical.Add(element);
+                wrappingClass = wrappingClass.AddModifiers(SyntaxFactory.Token(SyntaxKind.PartialKeyword));
             }
 
-            return vertical;
+            currentDeclaration = wrappingClass;
+            parentNode = parentNode.Parent;
         }
 
-        private static PropertyDeclarationSyntax GeneratedPropertyDeclaration(PropertyDeclarationSyntax property, CollectionExpressionSyntax collection)
+        if (parentNode is BaseNamespaceDeclarationSyntax namespaceDeclaration)
         {
-            return SyntaxFactory.PropertyDeclaration(property.Type, property.Identifier)
-                .WithExpressionBody(SyntaxFactory.ArrowExpressionClause(SyntaxFactory.ParseToken(" => "), collection));
+            currentDeclaration = SyntaxFactory.NamespaceDeclaration(namespaceDeclaration.Name)
+                .WithMembers(SyntaxFactory.SingletonList(currentDeclaration));
         }
 
-        private static MethodDeclarationSyntax GeneratedMethodDeclaration(string identifier, SyntaxTokenList modifiers, TypeSyntax returnType, FieldDeclarationSyntax field)
+        return currentDeclaration;
+    }
+
+    private static IEnumerable<UsingDirectiveSyntax> ParseUsings(params string[] names)
+    {
+        return names.Select(name => SyntaxFactory.UsingDirective(SyntaxFactory.ParseName(name)));
+    }
+
+    private static bool HasGenAttributes(MemberDeclarationSyntax member)
+    {
+        IEnumerable<string> memberAttributes = member.AttributeLists
+            .SelectMany(x => x.Attributes)
+            .Select(x => x.Name.ToString());
+
+        IEnumerable<string> targetAttributes = InlineAttributes.Concat(ReplyAttributes);
+
+        return memberAttributes.Intersect(targetAttributes).Any();
+    }
+
+    private static MemberAccessExpressionSyntax AccessExpression(string className, string methodName)
+    {
+        return SyntaxFactory.MemberAccessExpression(
+            SyntaxKind.SimpleMemberAccessExpression,
+            SyntaxFactory.IdentifierName(className),
+            SyntaxFactory.IdentifierName(methodName));
+    }
+
+    private class GeneratedMarkupMethodModel
+    {
+        public MethodDeclarationSyntax OriginalMethod { get; }
+        public FieldDeclarationSyntax GeneratedField { get; }
+        public MethodDeclarationSyntax GeneratedMethod { get; }
+
+        public GeneratedMarkupMethodModel(MethodDeclarationSyntax originalMethod, FieldDeclarationSyntax generatedField, MethodDeclarationSyntax generatedMethod)
         {
-            return SyntaxFactory.MethodDeclaration(returnType.WithTrailingTrivia(WhitespaceTrivia), identifier)
-                .WithModifiers(modifiers)
-                .WithExpressionBody(SyntaxFactory.ArrowExpressionClause(SyntaxFactory.ParseToken(" => "), SyntaxFactory.IdentifierName(field.Declaration.Variables.ElementAt(0).Identifier)))
-                .WithSemicolonToken(Semicolon);
+            OriginalMethod = originalMethod;
+            GeneratedField = generatedField;
+            GeneratedMethod = generatedMethod;
         }
+    }
 
-        private static FieldDeclarationSyntax GeneratedFieldDeclaration(string identifier, TypeSyntax returnType, CollectionExpressionSyntax collection)
+    private class GeneratedMarkupPropertyModel
+    {
+        public PropertyDeclarationSyntax OriginalProperty { get; }
+        public PropertyDeclarationSyntax GeneratedProperty { get; }
+
+        public GeneratedMarkupPropertyModel(PropertyDeclarationSyntax originalProperty, PropertyDeclarationSyntax generatedProperty)
         {
-            ArgumentListSyntax arguments = SyntaxFactory.ArgumentList(SeparatedSyntaxList(SyntaxFactory.Argument(collection)));
-            ObjectCreationExpressionSyntax objectCreation = SyntaxFactory.ObjectCreationExpression(returnType.WithLeadingTrivia(WhitespaceTrivia), arguments, null);
-
-            VariableDeclaratorSyntax declarator = SyntaxFactory.VariableDeclarator(identifier + "_generatedMarkup")
-                .WithInitializer(SyntaxFactory.EqualsValueClause(SyntaxFactory.ParseToken(" = "), objectCreation));
-
-            return SyntaxFactory.FieldDeclaration(SyntaxFactory.VariableDeclaration(returnType.WithTrailingTrivia(WhitespaceTrivia)).AddVariables(declarator))
-                .WithModifiers(Modifiers(SyntaxKind.PrivateKeyword, SyntaxKind.StaticKeyword, SyntaxKind.ReadOnlyKeyword));
+            OriginalProperty = originalProperty;
+            GeneratedProperty = generatedProperty;
         }
-
-        private static ArgumentListSyntax ConvertArguments(AttributeArgumentListSyntax? attributeArgs)
-        {
-            if (attributeArgs == null)
-                return SyntaxFactory.ArgumentList();
-
-            return SyntaxFactory.ArgumentList(SeparatedSyntaxList(attributeArgs.Arguments.Select(CastArgument)));
-        }
-
-        private static NamespaceDeclarationSyntax GeneratedNamespaceDeclaration(MemberDeclarationSyntax member, IEnumerable<MemberDeclarationSyntax> generatedMembers)
-        {
-            if (member.Parent is not ClassDeclarationSyntax containerClass)
-                throw new MemberAccessException();
-
-            int times = member.CountParentTree();
-            ClassDeclarationSyntax generatedContainerClass = SyntaxFactory.ClassDeclaration(containerClass.Identifier)
-                .WithMembers(new SyntaxList<MemberDeclarationSyntax>(generatedMembers.Select(member => member.DecorateMember(times + 1))))
-                .WithModifiers(containerClass.Modifiers.Decorate())
-                .DecorateType(times);
-
-            MemberDeclarationSyntax generated = generatedContainerClass;
-            MemberDeclarationSyntax inspecting = containerClass;
-
-            while (inspecting.Parent != null)
-            {
-                times -= 1;
-                if (inspecting.Parent is not MemberDeclarationSyntax inspectingMember)
-                    break;
-
-                inspecting = inspectingMember;
-                switch (inspectingMember)
-                {
-                    case ClassDeclarationSyntax classDeclaration:
-                        {
-                            generated = SyntaxFactory.ClassDeclaration(classDeclaration.Identifier)
-                                .WithMembers([generated])
-                                .WithModifiers(classDeclaration.Modifiers.Decorate())
-                                .DecorateType(times);
-
-                            break;
-                        }
-
-                    case StructDeclarationSyntax structDeclaration:
-                        {
-                            generated = SyntaxFactory.StructDeclaration(structDeclaration.Identifier)
-                                .WithMembers([generated])
-                                .WithModifiers(structDeclaration.Modifiers.Decorate())
-                                .DecorateType(times);
-
-                            break;
-                        }
-
-                    case NamespaceDeclarationSyntax namespaceDeclaration:
-                        {
-                            //foundNamespaceDeclaration = namespaceDeclaration;
-                            return SyntaxFactory.NamespaceDeclaration(namespaceDeclaration.Name)
-                                .WithMembers([generated]).Decorate();
-                        }
-                }
-            }
-
-            throw new AncestorNotFoundException();
-        }
-
-        private static ArgumentSyntax CastArgument(AttributeArgumentSyntax argument)
-            => SyntaxFactory.Argument(argument.Expression).WithNameColon(argument.NameColon);
-
-        private static SyntaxTokenList Modifiers(params SyntaxKind[] kinds)
-            => new SyntaxTokenList(kinds.Select(SyntaxFactory.Token).Select(mod => mod.WithTrailingTrivia(WhitespaceTrivia)));
-
-        private static IEnumerable<UsingDirectiveSyntax> ParseUsings(params string[] names) => names
-            .Select(name => SyntaxFactory.IdentifierName(name).WithLeadingTrivia(WhitespaceTrivia))
-            .Select(name => SyntaxFactory.UsingDirective(name).WithTrailingTrivia(NewLineTrivia));
-
-        private static bool HasGenAttributes(MemberDeclarationSyntax member) => member.AttributeLists.SelectMany(x => x.Attributes)
-            .Select(x => x.Name.ToString()).Intersect(InlineAttributes.Concat(ReplyAttributes)).Any();
-
-        private static SeparatedSyntaxList<T> SeparatedSyntaxList<T>(params IEnumerable<T> elements) where T : SyntaxNode
-            => new SeparatedSyntaxList<T>().AddRange(elements);
-
-        private static MemberAccessExpressionSyntax AccessExpression(string className, string methodName)
-            => SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, SyntaxFactory.IdentifierName(className), SyntaxFactory.IdentifierName(methodName));
-
-        private record class GeneratedMarkupMethodModel(MethodDeclarationSyntax OriginalMethod, FieldDeclarationSyntax GeneratedField, MethodDeclarationSyntax GeneratedMethod);
-        private record class GeneratedMarkupPropertyModel(PropertyDeclarationSyntax OriginalProperty, PropertyDeclarationSyntax GeneratedProperty);
     }
 }
