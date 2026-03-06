@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
 using Telegram.Bot.Types.Enums;
 using Telegrator.Annotations;
-using Telegrator.Attributes;
 using Telegrator.Configuration;
 using Telegrator.MadiatorCore;
 using Telegrator.MadiatorCore.Descriptors;

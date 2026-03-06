@@ -27,7 +27,7 @@ namespace Telegrator.Hosting.Polling
         {
             logger.LogInformation("Starting receiving updates via long-polling");
             _receiverOptions.AllowedUpdates = botHost.UpdateRouter.HandlersProvider.AllowedTypes.ToArray();
-            ReactiveUpdateReceiver updateReceiver = new ReactiveUpdateReceiver(botClient, _receiverOptions);
+            DefaultUpdateReceiver updateReceiver = new DefaultUpdateReceiver(botClient, _receiverOptions);
             await updateReceiver.ReceiveAsync(_updateRouter, stoppingToken).ConfigureAwait(false);
         }
     }

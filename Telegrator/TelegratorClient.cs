@@ -97,7 +97,7 @@ namespace Telegrator
             {
                 try
                 {
-                    await new ReactiveUpdateReceiver(this, receiverOptions)
+                    await new DefaultUpdateReceiver(this, receiverOptions)
                         .ReceiveAsync(UpdateRouter, cancellationToken)
                         .ConfigureAwait(false);
                 }

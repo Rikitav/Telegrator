@@ -36,14 +36,14 @@ namespace Telegrator
         /// <summary>
         /// The handler info associated with the faulted handler.
         /// </summary>
-        public readonly DescribedHandlerInfo HandlerInfo;
+        public readonly DescribedHandlerDescriptor HandlerInfo;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HandlerFaultedException"/> class.
         /// </summary>
         /// <param name="handlerInfo">The handler info.</param>
         /// <param name="inner">The inner exception.</param>
-        public HandlerFaultedException(DescribedHandlerInfo handlerInfo, Exception inner)
+        public HandlerFaultedException(DescribedHandlerDescriptor handlerInfo, Exception inner)
             : base(string.Format("Handler's \"{0}\" execution was faulted", handlerInfo.DisplayString), inner)
         {
             HandlerInfo = handlerInfo;

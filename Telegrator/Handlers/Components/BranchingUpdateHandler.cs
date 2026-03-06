@@ -106,7 +106,7 @@ namespace Telegrator.Handlers.Components
         /// <param name="handlerInfo">The handler information.</param>
         /// <returns>A handler container for this branching handler.</returns>
         /// <exception cref="Exception">Thrown when the awaiting provider is not of the expected type.</exception>
-        public override IHandlerContainer CreateContainer(DescribedHandlerInfo handlerInfo)
+        public override IHandlerContainer CreateContainer(DescribedHandlerDescriptor handlerInfo)
         {
             return new HandlerContainer<TUpdate>(handlerInfo);
         }

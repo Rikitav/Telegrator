@@ -37,7 +37,7 @@ namespace Telegrator.Handlers.Building
         /// </summary>
         /// <param name="describedHandler">The handler information containing the update.</param>
         /// <returns>An empty handler container.</returns>
-        public IHandlerContainer CreateContainer(DescribedHandlerInfo describedHandler)
+        public IHandlerContainer CreateContainer(DescribedHandlerDescriptor describedHandler)
         {
             HandlingUpdate = describedHandler.HandlingUpdate;
             return new EmptyHandlerContainer();

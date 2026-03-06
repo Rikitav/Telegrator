@@ -1,4 +1,4 @@
-﻿namespace Telegrator.Attributes
+﻿namespace Telegrator.Annotations
 {
     /// <summary>
     /// Attribute that prevents a class from being automatically collected by the handler collection system.

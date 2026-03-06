@@ -11,7 +11,7 @@ namespace Telegrator.Polling
     /// </summary>
     /// <param name="client">The Telegram bot client for making API requests.</param>
     /// <param name="options">Optional receiver options for configuring update polling behavior.</param>
-    public class ReactiveUpdateReceiver(ITelegramBotClient client, ReceiverOptions? options) : IUpdateReceiver
+    public class DefaultUpdateReceiver(ITelegramBotClient client, ReceiverOptions? options) : IUpdateReceiver
     {
         /// <summary>
         /// Gets the receiver options for configuring update polling behavior.

@@ -62,7 +62,7 @@ namespace Telegrator.Handlers.Components
         /// </summary>
         /// <param name="handlerInfo">The handler descriptor info.</param>
         /// <returns>The created handler container.</returns>
-        public virtual IHandlerContainer CreateContainer(DescribedHandlerInfo handlerInfo)
+        public virtual IHandlerContainer CreateContainer(DescribedHandlerDescriptor handlerInfo)
         {
             return new HandlerContainer<TUpdate>(handlerInfo);
         }

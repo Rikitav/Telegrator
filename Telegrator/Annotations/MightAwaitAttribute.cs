@@ -1,6 +1,6 @@
 ﻿using Telegram.Bot.Types.Enums;
 
-namespace Telegrator.Attributes
+namespace Telegrator.Annotations
 {
     /// <summary>
     /// Attribute that says if this handler can await some of await types, that is not listed by its handler base.

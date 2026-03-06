@@ -14,7 +14,10 @@ namespace Telegrator.Annotations.Targetted
         /// Creates new instance of <see cref="WelcomeAttribute"/>
         /// </summary>
         /// <param name="onlyFirst"></param>
-        public WelcomeAttribute(bool onlyFirst = false) : base(new MessageChatTypeFilter(ChatType.Private), new CommandAlliasFilter("start"), Filter<Message>.If(ctx => !onlyFirst || ctx.Input.Id == 0))
+        public WelcomeAttribute(bool onlyFirst = false) : base(
+            new MessageChatTypeFilter(ChatType.Private),
+            new CommandAlliasFilter("start"),
+            Filter<Message>.If(ctx => !onlyFirst || ctx.Input.Id == 0))
         { }
     }
 }

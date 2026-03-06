@@ -26,7 +26,7 @@ public interface IUpdateHandlerBase : IDisposable
     /// <param name="described"></param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-    Task<Result> Execute(DescribedHandlerInfo described, CancellationToken cancellationToken = default);
+    Task<Result> Execute(DescribedHandlerDescriptor described, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Handles failed filters during handler describing.

@@ -1,9 +1,7 @@
-﻿using Telegram.Bot.Types;
-using Telegrator.Aspects;
+﻿using Telegrator.Aspects;
 using Telegrator.Handlers.Components;
-using Telegrator.Filters.Components;
-using Telegrator.MadiatorCore;
 using Telegrator.Handlers.Diagnostics;
+using Telegrator.MadiatorCore;
 
 namespace Telegrator
 {

@@ -1,8 +1,6 @@
 ﻿using Telegram.Bot;
-using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
 using Telegrator.Filters.Components;
-using Telegrator.Handlers;
 using Telegrator.Handlers.Components;
 
 namespace Telegrator.MadiatorCore.Descriptors
@@ -10,47 +8,49 @@ namespace Telegrator.MadiatorCore.Descriptors
     /// <summary>
     /// Contains information about a described handler, including its context, client, and execution logic.
     /// </summary>
-    public class DescribedHandlerInfo
+    public class DescribedHandlerDescriptor
     {
+        private readonly ManualResetEventSlim ResetEvent = new ManualResetEventSlim(false);
+
         /// <summary>
         /// descriptor from that handler was described from
         /// </summary>
-        public readonly HandlerDescriptor From;
+        public HandlerDescriptor From { get; }
 
         /// <summary>
         /// The update router associated with this handler.
         /// </summary>
-        public readonly IUpdateRouter UpdateRouter;
+        public IUpdateRouter UpdateRouter { get; }
 
         /// <summary>
         /// The awaiting provider to fetch new updates inside handler
         /// </summary>
-        public readonly IAwaitingProvider AwaitingProvider;
+        public IAwaitingProvider AwaitingProvider { get; }
 
         /// <summary>
         /// The Telegram bot client used for this handler.
         /// </summary>
-        public readonly ITelegramBotClient Client;
+        public  ITelegramBotClient Client { get; }
 
         /// <summary>
         /// The handler instance being described.
         /// </summary>
-        public readonly UpdateHandlerBase HandlerInstance;
+        public UpdateHandlerBase HandlerInstance { get; }
 
         /// <summary>
         /// Extra data associated with the handler execution.
         /// </summary>
-        public readonly Dictionary<string, object> ExtraData;
+        public Dictionary<string, object> ExtraData { get; }
 
         /// <summary>
         /// List of completed filters for this handler.
         /// </summary>
-        public readonly CompletedFiltersList CompletedFilters;
+        public CompletedFiltersList CompletedFilters { get; }
 
         /// <summary>
         /// The update being handled.
         /// </summary>
-        public readonly Update HandlingUpdate;
+        public Update HandlingUpdate { get; }
 
         /// <summary>
         /// Lifetime token for the handler instance.
@@ -63,7 +63,12 @@ namespace Telegrator.MadiatorCore.Descriptors
         public string DisplayString { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DescribedHandlerInfo"/> class.
+        /// The final execution result.
+        /// </summary>
+        public Result? Result { get; private set; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DescribedHandlerDescriptor"/> class.
         /// </summary>
         /// <param name="fromDescriptor">descriptor from that handler was described from</param>
         /// <param name="awaitingProvider"></param>
@@ -72,7 +77,14 @@ namespace Telegrator.MadiatorCore.Descriptors
         /// <param name="handlerInstance">The handler instance.</param>
         /// <param name="filterContext">The filter execution context.</param>
         /// <param name="displayString">Optional display string.</param>
-        public DescribedHandlerInfo(HandlerDescriptor fromDescriptor, IUpdateRouter updateRouter, IAwaitingProvider awaitingProvider, ITelegramBotClient client, UpdateHandlerBase handlerInstance, FilterExecutionContext<Update> filterContext, string? displayString)
+        public DescribedHandlerDescriptor(
+            HandlerDescriptor fromDescriptor,
+            IUpdateRouter updateRouter,
+            IAwaitingProvider awaitingProvider,
+            ITelegramBotClient client,
+            UpdateHandlerBase handlerInstance,
+            FilterExecutionContext<Update> filterContext,
+            string? displayString)
         {
             From = fromDescriptor;
             UpdateRouter = updateRouter;
@@ -83,6 +95,22 @@ namespace Telegrator.MadiatorCore.Descriptors
             CompletedFilters = filterContext.CompletedFilters;
             HandlingUpdate = filterContext.Update;
             DisplayString = displayString ?? fromDescriptor.HandlerType.Name;
+        }
+
+        public async Task AwaitResult(CancellationToken cancellationToken)
+        {
+            await Task.Yield();
+            ResetEvent.Reset();
+            ResetEvent.Wait(cancellationToken);
+        }
+
+        public void ReportResult(Result result)
+        {
+            if (result != null)
+                throw new InvalidOperationException("Result already reported");
+
+            Result = result;
+            ResetEvent.Set();
         }
 
         /// <inheritdoc/>

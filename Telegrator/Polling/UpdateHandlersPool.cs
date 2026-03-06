@@ -1,4 +1,6 @@
-﻿using Telegrator.Handlers.Components;
+﻿using System.Security.Authentication.ExtendedProtection;
+using System.Threading.Channels;
+using Telegrator.Handlers.Components;
 using Telegrator.Logging;
 using Telegrator.MadiatorCore;
 using Telegrator.MadiatorCore.Descriptors;
@@ -14,12 +16,18 @@ namespace Telegrator.Polling
         /// <summary>
         /// Synchronization object for thread-safe operations.
         /// </summary>
-        protected object SyncObj = new object();
+        protected readonly object SyncObj = new object();
+
+        protected readonly Task ChannelReaderTask;
+
+        protected readonly Channel<DescribedHandlerDescriptor> ExecutionChannel;
 
         /// <summary>
         /// Semaphore for controlling the number of concurrently executing handlers.
         /// </summary>
-        protected SemaphoreSlim ExecutingHandlersSemaphore = null!;
+        protected readonly SemaphoreSlim? ExecutionLimiter;
+
+        protected readonly IUpdateRouter UpdateRouter;
 
         /// <summary>
         /// The bot configuration options.
@@ -45,72 +53,101 @@ namespace Telegrator.Polling
         /// <summary>
         /// Initializes a new instance of the <see cref="UpdateHandlersPool"/> class.
         /// </summary>
+        /// <param name="router">The update handler that claims updates</param>
         /// <param name="options">The bot configuration options.</param>
         /// <param name="globalCancellationToken">The global cancellation token.</param>
-        public UpdateHandlersPool(TelegratorOptions options, CancellationToken globalCancellationToken)
+        public UpdateHandlersPool(IUpdateRouter router, TelegratorOptions options, CancellationToken globalCancellationToken)
         {
+            UpdateRouter = router;
             Options = options;
             GlobalCancellationToken = globalCancellationToken;
+            
+            ExecutionChannel = Channel.CreateUnbounded<DescribedHandlerDescriptor>(new UnboundedChannelOptions()
+            {
+                SingleReader = true,
+                SingleWriter = true,
+                AllowSynchronousContinuations = false
+            });
 
             if (options.MaximumParallelWorkingHandlers != null)
-            {
-                ExecutingHandlersSemaphore = new SemaphoreSlim(options.MaximumParallelWorkingHandlers.Value);
-            }
+                ExecutionLimiter = new SemaphoreSlim(options.MaximumParallelWorkingHandlers.Value);
+
+            GlobalCancellationToken.Register(() => ExecutionChannel.Writer.Complete());
+            ChannelReaderTask = ReadChannel();
         }
 
         /// <inheritdoc/>
-        public async Task Enqueue(IEnumerable<DescribedHandlerInfo> handlers)
+        public async Task Enqueue(params IEnumerable<DescribedHandlerDescriptor> handlers)
         {
-            Result? lastResult = null;
-            foreach (DescribedHandlerInfo handlerInfo in handlers)
+            try
             {
-                if (lastResult?.NextType != null)
+                foreach (DescribedHandlerDescriptor handlerInfo in handlers)
                 {
-                    if (lastResult.NextType != handlerInfo.From.HandlerType)
-                        continue;
-                }
+                    if (handlerInfo.UpdateRouter != UpdateRouter)
+                        throw new InvalidOperationException("Tried to enqueue update handler info from other router.");
 
-                if (ExecutingHandlersSemaphore != null)
+                    await ExecutionChannel.Writer.WriteAsync(handlerInfo, GlobalCancellationToken);
+                }
+            }
+            catch (OperationCanceledException)
+            {
+                _ = 0xDEADBEEF;
+            }
+        }
+
+        private async Task ReadChannel()
+        {
+            try
+            {
+                await foreach (DescribedHandlerDescriptor handlerInfo in ExecutionChannel.Reader.ReadAllAsync(GlobalCancellationToken))
                 {
-                    await ExecutingHandlersSemaphore.WaitAsync().ConfigureAwait(false);
-                }
+                    if (ExecutionLimiter != null)
+                        await ExecutionLimiter.WaitAsync(GlobalCancellationToken);
 
-                try
+                    // Как только слот получен, "отстреливаем" задачу в ThreadPool 
+                    // и идем на следующий круг цикла за новым обработчиком из канала.
+                    _ = ProcessHandler(handlerInfo);
+                }
+            }
+            catch (ChannelClosedException)
+            {
+                // TODO: add logging
+            }
+        }
+
+        private async Task ProcessHandler(DescribedHandlerDescriptor handlerInfo)
+        {
+            try
+            {
+                Alligator.LogDebug("Described handler '{0}' (Update {1})", handlerInfo.DisplayString, handlerInfo.HandlingUpdate.Id);
+                HandlerExecuting?.Invoke(handlerInfo);
+
+                using UpdateHandlerBase instance = handlerInfo.HandlerInstance;
+                Task<Result> task = instance.Execute(handlerInfo);
+                HandlerEnqueued?.Invoke(handlerInfo);
+
+                await task.ConfigureAwait(false);
+                Result lastResult = task.Result;
+
+                handlerInfo.ReportResult(lastResult);
+                ExecutionLimiter?.Release(1);
+
+                if (lastResult.RouteNext)
                 {
-                    Alligator.LogDebug("Described handler '{0}' (Update {1})", handlerInfo.DisplayString, handlerInfo.HandlingUpdate.Id);
-                    HandlerExecuting?.Invoke(handlerInfo);
-
-                    using (UpdateHandlerBase instance = handlerInfo.HandlerInstance)
-                    {
-                        Task<Result> task = instance.Execute(handlerInfo);
-                        HandlerEnqueued?.Invoke(handlerInfo);
-
-                        await task.ConfigureAwait(false);
-                        lastResult = task.Result;
-                        ExecutingHandlersSemaphore?.Release(1);
-                    }
-
-                    if (lastResult.RouteNext)
-                    {
-                        Alligator.LogTrace("Handler '{0}' requested route continuation (Update {1})", handlerInfo.DisplayString, handlerInfo.HandlingUpdate.Id);
-                    }
+                    Alligator.LogTrace("Handler '{0}' requested route continuation (Update {1})", handlerInfo.DisplayString, handlerInfo.HandlingUpdate.Id);
                 }
-                catch (NotImplementedException)
-                {
-                    _ = 0xBAD + 0xC0DE;
-                }
-                catch (OperationCanceledException)
-                {
-                    _ = 0xBAD + 0xC0DE;
-                    break;
-                }
-                catch (Exception ex)
-                {
-                    Alligator.LogError("Failed to process handler '{0}' (Update {1})", exception: ex, handlerInfo.DisplayString, handlerInfo.HandlingUpdate.Id);
-                }
-
-                if (lastResult != null && !lastResult.RouteNext)
-                    break;
+            }
+            catch (NotImplementedException)
+            {
+                _ = 0xBAD + 0xC0DE;
+            }
+            catch (OperationCanceledException)
+            {
+                _ = 0xDEADBEEF;
+            }
+            catch (Exception ex)
+            {
+                Alligator.LogError("Failed to process handler '{0}' (Update {1})", exception: ex, handlerInfo.DisplayString, handlerInfo.HandlingUpdate.Id);
             }
         }
 
@@ -122,15 +159,9 @@ namespace Telegrator.Polling
             if (disposed)
                 return;
 
-            if (ExecutingHandlersSemaphore != null)
-            {
-                ExecutingHandlersSemaphore.Dispose();
-                ExecutingHandlersSemaphore = null!;
-            }
-
-            if (SyncObj != null)
-                SyncObj = null!;
-
+            // do not dispose UpdateRouter
+            ExecutionLimiter?.Dispose();
+            
             GC.SuppressFinalize(this);
             disposed = true;
         }

@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Runtime.InteropServices;
+using System.Text;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
@@ -24,6 +25,7 @@ namespace Telegrator.Polling
         private readonly IAwaitingProvider _awaitingProvider;
         private readonly IUpdateHandlersPool _HandlersPool;
         private readonly ITelegramBotInfo _botInfo;
+        private readonly HandlerDescriptorList _handlingRoutes;
 
         /// <inheritdoc/>
         public IHandlersProvider HandlersProvider => _handlersProvider;
@@ -55,8 +57,9 @@ namespace Telegrator.Polling
             _options = options;
             _handlersProvider = handlersProvider;
             _awaitingProvider = awaitingProvider;
-            _HandlersPool = new UpdateHandlersPool(_options, _options.GlobalCancellationToken);
+            _HandlersPool = new UpdateHandlersPool(this, _options, _options.GlobalCancellationToken);
             _botInfo = botInfo;
+            _handlingRoutes = new HandlerDescriptorList();
         }
 
         /// <summary>
@@ -74,6 +77,7 @@ namespace Telegrator.Polling
             _awaitingProvider = awaitingProvider;
             _HandlersPool = handlersPool;
             _botInfo = botInfo;
+            _handlingRoutes = new HandlerDescriptorList();
         }
 
         /// <summary>
@@ -105,19 +109,32 @@ namespace Telegrator.Polling
 
             try
             {
-                // Getting handlers in update awaiting pool
-                IEnumerable<DescribedHandlerInfo> handlers = GetHandlers(AwaitingProvider, botClient, update, cancellationToken);
-                if (handlers.Any())
+                Result? lastResult = null;
+                foreach (DescribedHandlerDescriptor handlerInfo in GetHandlers(AwaitingProvider, botClient, update, cancellationToken))
                 {
-                    // Enqueuing found awiting handlers
-                    await HandlersPool.Enqueue(handlers);
-
-                    // Chicking if awaiting handlers has exclusive routing
-                    if (Options.ExclusiveAwaitingHandlerRouting)
+                    if (lastResult?.NextType != null)
                     {
-                        Alligator.LogTrace("Receiving Update ({0}) completed with only awaiting handlers", update.Id);
-                        return;
+                        if (lastResult.NextType != handlerInfo.From.HandlerType)
+                            continue;
                     }
+
+                    // Enqueuing found awiting handlers
+                    await HandlersPool.Enqueue(handlerInfo);
+                    await handlerInfo.AwaitResult(cancellationToken).ConfigureAwait(false);
+
+                    lastResult = handlerInfo.Result;
+                    if (lastResult == null)
+                        break; // Smth went horribly wrong, better to stop routing
+
+                    if (lastResult != null && !lastResult.RouteNext)
+                        break;
+                }
+
+                // Checking if awaiting handlers has exclusive routing
+                if (Options.ExclusiveAwaitingHandlerRouting)
+                {
+                    Alligator.LogTrace("Receiving Update ({0}) completed with only awaiting handlers", update.Id);
+                    return;
                 }
 
                 // Queuing reagular handlers for execution
@@ -144,7 +161,7 @@ namespace Telegrator.Polling
         /// <param name="update">The incoming Telegram update to process</param>
         /// <param name="cancellationToken"></param>
         /// <returns>A collection of described handler information for the update</returns>
-        protected virtual IEnumerable<DescribedHandlerInfo> GetHandlers(IHandlersProvider provider, ITelegramBotClient client, Update update, CancellationToken cancellationToken = default)
+        protected virtual IEnumerable<DescribedHandlerDescriptor> GetHandlers(IHandlersProvider provider, ITelegramBotClient client, Update update, CancellationToken cancellationToken = default)
         {
             Alligator.LogTrace("Requested handlers for UpdateType.{0}", update.Type);
             if (!provider.TryGetDescriptorList(update.Type, out HandlerDescriptorList? descriptors))
@@ -172,13 +189,13 @@ namespace Telegrator.Polling
         /// <param name="update">The incoming Telegram update to process</param>
         /// <param name="cancellationToken"></param>
         /// <returns>A collection of described handler information</returns>
-        protected virtual IEnumerable<DescribedHandlerInfo> DescribeDescriptors(IHandlersProvider provider, HandlerDescriptorList descriptors, ITelegramBotClient client, Update update, CancellationToken cancellationToken = default)
+        protected virtual IEnumerable<DescribedHandlerDescriptor> DescribeDescriptors(IHandlersProvider provider, HandlerDescriptorList descriptors, ITelegramBotClient client, Update update, CancellationToken cancellationToken = default)
         {
             Alligator.LogTrace("Describing descriptors of descriptorsList.HandlingType.{0} for Update ({1})", descriptors.HandlingType, update.Id);
             foreach (HandlerDescriptor descriptor in descriptors.Reverse())
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                DescribedHandlerInfo? describedHandler = DescribeHandler(provider, descriptor, client, update, out bool breakRouting, cancellationToken);
+                DescribedHandlerDescriptor? describedHandler = DescribeHandler(provider, descriptor, client, update, out bool breakRouting, cancellationToken);
                 if (breakRouting)
                     yield break;
 
@@ -202,7 +219,7 @@ namespace Telegrator.Polling
         /// <param name="breakRouting"></param>
         /// <param name="cancellationToken"></param>
         /// <returns>The described handler info if validation passes; otherwise, null</returns>
-        public virtual DescribedHandlerInfo? DescribeHandler(IHandlersProvider provider, HandlerDescriptor descriptor, ITelegramBotClient client, Update update, out bool breakRouting, CancellationToken cancellationToken = default)
+        public virtual DescribedHandlerDescriptor? DescribeHandler(IHandlersProvider provider, HandlerDescriptor descriptor, ITelegramBotClient client, Update update, out bool breakRouting, CancellationToken cancellationToken = default)
         {
             breakRouting = false;
             cancellationToken.ThrowIfCancellationRequested();
@@ -231,7 +248,7 @@ namespace Telegrator.Polling
                 }
             }
 
-            return new DescribedHandlerInfo(descriptor, this, AwaitingProvider, client, handlerInstance, filterContext, descriptor.DisplayString);
+            return new DescribedHandlerDescriptor(descriptor, this, AwaitingProvider, client, handlerInstance, filterContext, descriptor.DisplayString);
         }
 
         /// <summary>

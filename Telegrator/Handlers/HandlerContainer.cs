@@ -37,7 +37,7 @@ namespace Telegrator.Handlers
         /// Initializes new instance of <see cref="HandlerContainer{TUpdate}"/>
         /// </summary>
         /// <param name="handlerInfo"></param>
-        public HandlerContainer(DescribedHandlerInfo handlerInfo)
+        public HandlerContainer(DescribedHandlerDescriptor handlerInfo)
         {
             ActualUpdate = handlerInfo.HandlingUpdate.GetActualUpdateObject<TUpdate>();
             HandlingUpdate = handlerInfo.HandlingUpdate;

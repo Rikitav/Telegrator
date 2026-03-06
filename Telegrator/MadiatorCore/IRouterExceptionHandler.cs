@@ -1,6 +1,5 @@
 ﻿using Telegram.Bot;
 using Telegram.Bot.Polling;
-using Telegrator.Polling;
 
 namespace Telegrator.MadiatorCore
 {

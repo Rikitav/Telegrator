@@ -42,8 +42,7 @@ namespace Telegrator.Filters.Components
         public static AnonymousTypeFilter Compile<T>(IFilter<T> filter, Func<Update, T?> getFilterringTarget) where T : class
         {
             return new AnonymousTypeFilter(
-                filter.GetType().Name,
-                getFilterringTarget,
+                filter.GetType().Name, getFilterringTarget,
                 (context, filterringTarget) => CanPassInternal(context, filter, filterringTarget));
         }
 

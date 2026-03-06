@@ -22,13 +22,13 @@ namespace Telegrator.Handlers.Components
         public HandlerLifetimeToken LifetimeToken { get; } = new HandlerLifetimeToken();
 
         /// <inheritdoc cref="Result.Ok"/>
-        public Result Ok => Result.Ok();
+        public static Result Ok => Result.Ok();
 
         /// <inheritdoc cref="Result.Fault"/>
-        public Result Fault => Result.Fault();
+        public static Result Fault => Result.Fault();
 
         /// <inheritdoc cref="Result.Next"/>
-        public Result Next => Result.Next();
+        public static Result Next => Result.Next();
 
         /// <summary>
         /// Executes the handler logic and marks the lifetime as ended after execution.
@@ -36,7 +36,7 @@ namespace Telegrator.Handlers.Components
         /// <param name="described"></param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        public async Task<Result> Execute(DescribedHandlerInfo described, CancellationToken cancellationToken = default)
+        public async Task<Result> Execute(DescribedHandlerDescriptor described, CancellationToken cancellationToken = default)
         {
             if (LifetimeToken.IsEnded)
                 throw new Exception();
@@ -125,7 +125,7 @@ namespace Telegrator.Handlers.Components
             }
         }
 
-        internal IHandlerContainer GetContainer(DescribedHandlerInfo handlerInfo)
+        internal IHandlerContainer GetContainer(DescribedHandlerDescriptor handlerInfo)
         {
             if (this is IHandlerContainerFactory handlerDefainedContainerFactory)
                 return handlerDefainedContainerFactory.CreateContainer(handlerInfo);

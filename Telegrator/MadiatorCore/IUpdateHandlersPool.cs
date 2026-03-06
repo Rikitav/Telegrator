@@ -5,14 +5,14 @@ namespace Telegrator.MadiatorCore
     /// <summary>
     /// Represents a delegate for when a handler is enqueued.
     /// </summary>
-    /// <param name="args">The <see cref="DescribedHandlerInfo"/> for the enqueued handler.</param>
-    public delegate void HandlerEnqueued(DescribedHandlerInfo args);
+    /// <param name="args">The <see cref="DescribedHandlerDescriptor"/> for the enqueued handler.</param>
+    public delegate void HandlerEnqueued(DescribedHandlerDescriptor args);
 
     /// <summary>
     /// Represents a delegate for when a handler is executing.
     /// </summary>
-    /// <param name="args">The <see cref="DescribedHandlerInfo"/> for the executing handler.</param>
-    public delegate void HandlerExecuting(DescribedHandlerInfo args);
+    /// <param name="args">The <see cref="DescribedHandlerDescriptor"/> for the executing handler.</param>
+    public delegate void HandlerExecuting(DescribedHandlerDescriptor args);
 
     /// <summary>
     /// Provides a pool for managing the execution and queuing of update handlers.
@@ -33,20 +33,6 @@ namespace Telegrator.MadiatorCore
         /// Enqueues a collection of handlers for execution.
         /// </summary>
         /// <param name="handlers">The handlers to enqueue.</param>
-        public Task Enqueue(IEnumerable<DescribedHandlerInfo> handlers);
-
-        /*
-        /// <summary>
-        /// Enqueues a single handler for execution.
-        /// </summary>
-        /// <param name="handlerInfo">The handler to enqueue.</param>
-        public void Enqueue(DescribedHandlerInfo handlerInfo);
-
-        /// <summary>
-        /// Dequeues a handler using its lifetime token.
-        /// </summary>
-        /// <param name="token">The <see cref="HandlerLifetimeToken"/> of the handler to dequeue.</param>
-        public void Dequeue(HandlerLifetimeToken token);
-        */
+        public Task Enqueue(params IEnumerable<DescribedHandlerDescriptor> handlers);
     }
 }
