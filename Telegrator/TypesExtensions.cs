@@ -65,6 +65,40 @@ namespace Telegrator
         }
 
         /// <summary>
+        /// Checkes if sent <see cref="Message"/> contains command. Automatically cuts bot name from it
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        public static bool IsCommand(this Message message, out string? command, out string? args)
+        {
+            command = null;
+            if (message is not { Entities.Length: > 0, Text.Length: > 0 })
+                return false;
+
+            MessageEntity commandEntity = message.Entities[0];
+            if (commandEntity.Type != MessageEntityType.BotCommand)
+                return false;
+
+            if (commandEntity.Offset != 0)
+                return false;
+
+            command = message.Text.Substring(1, commandEntity.Length - 1);
+            if (message.Text.Length > command.Length)
+            {
+                args = message.Text.Substring(command.Length);
+            }
+            
+            if (command.Contains('@'))
+            {
+                string[] split = command.Split('@');
+                command = split[0];
+            }
+
+            return true;
+        }
+
+        /// <summary>
         /// Split message text into arguments, ignoring command instance. Splits by space character
         /// </summary>
         /// <param name="message"></param>
@@ -74,16 +108,16 @@ namespace Telegrator
         /// <exception cref="MissingMemberException"></exception>
         public static string[] SplitArgs(this Message message)
         {
-            if (!message.IsCommand(out _))
-                throw new InvalidDataException("Message does not contain a command");
-
-            if (message is not { Text.Length: > 0 })
+            if (message.Text is not { Length: > 0 } text)
                 throw new ArgumentNullException(nameof(message), "Command text cannot be null or empty");
 
-            if (!message.Text.Contains(' '))
-                throw new MissingMemberException("Command dont contains arguments");
+            if (!text.Contains(' '))
+                throw new MissingMemberException("Command doesn't contains arguments");
 
-            return message.Text.Split([' '], StringSplitOptions.RemoveEmptyEntries).Skip(1).ToArray();
+            if (!message.IsCommand(out _, out string? argsStr))
+                throw new InvalidDataException("Message does not contain a command");
+
+            return argsStr.Split([' '], StringSplitOptions.RemoveEmptyEntries);
         }
 
         /// <summary>
@@ -94,17 +128,17 @@ namespace Telegrator
         /// <returns></returns>
         public static bool TrySplitArgs(this Message message, out string[]? args)
         {
-            args = null;
-            if (!message.IsCommand(out _))
-                return false;
-
             if (message is not { Text.Length: > 0 })
                 return false;
 
             if (!message.Text.Contains(' '))
                 return false;
 
-            args = message.Text.Split([' '], StringSplitOptions.RemoveEmptyEntries).Skip(1).ToArray();
+            args = null;
+            if (!message.IsCommand(out _, out string> argsStr))
+                return false;
+
+            args = argsStr.Split([' '], StringSplitOptions.RemoveEmptyEntries);
             return true;
         }
     }
