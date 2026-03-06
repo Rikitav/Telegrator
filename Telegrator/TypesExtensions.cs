@@ -297,10 +297,18 @@ namespace Telegrator
     /// </summary>
     public static partial class HandlersCollectionExtensions
     {
-        private static readonly string[] skippingAssemblies = ["System.", "Microsoft."];
+        // TODO: rewrite collecting system, add certain hardcoded Type searching, generated automatically
+        private static readonly string[] skippingAssemblies = [
+            "System", "Microsoft", "Windows", "Newtonsoft", "Serilog", "NLog",
+            "AutoMapper", "MediatR", "Dapper", "RestSharp", "Polly", "FluentValidation",
+            "NUnit", "Xunit", "Moq", "FluentAssertions", "Castle", "Autofac", "Ninject",
+            "StackExchange", "RabbitMQ", "Quartz", "Hangfire", "Npgsql", "MySql", "Oracle",
+            "Bogus", "CsvHelper", "Grpc", "Swashbuckle", "MassTransit", "AngleSharp",
+            "Ocelot", "BouncyCastle", "IdentityModel", "Telegrator"
+        ]
 
         /// <summary>
-        /// Collects all handlers from the current app domain.
+        /// Collects all public handlers from the current app domain.
         /// Scans for types that implement handlers and adds them to the collection.
         /// </summary>
         /// <returns>This collection instance for method chaining.</returns>
@@ -309,25 +317,21 @@ namespace Telegrator
         {
             AppDomain.CurrentDomain
                 .GetAssemblies()
-                .Where(ass => ass.GetName().Name != "Telegrator")
                 .Where(ass => skippingAssemblies.All(skip => !ass.FullName.StartsWith(skip)))
-                .SelectMany(ass => ass.GetExportedTypes())
-                .Where(type => type.GetCustomAttribute<DontCollectAttribute>() == null)
-                .Where(type => type.IsHandlerRealization())
-                .ForEach(type => handlers.AddHandler(type));
+                .ForEach(ass => ass.CollectHandlersAssemblyWide());
 
             return handlers;
         }
 
         /// <summary>
-        /// Collects all handlers from the calling this function assembly.
+        /// Collects all public handlers from the calling this function assembly.
         /// Scans for types that implement handlers and adds them to the collection.
         /// </summary>
         /// <returns>This collection instance for method chaining.</returns>
         /// <exception cref="Exception">Thrown when the entry assembly cannot be found.</exception>
-        public static IHandlersCollection CollectHandlersAssemblyWide(this IHandlersCollection handlers)
+        public static IHandlersCollection CollectHandlersAssemblyWide(this IHandlersCollection handlers, Assembly collectingTarget = null)
         {
-            Assembly.GetCallingAssembly()
+            (collectingTarget ?? Assembly.GetCallingAssembly())
                 .GetExportedTypes()
                 .Where(type => type.GetCustomAttribute<DontCollectAttribute>() == null)
                 .Where(type => type.IsHandlerRealization())
