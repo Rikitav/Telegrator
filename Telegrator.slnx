@@ -1,0 +1,9 @@
+﻿<Solution>
+  <Project Path="src/Telegrator/Telegrator.csproj" />
+  <Project Path="src/Telegrator.Analyzers/Telegrator.Analyzers.csproj" />
+  <Project Path="src/Telegrator.Hosting/Telegrator.Hosting.csproj" />
+  <Project Path="src/Telegrator.Hosting.Web/Telegrator.Hosting.Web.csproj" />
+  <Project Path="src/Telegrator.Localized/Telegrator.Localized.csproj" />
+  <Project Path="dev/Telegrator.RoslynGenerators/Telegrator.RoslynGenerators.csproj" />
+  <Project Path="tests/Telegrator.Tests/Telegrator.Tests.csproj" />
+</Solution>
