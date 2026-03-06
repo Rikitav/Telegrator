@@ -21,6 +21,15 @@ namespace Telegrator.Handlers.Components
         /// </summary>
         public HandlerLifetimeToken LifetimeToken { get; } = new HandlerLifetimeToken();
 
+        /// <inheritdoc cref="Result.Ok"/>
+        public Result Ok => Result.Ok();
+
+        /// <inheritdoc cref="Result.Fault"/>
+        public Result Fault => Result.Fault();
+
+        /// <inheritdoc cref="Result.Next"/>
+        public Result Next => Result.Next();
+
         /// <summary>
         /// Executes the handler logic and marks the lifetime as ended after execution.
         /// </summary>

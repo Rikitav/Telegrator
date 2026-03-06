@@ -12,6 +12,10 @@ namespace Telegrator
     /// </summary>
     public sealed class Result
     {
+        private static readonly Result ok = new Result(true, false, null);
+        private static readonly Result fault = new Result(false, false, null);
+        private static readonly Result next = new Result(true, true, null);
+
         /// <summary>
         /// Is result positive
         /// </summary>
@@ -44,7 +48,7 @@ namespace Telegrator
         /// </summary>
         /// <returns></returns>
         public static Result Ok()
-            => new Result(true, false, null);
+            => ok;
 
         /// <summary>
         /// Represents 'fault' or 'error'. Use cases:
@@ -55,7 +59,7 @@ namespace Telegrator
         /// </summary>
         /// <returns></returns>
         public static Result Fault()
-            => new Result(false, false, null);
+            => fault;
 
         /// <summary>
         /// Represents 'continue'. Use cases:
@@ -66,7 +70,7 @@ namespace Telegrator
         /// </summary>
         /// <returns></returns>
         public static Result Next()
-            => new Result(true, true, null);
+            => next;
 
         /// <summary>
         /// Represents 'chain'. Use cases:
