@@ -111,7 +111,7 @@ public static class HostBuilderExtensions
 
 /// <summary>
 /// Contains extensions for <see cref="IServiceCollection"/>
-/// Provides method to configure <see cref="ITelegramBotHost"/>
+/// Provides method to configure Telegram Bot Host
 /// </summary>
 public static class ServicesCollectionExtensions
 {

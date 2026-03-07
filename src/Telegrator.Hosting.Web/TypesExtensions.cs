@@ -60,7 +60,7 @@ namespace Telegrator
             options.GlobalCancellationToken = globallCancell.Token;
             services.AddSingleton(Options.Create(options));
             services.AddKeyedSingleton("cancell", globallCancell);
-1
+
             if (handlers != null)
             {
                 if (handlers is IHandlersManager manager)

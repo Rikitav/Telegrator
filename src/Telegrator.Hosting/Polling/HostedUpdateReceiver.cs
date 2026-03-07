@@ -11,7 +11,6 @@ namespace Telegrator.Polling
     /// <summary>
     /// Service for receiving updates for Hosted telegram bots
     /// </summary>
-    /// <param name="botHost"></param>
     /// <param name="botClient"></param>
     /// <param name="updateRouter"></param>
     /// <param name="options"></param>

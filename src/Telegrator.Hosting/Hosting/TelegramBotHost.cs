@@ -33,7 +33,6 @@ namespace Telegrator.Hosting
         /// Initializes a new instance of the <see cref="TelegramBotHost"/> class.
         /// </summary>
         /// <param name="hostApplicationBuilder">The proxied instance of host builder.</param>
-        /// <param name="handlers"></param>
         public TelegramBotHost(HostApplicationBuilder hostApplicationBuilder)
         {
             // Registering this host in services for easy access
