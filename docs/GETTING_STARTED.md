@@ -1078,7 +1078,7 @@ var host = webHost.Build();
 await host.StartAsync();
 ```
 
-**Note:** For web hosting, you need to configure both `TelegramBotClientOptions` (for bot token) and `TelegratorWebOptions` (for webhook settings) in your `appsettings.json` file.
+**Note:** For web hosting, you need to configure both `TelegratorOptions` (for bot token) and `WebhookerOptions` (for webhook settings) in your `appsettings.json` file.
 
 > **How is it working?**
 > 1. **Console Integration**: `TelegratorClient` provides a simple way to create bots in console applications.
@@ -1723,12 +1723,11 @@ dotnet add package Telegrator.Hosting.Web
 **Core Components:**
 - `TelegramBotWebHost` - The main web hosted service for webhook handling
 - `TelegramBotWebHostBuilder` - Builder pattern for configuring the web host
-- `TelegramBotWebOptions` - Configuration options for web application settings
-- `TelegratorWebOptions` - Configuration options for webhook settings
+- `WebhookerOptions` - Configuration options for webhook settings
 
 **Configuration Requirements:**
-- `TelegramBotClientOptions` must be configured as it contains the bot token
-- `TelegratorWebOptions` must be configured through external sources (appsettings.json) for webhook settings
+- `TelegratorOptions` must be configured as it contains the bot token
+- `WebhookerOptions` must be configured through external sources (appsettings.json) for webhook settings
 
 **Basic Example:**
 ```csharp
@@ -1750,11 +1749,11 @@ await host.StartAsync();
 **Configuration via appsettings.json:**
 ```json
 {
-  "TelegramBotClientOptions": {
+  "TelegratorOptions": {
     "Token": "YOUR_BOT_TOKEN"
   },
   
-  "TelegratorWebOptions": {
+  "WebhookerOptions": {
     "WebhookUri": "https://your-domain.com/webhook",
     "SecretToken": "your-secret-token",
     "MaxConnections": 40,
@@ -1790,7 +1789,7 @@ The bot token must be configured either in `appsettings.json` or through environ
 
 ```json
 {
-  "TelegramBotClientOptions": {
+  "TelegratorOptions": {
     "Token": "YOUR_BOT_TOKEN"
   }
 }
@@ -1805,7 +1804,7 @@ export TelegramBotClientOptions__Token="YOUR_BOT_TOKEN"
 **Advanced Configuration:**
 ```json
 {
-  "TelegramBotClientOptions": {
+  "TelegratorOptions": {
     "Token": "YOUR_BOT_TOKEN",
     "BaseUrl": "https://api.telegram.org"
   },
@@ -2158,10 +2157,11 @@ await host.StartAsync();
 **Configuration (appsettings.json):**
 ```json
 {
-  "TelegramBotClientOptions": {
+  "TelegratorOptions": {
     "Token": "YOUR_BOT_TOKEN"
   },
-  "TelegratorWebOptions": {
+
+  "WebhookerOptions": {
     "WebhookUri": "https://your-domain.com/webhook",
     "SecretToken": "your-secret-token",
     "MaxConnections": 40,
@@ -2283,12 +2283,12 @@ public class StartWizardHandler : CommandHandler
 
 ### 7.5. Logging System
 
-Telegrator provides a centralized logging system called "Alligator" that allows integration with various logging frameworks while maintaining zero dependencies in the core library.
+Telegrator provides a centralized logging system called "TelegratorLogging" that allows integration with various logging frameworks while maintaining zero dependencies in the core library.
 
 #### Overview
 
 The logging system consists of:
-- **Alligator** - Centralized static logging system
+- **TelegratorLogging** - Centralized static logging system
 - **ITelegratorLogger** - Core logging interface
 - **NullLogger** - No-op logger
 - **ConsoleLogger** - Simple console output
@@ -2301,11 +2301,11 @@ The logging system consists of:
 using Telegrator.Logging;
 
 // Add console adapter
-Alligator.AddAdapter(new ConsoleLoggerAdapter(LogLevel.Debug, includeTimestamp: true));
+TelegratorLogging.AddAdapter(new ConsoleLoggerAdapter(LogLevel.Debug, includeTimestamp: true));
 
 // Use logging
-Alligator.LogInformation("Bot started");
-Alligator.LogError("Something went wrong", exception);
+TelegratorLogging.LogInformation("Bot started");
+TelegratorLogging.LogError("Something went wrong", exception);
 ```
 
 **Custom Logger Adapter:**
@@ -2322,7 +2322,7 @@ public class CustomLogger : ITelegratorLogger
 }
 
 // Add custom adapter
-Alligator.AddAdapter(new CustomLogger());
+TelegratorLogging.AddAdapter(new CustomLogger());
 ```
 
 #### Hosting Integration
@@ -2340,7 +2340,7 @@ var loggerFactory = LoggerFactory.Create(builder =>
 // Add Microsoft.Extensions.Logging adapter
 ILogger<Program> logger = loggerFactory.CreateLogger<Program>();
 MicrosoftLoggingAdapter adapter = new MicrosoftLoggingAdapter(logger);
-Alligator.AddAdapter(adapter);
+TelegratorLogging.AddAdapter(adapter);
 
 var bot = new TelegratorClient("<BOT_TOKEN>");
 ```
@@ -2359,14 +2359,14 @@ All logging methods support simple message logging:
 
 ```csharp
 // In your handlers or aspects
-Alligator.LogInformation("Handler executed");
-Alligator.LogError("Something went wrong", exception);
-Alligator.LogWarning("User exceeded rate limit");
+TelegratorLogging.LogInformation("Handler executed");
+TelegratorLogging.LogError("Something went wrong", exception);
+TelegratorLogging.LogWarning("User exceeded rate limit");
 ```
 
 #### Performance Considerations
 
-- **Alligator** has minimal overhead with thread-safe adapter management
+- **TelegratorLogging** has minimal overhead with thread-safe adapter management
 - **NullLogger** has zero overhead
 - **ConsoleLogger** is lightweight for development
 - **MicrosoftLoggingAdapter** delegates to the underlying framework
@@ -2576,11 +2576,11 @@ For detailed information about the logging system, see [section 7.5 - Logging Sy
 using Telegrator.Logging;
 
 // Add console adapter for debugging
-Alligator.AddConsoleAdapter(LogLevel.Debug, includeTimestamp: true);
+TelegratorLogging.AddConsoleAdapter(LogLevel.Debug, includeTimestamp: true);
 
 // Use logging
-Alligator.LogInformation("Bot started");
-Alligator.LogError("Something went wrong", exception);
+TelegratorLogging.LogInformation("Bot started");
+TelegratorLogging.LogError("Something went wrong", exception);
 ```
 
 #### Common Debugging Steps
@@ -2599,9 +2599,9 @@ Alligator.LogError("Something went wrong", exception);
 #### Simple Logging
 ```csharp
 // In your handlers or aspects
-Alligator.LogInformation("Handler executed");
-Alligator.LogError("Something went wrong", exception);
-Alligator.LogWarning("User exceeded rate limit");
+TelegratorLogging.LogInformation("Handler executed");
+TelegratorLogging.LogError("Something went wrong", exception);
+TelegratorLogging.LogWarning("User exceeded rate limit");
 ```
 
 ---
@@ -2617,4 +2617,10 @@ Alligator.LogWarning("User exceeded rate limit");
 
 > **Feel free to contribute, ask questions, or open issues!**
 
-Сишарпилло Крокодилло
+В главных ролях :
+> Сишарпилло Крокодилло,
+> Дыкий Сишарп,
+> Шарпенко Михаил Дотнетович
+
+Кастинг и Тестирование :
+> не проводилось
