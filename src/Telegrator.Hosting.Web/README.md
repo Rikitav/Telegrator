@@ -41,7 +41,7 @@ using Telegrator.Hosting.Web;
 TelegramBotWebHostBuilder builder = TelegramBotWebHost.CreateBuilder(new WebApplicationOptions()
 {
     Args = args,
-    ApplicationName = "Telegrator WebApplication example",
+    ApplicationName = "TelegramBotWebHost example",
 });
 
 // Register handlers
@@ -54,6 +54,38 @@ builder.Services.AddSingleton<IMyService, MyService>();
 TelegramBotWebHost telegramBot = builder.Build();
 telegramBot.SetBotCommands();
 telegramBot.Run();
+```
+
+---
+
+## Application integration Example
+
+**Program.cs (ASP.NET Core):**
+```csharp
+using Telegrator.Hosting;
+using Telegrator.Hosting.Web;
+
+// Creating builder
+WebApplicationBuilder builder = WebApplication.CreateBuilder(new WebApplicationOptions()
+{
+    Args = args,
+    ApplicationName = "WebApplication example",
+});
+
+// Adding Telegrator
+builder.AddTelegratorWeb();
+
+// Register handlers
+builder.Handlers.CollectHandlersAssemblyWide();
+
+// Register your services
+builder.Services.AddSingleton<IMyService, MyService>();
+
+// Building and running application
+builder.Build()
+    .UseTelegratorWeb()
+    .SetBotCommands();
+    .Run();
 ```
 
 ---

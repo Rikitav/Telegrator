@@ -55,6 +55,35 @@ telegramBot.Run();
 
 ---
 
+## Application integration Example
+
+**Program.cs:**
+```csharp
+using Telegrator.Hosting;
+
+// Creating builder
+HostApplicationBuilder builder = Host.CreateApplicationBuilder(new HostApplicationBuilderSettings()
+{
+    Args = args,
+    ApplicationName = "Host example",
+});
+
+// Adding Telegrator
+builder.AddTelegrator();
+
+// Registerring handlers (extension)
+builder.Handlers.CollectHandlersAssemblyWide();
+
+// Building and running application
+builder.Build()
+    .UseTelegrator()
+    .SetBotCommands()
+    .Run();
+
+```
+
+---
+
 ## Configuration (appsettings.json)
 
 ```json
