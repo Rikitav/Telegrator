@@ -1,6 +1,5 @@
 ﻿using Telegram.Bot;
 using Telegram.Bot.Types;
-using Telegrator.Core;
 using Telegrator.Core.Filters;
 using Telegrator.Core.Handlers;
 

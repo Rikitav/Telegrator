@@ -99,6 +99,11 @@ namespace Telegrator.Mediation
         /// <returns>A task representing the asynchronous update handling operation.</returns>
         public virtual async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
+            _ = HandleUpdateAsyncInternal(botClient, update, cancellationToken);
+        }
+
+        private async Task HandleUpdateAsyncInternal(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+        {
             // Logging
             LogUpdate(update);
 
@@ -135,7 +140,28 @@ namespace Telegrator.Mediation
                 }
 
                 // Queuing reagular handlers for execution
-                await HandlersPool.Enqueue(GetHandlers(HandlersProvider, botClient, update, cancellationToken));
+                foreach (DescribedHandlerDescriptor handlerInfo in GetHandlers(HandlersProvider, botClient, update, cancellationToken))
+                {
+                    if (lastResult?.NextType != null)
+                    {
+                        if (lastResult.NextType != handlerInfo.From.HandlerType)
+                            continue;
+                    }
+
+                    // Enqueuing found handlers
+                    await HandlersPool.Enqueue(handlerInfo);
+                    await handlerInfo.AwaitResult(cancellationToken).ConfigureAwait(false);
+
+                    lastResult = handlerInfo.Result;
+                    if (lastResult == null)
+                        break; // Smth went horribly wrong, better to stop routing
+
+                    if (lastResult != null && !lastResult.RouteNext)
+                        break;
+
+                    TelegratorLogging.LogTrace("Handler '{0}' requested route continuation (Update {1})", handlerInfo.DisplayString, handlerInfo.HandlingUpdate.Id);
+                }
+
                 TelegratorLogging.LogTrace("Receiving Update ({0}) finished", update.Id);
             }
             catch (OperationCanceledException)

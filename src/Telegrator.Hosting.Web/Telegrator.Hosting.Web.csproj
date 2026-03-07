@@ -15,7 +15,7 @@
     <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
 	  
     <Title>Telegrator.Hosting.Web</Title>
-    <Version>1.16.0</Version>
+    <Version>1.16.1</Version>
 	<Authors>Rikitav Tim4ik</Authors>
     <Company>Rikitav Tim4ik</Company>
     <RepositoryUrl>https://github.com/Rikitav/Telegrator</RepositoryUrl>
@@ -25,22 +25,19 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Include="..\..\LICENSE" Pack="True" PackagePath="\" />
-    <None Include="..\..\README.md" Pack="True" PackagePath="\" />
-    <None Include="..\..\resources\telegrator_nuget.png" Pack="True" PackagePath="\" />
-  </ItemGroup>
   
   <ItemGroup>
     <ProjectReference Include="..\Telegrator.Hosting\Telegrator.Hosting.csproj" />
   </ItemGroup>
-
+	
   <ItemGroup>
 	<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	<PackageReference Include="Telegram.Bot.AspNetCore" Version="22.5.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Telegram.Bot.AspNetCore" Version="22.5.0" />
+    <None Include=".\README.md" Pack="True" PackagePath="\" />
+    <None Include="..\..\LICENSE" Pack="True" PackagePath="\" />
+    <None Include="..\..\resources\telegrator_nuget.png" Pack="True" PackagePath="\" />
   </ItemGroup>
 </Project>

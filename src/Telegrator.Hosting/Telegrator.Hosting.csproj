@@ -15,7 +15,7 @@
     <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
 	  
     <Title>Telegrator.Hosting</Title>
-    <Version>1.16.0</Version>
+    <Version>1.16.1</Version>
 	<Authors>Rikitav Tim4ik</Authors>
     <Company>Rikitav Tim4ik</Company>
     <RepositoryUrl>https://github.com/Rikitav/Telegrator</RepositoryUrl>
@@ -27,18 +27,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Telegrator\Telegrator.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.3" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.3" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Include=".\README.md" Pack="True" PackagePath="\" />
     <None Include="..\..\LICENSE" Pack="True" PackagePath="\" />
-    <None Include="..\..\README.md" Pack="True" PackagePath="\" />
     <None Include="..\..\resources\telegrator_nuget.png" Pack="True" PackagePath="\" />
   </ItemGroup>
   
-  <ItemGroup>
-    <ProjectReference Include="..\Telegrator\Telegrator.csproj" />
-  </ItemGroup>
-
 </Project>
