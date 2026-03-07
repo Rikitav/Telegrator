@@ -7,7 +7,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Telegram.Bot;
 using Telegrator.Core;
-using Telegrator.Hosting;
 using Telegrator.Hosting.Web;
 using Telegrator.Mediation;
 using Telegrator.Providers;
@@ -25,7 +24,7 @@ namespace Telegrator
         /// </summary>
         public const string HandlersCollectionPropertyKey = nameof(IHandlersCollection);
 
-        extension(IHostApplicationBuilder builder)
+        extension(WebApplicationBuilder builder)
         {
             /// <summary>
             /// Gets the <see cref="IHandlersCollection"/> from the builder properties.
@@ -34,13 +33,7 @@ namespace Telegrator
             {
                 get
                 {
-                    if (builder is TelegramBotHostBuilder botHostBuilder)
-                        return botHostBuilder.Handlers;
-
-                    if (builder is TelegramBotWebHostBuilder webBotHostBuilder)
-                        return webBotHostBuilder.Handlers;
-
-                    return (IHandlersCollection)builder.Properties[HandlersCollectionPropertyKey];
+                    return (IHandlersCollection)builder.Host.Properties[HandlersCollectionPropertyKey];
                 }
             }
         }
@@ -67,7 +60,7 @@ namespace Telegrator
             options.GlobalCancellationToken = globallCancell.Token;
             services.AddSingleton(Options.Create(options));
             services.AddKeyedSingleton("cancell", globallCancell);
-
+1
             if (handlers != null)
             {
                 if (handlers is IHandlersManager manager)
