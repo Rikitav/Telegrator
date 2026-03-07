@@ -48,11 +48,8 @@ public static class HostBuilderExtensions
     /// <summary>
     /// Replaces TelegramBotWebHostBuilder. Configures DI, options, and handlers.
     /// </summary>
-    public static IHostApplicationBuilder AddTelegrator(this IHostApplicationBuilder builder, HostApplicationBuilderSettings settings, TelegratorOptions? options = null, IHandlersCollection? handlers = null)
+    public static IHostApplicationBuilder AddTelegrator(this IHostApplicationBuilder builder, TelegratorOptions? options = null, IHandlersCollection? handlers = null)
     {
-        if (settings is null)
-            throw new ArgumentNullException(nameof(settings));
-
         IServiceCollection services = builder.Services;
         IConfigurationManager configuration = builder.Configuration;
 

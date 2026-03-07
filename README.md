@@ -55,7 +55,7 @@ using Telegrator.Annotations;
 [MessageHandler]
 public class HelloHandler : MessageHandler
 {
-    public override async Task<Result> Execute(IAbstractHandlerContainer<Message> container, CancellationToken cancellation)
+    public override async Task<Result> Execute(IHandlerContainer<Message> container, CancellationToken cancellation)
     {
         await Reply("Hello, world!", cancellationToken: cancellation);
         return Result.Ok();
@@ -75,10 +75,10 @@ using Telegram.Bot.Types.Enums;
 using Telegrator.Handlers;
 using Telegrator.Annotations;
 
-[CommandHandler, CommandAllias("start", "hello"), ChatType(ChatType.Private)]
+[CommandHandler, CommandAlias("start", "hello"), ChatType(ChatType.Private)]
 public class StartCommandHandler : CommandHandler
 {
-    public override async Task<Result> Execute(IAbstractHandlerContainer<Message> container, CancellationToken cancellation)
+    public override async Task<Result> Execute(IHandlerContainer<Message> container, CancellationToken cancellation)
     {
         await Responce("Welcome!", cancellationToken: cancellation);
         return Result.Ok();
@@ -95,10 +95,10 @@ bot.Handlers.AddHandler<StartCommandHandler>();
 using Telegrator.Handlers;
 using Telegrator.Annotations;
 
-[CommandHandler, CommandAllias("first"), NumericState(SpecialState.NoState)]
+[CommandHandler, CommandAlias("first"), NumericState(SpecialState.NoState)]
 public class StateKeepFirst : CommandHandler
 {
-    public override async Task<Result> Execute(IAbstractHandlerContainer<Message> container, CancellationToken cancellation)
+    public override async Task<Result> Execute(IHandlerContainer<Message> container, CancellationToken cancellation)
     {
         container.CreateNumericState();
         container.ForwardNumericState();
@@ -126,7 +126,7 @@ bot.Handlers.AddHandler<StateKeepFirst>();
 ## 📚 Documentation & Examples
 
 - [Documentation](https://github.com/Rikitav/Telegrator/wiki/)
-- [Usage examples (WIP)](https://github.com/Rikitav/Telegrator/tree/master/Examples)
+- [Usage examples (WIP)](https://github.com/Rikitav/Telegrator/tree/master/examples)
 
 ---
 

@@ -16,8 +16,9 @@
 ---
 
 ## Requirements
-- .NET 8.0 or later
+- .NET 10.0 or later
 - ASP.NET Core
+- [Telegrator.Hosting](https://github.com/Rikitav/Telegrator)
 
 ---
 
@@ -37,10 +38,10 @@ using Telegrator.Hosting;
 using Telegrator.Hosting.Web;
 
 // Creating builder
-TelegramBotWebHostBuilder builder = TelegramBotWebHost.CreateBuilder(new TelegramBotWebOptions()
+TelegramBotWebHostBuilder builder = TelegramBotWebHost.CreateBuilder(new WebApplicationOptions()
 {
     Args = args,
-    ExceptIntersectingCommandAliases = true
+    ApplicationName = "Telegrator WebApplication example",
 });
 
 // Register handlers
@@ -61,23 +62,23 @@ telegramBot.Run();
 
 ```json
 {
-  "TelegramBotClientOptions": {
-    "Token": "YOUR_BOT_TOKEN"
+  "TelegratorOptions": {
+    "Token": "YOUR_BOT_TOKEN",
+    "ExceptIntersectingCommandAliases": true
   }
 
-  "TelegratorWebOptions": {
+  "WebhookerOptioons": {
     "WebhookUri" = "https://you-public-host.ru/bot",
+    "SecretToken": "MEDIC_GAMING"
     "DropPendingUpdates": true
   }
 }
 ```
 
-- `TelegramBotClientOptions`: Bot token and client settings
-
 ---
 
 ## Documentation
-- [Telegrator Main Docs](https://github.com/Rikitav/Telegrator)
+- [Telegrator Main Repository](https://github.com/Rikitav/Telegrator)
 - [Getting Started Guide](https://github.com/Rikitav/Telegrator/wiki/Getting-started)
 - [Annotation Overview](https://github.com/Rikitav/Telegrator/wiki/Annotation-overview)
 

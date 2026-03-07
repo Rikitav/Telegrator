@@ -41,11 +41,8 @@ namespace Telegrator
         /// <summary>
         /// Replaces TelegramBotWebHostBuilder. Configures DI, options, and handlers.
         /// </summary>
-        public static IHostApplicationBuilder AddTelegratorWeb(this IHostApplicationBuilder builder, WebApplicationOptions settings, TelegratorOptions? options = null, IHandlersCollection? handlers = null)
+        public static IHostApplicationBuilder AddTelegratorWeb(this IHostApplicationBuilder builder, TelegratorOptions? options = null, IHandlersCollection? handlers = null)
         {
-            if (settings is null)
-                throw new ArgumentNullException(nameof(settings));
-
             IServiceCollection services = builder.Services;
             IConfigurationManager configuration = builder.Configuration;
 

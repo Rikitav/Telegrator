@@ -15,7 +15,7 @@
 ---
 
 ## Requirements
-- .NET 8.0 or later
+- .NET 10.0 or later
 - [Telegrator](https://github.com/Rikitav/Telegrator)
 
 ---
@@ -35,10 +35,10 @@ dotnet add package Telegrator.Hosting
 using Telegrator.Hosting;
 
 // Creating builder
-TelegramBotHostBuilder builder = TelegramBotHost.CreateBuilder(new TelegramBotHostBuilderSettings()
+TelegramBotHostBuilder builder = TelegramBotHost.CreateBuilder(new HostApplicationBuilderSettings()
 {
     Args = args,
-    ExceptIntersectingCommandAliases = true
+    ApplicationName = "TelegramBotHost example",
 });
 
 // Registerring handlers
@@ -59,8 +59,9 @@ telegramBot.Run();
 
 ```json
 {
-  "TelegramBotClientOptions": {
-    "Token": "YOUR_BOT_TOKEN"
+  "TelegratorOptions": {
+    "Token": "YOUR_BOT_TOKEN",
+    "ExceptIntersectingCommandAliases": true
   },
 
   "HostOptions": {
