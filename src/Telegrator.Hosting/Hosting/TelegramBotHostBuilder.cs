@@ -42,7 +42,7 @@ namespace Telegrator.Hosting
             _innerBuilder = hostApplicationBuilder ?? throw new ArgumentNullException(nameof(hostApplicationBuilder));
             _settings = settings ?? new HostApplicationBuilderSettings();
 
-            _innerBuilder.AddTelegrator(_settings);
+            _innerBuilder.AddTelegrator();
             _innerBuilder.Logging.ClearProviders();
         }
 
@@ -57,7 +57,7 @@ namespace Telegrator.Hosting
             _innerBuilder = hostApplicationBuilder ?? throw new ArgumentNullException(nameof(hostApplicationBuilder));
             _settings = settings ?? new HostApplicationBuilderSettings();
 
-            _innerBuilder.AddTelegrator(_settings, null, handlers);
+            _innerBuilder.AddTelegrator(null, handlers);
             _innerBuilder.Logging.ClearProviders();
         }
 
