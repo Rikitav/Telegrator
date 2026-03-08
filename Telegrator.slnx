@@ -1,5 +1,4 @@
 <Solution>
-  <Project Path="../../BarmenBot/BarmenBot/BarmenBot.csproj" />
   <Project Path="dev/Telegrator.RoslynGenerators/Telegrator.RoslynGenerators.csproj" />
   <Project Path="src/Telegrator.Analyzers/Telegrator.Analyzers.csproj" />
   <Project Path="src/Telegrator.Hosting.Web/Telegrator.Hosting.Web.csproj" />
