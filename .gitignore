@@ -363,3 +363,6 @@ MigrationBackup/
 FodyWeavers.xsd
 /GETTING_STARTED.md
 /ANNOTATION_OVERVIEW.md
+/.aider.input.history
+/.aider.chat.history.md
+/.aider.tags.cache.v4
