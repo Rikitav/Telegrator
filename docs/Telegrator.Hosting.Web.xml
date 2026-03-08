@@ -100,11 +100,25 @@
         <member name="P:Telegrator.Hosting.Web.TelegramBotWebHostBuilder.Environment">
             <inheritdoc/>
         </member>
+        <member name="P:Telegrator.Hosting.Web.TelegramBotWebHostBuilder.Properties">
+            <inheritdoc/>
+        </member>
+        <member name="P:Telegrator.Hosting.Web.TelegramBotWebHostBuilder.Metrics">
+            <inheritdoc/>
+        </member>
         <member name="M:Telegrator.Hosting.Web.TelegramBotWebHostBuilder.#ctor(Microsoft.AspNetCore.Builder.WebApplicationBuilder,Microsoft.AspNetCore.Builder.WebApplicationOptions)">
             <summary>
             Initializes a new instance of the <see cref="T:Telegrator.Hosting.Web.TelegramBotWebHostBuilder"/> class.
             </summary>
             <param name="webApplicationBuilder"></param>
+            <param name="settings"></param>
+        </member>
+        <member name="M:Telegrator.Hosting.Web.TelegramBotWebHostBuilder.#ctor(Microsoft.AspNetCore.Builder.WebApplicationBuilder,Telegrator.TelegratorOptions,Microsoft.AspNetCore.Builder.WebApplicationOptions)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Telegrator.Hosting.Web.TelegramBotWebHostBuilder"/> class.
+            </summary>
+            <param name="webApplicationBuilder"></param>
+            <param name="options"></param>
             <param name="settings"></param>
         </member>
         <member name="M:Telegrator.Hosting.Web.TelegramBotWebHostBuilder.#ctor(Microsoft.AspNetCore.Builder.WebApplicationBuilder,Telegrator.Core.IHandlersCollection,Microsoft.AspNetCore.Builder.WebApplicationOptions)">
@@ -115,11 +129,23 @@
             <param name="handlers"></param>
             <param name="settings"></param>
         </member>
+        <member name="M:Telegrator.Hosting.Web.TelegramBotWebHostBuilder.#ctor(Microsoft.AspNetCore.Builder.WebApplicationBuilder,Telegrator.Core.IHandlersCollection,Telegrator.TelegratorOptions,Microsoft.AspNetCore.Builder.WebApplicationOptions)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Telegrator.Hosting.Web.TelegramBotWebHostBuilder"/> class.
+            </summary>
+            <param name="webApplicationBuilder"></param>
+            <param name="handlers"></param>
+            <param name="options"></param>
+            <param name="settings"></param>
+        </member>
         <member name="M:Telegrator.Hosting.Web.TelegramBotWebHostBuilder.Build">
             <summary>
             Builds the host.
             </summary>
             <returns></returns>
+        </member>
+        <member name="M:Telegrator.Hosting.Web.TelegramBotWebHostBuilder.ConfigureContainer``1(Microsoft.Extensions.DependencyInjection.IServiceProviderFactory{``0},System.Action{``0})">
+            <inheritdoc/>
         </member>
         <member name="T:Telegrator.Hosting.Web.WebhookerOptions">
             <summary>
@@ -185,7 +211,7 @@
         <member name="M:Telegrator.ServicesCollectionExtensions.get_Handlers(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
             <inheritdoc cref="P:Telegrator.ServicesCollectionExtensions.&lt;G&gt;$41F16C2D39AF52899E745C9C9F42FF83.Handlers"/>
         </member>
-        <member name="M:Telegrator.ServicesCollectionExtensions.AddTelegratorWeb(Microsoft.Extensions.Hosting.IHostApplicationBuilder,Microsoft.AspNetCore.Builder.WebApplicationOptions,Telegrator.TelegratorOptions,Telegrator.Core.IHandlersCollection)">
+        <member name="M:Telegrator.ServicesCollectionExtensions.AddTelegratorWeb(Microsoft.Extensions.Hosting.IHostApplicationBuilder,Telegrator.TelegratorOptions,Telegrator.Core.IHandlersCollection)">
             <summary>
             Replaces TelegramBotWebHostBuilder. Configures DI, options, and handlers.
             </summary>

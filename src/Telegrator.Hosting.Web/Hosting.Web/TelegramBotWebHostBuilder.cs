@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.Metrics;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Telegrator.Core;
@@ -11,7 +12,7 @@ namespace Telegrator.Hosting.Web
     /// <summary>
     /// Represents a web hosted telegram bots and services builder that helps manage configuration, logging, lifetime, and more.
     /// </summary>
-    public class TelegramBotWebHostBuilder : ITelegramBotHostBuilder
+    public class TelegramBotWebHostBuilder : IHostApplicationBuilder, ICollectingProvider
     {
         private readonly WebApplicationBuilder _innerBuilder;
         private readonly WebApplicationOptions _settings;
@@ -32,17 +33,37 @@ namespace Telegrator.Hosting.Web
         /// <inheritdoc/>
         public IHostEnvironment Environment => _innerBuilder.Environment;
 
+        /// <inheritdoc/>
+        public IDictionary<object, object> Properties => ((IHostApplicationBuilder)_innerBuilder).Properties;
+
+        /// <inheritdoc/>
+        public IMetricsBuilder Metrics => _innerBuilder.Metrics;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="TelegramBotWebHostBuilder"/> class.
         /// </summary>
         /// <param name="webApplicationBuilder"></param>
         /// <param name="settings"></param>
-        public TelegramBotWebHostBuilder(WebApplicationBuilder webApplicationBuilder, WebApplicationOptions settings)
+        public TelegramBotWebHostBuilder(WebApplicationBuilder webApplicationBuilder, WebApplicationOptions? settings = null)
         {
             _innerBuilder = webApplicationBuilder ?? throw new ArgumentNullException(nameof(webApplicationBuilder));
             _settings = settings ?? throw new ArgumentNullException(nameof(settings));
 
-            _innerBuilder.AddTelegratorWeb();
+            this.AddTelegratorWeb();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TelegramBotWebHostBuilder"/> class.
+        /// </summary>
+        /// <param name="webApplicationBuilder"></param>
+        /// <param name="options"></param>
+        /// <param name="settings"></param>
+        public TelegramBotWebHostBuilder(WebApplicationBuilder webApplicationBuilder, TelegratorOptions? options, WebApplicationOptions? settings)
+        {
+            _innerBuilder = webApplicationBuilder ?? throw new ArgumentNullException(nameof(webApplicationBuilder));
+            _settings = settings ?? throw new ArgumentNullException(nameof(settings));
+
+            this.AddTelegratorWeb(options, null);
         }
 
         /// <summary>
@@ -56,7 +77,22 @@ namespace Telegrator.Hosting.Web
             _innerBuilder = webApplicationBuilder ?? throw new ArgumentNullException(nameof(webApplicationBuilder));
             _settings = settings ?? throw new ArgumentNullException(nameof(settings));
 
-            _innerBuilder.AddTelegratorWeb(null, handlers);
+            this.AddTelegratorWeb(null, handlers);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TelegramBotWebHostBuilder"/> class.
+        /// </summary>
+        /// <param name="webApplicationBuilder"></param>
+        /// <param name="handlers"></param>
+        /// <param name="options"></param>
+        /// <param name="settings"></param>
+        public TelegramBotWebHostBuilder(WebApplicationBuilder webApplicationBuilder, IHandlersCollection handlers, TelegratorOptions? options, WebApplicationOptions settings)
+        {
+            _innerBuilder = webApplicationBuilder ?? throw new ArgumentNullException(nameof(webApplicationBuilder));
+            _settings = settings ?? throw new ArgumentNullException(nameof(settings));
+
+            this.AddTelegratorWeb(options, handlers);
         }
 
         /// <summary>
@@ -68,6 +104,12 @@ namespace Telegrator.Hosting.Web
             TelegramBotWebHost host = new TelegramBotWebHost(_innerBuilder);
             host.UseTelegrator();
             return host;
+        }
+
+        /// <inheritdoc/>
+        public void ConfigureContainer<TContainerBuilder>(IServiceProviderFactory<TContainerBuilder> factory, Action<TContainerBuilder>? configure = null) where TContainerBuilder : notnull
+        {
+            ((IHostApplicationBuilder)_innerBuilder).ConfigureContainer(factory, configure);
         }
     }
 }

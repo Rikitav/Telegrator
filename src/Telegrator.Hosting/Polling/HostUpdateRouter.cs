@@ -21,9 +21,8 @@ namespace Telegrator.Polling
             IHandlersProvider handlersProvider,
             IAwaitingProvider awaitingProvider,
             IOptions<TelegratorOptions> options,
-            IUpdateHandlersPool handlersPool,
             ITelegramBotInfo botInfo,
-            ILogger<HostUpdateRouter> logger) : base(handlersProvider, awaitingProvider, options.Value, handlersPool, botInfo)
+            ILogger<HostUpdateRouter> logger) : base(handlersProvider, awaitingProvider, options.Value, botInfo)
         {
             Logger = logger;
             ExceptionHandler = new DefaultRouterExceptionHandler(HandleException);

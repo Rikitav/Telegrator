@@ -1,14 +1,10 @@
-# Telegrator
-
 ![Telegrator Banner](https://github.com/Rikitav/Telegrator/blob/master/resources%2FTelegrator_banner.png)
-
-> **A modern reactive framework for Telegram bots in C# with aspect-oriented design, mediator-based dispatching, and flexible architecture.**
 
 ---
 
 ## 🚀 About Telegrator
 
-Telegrator is a next-generation framework for building Telegram bots in C#, inspired by AOP (Aspect-Oriented Programming) and the mediator pattern. It enables decentralized, easily extensible, and maintainable bot logic without traditional state machines or monolithic handlers.
+Telegrator is a modern C# framework for building Telegram bots, inspired by AOP (Aspect-Oriented Programming) and the mediator pattern. It enables decentralized, easily extensible, and maintainable bot logic without traditional state machines or monolithic handlers.
 
 ---
 

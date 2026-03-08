@@ -12,7 +12,7 @@ namespace Telegrator.Hosting
     /// <param name="client"></param>
     /// <param name="services"></param>
     /// <param name="configuration"></param>
-    public class HostedTelegramBotInfo(ITelegramBotClient client, IServiceProvider services, IConfigurationManager configuration) : ITelegramBotInfo
+    public class HostedTelegramBotInfo(ITelegramBotClient client, IServiceProvider services, IConfiguration configuration) : ITelegramBotInfo
     {
         /// <inheritdoc/>
         public User User { get; } = client.GetMe().Result;
@@ -25,6 +25,6 @@ namespace Telegrator.Hosting
         /// <summary>
         /// Provides access to configuration of this Hosted telegram bot
         /// </summary>
-        public IConfigurationManager Configuration { get; } = configuration;
+        public IConfiguration Configuration { get; } = configuration;
     }
 }

@@ -6345,16 +6345,6 @@
             <param name="options">The bot configuration options.</param>
             <param name="botInfo"></param>
         </member>
-        <member name="M:Telegrator.Mediation.UpdateRouter.#ctor(Telegrator.Core.IHandlersProvider,Telegrator.Core.IAwaitingProvider,Telegrator.TelegratorOptions,Telegrator.Core.IUpdateHandlersPool,Telegrator.Core.ITelegramBotInfo)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Telegrator.Mediation.UpdateRouter"/> class with a custom handlers pool.
-            </summary>
-            <param name="handlersProvider">The provider for regular handlers.</param>
-            <param name="awaitingProvider">The provider for awaiting handlers.</param>
-            <param name="options">The bot configuration options.</param>
-            <param name="handlersPool">The custom handlers pool to use.</param>
-            <param name="botInfo"></param>
-        </member>
         <member name="M:Telegrator.Mediation.UpdateRouter.HandleErrorAsync(Telegram.Bot.ITelegramBotClient,System.Exception,Telegram.Bot.Polling.HandleErrorSource,System.Threading.CancellationToken)">
             <summary>
             Handles errors that occur during update processing.

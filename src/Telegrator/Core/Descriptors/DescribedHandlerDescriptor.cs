@@ -114,7 +114,7 @@ namespace Telegrator.Core.Descriptors
         /// <param name="result">The execution result.</param>
         public void ReportResult(Result? result)
         {
-            if (result != null)
+            if (Result != null)
                 throw new InvalidOperationException("Result already reported");
 
             Result = result;

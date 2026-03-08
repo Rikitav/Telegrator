@@ -59,23 +59,6 @@ namespace Telegrator.Mediation
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="UpdateRouter"/> class with a custom handlers pool.
-        /// </summary>
-        /// <param name="handlersProvider">The provider for regular handlers.</param>
-        /// <param name="awaitingProvider">The provider for awaiting handlers.</param>
-        /// <param name="options">The bot configuration options.</param>
-        /// <param name="handlersPool">The custom handlers pool to use.</param>
-        /// <param name="botInfo"></param>
-        public UpdateRouter(IHandlersProvider handlersProvider, IAwaitingProvider awaitingProvider, TelegratorOptions options, IUpdateHandlersPool handlersPool, ITelegramBotInfo botInfo)
-        {
-            _options = options;
-            _handlersProvider = handlersProvider;
-            _awaitingProvider = awaitingProvider;
-            _HandlersPool = handlersPool;
-            _botInfo = botInfo;
-        }
-
-        /// <summary>
         /// Handles errors that occur during update processing.
         /// </summary>
         /// <param name="botClient">The Telegram bot client.</param>

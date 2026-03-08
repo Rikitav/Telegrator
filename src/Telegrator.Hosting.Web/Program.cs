@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Telegrator.Hosting;
 using Telegrator.Hosting.Web;
@@ -43,10 +44,14 @@ internal class Program
 
     public static void TelegramBotHostBuilder_Example(string[] args)
     {
+        ConfigurationManager configuration = new ConfigurationManager();
+        configuration.AddJsonFile("appsettings.json");
+
         TelegramBotHostBuilder builder = TelegramBotHost.CreateBuilder(new HostApplicationBuilderSettings()
         {
             Args = args,
             ApplicationName = "TelegramBotHost example",
+            Configuration = configuration
         });
 
         builder.Handlers.CollectHandlersAssemblyWide();

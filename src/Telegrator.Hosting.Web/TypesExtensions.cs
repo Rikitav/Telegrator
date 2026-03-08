@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Telegram.Bot;
 using Telegrator.Core;
+using Telegrator.Hosting;
 using Telegrator.Hosting.Web;
 using Telegrator.Mediation;
 using Telegrator.Providers;

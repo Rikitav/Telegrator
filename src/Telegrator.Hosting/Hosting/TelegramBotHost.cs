@@ -56,9 +56,6 @@ namespace Telegrator.Hosting
         {
             HostApplicationBuilder innerBuilder = new HostApplicationBuilder(settings: null);
             TelegramBotHostBuilder builder = new TelegramBotHostBuilder(innerBuilder, null);
-
-            builder.Services.AddTelegramBotHostDefaults();
-            builder.Services.AddTelegramReceiver();
             return builder;
         }
 
@@ -70,9 +67,6 @@ namespace Telegrator.Hosting
         {
             HostApplicationBuilder innerBuilder = new HostApplicationBuilder(settings);
             TelegramBotHostBuilder builder = new TelegramBotHostBuilder(innerBuilder, settings);
-
-            builder.Services.AddTelegramBotHostDefaults();
-            builder.Services.AddTelegramReceiver();
             return builder;
         }
 
