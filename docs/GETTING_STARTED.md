@@ -47,7 +47,7 @@ This guide will walk you through the core concepts and advanced features of **Te
 **Telegrator** is distributed as a NuGet package. You can install it using the .NET CLI, the NuGet Package Manager Console, or by managing NuGet packages in Visual Studio.
 
 ### Prerequisites
-- .NET >= 5.0 `or` .NET Core >= 2.0 `or` Framework >= 4.6.1 (.NET Standard 2.0 compatible)
+- .NET >= 5.0 `or` .NET Core >= 2.0 `or` Framework >= 4.6.1 (.NET Standard 2.1 compatible)
 - A Telegram Bot Token from [@BotFather](https://t.me/BotFather).
 
 ### .NET CLI
@@ -61,7 +61,7 @@ Install-Package Telegrator
 ```
 
 ### Hosting Integrations
-- .NET Core >= 8.0 
+- .NET Core >= 10.0 
 - `Telegrator.Hosting`: For console/background services
 - `Telegrator.Hosting.Web`: For ASP.NET Core/Webhook
 
@@ -325,7 +325,7 @@ builder.Handlers.AddMethod<CallbackQuery>(Option1Handler);
 ```csharp
 public enum UserState
 {
-    Start = SpecialState.NoState,
+    Start,
     WaitingForName,
     WaitingForAge
 }
@@ -333,39 +333,40 @@ public enum UserState
 // Start conversation
 [CommandHandler]
 [CommandAlias("register")]
-[EnumState<UserState>(UserState.Start)]
+[State<UserState>(UserState.Start)]
 private static async Task<Result> StartRegistration(IHandlerContainer<Message> container, CancellationToken cancellationToken)
 {
-    container.ForwardEnumState<UserState>();
+    StateStorage.GetStateMachine<UserState>().BySenderId().Advance();
     await container.Reply("Please enter your name:", cancellationToken: cancellationToken);
     return Ok;
 }
 
 // Handle name input
 [MessageHandler]
-[EnumState<UserState>(UserState.WaitingForName)]
+[State<UserState>(UserState.WaitingForName)]
 private static async Task<Result> HandleName(IHandlerContainer<Message> container, CancellationToken cancellationToken)
 {
     var name = container.Input.Text;
-    container.ForwardEnumState<UserState>();
+    StateStorage.GetStateMachine<UserState>().BySenderId().Advance();
     await container.Reply($"Hello {name}! Please enter your age:", cancellationToken: cancellationToken);
     return Ok;
 }
 
 // Handle age input
 [MessageHandler]
-[EnumState<UserState>(UserState.WaitingForAge)]
+[State<UserState>(UserState.WaitingForAge)]
 private static async Task<Result> HandleAge(IHandlerContainer<Message> container, CancellationToken cancellationToken)
 {
     if (int.TryParse(container.Input.Text, out int age))
     {
-        container.DeleteEnumState<UserState>();
+        StateStorage.GetStateMachine<UserState>().BySenderId().Reset();
         await container.Reply($"Registration complete! Name: {name}, Age: {age}", cancellationToken: cancellationToken);
     }
     else
     {
         await container.Reply("Please enter a valid age (number):", cancellationToken: cancellationToken);
     }
+
     return Ok;
 }
 
@@ -497,50 +498,43 @@ public class RestrictedHandler : MessageHandler
 
 ### 3.3. State Management
 
-Telegrator provides built-in state management for multi-step conversations (wizards, forms, quizzes) without a database.
+Telegrator provides built-in state management for multi-step conversations (wizards, forms, quizzes) with or without a database.
 
 > [!NOTE]
-> Each type of `StateKeeper`'s (EnumStateKeeper, NumericStateKeeper) is shared between **EVERY** handler in project.
-
-**Types of State:**
-- **NumericState**: Integer-based steps
-- **StringState**: Named steps
-- **EnumState**: Enum-based scenarios
+> Each type of `StateKeeper`'s keys and states are shared between **EVERY** handler in project.
 
 **How to Use:**
 1. Define your state (enum/int/string)
 2. Use a state filter attribute on your handler:
-   - `[EnumState<MyEnum>(MyEnum.Step1)]`
-   - `[NumericState(1)]`
-   - `[StringState("waiting_input")]`
+   - `[State<MyEnum>(MyEnum.Step1)]`
 3. Change state inside the handler using extension methods:
-   - `container.ForwardEnumState<MyEnum>()`
-   - `container.ForwardNumericState()`
-   - `container.ForwardStringState()`
-   - `container.DeleteEnumState<MyEnum>()`
+   - `StateStorage.GetStateMachine<MyEnum>().BySenderId().Current()`
+   - `StateStorage.GetStateMachine<MyEnum>().BySenderId().Advance()`
+   - `StateStorage.GetStateMachine<MyEnum>().BySenderId().Retreat()`
+   - `StateStorage.GetStateMachine<MyEnum>().BySenderId().Reset()`
 
 **Example:**
 ```csharp
 public enum QuizState
 {
-    Start = SpecialState.NoState, Q1, Q2
+    Start, Q1, Q2
 }
 
 [CommandHandler]
 [CommandAlias("quiz")]
-[EnumState<QuizState>(QuizState.Start)]
+[State<QuizState>(QuizState.Start)]
 public class StartQuizHandler : CommandHandler
 {
     public override async Task<Result> Execute(IHandlerContainer<Message> container, CancellationToken cancellation)
     {
-        container.ForwardEnumState<QuizState>();
+        StateStorage.GetStateMachine<QuizState>().BySenderId().Advance();
         await Reply("Quiz started! Question 1: What is the capital of France?");
         return Ok;
     }
 }
 
 [MessageHandler]
-[EnumState<QuizState>(QuizState.Q1)]
+[State<QuizState>(QuizState.Q1)]
 public class Q1Handler : MessageHandler
 {
     public override async Task<Result> Execute(IHandlerContainer<Message> container, CancellationToken cancellation)
@@ -550,7 +544,7 @@ public class Q1Handler : MessageHandler
         else
             await Reply("Incorrect. The answer is Paris.");
 
-        container.ForwardEnumState<QuizState>();
+        StateStorage.GetStateMachine<QuizState>().BySenderId().Advance();
         await Reply("Question 2: What is 2 + 2?");
         return Ok;
     }
@@ -559,8 +553,8 @@ public class Q1Handler : MessageHandler
 
 > **How is it working?**
 > 1. **Enum State Definition**: `QuizState` enum defines the conversation flow with `Start = SpecialState.NoState` indicating no initial state.
-> 2. **State Filter**: `[EnumState<QuizState>(QuizState.Start)]` ensures the handler only runs when the user is in the "Start" state.
-> 3. **State Transition**: `container.ForwardEnumState<QuizState>()` moves the user to the next state (Q1).
+> 2. **State Filter**: `[State<QuizState>(QuizState.Start)]` ensures the handler only runs when the user is in the "Start" state.
+> 3. **State Transition**: `StateStorage.GetStateMachine<QuizState>().BySenderId().Advance()` moves the user to the next state (Q1).
 > 4. **Next Handler**: The `Q1Handler` will only run when the user is in state `QuizState.Q1`.
 > 5. **State Management**: Each handler manages its own state transition, creating a clear conversation flow.
 
@@ -1425,28 +1419,28 @@ public enum UserState
 // Start conversation
 [CommandHandler]
 [CommandAlias("register")]
-[EnumState<UserState>(UserState.Start)]
+[State<UserState>(UserState.Start)]
 private static async Task<Result> StartRegistration(IHandlerContainer<Message> container, CancellationToken cancellationToken)
 {
-    container.ForwardEnumState<UserState>();
+    StateStorage.GetStateMachine<UserState>().BySenderId().Advance();
     await container.Reply("Please enter your name:", cancellationToken: cancellationToken);
     return Ok;
 }
 
 // Handle name input
 [MessageHandler]
-[EnumState<UserState>(UserState.WaitingForName)]
+[State<UserState>(UserState.WaitingForName)]
 private static async Task<Result> HandleName(IHandlerContainer<Message> container, CancellationToken cancellationToken)
 {
     var name = container.Input.Text;
-    container.ForwardEnumState<UserState>();
+    StateStorage.GetStateMachine<UserState>().BySenderId().Advance();
     await container.Reply($"Hello {name}! Please enter your age:", cancellationToken: cancellationToken);
     return Ok;
 }
 
 // Handle age input
 [MessageHandler]
-[EnumState<UserState>(UserState.WaitingForAge)]
+[State<UserState>(UserState.WaitingForAge)]
 private static async Task<Result> HandleAge(IHandlerContainer<Message> container, CancellationToken cancellationToken)
 {
     if (int.TryParse(container.Input.Text, out int age))

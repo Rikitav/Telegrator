@@ -91,13 +91,12 @@ bot.Handlers.AddHandler<StartCommandHandler>();
 using Telegrator.Handlers;
 using Telegrator.Annotations;
 
-[CommandHandler, CommandAlias("first"), NumericState(SpecialState.NoState)]
+[CommandHandler, CommandAlias("first"), State<SetupWizard>(null)]
 public class StateKeepFirst : CommandHandler
 {
     public override async Task<Result> Execute(IHandlerContainer<Message> container, CancellationToken cancellation)
     {
-        container.CreateNumericState();
-        container.ForwardNumericState();
+        StateStorage.GetStateMachine<SetupWizard>().BysenderId().Advance();
         await Reply("first state moved (1)", cancellationToken: cancellation);
         return Result.Ok();
     }
