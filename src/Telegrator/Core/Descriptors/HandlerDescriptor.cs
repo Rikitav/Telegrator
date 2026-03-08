@@ -167,7 +167,7 @@ namespace Telegrator.Core.Descriptors
             if (handlerAttribute.ExpectingHandlerType != null && !handlerAttribute.ExpectingHandlerType.Contains(handlerType.BaseType))
                 throw new ArgumentException(string.Format("This handler attribute cannot be attached to this class. Attribute can be attached on next handlers : {0}", string.Join(", ", handlerAttribute.ExpectingHandlerType.AsEnumerable())));
 
-            StateKeeperAttributeBase? stateKeeperAttribute = HandlerInspector.GetStateKeeperAttribute(handlerType);
+            IFilter<Update>? stateKeeperAttribute = HandlerInspector.GetStateKeeperAttribute(handlerType);
             IFilter<Update>[] filters = HandlerInspector.GetFilterAttributes(handlerType, handlerAttribute.Type).ToArray();
 
             UpdateType = handlerAttribute.Type;

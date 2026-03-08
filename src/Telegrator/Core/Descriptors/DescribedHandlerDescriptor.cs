@@ -2,6 +2,7 @@
 using Telegram.Bot.Types;
 using Telegrator.Core.Filters;
 using Telegrator.Core.Handlers;
+using Telegrator.Core.States;
 
 namespace Telegrator.Core.Descriptors
 {
@@ -26,6 +27,11 @@ namespace Telegrator.Core.Descriptors
         /// The awaiting provider to fetch new updates inside handler
         /// </summary>
         public IAwaitingProvider AwaitingProvider { get; }
+        
+        /// <summary>
+        /// The state storage to handling state machines
+        /// </summary>
+        public IStateStorage StateStorage { get; }
 
         /// <summary>
         /// The Telegram bot client used for this handler.
@@ -73,6 +79,7 @@ namespace Telegrator.Core.Descriptors
         /// <param name="fromDescriptor">The descriptor from which this handler was described.</param>
         /// <param name="updateRouter">The update router.</param>
         /// <param name="awaitingProvider">The awaiting provider.</param>
+        /// <param name="stateStorage">The state storage.</param>
         /// <param name="client">The Telegram bot client.</param>
         /// <param name="handlerInstance">The handler instance.</param>
         /// <param name="filterContext">The filter execution context.</param>
@@ -81,6 +88,7 @@ namespace Telegrator.Core.Descriptors
             HandlerDescriptor fromDescriptor,
             IUpdateRouter updateRouter,
             IAwaitingProvider awaitingProvider,
+            IStateStorage stateStorage,
             ITelegramBotClient client,
             UpdateHandlerBase handlerInstance,
             FilterExecutionContext<Update> filterContext,
@@ -89,6 +97,7 @@ namespace Telegrator.Core.Descriptors
             From = fromDescriptor;
             UpdateRouter = updateRouter;
             AwaitingProvider = awaitingProvider;
+            StateStorage = stateStorage;
             Client = client;
             HandlerInstance = handlerInstance;
             ExtraData = filterContext.Data;

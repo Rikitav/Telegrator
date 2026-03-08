@@ -1,9 +1,7 @@
 ﻿using Telegram.Bot.Types;
-using Telegrator.Annotations.StateKeeping;
 using Telegrator.Core.Filters;
 using Telegrator.Core.Handlers.Building;
-using Telegrator.Core.StateKeeping;
-using Telegrator.StateKeeping;
+using Telegrator.Core.States;
 
 namespace Telegrator.Handlers.Building
 {
@@ -61,25 +59,13 @@ namespace Telegrator.Handlers.Building
             return handlerBuilder;
         }
 
-        /// <inheritdoc cref="HandlerBuilderBase.SetStateKeeper{TKey, TState, TKeeper}(TState, IStateKeyResolver{TKey})"/>
-        public static TBuilder SetStateKeeper<TBuilder, TKey, TState, TKeeper>(this TBuilder handlerBuilder, TState myState, IStateKeyResolver<TKey> keyResolver)
+        /// <inheritdoc cref="HandlerBuilderBase.SetState{TKey, TValue}(TValue?)"/>
+        public static TBuilder SetState<TBuilder, TKey, TValue>(this TBuilder handlerBuilder, TValue? myState)
             where TBuilder : HandlerBuilderBase
-            where TKey : notnull
-            where TState : IEquatable<TState>
-            where TKeeper : StateKeeperBase<TKey, TState>, new()
+            where TKey : IStateKeyResolver, new()
+            where TValue : IEquatable<TValue>
         {
-            handlerBuilder.SetStateKeeper<TKey, TState, TKeeper>(myState, keyResolver);
-            return handlerBuilder;
-        }
-
-        /// <inheritdoc cref="HandlerBuilderBase.SetStateKeeper{TKey, TState, TKeeper}(SpecialState, IStateKeyResolver{TKey})"/>
-        public static TBuilder SetStateKeeper<TBuilder, TKey, TState, TKeeper>(this TBuilder handlerBuilder, SpecialState specialState, IStateKeyResolver<TKey> keyResolver)
-            where TBuilder : HandlerBuilderBase
-            where TKey : notnull
-            where TState : IEquatable<TState>
-            where TKeeper : StateKeeperBase<TKey, TState>, new()
-        {
-            handlerBuilder.SetStateKeeper<TKey, TState, TKeeper>(specialState, keyResolver);
+            handlerBuilder.SetState<TKey, TValue>(myState);
             return handlerBuilder;
         }
 
@@ -114,130 +100,6 @@ namespace Telegrator.Handlers.Building
             where TFilterTarget : class
         {
             handlerBuilder.AddTargetedFilters(getFilterringTarget, filters);
-            return handlerBuilder;
-        }
-
-        /// <summary>
-        /// Sets a numeric state keeper with a custom key resolver.
-        /// </summary>
-        /// <typeparam name="TBuilder">The type of the handler builder.</typeparam>
-        /// <param name="handlerBuilder">The handler builder.</param>
-        /// <param name="myState">The numeric state value.</param>
-        /// <param name="keyResolver">The key resolver for the state.</param>
-        /// <returns>The handler builder for method chaining.</returns>
-        public static TBuilder SetNumericState<TBuilder>(this TBuilder handlerBuilder, int myState, IStateKeyResolver<long> keyResolver)
-            where TBuilder : HandlerBuilderBase
-        {
-            handlerBuilder.SetStateKeeper<long, int, NumericStateKeeper>(myState, keyResolver);
-            return handlerBuilder;
-        }
-
-        /// <summary>
-        /// Sets a numeric state keeper with a special state and custom key resolver.
-        /// </summary>
-        /// <typeparam name="TBuilder">The type of the handler builder.</typeparam>
-        /// <param name="handlerBuilder">The handler builder.</param>
-        /// <param name="specialState">The special state value.</param>
-        /// <param name="keyResolver">The key resolver for the state.</param>
-        /// <returns>The handler builder for method chaining.</returns>
-        public static TBuilder SetNumericState<TBuilder>(this TBuilder handlerBuilder, SpecialState specialState, IStateKeyResolver<long> keyResolver)
-            where TBuilder : HandlerBuilderBase
-        {
-            handlerBuilder.SetStateKeeper<long, int, NumericStateKeeper>(specialState, keyResolver);
-            return handlerBuilder;
-        }
-
-        /// <summary>
-        /// Sets a numeric state keeper with the default sender ID resolver.
-        /// </summary>
-        /// <typeparam name="TBuilder">The type of the handler builder.</typeparam>
-        /// <param name="handlerBuilder">The handler builder.</param>
-        /// <param name="myState">The numeric state value.</param>
-        /// <returns>The handler builder for method chaining.</returns>
-        public static TBuilder SetNumericState<TBuilder>(this TBuilder handlerBuilder, int myState)
-            where TBuilder : HandlerBuilderBase
-        {
-            handlerBuilder.SetStateKeeper<long, int, NumericStateKeeper>(myState, new SenderIdResolver());
-            return handlerBuilder;
-        }
-
-        /// <summary>
-        /// Sets a numeric state keeper with a special state and the default sender ID resolver.
-        /// </summary>
-        /// <typeparam name="TBuilder">The type of the handler builder.</typeparam>
-        /// <param name="handlerBuilder">The handler builder.</param>
-        /// <param name="specialState">The special state value.</param>
-        /// <returns>The handler builder for method chaining.</returns>
-        public static TBuilder SetNumericState<TBuilder>(this TBuilder handlerBuilder, SpecialState specialState)
-            where TBuilder : HandlerBuilderBase
-        {
-            handlerBuilder.SetStateKeeper<long, int, NumericStateKeeper>(specialState, new SenderIdResolver());
-            return handlerBuilder;
-        }
-
-        /// <summary>
-        /// Sets an enum state keeper with a custom key resolver.
-        /// </summary>
-        /// <typeparam name="TBuilder">The type of the handler builder.</typeparam>
-        /// <typeparam name="TEnum">The type of the enum state.</typeparam>
-        /// <param name="handlerBuilder">The handler builder.</param>
-        /// <param name="myState">The enum state value.</param>
-        /// <param name="keyResolver">The key resolver for the state.</param>
-        /// <returns>The handler builder for method chaining.</returns>
-        public static TBuilder SetEnumState<TBuilder, TEnum>(this TBuilder handlerBuilder, TEnum myState, IStateKeyResolver<long> keyResolver)
-            where TBuilder : HandlerBuilderBase
-            where TEnum : Enum, IEquatable<TEnum>
-        {
-            handlerBuilder.SetStateKeeper<long, TEnum, EnumStateKeeper<TEnum>>(myState, keyResolver);
-            return handlerBuilder;
-        }
-
-        /// <summary>
-        /// Sets an enum state keeper with a special state and custom key resolver.
-        /// </summary>
-        /// <typeparam name="TBuilder">The type of the handler builder.</typeparam>
-        /// <typeparam name="TEnum">The type of the enum state.</typeparam>
-        /// <param name="handlerBuilder">The handler builder.</param>
-        /// <param name="specialState">The special state value.</param>
-        /// <param name="keyResolver">The key resolver for the state.</param>
-        /// <returns>The handler builder for method chaining.</returns>
-        public static TBuilder SetEnumState<TBuilder, TEnum>(this TBuilder handlerBuilder, SpecialState specialState, IStateKeyResolver<long> keyResolver)
-            where TBuilder : HandlerBuilderBase
-            where TEnum : Enum, IEquatable<TEnum>
-        {
-            handlerBuilder.SetStateKeeper<long, TEnum, EnumStateKeeper<TEnum>>(specialState, keyResolver);
-            return handlerBuilder;
-        }
-
-        /// <summary>
-        /// Sets an enum state keeper with the default sender ID resolver.
-        /// </summary>
-        /// <typeparam name="TBuilder">The type of the handler builder.</typeparam>
-        /// <typeparam name="TEnum">The type of the enum state.</typeparam>
-        /// <param name="handlerBuilder">The handler builder.</param>
-        /// <param name="myState">The enum state value.</param>
-        /// <returns>The handler builder for method chaining.</returns>
-        public static TBuilder SetEnumState<TBuilder, TEnum>(this TBuilder handlerBuilder, TEnum myState)
-            where TBuilder : HandlerBuilderBase
-            where TEnum : Enum, IEquatable<TEnum>
-        {
-            handlerBuilder.SetStateKeeper<long, TEnum, EnumStateKeeper<TEnum>>(myState, new SenderIdResolver());
-            return handlerBuilder;
-        }
-
-        /// <summary>
-        /// Sets an enum state keeper with a special state and the default sender ID resolver.
-        /// </summary>
-        /// <typeparam name="TBuilder">The type of the handler builder.</typeparam>
-        /// <typeparam name="TEnum">The type of the enum state.</typeparam>
-        /// <param name="handlerBuilder">The handler builder.</param>
-        /// <param name="specialState">The special state value.</param>
-        /// <returns>The handler builder for method chaining.</returns>
-        public static TBuilder SetEnumState<TBuilder, TEnum>(this TBuilder handlerBuilder, SpecialState specialState)
-            where TBuilder : HandlerBuilderBase
-            where TEnum : Enum, IEquatable<TEnum>
-        {
-            handlerBuilder.SetStateKeeper<long, TEnum, EnumStateKeeper<TEnum>>(specialState, new SenderIdResolver());
             return handlerBuilder;
         }
     }

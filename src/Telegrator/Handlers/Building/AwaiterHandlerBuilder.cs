@@ -1,11 +1,11 @@
 ﻿using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
-using Telegrator.Filters;
-using Telegrator.StateKeeping;
 using Telegrator.Core;
-using Telegrator.Core.Handlers.Building;
 using Telegrator.Core.Descriptors;
-using Telegrator.Core.StateKeeping;
+using Telegrator.Core.Handlers.Building;
+using Telegrator.Core.States;
+using Telegrator.Filters;
+using Telegrator.States;
 
 namespace Telegrator.Handlers.Building
 {
@@ -56,9 +56,21 @@ namespace Telegrator.Handlers.Building
         /// <param name="keyResolver">The state key resolver to use for filtering updates.</param>
         /// <param name="cancellationToken">The cancellation token to cancel the wait operation.</param>
         /// <returns>The awaited update of type TUpdate.</returns>
-        public async Task<TUpdate> Await(IStateKeyResolver<long> keyResolver, CancellationToken cancellationToken = default)
+        public async Task<TUpdate> Await(IStateKeyResolver keyResolver, CancellationToken cancellationToken = default)
         {
-            Filters.Add(new StateKeyFilter<long>(keyResolver, keyResolver.ResolveKey(HandlingUpdate)));
+            string? handlingKey = keyResolver.ResolveKey(HandlingUpdate);
+            if (handlingKey is null)
+                throw new InvalidOperationException("Cannot await update with resolved key as NULL");
+
+            Filters.Add(Filter<Update>.If(ctx =>
+            {
+                string? key = keyResolver.ResolveKey(ctx.Update);
+                if (key is null)
+                    return false;
+
+                return key == handlingKey;
+            }));
+            
             AwaiterHandler handlerInstance = new AwaiterHandler(UpdateType);
             HandlerDescriptor descriptor = BuildImplicitDescriptor(handlerInstance);
             

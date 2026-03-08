@@ -3,6 +3,7 @@ using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegrator.Core.Descriptors;
 using Telegrator.Core.Filters;
+using Telegrator.Core.States;
 using Telegrator.Handlers;
 
 namespace Telegrator.Core.Handlers
@@ -46,6 +47,11 @@ namespace Telegrator.Core.Handlers
         /// Provider for awaiting asynchronous operations.
         /// </summary>
         protected IAwaitingProvider AwaitingProvider => Container.AwaitingProvider;
+
+        /// <summary>
+        /// Storage of bot states.
+        /// </summary>
+        protected IStateStorage StateStorage => Container.StateStorage;
 
         /// <summary>
         /// Initializes a new instance and checks that the update type matches <typeparamref name="TUpdate"/>.

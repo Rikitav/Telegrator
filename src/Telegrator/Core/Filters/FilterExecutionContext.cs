@@ -12,6 +12,11 @@ namespace Telegrator.Core.Filters
         /// <summary>
         /// Gets the <see cref="ITelegramBotInfo"/> for the current context.
         /// </summary>
+        public IUpdateRouter UpdateRouter { get; }
+
+        /// <summary>
+        /// Gets the <see cref="ITelegramBotInfo"/> for the current context.
+        /// </summary>
         public ITelegramBotInfo BotInfo { get; }
 
         /// <summary>
@@ -42,13 +47,15 @@ namespace Telegrator.Core.Filters
         /// <summary>
         /// Initializes a new instance of the <see cref="FilterExecutionContext{T}"/> class with all parameters.
         /// </summary>
+        /// <param name="router">The router, that invoked filter.</param>
         /// <param name="botInfo">The bot info.</param>
         /// <param name="update">The update.</param>
         /// <param name="input">The input object.</param>
         /// <param name="data">The additional data dictionary.</param>
         /// <param name="completedFilters">The list of completed filters.</param>
-        public FilterExecutionContext(ITelegramBotInfo botInfo, Update update, T input, Dictionary<string, object> data, CompletedFiltersList completedFilters)
+        public FilterExecutionContext(IUpdateRouter router, ITelegramBotInfo botInfo, Update update, T input, Dictionary<string, object> data, CompletedFiltersList completedFilters)
         {
+            UpdateRouter = router;
             BotInfo = botInfo;
             Data = data;
             CompletedFilters = completedFilters;
@@ -60,11 +67,12 @@ namespace Telegrator.Core.Filters
         /// <summary>
         /// Initializes a new instance of the <see cref="FilterExecutionContext{T}"/> class with default data and filters.
         /// </summary>
+        /// <param name="router">The router, that invoked filter.</param>
         /// <param name="botInfo">The bot info.</param>
         /// <param name="update">The update.</param>
         /// <param name="input">The input object.</param>
-        public FilterExecutionContext(ITelegramBotInfo botInfo, Update update, T input)
-            : this(botInfo, update, input, [], []) { }
+        public FilterExecutionContext(IUpdateRouter router, ITelegramBotInfo botInfo, Update update, T input)
+            : this(router, botInfo, update, input, [], []) { }
 
         /// <summary>
         /// Creates a child context for a different input type, sharing the same data and completed filters.
@@ -73,6 +81,6 @@ namespace Telegrator.Core.Filters
         /// <param name="input">The new input object.</param>
         /// <returns>A new <see cref="FilterExecutionContext{C}"/> instance.</returns>
         public FilterExecutionContext<C> CreateChild<C>(C input) where C : class
-            => new FilterExecutionContext<C>(BotInfo, Update, input, Data, CompletedFilters);
+            => new FilterExecutionContext<C>(UpdateRouter, BotInfo, Update, input, Data, CompletedFilters);
     }
 }

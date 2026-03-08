@@ -3,6 +3,7 @@ using Telegram.Bot.Types;
 using Telegrator.Core;
 using Telegrator.Core.Descriptors;
 using Telegrator.Core.Filters;
+using Telegrator.Core.States;
 
 namespace Telegrator.Handlers
 {
@@ -33,6 +34,9 @@ namespace Telegrator.Handlers
         /// <inheritdoc/>
         public IAwaitingProvider AwaitingProvider { get; }
 
+        /// <inheritdoc/>
+        public IStateStorage StateStorage { get; }
+
         /// <summary>
         /// Initializes new instance of <see cref="HandlerContainer{TUpdate}"/>
         /// </summary>
@@ -45,6 +49,7 @@ namespace Telegrator.Handlers
             ExtraData = handlerInfo.ExtraData;
             CompletedFilters = handlerInfo.CompletedFilters;
             AwaitingProvider = handlerInfo.AwaitingProvider;
+            StateStorage = handlerInfo.StateStorage;
         }
 
         /// <summary>
@@ -56,7 +61,7 @@ namespace Telegrator.Handlers
         /// <param name="extraData"></param>
         /// <param name="filters"></param>
         /// <param name="awaitingProvider"></param>
-        public HandlerContainer(TUpdate actualUpdate, Update handlingUpdate, ITelegramBotClient client, Dictionary<string, object> extraData, CompletedFiltersList filters, IAwaitingProvider awaitingProvider)
+        public HandlerContainer(TUpdate actualUpdate, Update handlingUpdate, ITelegramBotClient client, Dictionary<string, object> extraData, CompletedFiltersList filters, IAwaitingProvider awaitingProvider, IStateStorage stateStorage)
         {
             ActualUpdate = actualUpdate;
             HandlingUpdate = handlingUpdate;
@@ -64,6 +69,7 @@ namespace Telegrator.Handlers
             ExtraData = extraData;
             CompletedFilters = filters;
             AwaitingProvider = awaitingProvider;
+            StateStorage = stateStorage;
         }
 
         /// <summary>
@@ -75,8 +81,8 @@ namespace Telegrator.Handlers
         {
             return new HandlerContainer<QUpdate>(
                 HandlingUpdate.GetActualUpdateObject<QUpdate>(),
-                HandlingUpdate, Client, ExtraData,
-                CompletedFilters, AwaitingProvider);
+                HandlingUpdate, Client, ExtraData, CompletedFilters,
+                AwaitingProvider, StateStorage);
         }
 
         /// <summary>
@@ -89,8 +95,8 @@ namespace Telegrator.Handlers
         {
             return new HandlerContainer<TUpdate>(
                 other.HandlingUpdate.GetActualUpdateObject<TUpdate>(),
-                other.HandlingUpdate, other.Client, other.ExtraData,
-                other.CompletedFilters, other.AwaitingProvider);
+                other.HandlingUpdate, other.Client, other.ExtraData, other.CompletedFilters,
+                other.AwaitingProvider, other.StateStorage);
         }
     }
 }

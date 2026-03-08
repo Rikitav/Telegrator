@@ -24,7 +24,7 @@ namespace Telegrator.Core.Descriptors
         public MethodHandlerDescriptor(AbstractHandlerAction<TUpdate> action) : base(DescriptorType.General, typeof(MethodHandler), true)
         {
             UpdateHandlerAttributeBase handlerAttribute = HandlerInspector.GetHandlerAttribute(action.Method);
-            StateKeeperAttributeBase? stateKeeperAttribute = HandlerInspector.GetStateKeeperAttribute(action.Method);
+            IFilter<Update>? stateKeeperAttribute = HandlerInspector.GetStateKeeperAttribute(action.Method);
             IFilter<Update>[] filters = HandlerInspector.GetFilterAttributes(action.Method, handlerAttribute.Type).ToArray();
 
             UpdateType = handlerAttribute.Type;

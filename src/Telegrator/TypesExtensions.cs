@@ -3,14 +3,13 @@ using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.Payments;
 using Telegrator.Annotations;
-using Telegrator.Attributes;
 using Telegrator.Core;
 using Telegrator.Core.Descriptors;
 using Telegrator.Core.Handlers;
 using Telegrator.Core.Handlers.Building;
-using Telegrator.Core.StateKeeping;
+using Telegrator.Core.States;
 using Telegrator.Handlers.Building;
-using Telegrator.StateKeeping;
+using Telegrator.States;
 
 namespace Telegrator
 {
@@ -187,17 +186,6 @@ namespace Telegrator
         /// <returns>An awaiter builder for callback query updates.</returns>
         public static IAwaiterHandlerBuilder<CallbackQuery> AwaitCallbackQuery(this IHandlerContainer container)
             => container.AwaitUpdate<CallbackQuery>(UpdateType.CallbackQuery);
-
-        /// <summary>
-        /// Gets a state keeper instance for the specified types.
-        /// </summary>
-        /// <typeparam name="TKey">The type of the state key.</typeparam>
-        /// <typeparam name="TState">The type of the state value.</typeparam>
-        /// <typeparam name="TKeeper">The type of the state keeper.</typeparam>
-        /// <param name="_">The handler container (unused).</param>
-        /// <returns>The state keeper instance.</returns>
-        public static TKeeper GetStateKeeper<TKey, TState, TKeeper>(this IHandlerContainer _) where TKey : notnull where TState : IEquatable<TState> where TKeeper : StateKeeperBase<TKey, TState>, new()
-            => StateKeeperAttribute<TKey, TState, TKeeper>.Shared;
     }
 
     /// <summary>
@@ -293,6 +281,47 @@ namespace Telegrator
                 cancellationToken.ThrowIfCancellationRequested();
                 yield return botCommand;
             }
+        }
+    }
+
+    public static class StateStorageExtensions
+    {
+        public static StateMachine<EnumStateMachine<TState>, TState> GetStateMachine<TState>(this IStateStorage stateStorage, Update handlingUpdate)
+            where TState : struct, Enum, IEquatable<TState>
+            => new StateMachine<EnumStateMachine<TState>, TState>(stateStorage, handlingUpdate);
+
+        public static StateMachine<TMachine, TState> GetStateMachine<TMachine, TState>(this IStateStorage stateStorage, Update handlingUpdate)
+            where TMachine : IStateMachine<TState>, new()
+            where TState : IEquatable<TState>
+            => new StateMachine<TMachine, TState>(stateStorage, handlingUpdate);
+
+        public static StateMachine<TMachine, TState> ByChatId<TMachine, TState>(this IStateStorage stateStorage, Update handlingUpdate)
+            where TMachine : IStateMachine<TState>, new()
+            where TState : IEquatable<TState>
+            => new StateMachine<TMachine, TState>(stateStorage, handlingUpdate).ByChatId();
+
+        public static StateMachine<TMachine, TState> BySenderId<TMachine, TState>(this IStateStorage stateStorage, Update handlingUpdate)
+            where TMachine : IStateMachine<TState>, new()
+            where TState : IEquatable<TState>
+            => new StateMachine<TMachine, TState>(stateStorage, handlingUpdate).BySenderId();
+    }
+
+    public static class StateMachineExtensions
+    {
+        public static StateMachine<TMachine, TState> ByChatId<TMachine, TState>(this StateMachine<TMachine, TState> stateMachine)
+            where TMachine : IStateMachine<TState>, new()
+            where TState : IEquatable<TState>
+        {
+            stateMachine.KeyResolver = new ChatIdResolver();
+            return stateMachine;
+        }
+
+        public static StateMachine<TMachine, TState> BySenderId<TMachine, TState>(this StateMachine<TMachine, TState> stateMachine)
+            where TMachine : IStateMachine<TState>, new()
+            where TState : IEquatable<TState>
+        {
+            stateMachine.KeyResolver = new SenderIdResolver();
+            return stateMachine;
         }
     }
 

@@ -203,7 +203,7 @@
             <see cref="T:Microsoft.Extensions.Logging.ILogger"/> of this router
             </summary>
         </member>
-        <member name="M:Telegrator.Polling.HostUpdateRouter.#ctor(Telegrator.Core.IHandlersProvider,Telegrator.Core.IAwaitingProvider,Microsoft.Extensions.Options.IOptions{Telegrator.TelegratorOptions},Telegrator.Core.ITelegramBotInfo,Microsoft.Extensions.Logging.ILogger{Telegrator.Polling.HostUpdateRouter})">
+        <member name="M:Telegrator.Polling.HostUpdateRouter.#ctor(Telegrator.Core.IHandlersProvider,Telegrator.Core.IAwaitingProvider,Telegrator.Core.States.IStateStorage,Microsoft.Extensions.Options.IOptions{Telegrator.TelegratorOptions},Telegrator.Core.ITelegramBotInfo,Microsoft.Extensions.Logging.ILogger{Telegrator.Polling.HostUpdateRouter})">
             <inheritdoc/>
         </member>
         <member name="M:Telegrator.Polling.HostUpdateRouter.HandleUpdateAsync(Telegram.Bot.ITelegramBotClient,Telegram.Bot.Types.Update,System.Threading.CancellationToken)">

@@ -125,7 +125,7 @@ namespace Telegrator.Core.Handlers
             }
         }
 
-        internal IHandlerContainer GetContainer(DescribedHandlerDescriptor handlerInfo)
+        private IHandlerContainer GetContainer(DescribedHandlerDescriptor handlerInfo)
         {
             if (this is IHandlerContainerFactory handlerDefainedContainerFactory)
                 return handlerDefainedContainerFactory.CreateContainer(handlerInfo);

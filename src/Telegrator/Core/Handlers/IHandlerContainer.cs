@@ -1,6 +1,7 @@
 ﻿using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegrator.Core.Filters;
+using Telegrator.Core.States;
 
 namespace Telegrator.Core.Handlers
 {
@@ -34,5 +35,10 @@ namespace Telegrator.Core.Handlers
         /// Gets the <see cref="IAwaitingProvider"/> for awaiting operations.
         /// </summary>
         public IAwaitingProvider AwaitingProvider { get; }
+
+        /// <summary>
+        /// Gets the <see cref="IStateStorage"/> for state managment.
+        /// </summary>
+        public IStateStorage StateStorage { get; }
     }
 }

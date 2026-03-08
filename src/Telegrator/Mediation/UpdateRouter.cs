@@ -7,6 +7,7 @@ using Telegrator.Core;
 using Telegrator.Core.Descriptors;
 using Telegrator.Core.Filters;
 using Telegrator.Core.Handlers;
+using Telegrator.Core.States;
 using Telegrator.Handlers.Diagnostics;
 using Telegrator.Logging;
 
@@ -21,6 +22,7 @@ namespace Telegrator.Mediation
         private readonly TelegratorOptions _options;
         private readonly IHandlersProvider _handlersProvider;
         private readonly IAwaitingProvider _awaitingProvider;
+        private readonly IStateStorage _stateStorage;
         private readonly IUpdateHandlersPool _HandlersPool;
         private readonly ITelegramBotInfo _botInfo;
 
@@ -29,6 +31,9 @@ namespace Telegrator.Mediation
 
         /// <inheritdoc/>
         public IAwaitingProvider AwaitingProvider => _awaitingProvider;
+
+        /// <inheritdoc/>
+        public IStateStorage StateStorage => _stateStorage;
 
         /// <inheritdoc/>
         public TelegratorOptions Options => _options;
@@ -47,13 +52,15 @@ namespace Telegrator.Mediation
         /// </summary>
         /// <param name="handlersProvider">The provider for regular handlers.</param>
         /// <param name="awaitingProvider">The provider for awaiting handlers.</param>
+        /// <param name="stateStorage">The state storage.</param>
         /// <param name="options">The bot configuration options.</param>
         /// <param name="botInfo"></param>
-        public UpdateRouter(IHandlersProvider handlersProvider, IAwaitingProvider awaitingProvider, TelegratorOptions options, ITelegramBotInfo botInfo)
+        public UpdateRouter(IHandlersProvider handlersProvider, IAwaitingProvider awaitingProvider, IStateStorage stateStorage, TelegratorOptions options, ITelegramBotInfo botInfo)
         {
             _options = options;
             _handlersProvider = handlersProvider;
             _awaitingProvider = awaitingProvider;
+            _stateStorage = stateStorage;
             _HandlersPool = new UpdateHandlersPool(this, _options, _options.GlobalCancellationToken);
             _botInfo = botInfo;
         }
@@ -235,7 +242,7 @@ namespace Telegrator.Mediation
             };
 
             UpdateHandlerBase handlerInstance = provider.GetHandlerInstance(descriptor, cancellationToken);
-            FilterExecutionContext<Update> filterContext = new FilterExecutionContext<Update>(_botInfo, update, update, data, []);
+            FilterExecutionContext<Update> filterContext = new FilterExecutionContext<Update>(this, _botInfo, update, update, data, []);
 
             if (descriptor.Filters != null)
             {
@@ -254,7 +261,7 @@ namespace Telegrator.Mediation
                 }
             }
 
-            return new DescribedHandlerDescriptor(descriptor, this, AwaitingProvider, client, handlerInstance, filterContext, descriptor.DisplayString);
+            return new DescribedHandlerDescriptor(descriptor, this, AwaitingProvider, StateStorage, client, handlerInstance, filterContext, descriptor.DisplayString);
         }
 
         /// <summary>

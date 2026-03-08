@@ -14,7 +14,7 @@
     <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
 	  
     <Title>Telegrator : Telegram.Bot mediator framework</Title>
-    <Version>1.16.3</Version>
+    <Version>1.16.4</Version>
 	<Authors>Rikitav Tim4ik</Authors>
 	<Company>Rikitav Tim4ik</Company>
     <RepositoryUrl>https://github.com/Rikitav/Telegrator</RepositoryUrl>
@@ -42,6 +42,10 @@
 
   <ItemGroup>
 	<ProjectReference Include="..\..\dev\Telegrator.RoslynGenerators\Telegrator.RoslynGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Annotations\Targetted\" />
   </ItemGroup>
 
 </Project>

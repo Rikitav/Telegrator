@@ -43,6 +43,9 @@ namespace Telegrator.Handlers
             {
                 string[] split = ReceivedCommand.Split('@');
                 ReceivedCommand = split[0];
+
+                if (!split.ElementAtOrDefault(1).Equals(context.BotInfo.User.Username))
+                    return false;
             }
             
             return true;

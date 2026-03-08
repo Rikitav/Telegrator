@@ -1,9 +1,9 @@
 ﻿using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
-using Telegrator.Annotations.StateKeeping;
 using Telegrator.Core.Descriptors;
 using Telegrator.Core.Filters;
-using Telegrator.Core.StateKeeping;
+using Telegrator.Core.States;
+using Telegrator.Filters;
 
 namespace Telegrator.Core.Handlers.Building
 {
@@ -140,35 +140,15 @@ namespace Telegrator.Core.Handlers.Building
         /// <summary>
         /// Sets a state keeper for the handler using a specific state and key resolver.
         /// </summary>
-        /// <typeparam name="TKey">The type of the key.</typeparam>
-        /// <typeparam name="TState">The type of the state.</typeparam>
-        /// <typeparam name="TKeeper">The type of the state keeper.</typeparam>
-        /// <param name="myState">The state value.</param>
-        /// <param name="keyResolver">The key resolver.</param>
+        /// <typeparam name="TKey">The key resolver.</typeparam>
+        /// <typeparam name="TValue">The state value.</typeparam>
+        /// <param name="state">The state value.</param>
         /// <returns>The builder instance.</returns>
-        public void SetStateKeeper<TKey, TState, TKeeper>(TState myState, IStateKeyResolver<TKey> keyResolver)
-            where TKey : notnull
-            where TState : IEquatable<TState>
-            where TKeeper : StateKeeperBase<TKey, TState>, new()
+        public void SetState<TKey, TValue>(TValue? state)
+            where TKey : IStateKeyResolver, new()
+            where TValue : IEquatable<TValue>
         {
-            StateKeeper = new StateKeepFilter<TKey, TState, TKeeper>(myState, keyResolver);
-        }
-
-        /// <summary>
-        /// Sets a state keeper for the handler using a special state and key resolver.
-        /// </summary>
-        /// <typeparam name="TKey">The type of the key.</typeparam>
-        /// <typeparam name="TState">The type of the state.</typeparam>
-        /// <typeparam name="TKeeper">The type of the state keeper.</typeparam>
-        /// <param name="specialState">The special state value.</param>
-        /// <param name="keyResolver">The key resolver.</param>
-        /// <returns>The builder instance.</returns>
-        public void SetStateKeeper<TKey, TState, TKeeper>(SpecialState specialState, IStateKeyResolver<TKey> keyResolver)
-            where TKey : notnull
-            where TState : IEquatable<TState>
-            where TKeeper : StateKeeperBase<TKey, TState>, new()
-        {
-            StateKeeper = new StateKeepFilter<TKey, TState, TKeeper>(specialState, keyResolver);
+            StateKeeper = new StateKeyFilter<TKey, TValue>(state);
         }
 
         /// <summary>

@@ -4,6 +4,7 @@ using Telegram.Bot;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
 using Telegrator.Core;
+using Telegrator.Core.States;
 using Telegrator.Mediation;
 
 namespace Telegrator.Polling
@@ -20,9 +21,10 @@ namespace Telegrator.Polling
         public HostUpdateRouter(
             IHandlersProvider handlersProvider,
             IAwaitingProvider awaitingProvider,
+            IStateStorage stateStorage,
             IOptions<TelegratorOptions> options,
             ITelegramBotInfo botInfo,
-            ILogger<HostUpdateRouter> logger) : base(handlersProvider, awaitingProvider, options.Value, botInfo)
+            ILogger<HostUpdateRouter> logger) : base(handlersProvider, awaitingProvider, stateStorage, options.Value, botInfo)
         {
             Logger = logger;
             ExceptionHandler = new DefaultRouterExceptionHandler(HandleException);

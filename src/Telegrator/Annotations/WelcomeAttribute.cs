@@ -2,7 +2,7 @@
 using Telegram.Bot.Types.Enums;
 using Telegrator.Filters;
 
-namespace Telegrator.Annotations.Targetted
+namespace Telegrator.Annotations
 {
     /// <summary>
     /// Attribute for filtering message with command "start" in bot's private chats.

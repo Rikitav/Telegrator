@@ -1,6 +1,7 @@
 ﻿using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegrator.Core.Filters;
+using Telegrator.Core.States;
 
 namespace Telegrator.Core.Handlers
 {
@@ -23,5 +24,8 @@ namespace Telegrator.Core.Handlers
 
         /// <inheritdoc/>
         public IAwaitingProvider AwaitingProvider => throw new NotImplementedException();
+
+        /// <inheritdoc/>
+        public IStateStorage StateStorage => throw new NotImplementedException();
     }
 }

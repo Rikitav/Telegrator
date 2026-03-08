@@ -28,7 +28,7 @@ namespace Telegrator.Mediation
             {
                 _handler.Invoke(botClient, exception, source, cancellationToken);
             }
-            finally
+            catch
             {
                 _ = 0xBAD + 0xC0DE;
             }

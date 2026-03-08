@@ -2,6 +2,7 @@
 using System.Reflection;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
+using Telegrator.Annotations;
 using Telegrator.Aspects;
 using Telegrator.Core.Attributes;
 using Telegrator.Core.Filters;
@@ -42,13 +43,13 @@ namespace Telegrator.Core.Descriptors
         /// </summary>
         /// <param name="handlerType">The member info representing the handler type.</param>
         /// <returns>The state keeper attribute, or null if not present.</returns>
-        public static StateKeeperAttributeBase? GetStateKeeperAttribute(MemberInfo handlerType)
+        public static IFilter<Update>? GetStateKeeperAttribute(MemberInfo handlerType)
         {
             // Getting polling handler attribute
-            IEnumerable<StateKeeperAttributeBase> handlerAttrs = handlerType.GetCustomAttributes<StateKeeperAttributeBase>();
+            Attribute stateAttr = handlerType.GetCustomAttribute(typeof(StateAttribute<,>));
 
             //
-            return handlerAttrs.Any() ? handlerAttrs.Single() : null;
+            return stateAttr as IFilter<Update>;
         }
 
         /// <summary>

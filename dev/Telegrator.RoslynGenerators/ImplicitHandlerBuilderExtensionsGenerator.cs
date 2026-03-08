@@ -5,10 +5,6 @@ using System.Collections.Immutable;
 using System.Text;
 using Telegrator.RoslynGenerators.RoslynExtensions;
 
-#if DEBUG
-using System.Diagnostics;
-#endif
-
 namespace Telegrator.RoslynGenerators;
 
 [Generator(LanguageNames.CSharp)]
@@ -70,6 +66,9 @@ public class ImplicitHandlerBuilderExtensionsGenerator : IIncrementalGenerator
             {
                 string className = classDeclaration.Identifier.ToString();
                 if (className == "FilterAnnotation")
+                    continue;
+
+                if (className == "StateAttribute")
                     continue;
 
                 MethodDeclarationSyntax? targeter = classDeclaration.Members.OfType<MethodDeclarationSyntax>().SingleOrDefault(IsTargeterMethod);
@@ -140,16 +139,15 @@ public class ImplicitHandlerBuilderExtensionsGenerator : IIncrementalGenerator
         {
             ClassDeclarationSyntax extensionsClass = SyntaxFactory.ClassDeclaration("HandlerBuilderExtensions")
                 .WithModifiers(Modifiers(SyntaxKind.PublicKeyword, SyntaxKind.StaticKeyword, SyntaxKind.PartialKeyword))
-                .AddMembers([.. targetters.Values, .. extensions])
-                .DecorateType(1);
+                .AddMembers([.. targetters.Values, .. extensions]);
 
             NamespaceDeclarationSyntax namespaceDeclaration = SyntaxFactory.NamespaceDeclaration(SyntaxFactory.ParseName("Telegrator"))
-                .WithMembers([extensionsClass])
-                .Decorate();
+                .WithMembers([extensionsClass]);
 
             CompilationUnitSyntax compilationUnit = SyntaxFactory.CompilationUnit()
                 .WithUsings([.. usings])
-                .WithMembers([namespaceDeclaration]);
+                .WithMembers([namespaceDeclaration])
+                .NormalizeWhitespace();
 
             context.AddSource("GeneratedHandlerBuilderExtensions.cs", compilationUnit.ToFullString());
         }
@@ -175,7 +173,7 @@ public class ImplicitHandlerBuilderExtensionsGenerator : IIncrementalGenerator
         if (targetterMethod.ExpressionBody != null)
             method = method.WithExpressionBody(targetterMethod.ExpressionBody).WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken));
 
-        return method.DecorateMember(2);
+        return method;
     }
 
     private static MethodDeclarationSyntax GeneratedExtensionsMethod(ClassDeclarationSyntax classDeclaration, ParameterListSyntax methodParameters, ArgumentListSyntax invokerArguments, MethodDeclarationSyntax targetterMethod)
@@ -204,11 +202,10 @@ public class ImplicitHandlerBuilderExtensionsGenerator : IIncrementalGenerator
 
         MethodDeclarationSyntax method = SyntaxFactory.MethodDeclaration(returnType, identifier)
             .WithParameterList(parameters)
-            .WithBody(body.DecorateBlock(2))
+            .WithBody(body)
             .WithTypeParameterList(typeParameters)
             .WithModifiers(Modifiers(SyntaxKind.PublicKeyword, SyntaxKind.StaticKeyword))
             .WithConstraintClauses([typeParameterConstraint])
-            .DecorateMember(2)
             .WithLeadingTrivia(xmlDoc);
          
         return method;

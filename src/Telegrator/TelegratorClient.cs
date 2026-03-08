@@ -4,6 +4,7 @@ using Telegrator.Core;
 using Telegrator.Logging;
 using Telegrator.Mediation;
 using Telegrator.Providers;
+using Telegrator.States;
 
 namespace Telegrator
 {
@@ -75,8 +76,9 @@ namespace Telegrator
 
             HandlersProvider handlerProvider = new HandlersProvider(Handlers, Options);
             AwaitingProvider awaitingProvider = new AwaitingProvider(Options);
+            DefaultStateStorage stateStorage = new DefaultStateStorage();
 
-            updateRouter = new UpdateRouter(handlerProvider, awaitingProvider, Options, BotInfo);
+            updateRouter = new UpdateRouter(handlerProvider, awaitingProvider, stateStorage, Options, BotInfo);
             
             // Log startup
             TelegratorLogging.LogInformation($"Telegrator bot starting up - BotId: {BotInfo.User.Id}, Username: {BotInfo.User.Username}, MaxParallelHandlers: {Options.MaximumParallelWorkingHandlers ?? -1}");
