@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Telegrator.Core;
@@ -12,14 +11,13 @@ namespace Telegrator.Hosting
     public class TelegramBotHost : IHost, ITelegratorBot
     {
         private readonly IHost _innerHost;
-        private readonly IServiceProvider _serviceProvider;
         private readonly IUpdateRouter _updateRouter;
         private readonly ILogger<TelegramBotHost> _logger;
 
         private bool _disposed;
 
         /// <inheritdoc/>
-        public IServiceProvider Services => _serviceProvider;
+        public IServiceProvider Services => _innerHost.Services;
 
         /// <inheritdoc/>
         public IUpdateRouter UpdateRouter => _updateRouter;
@@ -40,8 +38,6 @@ namespace Telegrator.Hosting
 
             // Building proxy hoster
             _innerHost = hostApplicationBuilder.Build();
-            _serviceProvider = _innerHost.Services;
-            _innerHost.UseTelegrator();
 
             // Reruesting services for this host
             _updateRouter = Services.GetRequiredService<IUpdateRouter>();

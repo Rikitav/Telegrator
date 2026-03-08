@@ -53,7 +53,6 @@ namespace Telegrator.Hosting.Web
         {
             // Building proxy application
             _innerApp = webApplicationBuilder.Build();
-            _innerApp.UseTelegratorWeb();
 
             // Reruesting services for this host
             _updateRouter = Services.GetRequiredService<IUpdateRouter>();
