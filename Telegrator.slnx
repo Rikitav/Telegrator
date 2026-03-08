@@ -1,5 +1,6 @@
 <Solution>
   <Project Path="dev/Telegrator.RoslynGenerators/Telegrator.RoslynGenerators.csproj" />
+  <Project Path="src/Telegartor.RedisStateStorage/Telegartor.RedisStateStorage.csproj" />
   <Project Path="src/Telegrator.Analyzers/Telegrator.Analyzers.csproj" />
   <Project Path="src/Telegrator.Hosting.Web/Telegrator.Hosting.Web.csproj" />
   <Project Path="src/Telegrator.Hosting/Telegrator.Hosting.csproj" />

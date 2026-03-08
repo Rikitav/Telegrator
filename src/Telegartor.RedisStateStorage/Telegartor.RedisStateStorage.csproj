@@ -5,6 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 	<LangVersion>latest</LangVersion>
+	<RootNamespace>Telegrator</RootNamespace>
 	<BaseOutputPath>..\..\bin</BaseOutputPath>
 	<DocumentationFile>..\..\docs\$(AssemblyName).xml</DocumentationFile>
 	  
@@ -13,10 +14,10 @@
     <EnableNETAnalyzers>True</EnableNETAnalyzers>
     <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
 	  
-    <Title>Telegrator : Telegram.Bot mediator framework</Title>
+    <Title>Telegrator.RedisStateStorage</Title>
     <Version>1.16.4</Version>
 	<Authors>Rikitav Tim4ik</Authors>
-	<Company>Rikitav Tim4ik</Company>
+    <Company>Rikitav Tim4ik</Company>
     <RepositoryUrl>https://github.com/Rikitav/Telegrator</RepositoryUrl>
     <PackageTags>telegram;bot;mediator;attributes;aspect;hosting;host;framework;easy;simple;handlers</PackageTags>
 	  
@@ -26,26 +27,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Telegrator\Telegrator.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="StackExchange.Redis" Version="2.11.8 " />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include=".\README.md" Pack="True" PackagePath="\" />
     <None Include="..\..\LICENSE" Pack="True" PackagePath="\" />
-    <None Include="..\..\README.md" Pack="True" PackagePath="\" />
     <None Include="..\..\resources\telegrator_nuget.png" Pack="True" PackagePath="\" />
   </ItemGroup>
   
-  <ItemGroup>
-    <PackageReference Include="System.Threading.Channels" Version="10.0.3" />
-    <PackageReference Include="Telegram.Bot" Version="22.9.5.3" />	  
-  </ItemGroup>
-
-  <ItemGroup>
-	<None Include="..\Telegrator.Analyzers\bin\$(Configuration)\netstandard2.0\Telegrator.Analyzers.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
-  </ItemGroup>
-
-  <ItemGroup>
-	<ProjectReference Include="..\..\dev\Telegrator.RoslynGenerators\Telegrator.RoslynGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Annotations\Targetted\" />
-  </ItemGroup>
-
 </Project>
