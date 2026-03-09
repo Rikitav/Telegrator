@@ -5,176 +5,175 @@ using Telegrator.Core.Filters;
 using Telegrator.Core.States;
 using Telegrator.Filters;
 
-namespace Telegrator.Core.Handlers.Building
+namespace Telegrator.Core.Handlers.Building;
+
+/// <summary>
+/// Base class for building handler descriptors and managing handler filters.
+/// </summary>
+public abstract class HandlerBuilderBase(Type buildingHandlerType, UpdateType updateType, IHandlersCollection? handlerCollection) : IHandlerBuilder
 {
+    private static int HandlerServiceKeyIndex = 0;
+
     /// <summary>
-    /// Base class for building handler descriptors and managing handler filters.
+    /// <see cref="IHandlersCollection"/> to ehich new builded handlers is adding
     /// </summary>
-    public abstract class HandlerBuilderBase(Type buildingHandlerType, UpdateType updateType, IHandlersCollection? handlerCollection) : IHandlerBuilder
+    protected readonly IHandlersCollection? HandlerCollection = handlerCollection;
+
+    /// <summary>
+    /// <see cref="UpdateType"/> of building handler
+    /// </summary>
+    protected readonly UpdateType UpdateType = updateType;
+    
+    /// <summary>
+    /// Type of handler to build
+    /// </summary>
+    protected readonly Type BuildingHandlerType = buildingHandlerType;
+    
+    /// <summary>
+    /// Filters applied to handler
+    /// </summary>
+    protected readonly List<IFilter<Update>> Filters = [];
+
+    /// <summary>
+    /// <see cref="DescriptorIndexer"/> of building handler
+    /// </summary>
+    protected DescriptorIndexer Indexer = new DescriptorIndexer(0, 0, 0);
+    
+    /// <summary>
+    /// Update validation filter of building handler
+    /// </summary>
+    protected IFilter<Update>? ValidateFilter;
+    
+    /// <summary>
+    /// State keeper of building handler
+    /// </summary>
+    protected IFilter<Update>? StateKeeper;
+
+    /// <summary>
+    /// Builds an implicit <see cref="HandlerDescriptor"/> for the specified handler instance.
+    /// </summary>
+    /// <param name="instance">The <see cref="UpdateHandlerBase"/> instance.</param>
+    /// <returns>The created <see cref="HandlerDescriptor"/>.</returns>
+    protected HandlerDescriptor BuildImplicitDescriptor(UpdateHandlerBase instance)
     {
-        private static int HandlerServiceKeyIndex = 0;
+        object handlerServiceKey = GetImplicitHandlerServiceKey(BuildingHandlerType);
 
-        /// <summary>
-        /// <see cref="IHandlersCollection"/> to ehich new builded handlers is adding
-        /// </summary>
-        protected readonly IHandlersCollection? HandlerCollection = handlerCollection;
+        HandlerDescriptor descriptor = new HandlerDescriptor(
+            DescriptorType.Implicit, BuildingHandlerType,
+            UpdateType, Indexer, ValidateFilter,
+            Filters.ToArray(), StateKeeper,
+            handlerServiceKey, instance);
 
-        /// <summary>
-        /// <see cref="UpdateType"/> of building handler
-        /// </summary>
-        protected readonly UpdateType UpdateType = updateType;
-        
-        /// <summary>
-        /// Type of handler to build
-        /// </summary>
-        protected readonly Type BuildingHandlerType = buildingHandlerType;
-        
-        /// <summary>
-        /// Filters applied to handler
-        /// </summary>
-        protected readonly List<IFilter<Update>> Filters = [];
+        HandlerCollection?.AddDescriptor(descriptor);
+        return descriptor;
+    }
 
-        /// <summary>
-        /// <see cref="DescriptorIndexer"/> of building handler
-        /// </summary>
-        protected DescriptorIndexer Indexer = new DescriptorIndexer(0, 0, 0);
-        
-        /// <summary>
-        /// Update validation filter of building handler
-        /// </summary>
-        protected IFilter<Update>? ValidateFilter;
-        
-        /// <summary>
-        /// State keeper of building handler
-        /// </summary>
-        protected IFilter<Update>? StateKeeper;
+    /// <summary>
+    /// Gets a unique service key for an implicit handler type.
+    /// </summary>
+    /// <param name="BuildingHandlerType">The handler type.</param>
+    /// <returns>A unique service key string.</returns>
+    public static object GetImplicitHandlerServiceKey(Type BuildingHandlerType)
+        => string.Format("ImplicitHandler_{0}+{1}", HandlerServiceKeyIndex++, BuildingHandlerType.Name);
 
-        /// <summary>
-        /// Builds an implicit <see cref="HandlerDescriptor"/> for the specified handler instance.
-        /// </summary>
-        /// <param name="instance">The <see cref="UpdateHandlerBase"/> instance.</param>
-        /// <returns>The created <see cref="HandlerDescriptor"/>.</returns>
-        protected HandlerDescriptor BuildImplicitDescriptor(UpdateHandlerBase instance)
-        {
-            object handlerServiceKey = GetImplicitHandlerServiceKey(BuildingHandlerType);
+    /// <summary>
+    /// Sets the update validating action for the handler.
+    /// </summary>
+    /// <param name="validateAction">The <see cref="UpdateValidateAction"/> to use.</param>
+    /// <returns>The builder instance.</returns>
+    public void SetUpdateValidating(UpdateValidateAction validateAction)
+    {
+        ValidateFilter = new UpdateValidateFilter(validateAction);
+    }
 
-            HandlerDescriptor descriptor = new HandlerDescriptor(
-                DescriptorType.Implicit, BuildingHandlerType,
-                UpdateType, Indexer, ValidateFilter,
-                Filters.ToArray(), StateKeeper,
-                handlerServiceKey, instance);
+    /// <summary>
+    /// Sets the concurrency level for the handler.
+    /// </summary>
+    /// <param name="concurrency">The concurrency value.</param>
+    /// <returns>The builder instance.</returns>
+    public void SetConcurreny(int concurrency)
+    {
+        Indexer = Indexer.UpdateImportance(concurrency);
+    }
 
-            HandlerCollection?.AddDescriptor(descriptor);
-            return descriptor;
-        }
+    /// <summary>
+    /// Sets the priority for the handler.
+    /// </summary>
+    /// <param name="priority">The priority value.</param>
+    /// <returns>The builder instance.</returns>
+    public void SetPriority(int priority)
+    {
+        Indexer = Indexer.UpdatePriority(priority);
+    }
 
-        /// <summary>
-        /// Gets a unique service key for an implicit handler type.
-        /// </summary>
-        /// <param name="BuildingHandlerType">The handler type.</param>
-        /// <returns>A unique service key string.</returns>
-        public static object GetImplicitHandlerServiceKey(Type BuildingHandlerType)
-            => string.Format("ImplicitHandler_{0}+{1}", HandlerServiceKeyIndex++, BuildingHandlerType.Name);
+    /// <summary>
+    /// Sets both concurrency and priority for the handler.
+    /// </summary>
+    /// <param name="concurrency">The concurrency value.</param>
+    /// <param name="priority">The priority value.</param>
+    /// <returns>The builder instance.</returns>
+    public void SetIndexer(int concurrency, int priority)
+    {
+        Indexer = new DescriptorIndexer(0, concurrency, priority);
+    }
 
-        /// <summary>
-        /// Sets the update validating action for the handler.
-        /// </summary>
-        /// <param name="validateAction">The <see cref="UpdateValidateAction"/> to use.</param>
-        /// <returns>The builder instance.</returns>
-        public void SetUpdateValidating(UpdateValidateAction validateAction)
-        {
-            ValidateFilter = new UpdateValidateFilter(validateAction);
-        }
+    /// <summary>
+    /// Adds a filter to the handler.
+    /// </summary>
+    /// <param name="filter">The <see cref="IFilter{Update}"/> to add.</param>
+    /// <returns>The builder instance.</returns>
+    public void AddFilter(IFilter<Update> filter)
+    {
+        Filters.Add(filter);
+    }
 
-        /// <summary>
-        /// Sets the concurrency level for the handler.
-        /// </summary>
-        /// <param name="concurrency">The concurrency value.</param>
-        /// <returns>The builder instance.</returns>
-        public void SetConcurreny(int concurrency)
-        {
-            Indexer = Indexer.UpdateImportance(concurrency);
-        }
+    /// <summary>
+    /// Adds multiple filters to the handler.
+    /// </summary>
+    /// <param name="filters">The filters to add.</param>
+    /// <returns>The builder instance.</returns>
+    public void AddFilters(params IFilter<Update>[] filters)
+    {
+        Filters.AddRange(filters);
+    }
 
-        /// <summary>
-        /// Sets the priority for the handler.
-        /// </summary>
-        /// <param name="priority">The priority value.</param>
-        /// <returns>The builder instance.</returns>
-        public void SetPriority(int priority)
-        {
-            Indexer = Indexer.UpdatePriority(priority);
-        }
+    /// <summary>
+    /// Sets a state keeper for the handler using a specific state and key resolver.
+    /// </summary>
+    /// <typeparam name="TKey">The key resolver.</typeparam>
+    /// <typeparam name="TValue">The state value.</typeparam>
+    /// <param name="state">The state value.</param>
+    /// <returns>The builder instance.</returns>
+    public void SetState<TKey, TValue>(TValue? state)
+        where TKey : IStateKeyResolver, new()
+        where TValue : IEquatable<TValue>
+    {
+        StateKeeper = new StateKeyFilter<TKey, TValue>(state);
+    }
 
-        /// <summary>
-        /// Sets both concurrency and priority for the handler.
-        /// </summary>
-        /// <param name="concurrency">The concurrency value.</param>
-        /// <param name="priority">The priority value.</param>
-        /// <returns>The builder instance.</returns>
-        public void SetIndexer(int concurrency, int priority)
-        {
-            Indexer = new DescriptorIndexer(0, concurrency, priority);
-        }
+    /// <summary>
+    /// Adds a targeted filter for a specific filter target type.
+    /// </summary>
+    /// <typeparam name="TFilterTarget">The type of the filter target.</typeparam>
+    /// <param name="getFilterringTarget">Function to get the filter target from an update.</param>
+    /// <param name="filter">The filter to add.</param>
+    /// <returns>The builder instance.</returns>
+    public void AddTargetedFilter<TFilterTarget>(Func<Update, TFilterTarget?> getFilterringTarget, IFilter<TFilterTarget> filter) where TFilterTarget : class
+    {
+        AnonymousTypeFilter anonymousTypeFilter = AnonymousTypeFilter.Compile(filter, getFilterringTarget);
+        Filters.Add(anonymousTypeFilter);
+    }
 
-        /// <summary>
-        /// Adds a filter to the handler.
-        /// </summary>
-        /// <param name="filter">The <see cref="IFilter{Update}"/> to add.</param>
-        /// <returns>The builder instance.</returns>
-        public void AddFilter(IFilter<Update> filter)
-        {
-            Filters.Add(filter);
-        }
-
-        /// <summary>
-        /// Adds multiple filters to the handler.
-        /// </summary>
-        /// <param name="filters">The filters to add.</param>
-        /// <returns>The builder instance.</returns>
-        public void AddFilters(params IFilter<Update>[] filters)
-        {
-            Filters.AddRange(filters);
-        }
-
-        /// <summary>
-        /// Sets a state keeper for the handler using a specific state and key resolver.
-        /// </summary>
-        /// <typeparam name="TKey">The key resolver.</typeparam>
-        /// <typeparam name="TValue">The state value.</typeparam>
-        /// <param name="state">The state value.</param>
-        /// <returns>The builder instance.</returns>
-        public void SetState<TKey, TValue>(TValue? state)
-            where TKey : IStateKeyResolver, new()
-            where TValue : IEquatable<TValue>
-        {
-            StateKeeper = new StateKeyFilter<TKey, TValue>(state);
-        }
-
-        /// <summary>
-        /// Adds a targeted filter for a specific filter target type.
-        /// </summary>
-        /// <typeparam name="TFilterTarget">The type of the filter target.</typeparam>
-        /// <param name="getFilterringTarget">Function to get the filter target from an update.</param>
-        /// <param name="filter">The filter to add.</param>
-        /// <returns>The builder instance.</returns>
-        public void AddTargetedFilter<TFilterTarget>(Func<Update, TFilterTarget?> getFilterringTarget, IFilter<TFilterTarget> filter) where TFilterTarget : class
-        {
-            AnonymousTypeFilter anonymousTypeFilter = AnonymousTypeFilter.Compile(filter, getFilterringTarget);
-            Filters.Add(anonymousTypeFilter);
-        }
-
-        /// <summary>
-        /// Adds multiple targeted filters for a specific filter target type.
-        /// </summary>
-        /// <typeparam name="TFilterTarget">The type of the filter target.</typeparam>
-        /// <param name="getFilterringTarget">Function to get the filter target from an update.</param>
-        /// <param name="filters">The filters to add.</param>
-        /// <returns>The builder instance.</returns>
-        public void AddTargetedFilters<TFilterTarget>(Func<Update, TFilterTarget?> getFilterringTarget, params IFilter<TFilterTarget>[] filters) where TFilterTarget : class
-        {
-            AnonymousCompiledFilter compiledPollingFilter = AnonymousCompiledFilter.Compile(filters, getFilterringTarget);
-            Filters.Add(compiledPollingFilter);
-        }
+    /// <summary>
+    /// Adds multiple targeted filters for a specific filter target type.
+    /// </summary>
+    /// <typeparam name="TFilterTarget">The type of the filter target.</typeparam>
+    /// <param name="getFilterringTarget">Function to get the filter target from an update.</param>
+    /// <param name="filters">The filters to add.</param>
+    /// <returns>The builder instance.</returns>
+    public void AddTargetedFilters<TFilterTarget>(Func<Update, TFilterTarget?> getFilterringTarget, params IFilter<TFilterTarget>[] filters) where TFilterTarget : class
+    {
+        AnonymousCompiledFilter compiledPollingFilter = AnonymousCompiledFilter.Compile(filters, getFilterringTarget);
+        Filters.Add(compiledPollingFilter);
     }
 }

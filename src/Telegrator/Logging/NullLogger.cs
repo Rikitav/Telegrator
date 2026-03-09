@@ -1,21 +1,18 @@
-using System;
+namespace Telegrator.Logging;
 
-namespace Telegrator.Logging
+/// <summary>
+/// Null logger implementation that does nothing.
+/// Used when logging is not required or disabled.
+/// </summary>
+public class NullLogger : ITelegratorLogger
 {
     /// <summary>
-    /// Null logger implementation that does nothing.
-    /// Used when logging is not required or disabled.
+    /// Singleton instance of NullLogger.
     /// </summary>
-    public class NullLogger : ITelegratorLogger
-    {
-        /// <summary>
-        /// Singleton instance of NullLogger.
-        /// </summary>
-        public static readonly NullLogger Instance = new();
+    public static readonly NullLogger Instance = new();
 
-        private NullLogger() { }
+    private NullLogger() { }
 
-        /// <inheritdoc/>
-        public void Log(LogLevel level, string message, Exception? exception = null) { }
-    }
-} 
+    /// <inheritdoc/>
+    public void Log(LogLevel level, string message, Exception? exception = null) { }
+}

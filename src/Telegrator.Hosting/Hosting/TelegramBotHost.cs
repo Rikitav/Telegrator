@@ -3,113 +3,112 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Telegrator.Core;
 
-namespace Telegrator.Hosting
+namespace Telegrator.Hosting;
+
+/// <summary>
+/// Represents a hosted telegram bot
+/// </summary>
+public class TelegramBotHost : IHost, ITelegratorBot
 {
+    private readonly IHost _innerHost;
+    private readonly IUpdateRouter _updateRouter;
+    private readonly ILogger<TelegramBotHost> _logger;
+
+    private bool _disposed;
+
+    /// <inheritdoc/>
+    public IServiceProvider Services => _innerHost.Services;
+
+    /// <inheritdoc/>
+    public IUpdateRouter UpdateRouter => _updateRouter;
+
     /// <summary>
-    /// Represents a hosted telegram bot
+    /// This application's logger
     /// </summary>
-    public class TelegramBotHost : IHost, ITelegratorBot
+    public ILogger<TelegramBotHost> Logger => _logger;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TelegramBotHost"/> class.
+    /// </summary>
+    /// <param name="hostApplicationBuilder">The proxied instance of host builder.</param>
+    public TelegramBotHost(HostApplicationBuilder hostApplicationBuilder)
     {
-        private readonly IHost _innerHost;
-        private readonly IUpdateRouter _updateRouter;
-        private readonly ILogger<TelegramBotHost> _logger;
+        // Registering this host in services for easy access
+        hostApplicationBuilder.Services.AddSingleton<ITelegratorBot>(this);
 
-        private bool _disposed;
+        // Building proxy hoster
+        _innerHost = hostApplicationBuilder.Build();
 
-        /// <inheritdoc/>
-        public IServiceProvider Services => _innerHost.Services;
+        // Reruesting services for this host
+        _updateRouter = Services.GetRequiredService<IUpdateRouter>();
+        _logger = Services.GetRequiredService<ILogger<TelegramBotHost>>();
+    }
 
-        /// <inheritdoc/>
-        public IUpdateRouter UpdateRouter => _updateRouter;
+    /// <summary>
+    /// Creates new <see cref="TelegramBotHostBuilder"/> with default configuration, services and long-polling update receiving scheme
+    /// </summary>
+    /// <returns></returns>
+    public static TelegramBotHostBuilder CreateBuilder()
+    {
+        HostApplicationBuilder innerBuilder = new HostApplicationBuilder(settings: null);
+        TelegramBotHostBuilder builder = new TelegramBotHostBuilder(innerBuilder, null);
+        return builder;
+    }
 
-        /// <summary>
-        /// This application's logger
-        /// </summary>
-        public ILogger<TelegramBotHost> Logger => _logger;
+    /// <summary>
+    /// Creates new <see cref="TelegramBotHostBuilder"/> with default services and long-polling update receiving scheme
+    /// </summary>
+    /// <returns></returns>
+    public static TelegramBotHostBuilder CreateBuilder(HostApplicationBuilderSettings? settings)
+    {
+        HostApplicationBuilder innerBuilder = new HostApplicationBuilder(settings);
+        TelegramBotHostBuilder builder = new TelegramBotHostBuilder(innerBuilder, settings);
+        return builder;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TelegramBotHost"/> class.
-        /// </summary>
-        /// <param name="hostApplicationBuilder">The proxied instance of host builder.</param>
-        public TelegramBotHost(HostApplicationBuilder hostApplicationBuilder)
-        {
-            // Registering this host in services for easy access
-            hostApplicationBuilder.Services.AddSingleton<ITelegratorBot>(this);
+    /// <summary>
+    /// Creates new EMPTY <see cref="TelegramBotHostBuilder"/> WITHOUT any services or update receiving schemes
+    /// </summary>
+    /// <returns></returns>
+    public static TelegramBotHostBuilder CreateEmptyBuilder()
+    {
+        HostApplicationBuilder innerBuilder = Host.CreateEmptyApplicationBuilder(null);
+        return new TelegramBotHostBuilder(innerBuilder, null);
+    }
 
-            // Building proxy hoster
-            _innerHost = hostApplicationBuilder.Build();
+    /// <summary>
+    /// Creates new EMPTY <see cref="TelegramBotHostBuilder"/> WITHOUT any services or update receiving schemes
+    /// </summary>
+    /// <returns></returns>
+    public static TelegramBotHostBuilder CreateEmptyBuilder(HostApplicationBuilderSettings? settings)
+    {
+        HostApplicationBuilder innerBuilder = Host.CreateEmptyApplicationBuilder(null);
+        return new TelegramBotHostBuilder(innerBuilder, settings);
+    }
 
-            // Reruesting services for this host
-            _updateRouter = Services.GetRequiredService<IUpdateRouter>();
-            _logger = Services.GetRequiredService<ILogger<TelegramBotHost>>();
-        }
+    /// <inheritdoc/>
+    public async Task StartAsync(CancellationToken cancellationToken = default)
+    {
+        await _innerHost.StartAsync(cancellationToken);
+    }
 
-        /// <summary>
-        /// Creates new <see cref="TelegramBotHostBuilder"/> with default configuration, services and long-polling update receiving scheme
-        /// </summary>
-        /// <returns></returns>
-        public static TelegramBotHostBuilder CreateBuilder()
-        {
-            HostApplicationBuilder innerBuilder = new HostApplicationBuilder(settings: null);
-            TelegramBotHostBuilder builder = new TelegramBotHostBuilder(innerBuilder, null);
-            return builder;
-        }
+    /// <inheritdoc/>
+    public async Task StopAsync(CancellationToken cancellationToken = default)
+    {
+        await _innerHost.StopAsync(cancellationToken);
+    }
 
-        /// <summary>
-        /// Creates new <see cref="TelegramBotHostBuilder"/> with default services and long-polling update receiving scheme
-        /// </summary>
-        /// <returns></returns>
-        public static TelegramBotHostBuilder CreateBuilder(HostApplicationBuilderSettings? settings)
-        {
-            HostApplicationBuilder innerBuilder = new HostApplicationBuilder(settings);
-            TelegramBotHostBuilder builder = new TelegramBotHostBuilder(innerBuilder, settings);
-            return builder;
-        }
+    /// <summary>
+    /// Disposes the host.
+    /// </summary>
+    public void Dispose()
+    {
+        if (_disposed)
+            return;
 
-        /// <summary>
-        /// Creates new EMPTY <see cref="TelegramBotHostBuilder"/> WITHOUT any services or update receiving schemes
-        /// </summary>
-        /// <returns></returns>
-        public static TelegramBotHostBuilder CreateEmptyBuilder()
-        {
-            HostApplicationBuilder innerBuilder = Host.CreateEmptyApplicationBuilder(null);
-            return new TelegramBotHostBuilder(innerBuilder, null);
-        }
+        _innerHost.Dispose();
 
-        /// <summary>
-        /// Creates new EMPTY <see cref="TelegramBotHostBuilder"/> WITHOUT any services or update receiving schemes
-        /// </summary>
-        /// <returns></returns>
-        public static TelegramBotHostBuilder CreateEmptyBuilder(HostApplicationBuilderSettings? settings)
-        {
-            HostApplicationBuilder innerBuilder = Host.CreateEmptyApplicationBuilder(null);
-            return new TelegramBotHostBuilder(innerBuilder, settings);
-        }
-
-        /// <inheritdoc/>
-        public async Task StartAsync(CancellationToken cancellationToken = default)
-        {
-            await _innerHost.StartAsync(cancellationToken);
-        }
-
-        /// <inheritdoc/>
-        public async Task StopAsync(CancellationToken cancellationToken = default)
-        {
-            await _innerHost.StopAsync(cancellationToken);
-        }
-
-        /// <summary>
-        /// Disposes the host.
-        /// </summary>
-        public void Dispose()
-        {
-            if (_disposed)
-                return;
-
-            _innerHost.Dispose();
-
-            GC.SuppressFinalize(this);
-            _disposed = true;
-        }
+        GC.SuppressFinalize(this);
+        _disposed = true;
     }
 }

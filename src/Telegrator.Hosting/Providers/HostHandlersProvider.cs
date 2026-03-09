@@ -1,45 +1,40 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Telegrator.Core;
 using Telegrator.Core.Descriptors;
 using Telegrator.Core.Handlers;
 
-namespace Telegrator.Providers
+namespace Telegrator.Providers;
+
+/// <inheritdoc/>
+public class HostHandlersProvider : HandlersProvider
 {
+    private readonly IServiceProvider Services;
+
     /// <inheritdoc/>
-    public class HostHandlersProvider : HandlersProvider
+    public HostHandlersProvider(
+        IHandlersCollection handlers,
+        IOptions<TelegratorOptions> options,
+        IServiceProvider serviceProvider) : base(handlers, options.Value)
     {
-        private readonly IServiceProvider Services;
-        private readonly ILogger<HostHandlersProvider> Logger;
+        Services = serviceProvider;
+    }
 
-        /// <inheritdoc/>
-        public HostHandlersProvider(
-            IHandlersCollection handlers,
-            IOptions<TelegratorOptions> options,
-            IServiceProvider serviceProvider,
-            ILogger<HostHandlersProvider> logger) : base(handlers, options.Value)
-        {
-            Services = serviceProvider;
-            Logger = logger;
-        }
+    /// <inheritdoc/>
+    public override UpdateHandlerBase GetHandlerInstance(HandlerDescriptor descriptor, CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        IServiceScope scope = Services.CreateScope();
 
-        /// <inheritdoc/>
-        public override UpdateHandlerBase GetHandlerInstance(HandlerDescriptor descriptor, CancellationToken cancellationToken = default)
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-            IServiceScope scope = Services.CreateScope();
+        object handlerInstance = descriptor.ServiceKey == null
+            ? scope.ServiceProvider.GetRequiredService(descriptor.HandlerType)
+            : scope.ServiceProvider.GetRequiredKeyedService(descriptor.HandlerType, descriptor.ServiceKey);
 
-            object handlerInstance = descriptor.ServiceKey == null
-                ? scope.ServiceProvider.GetRequiredService(descriptor.HandlerType)
-                : scope.ServiceProvider.GetRequiredKeyedService(descriptor.HandlerType, descriptor.ServiceKey);
+        if (handlerInstance is not UpdateHandlerBase updateHandler)
+            throw new InvalidOperationException("Failed to resolve " + descriptor.HandlerType + " as UpdateHandlerBase");
 
-            if (handlerInstance is not UpdateHandlerBase updateHandler)
-                throw new InvalidOperationException("Failed to resolve " + descriptor.HandlerType + " as UpdateHandlerBase");
-
-            descriptor.LazyInitialization?.Invoke(updateHandler);
-            updateHandler.LifetimeToken.OnLifetimeEnded += _ => scope.Dispose();
-            return updateHandler;
-        }
+        descriptor.LazyInitialization?.Invoke(updateHandler);
+        updateHandler.LifetimeToken.OnLifetimeEnded += _ => scope.Dispose();
+        return updateHandler;
     }
 }

@@ -1,11 +1,9 @@
-﻿using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 
-namespace Telegrator.Providers
+namespace Telegrator.Providers;
+
+/// <inheritdoc/>
+public class HostAwaitingProvider(IOptions<TelegratorOptions> options) : AwaitingProvider(options.Value)
 {
-    /// <inheritdoc/>
-    public class HostAwaitingProvider(IOptions<TelegratorOptions> options, ILogger<HostAwaitingProvider> logger) : AwaitingProvider(options.Value)
-    {
-        private readonly ILogger<HostAwaitingProvider> _logger = logger;
-    }
+
 }

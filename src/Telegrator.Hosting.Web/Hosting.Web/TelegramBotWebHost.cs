@@ -7,154 +7,153 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Telegrator.Core;
 
-namespace Telegrator.Hosting.Web
+namespace Telegrator.Hosting.Web;
+
+/// <summary>
+/// Represents a web hosted telegram bot
+/// </summary>
+public class TelegramBotWebHost : IHost, IApplicationBuilder, IEndpointRouteBuilder, IAsyncDisposable
 {
+    private readonly WebApplication _innerApp;
+    private readonly IUpdateRouter _updateRouter;
+    private readonly ILogger<TelegramBotWebHost> _logger;
+
+    private bool _disposed;
+
+    /// <inheritdoc/>
+    public IServiceProvider Services => _innerApp.Services;
+
+    /// <inheritdoc/>
+    public IUpdateRouter UpdateRouter => _updateRouter;
+
+    /// <inheritdoc/>
+    public ICollection<EndpointDataSource> DataSources => ((IEndpointRouteBuilder)_innerApp).DataSources;
+
     /// <summary>
-    /// Represents a web hosted telegram bot
+    /// Allows consumers to be notified of application lifetime events.
     /// </summary>
-    public class TelegramBotWebHost : IHost, IApplicationBuilder, IEndpointRouteBuilder, IAsyncDisposable
+    public IHostApplicationLifetime Lifetime => _innerApp.Lifetime;
+
+    /// <summary>
+    /// This application's logger
+    /// </summary>
+    public ILogger<TelegramBotWebHost> Logger => _logger;
+
+    // Private interface fields
+    IServiceProvider IEndpointRouteBuilder.ServiceProvider => Services;
+    IServiceProvider IApplicationBuilder.ApplicationServices { get => Services; set => throw new NotImplementedException(); }
+    IFeatureCollection IApplicationBuilder.ServerFeatures => ((IApplicationBuilder)_innerApp).ServerFeatures;
+    IDictionary<string, object?> IApplicationBuilder.Properties => ((IApplicationBuilder)_innerApp).Properties;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="WebApplicationBuilder"/> class.
+    /// </summary>
+    /// <param name="webApplicationBuilder">The proxied instance of host builder.</param>
+    public TelegramBotWebHost(WebApplicationBuilder webApplicationBuilder)
     {
-        private readonly WebApplication _innerApp;
-        private readonly IUpdateRouter _updateRouter;
-        private readonly ILogger<TelegramBotWebHost> _logger;
+        // Building proxy application
+        _innerApp = webApplicationBuilder.Build();
 
-        private bool _disposed;
+        // Reruesting services for this host
+        _updateRouter = Services.GetRequiredService<IUpdateRouter>();
+        _logger = Services.GetRequiredService<ILogger<TelegramBotWebHost>>();
+    }
 
-        /// <inheritdoc/>
-        public IServiceProvider Services => _innerApp.Services;
+    /// <summary>
+    /// Creates new <see cref="TelegramBotHostBuilder"/> with default services and webhook update receiving scheme
+    /// </summary>
+    /// <returns></returns>
+    public static TelegramBotWebHostBuilder CreateBuilder(WebApplicationOptions settings)
+    {
+        ArgumentNullException.ThrowIfNull(settings, nameof(settings));
+        WebApplicationBuilder innerApp = WebApplication.CreateBuilder(settings);
+        TelegramBotWebHostBuilder builder = new TelegramBotWebHostBuilder(innerApp, settings);
 
-        /// <inheritdoc/>
-        public IUpdateRouter UpdateRouter => _updateRouter;
+        builder.Services.AddTelegramBotHostDefaults();
+        builder.Services.AddTelegramWebhook();
+        return builder;
+    }
 
-        /// <inheritdoc/>
-        public ICollection<EndpointDataSource> DataSources => ((IEndpointRouteBuilder)_innerApp).DataSources;
+    /// <summary>
+    /// Creates new SLIM <see cref="TelegramBotHostBuilder"/> with default services and webhook update receiving scheme
+    /// </summary>
+    /// <returns></returns>
+    public static TelegramBotWebHostBuilder CreateSlimBuilder(WebApplicationOptions settings)
+    {
+        ArgumentNullException.ThrowIfNull(settings, nameof(settings));
+        WebApplicationBuilder innerApp = WebApplication.CreateSlimBuilder(settings);
+        TelegramBotWebHostBuilder builder = new TelegramBotWebHostBuilder(innerApp, settings);
 
-        /// <summary>
-        /// Allows consumers to be notified of application lifetime events.
-        /// </summary>
-        public IHostApplicationLifetime Lifetime => _innerApp.Lifetime;
+        builder.Services.AddTelegramBotHostDefaults();
+        builder.Services.AddTelegramWebhook();
+        return builder;
+    }
 
-        /// <summary>
-        /// This application's logger
-        /// </summary>
-        public ILogger<TelegramBotWebHost> Logger => _logger;
+    /// <summary>
+    /// Creates new EMPTY <see cref="TelegramBotHostBuilder"/> WITHOUT any services or update receiving schemes
+    /// </summary>
+    /// <returns></returns>
+    public static TelegramBotWebHostBuilder CreateEmptyBuilder(WebApplicationOptions settings)
+    {
+        ArgumentNullException.ThrowIfNull(settings, nameof(settings));
+        WebApplicationBuilder innerApp = WebApplication.CreateEmptyBuilder(settings);
+        return new TelegramBotWebHostBuilder(innerApp, settings);
+    }
 
-        // Private interface fields
-        IServiceProvider IEndpointRouteBuilder.ServiceProvider => Services;
-        IServiceProvider IApplicationBuilder.ApplicationServices { get => Services; set => throw new NotImplementedException(); }
-        IFeatureCollection IApplicationBuilder.ServerFeatures => ((IApplicationBuilder)_innerApp).ServerFeatures;
-        IDictionary<string, object?> IApplicationBuilder.Properties => ((IApplicationBuilder)_innerApp).Properties;
+    /// <inheritdoc/>
+    public async Task StartAsync(CancellationToken cancellationToken = default)
+    {
+        await _innerApp.StartAsync(cancellationToken);
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="WebApplicationBuilder"/> class.
-        /// </summary>
-        /// <param name="webApplicationBuilder">The proxied instance of host builder.</param>
-        public TelegramBotWebHost(WebApplicationBuilder webApplicationBuilder)
-        {
-            // Building proxy application
-            _innerApp = webApplicationBuilder.Build();
+    /// <inheritdoc/>
+    public async Task StopAsync(CancellationToken cancellationToken = default)
+    {
+        await _innerApp.StopAsync(cancellationToken);
+    }
 
-            // Reruesting services for this host
-            _updateRouter = Services.GetRequiredService<IUpdateRouter>();
-            _logger = Services.GetRequiredService<ILogger<TelegramBotWebHost>>();
-        }
+    /// <inheritdoc/>
+    public IApplicationBuilder CreateApplicationBuilder()
+        => ((IEndpointRouteBuilder)_innerApp).CreateApplicationBuilder();
 
-        /// <summary>
-        /// Creates new <see cref="TelegramBotHostBuilder"/> with default services and webhook update receiving scheme
-        /// </summary>
-        /// <returns></returns>
-        public static TelegramBotWebHostBuilder CreateBuilder(WebApplicationOptions settings)
-        {
-            ArgumentNullException.ThrowIfNull(settings, nameof(settings));
-            WebApplicationBuilder innerApp = WebApplication.CreateBuilder(settings);
-            TelegramBotWebHostBuilder builder = new TelegramBotWebHostBuilder(innerApp, settings);
+    /// <inheritdoc/>
+    public IApplicationBuilder Use(Func<RequestDelegate, RequestDelegate> middleware)
+        => _innerApp.Use(middleware);
 
-            builder.Services.AddTelegramBotHostDefaults();
-            builder.Services.AddTelegramWebhook();
-            return builder;
-        }
+    /// <inheritdoc/>
+    public IApplicationBuilder New()
+        => ((IApplicationBuilder)_innerApp).New();
 
-        /// <summary>
-        /// Creates new SLIM <see cref="TelegramBotHostBuilder"/> with default services and webhook update receiving scheme
-        /// </summary>
-        /// <returns></returns>
-        public static TelegramBotWebHostBuilder CreateSlimBuilder(WebApplicationOptions settings)
-        {
-            ArgumentNullException.ThrowIfNull(settings, nameof(settings));
-            WebApplicationBuilder innerApp = WebApplication.CreateSlimBuilder(settings);
-            TelegramBotWebHostBuilder builder = new TelegramBotWebHostBuilder(innerApp, settings);
+    /// <inheritdoc/>
+    public RequestDelegate Build()
+        => ((IApplicationBuilder)_innerApp).Build();
 
-            builder.Services.AddTelegramBotHostDefaults();
-            builder.Services.AddTelegramWebhook();
-            return builder;
-        }
+    /// <summary>
+    /// Disposes the host.
+    /// </summary>
+    public async ValueTask DisposeAsync()
+    {
+        if (_disposed)
+            return;
 
-        /// <summary>
-        /// Creates new EMPTY <see cref="TelegramBotHostBuilder"/> WITHOUT any services or update receiving schemes
-        /// </summary>
-        /// <returns></returns>
-        public static TelegramBotWebHostBuilder CreateEmptyBuilder(WebApplicationOptions settings)
-        {
-            ArgumentNullException.ThrowIfNull(settings, nameof(settings));
-            WebApplicationBuilder innerApp = WebApplication.CreateEmptyBuilder(settings);
-            return new TelegramBotWebHostBuilder(innerApp, settings);
-        }
+        await _innerApp.DisposeAsync();
 
-        /// <inheritdoc/>
-        public async Task StartAsync(CancellationToken cancellationToken = default)
-        {
-            await _innerApp.StartAsync(cancellationToken);
-        }
+        GC.SuppressFinalize(this);
+        _disposed = true;
+    }
 
-        /// <inheritdoc/>
-        public async Task StopAsync(CancellationToken cancellationToken = default)
-        {
-            await _innerApp.StopAsync(cancellationToken);
-        }
+    /// <summary>
+    /// Disposes the host.
+    /// </summary>
+    public void Dispose()
+    {
+        if (_disposed)
+            return;
 
-        /// <inheritdoc/>
-        public IApplicationBuilder CreateApplicationBuilder()
-            => ((IEndpointRouteBuilder)_innerApp).CreateApplicationBuilder();
+        ValueTask disposeTask = _innerApp.DisposeAsync();
+        disposeTask.AsTask().Wait();
 
-        /// <inheritdoc/>
-        public IApplicationBuilder Use(Func<RequestDelegate, RequestDelegate> middleware)
-            => _innerApp.Use(middleware);
-
-        /// <inheritdoc/>
-        public IApplicationBuilder New()
-            => ((IApplicationBuilder)_innerApp).New();
-
-        /// <inheritdoc/>
-        public RequestDelegate Build()
-            => ((IApplicationBuilder)_innerApp).Build();
-
-        /// <summary>
-        /// Disposes the host.
-        /// </summary>
-        public async ValueTask DisposeAsync()
-        {
-            if (_disposed)
-                return;
-
-            await _innerApp.DisposeAsync();
-
-            GC.SuppressFinalize(this);
-            _disposed = true;
-        }
-
-        /// <summary>
-        /// Disposes the host.
-        /// </summary>
-        public void Dispose()
-        {
-            if (_disposed)
-                return;
-
-            ValueTask disposeTask = _innerApp.DisposeAsync();
-            disposeTask.AsTask().Wait();
-
-            GC.SuppressFinalize(this);
-            _disposed = true;
-        }
+        GC.SuppressFinalize(this);
+        _disposed = true;
     }
 }

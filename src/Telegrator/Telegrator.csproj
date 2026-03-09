@@ -44,8 +44,4 @@
 	<ProjectReference Include="..\..\dev\Telegrator.RoslynGenerators\Telegrator.RoslynGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Annotations\Targetted\" />
-  </ItemGroup>
-
 </Project>

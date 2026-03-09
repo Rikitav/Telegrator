@@ -7,54 +7,53 @@ using Telegrator.Core;
 using Telegrator.Core.States;
 using Telegrator.Mediation;
 
-namespace Telegrator.Polling
+namespace Telegrator.Polling;
+
+/// <inheritdoc/>
+public class HostUpdateRouter : UpdateRouter
 {
+    /// <summary>
+    /// <see cref="ILogger"/> of this router
+    /// </summary>
+    protected readonly ILogger<HostUpdateRouter> Logger;
+
     /// <inheritdoc/>
-    public class HostUpdateRouter : UpdateRouter
+    public HostUpdateRouter(
+        IHandlersProvider handlersProvider,
+        IAwaitingProvider awaitingProvider,
+        IStateStorage stateStorage,
+        IOptions<TelegratorOptions> options,
+        ITelegramBotInfo botInfo,
+        ILogger<HostUpdateRouter> logger) : base(handlersProvider, awaitingProvider, stateStorage, options.Value, botInfo)
     {
-        /// <summary>
-        /// <see cref="ILogger"/> of this router
-        /// </summary>
-        protected readonly ILogger<HostUpdateRouter> Logger;
+        Logger = logger;
+        ExceptionHandler = new DefaultRouterExceptionHandler(HandleException);
+    }
 
-        /// <inheritdoc/>
-        public HostUpdateRouter(
-            IHandlersProvider handlersProvider,
-            IAwaitingProvider awaitingProvider,
-            IStateStorage stateStorage,
-            IOptions<TelegratorOptions> options,
-            ITelegramBotInfo botInfo,
-            ILogger<HostUpdateRouter> logger) : base(handlersProvider, awaitingProvider, stateStorage, options.Value, botInfo)
+    /// <inheritdoc/>
+    public override Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+    {
+        //Logger.LogInformation("Received update of type \"{type}\"", update.Type);
+        return base.HandleUpdateAsync(botClient, update, cancellationToken);
+    }
+
+    /// <summary>
+    /// Default exception handler of this router
+    /// </summary>
+    /// <param name="botClient"></param>
+    /// <param name="exception"></param>
+    /// <param name="source"></param>
+    /// <param name="cancellationToken"></param>
+    public void HandleException(ITelegramBotClient botClient, Exception exception, HandleErrorSource source, CancellationToken cancellationToken)
+    {
+        if (exception is HandlerFaultedException handlerFaultedException)
         {
-            Logger = logger;
-            ExceptionHandler = new DefaultRouterExceptionHandler(HandleException);
+            Logger.LogError("\"{handler}\" handler's execution was faulted :\n{exception}",
+                handlerFaultedException.HandlerInfo.ToString(),
+                handlerFaultedException.InnerException?.ToString() ?? "No inner exception");
+            return;
         }
 
-        /// <inheritdoc/>
-        public override Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
-        {
-            //Logger.LogInformation("Received update of type \"{type}\"", update.Type);
-            return base.HandleUpdateAsync(botClient, update, cancellationToken);
-        }
-
-        /// <summary>
-        /// Default exception handler of this router
-        /// </summary>
-        /// <param name="botClient"></param>
-        /// <param name="exception"></param>
-        /// <param name="source"></param>
-        /// <param name="cancellationToken"></param>
-        public void HandleException(ITelegramBotClient botClient, Exception exception, HandleErrorSource source, CancellationToken cancellationToken)
-        {
-            if (exception is HandlerFaultedException handlerFaultedException)
-            {
-                Logger.LogError("\"{handler}\" handler's execution was faulted :\n{exception}",
-                    handlerFaultedException.HandlerInfo.ToString(),
-                    handlerFaultedException.InnerException?.ToString() ?? "No inner exception");
-                return;
-            }
-
-            Logger.LogError("Exception was thrown during update routing faulted :\n{exception}", exception.ToString());
-        }
+        Logger.LogError("Exception was thrown during update routing faulted :\n{exception}", exception.ToString());
     }
 }

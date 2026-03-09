@@ -7,63 +7,62 @@ using Telegrator.Core.Handlers;
 using Telegrator.Handlers;
 using Telegrator.Handlers.Building;
 
-namespace Telegrator.Core.Descriptors
+namespace Telegrator.Core.Descriptors;
+
+/// <summary>
+/// Descriptor for creating handlers from methods
+/// </summary>
+/// <typeparam name="TUpdate"></typeparam>
+public class MethodHandlerDescriptor<TUpdate> : HandlerDescriptor where TUpdate : class
 {
+    private readonly MethodInfo Method;
+
     /// <summary>
-    /// Descriptor for creating handlers from methods
+    /// Initializes new instance of <see cref="MethodHandlerDescriptor{TUpdate}"/>
     /// </summary>
-    /// <typeparam name="TUpdate"></typeparam>
-    public class MethodHandlerDescriptor<TUpdate> : HandlerDescriptor where TUpdate : class
+    /// <param name="action"></param>
+    public MethodHandlerDescriptor(AbstractHandlerAction<TUpdate> action) : base(DescriptorType.General, typeof(MethodHandler), true)
     {
-        private readonly MethodInfo Method;
+        UpdateHandlerAttributeBase handlerAttribute = HandlerInspector.GetHandlerAttribute(action.Method);
+        IFilter<Update>? stateKeeperAttribute = HandlerInspector.GetStateKeeperAttribute(action.Method);
+        IFilter<Update>[] filters = HandlerInspector.GetFilterAttributes(action.Method, handlerAttribute.Type).ToArray();
 
-        /// <summary>
-        /// Initializes new instance of <see cref="MethodHandlerDescriptor{TUpdate}"/>
-        /// </summary>
-        /// <param name="action"></param>
-        public MethodHandlerDescriptor(AbstractHandlerAction<TUpdate> action) : base(DescriptorType.General, typeof(MethodHandler), true)
+        UpdateType = handlerAttribute.Type;
+        Indexer = handlerAttribute.GetIndexer();
+        Filters = new DescriptorFiltersSet(handlerAttribute, stateKeeperAttribute, filters);
+        DisplayString = HandlerInspector.GetDisplayName(action.Method) ?? action.Method.Name;
+        Method = action.Method;
+        InstanceFactory = () => new MethodHandler(UpdateType);
+        LazyInitialization = handler =>
         {
-            UpdateHandlerAttributeBase handlerAttribute = HandlerInspector.GetHandlerAttribute(action.Method);
-            IFilter<Update>? stateKeeperAttribute = HandlerInspector.GetStateKeeperAttribute(action.Method);
-            IFilter<Update>[] filters = HandlerInspector.GetFilterAttributes(action.Method, handlerAttribute.Type).ToArray();
+            if (handler is not MethodHandler methodHandler)
+                throw new InvalidDataException();
 
-            UpdateType = handlerAttribute.Type;
-            Indexer = handlerAttribute.GetIndexer();
-            Filters = new DescriptorFiltersSet(handlerAttribute, stateKeeperAttribute, filters);
-            DisplayString = HandlerInspector.GetDisplayName(action.Method) ?? action.Method.Name;
-            Method = action.Method;
-            InstanceFactory = () => new MethodHandler(UpdateType);
-            LazyInitialization = handler =>
-            {
-                if (handler is not MethodHandler methodHandler)
-                    throw new InvalidDataException();
+            methodHandler.Method = Method;
+        };
+    }
 
-                methodHandler.Method = Method;
-            };
-        }
+    private class MethodHandler(UpdateType updateType) : AbstractUpdateHandler<TUpdate>(updateType)
+    {
+        internal MethodInfo Method = null!;
 
-        private class MethodHandler(UpdateType updateType) : AbstractUpdateHandler<TUpdate>(updateType)
+        public override async Task<Result> Execute(IHandlerContainer<TUpdate> container, CancellationToken cancellation)
         {
-            internal MethodInfo Method = null!;
+            if (Method is null)
+                throw new Exception();
 
-            public override async Task<Result> Execute(IHandlerContainer<TUpdate> container, CancellationToken cancellation)
+            if (Method.ReturnType == typeof(void))
             {
-                if (Method is null)
-                    throw new Exception();
+                Method.Invoke(this, [container, cancellation]);
+                return Result.Ok();
+            }
+            else
+            {
+                object branchReturn = Method.Invoke(this, [container, cancellation]);
+                if (branchReturn is not Task<Result> branchTask)
+                    throw new InvalidOperationException();
 
-                if (Method.ReturnType == typeof(void))
-                {
-                    Method.Invoke(this, [container, cancellation]);
-                    return Result.Ok();
-                }
-                else
-                {
-                    object branchReturn = Method.Invoke(this, [container, cancellation]);
-                    if (branchReturn is not Task<Result> branchTask)
-                        throw new InvalidOperationException();
-
-                    return await branchTask;
-                }
+                return await branchTask;
             }
         }
     }

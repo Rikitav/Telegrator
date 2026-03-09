@@ -2,35 +2,35 @@
 using Telegram.Bot.Polling;
 using Telegrator.Core;
 
-namespace Telegrator.Mediation
+namespace Telegrator.Mediation;
+
+/// <summary>
+/// Delegate used to handle <see cref="IUpdateRouter"/> exception
+/// </summary>
+/// <param name="botClient"></param>
+/// <param name="exception"></param>
+/// <param name="source"></param>
+/// <param name="cancellationToken"></param>
+public delegate void RouterExceptionHandler(ITelegramBotClient botClient, Exception exception, HandleErrorSource source, CancellationToken cancellationToken);
+
+/// <summary>
+/// Realizes <see cref="IRouterExceptionHandler"/> using function delegate
+/// </summary>
+/// <param name="handler"></param>
+public sealed class DefaultRouterExceptionHandler(RouterExceptionHandler handler) : IRouterExceptionHandler
 {
-    /// <summary>
-    /// Delegate used to handle <see cref="IUpdateRouter"/> exception
-    /// </summary>
-    /// <param name="botClient"></param>
-    /// <param name="exception"></param>
-    /// <param name="source"></param>
-    /// <param name="cancellationToken"></param>
-    public delegate void RouterExceptionHandler(ITelegramBotClient botClient, Exception exception, HandleErrorSource source, CancellationToken cancellationToken);
+    private readonly RouterExceptionHandler _handler = handler;
 
-    /// <summary>
-    /// Realizes <see cref="IRouterExceptionHandler"/> using function delegate
-    /// </summary>
-    /// <param name="handler"></param>
-    public sealed class DefaultRouterExceptionHandler(RouterExceptionHandler handler) : IRouterExceptionHandler
+    /// <inheritdoc/>
+    public void HandleException(ITelegramBotClient botClient, Exception exception, HandleErrorSource source, CancellationToken cancellationToken)
     {
-        private readonly RouterExceptionHandler _handler = handler;
-
-        /// <inheritdoc/>
-        public void HandleException(ITelegramBotClient botClient, Exception exception, HandleErrorSource source, CancellationToken cancellationToken)
+        try
         {
-            try
-            {
-                _handler.Invoke(botClient, exception, source, cancellationToken);
-            }
-            catch
-            {
-                _ = 0xBAD + 0xC0DE;
-            }
-        }}
+            _handler.Invoke(botClient, exception, source, cancellationToken);
+        }
+        catch
+        {
+            _ = 0xBAD + 0xC0DE;
+        }
+    }
 }
