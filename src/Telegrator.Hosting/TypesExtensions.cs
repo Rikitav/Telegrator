@@ -11,10 +11,12 @@ using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegrator.Core;
 using Telegrator.Core.Descriptors;
+using Telegrator.Core.States;
 using Telegrator.Hosting;
 using Telegrator.Logging;
 using Telegrator.Polling;
 using Telegrator.Providers;
+using Telegrator.States;
 
 namespace Telegrator;
 
@@ -113,6 +115,18 @@ public static class HostBuilderExtensions
 public static class ServicesCollectionExtensions
 {
     /// <summary>
+    /// Registers <see cref="IStateStorage"/> service
+    /// </summary>
+    /// <typeparam name="TStorage"></typeparam>
+    /// <param name="services"></param>
+    /// <returns></returns>
+    public static IServiceCollection AddStateStorage<TStorage>(this IServiceCollection services) where TStorage : IStateStorage
+    {
+        services.Replace(new ServiceDescriptor(typeof(IStateStorage), typeof(TStorage), ServiceLifetime.Singleton));
+        return services;
+    }
+
+    /// <summary>
     /// Registers <see cref="TelegramBotHost"/> default services
     /// </summary>
     /// <param name="services"></param>
@@ -124,6 +138,7 @@ public static class ServicesCollectionExtensions
         services.AddSingleton<IHandlersProvider, HostHandlersProvider>();
         services.AddSingleton<IUpdateRouter, HostUpdateRouter>();
         services.AddSingleton<ITelegramBotInfo, HostedTelegramBotInfo>();
+        services.AddSingleton<IStateStorage, DefaultStateStorage>();
 
         return services;
     }

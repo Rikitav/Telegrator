@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 	<LangVersion>latest</LangVersion>
@@ -15,7 +15,7 @@
     <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
 	  
     <Title>Telegrator.RedisStateStorage</Title>
-    <Version>1.16.4</Version>
+    <Version>1.16.5</Version>
 	<Authors>Rikitav Tim4ik</Authors>
     <Company>Rikitav Tim4ik</Company>
     <RepositoryUrl>https://github.com/Rikitav/Telegrator</RepositoryUrl>
@@ -31,7 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="StackExchange.Redis" Version="2.11.8 " />
+    <PackageReference Include="StackExchange.Redis" Version="2.11.8" />
   </ItemGroup>
 
   <ItemGroup>
