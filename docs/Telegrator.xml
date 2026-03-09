@@ -769,6 +769,33 @@
             </summary>
             <param name="updateTypes"></param>
         </member>
+        <member name="T:Telegrator.Annotations.StateAttribute`2">
+            <summary>
+            Attribute for filtering updates where resolved state matches target value.
+            </summary>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TValue"></typeparam>
+            <param name="value"></param>
+        </member>
+        <member name="M:Telegrator.Annotations.StateAttribute`2.#ctor(`1)">
+            <summary>
+            Attribute for filtering updates where resolved state matches target value.
+            </summary>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TValue"></typeparam>
+            <param name="value"></param>
+        </member>
+        <member name="P:Telegrator.Annotations.StateAttribute`2.Value">
+            <summary>
+            The targetting state value.
+            </summary>
+        </member>
+        <member name="P:Telegrator.Annotations.StateAttribute`2.AllowedTypes">
+            <inheritdoc/>
+        </member>
+        <member name="M:Telegrator.Annotations.StateAttribute`2.GetFilterringTarget(Telegram.Bot.Types.Update)">
+            <inheritdoc/>
+        </member>
         <member name="T:Telegrator.Annotations.WelcomeAttribute">
             <summary>
             Attribute for filtering message with command "start" in bot's private chats.
@@ -2896,6 +2923,80 @@
             <param name="keySource">The update to resolve the key from.</param>
             <returns>The resolved key.</returns>
         </member>
+        <member name="T:Telegrator.Core.States.IStateMachine`1">
+            <summary>
+            Defines a contract for a state machine that manages transitions and retrieves states for specific updates.
+            </summary>
+            <typeparam name="TState">The type of the state. Must implement <see cref="T:System.IEquatable`1"/>.</typeparam>
+        </member>
+        <member name="M:Telegrator.Core.States.IStateMachine`1.Current(Telegrator.Core.States.IStateStorage,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Gets the current state associated with the specified update key.
+            </summary>
+            <param name="storage">The storage mechanism used to persist the state.</param>
+            <param name="updateKey">The unique key identifying the current update context (e.g., chat and user ID).</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A task that represents the asynchronous operation. The task result contains the current state, or the default value if no state is found.</returns>
+        </member>
+        <member name="M:Telegrator.Core.States.IStateMachine`1.Advance(Telegrator.Core.States.IStateStorage,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Advances the state machine to the next state in the sequence.
+            </summary>
+            <param name="storage">The storage mechanism used to persist the state.</param>
+            <param name="updateKey">The unique key identifying the current update context.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A task that represents the asynchronous transition operation.</returns>
+        </member>
+        <member name="M:Telegrator.Core.States.IStateMachine`1.Retreat(Telegrator.Core.States.IStateStorage,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Moves the state machine backward to the previous state in the sequence.
+            </summary>
+            <param name="storage">The storage mechanism used to persist the state.</param>
+            <param name="updateKey">The unique key identifying the current update context.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A task that represents the asynchronous transition operation.</returns>
+        </member>
+        <member name="M:Telegrator.Core.States.IStateMachine`1.Reset(Telegrator.Core.States.IStateStorage,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Resets the state machine to its initial or default state.
+            </summary>
+            <param name="storage">The storage mechanism used to persist the state.</param>
+            <param name="updateKey">The unique key identifying the current update context.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A task that represents the asynchronous reset operation.</returns>
+        </member>
+        <member name="T:Telegrator.Core.States.IStateStorage">
+            <summary>
+            Defines a contract for an asynchronous state storage mechanism.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Core.States.IStateStorage.SetAsync``1(System.String,``0,System.Threading.CancellationToken)">
+            <summary>
+            Saves or updates a state value associated with the specified key.
+            </summary>
+            <typeparam name="T">The type of the state object.</typeparam>
+            <param name="key">The unique identifier for the state.</param>
+            <param name="state">The state object to store.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A task that represents the asynchronous save operation.</returns>
+        </member>
+        <member name="M:Telegrator.Core.States.IStateStorage.GetAsync``1(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Retrieves a state value associated with the specified key.
+            </summary>
+            <typeparam name="T">The type of the state object to retrieve.</typeparam>
+            <param name="key">The unique identifier for the state.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A task that represents the asynchronous retrieve operation. The task result contains the state object if found; otherwise, the default value of <typeparamref name="T"/>.</returns>
+        </member>
+        <member name="M:Telegrator.Core.States.IStateStorage.DeleteAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Deletes the state value associated with the specified key.
+            </summary>
+            <param name="key">The unique identifier for the state to remove.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>A task that represents the asynchronous delete operation.</returns>
+        </member>
         <member name="T:Telegrator.DiceType">
             <summary>
             Enumeration of dice types supported by Telegram.
@@ -4996,6 +5097,7 @@
             <param name="extraData"></param>
             <param name="filters"></param>
             <param name="awaitingProvider"></param>
+            <param name="stateStorage"></param>
         </member>
         <member name="M:Telegrator.Handlers.HandlerContainer`1.CreateChild``1">
             <summary>
@@ -6548,6 +6650,20 @@
             <returns>The chat ID as a long value.</returns>
             <exception cref="T:System.ArgumentException">Thrown when the update does not contain a valid chat ID.</exception>
         </member>
+        <member name="T:Telegrator.States.DefaultStateStorage">
+            <summary>
+            Defines default in-memory state storage
+            </summary>
+        </member>
+        <member name="M:Telegrator.States.DefaultStateStorage.DeleteAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Telegrator.States.DefaultStateStorage.GetAsync``1(System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Telegrator.States.DefaultStateStorage.SetAsync``1(System.String,``0,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
         <member name="T:Telegrator.States.EnumStateMachine`1">
             <summary>
             State machine implementation for enum-based states.
@@ -6580,6 +6696,29 @@
             <param name="keySource">The Telegram update to extract the sender ID from.</param>
             <returns>The sender ID as a long value.</returns>
             <exception cref="T:System.ArgumentException">Thrown when the update does not contain a valid sender ID.</exception>
+        </member>
+        <member name="T:Telegrator.States.StateMachine`2">
+            <inheritdoc cref="T:Telegrator.Core.States.IStateMachine`1"/>
+        </member>
+        <member name="M:Telegrator.States.StateMachine`2.#ctor(Telegrator.Core.States.IStateStorage,Telegram.Bot.Types.Update)">
+            <inheritdoc cref="T:Telegrator.Core.States.IStateMachine`1"/>
+        </member>
+        <member name="F:Telegrator.States.StateMachine`2.KeyResolver">
+            <summary>
+            Chosen key resolver
+            </summary>
+        </member>
+        <member name="M:Telegrator.States.StateMachine`2.Advance(System.Threading.CancellationToken)">
+            <inheritdoc cref="M:Telegrator.Core.States.IStateMachine`1.Advance(Telegrator.Core.States.IStateStorage,System.String,System.Threading.CancellationToken)"/>
+        </member>
+        <member name="M:Telegrator.States.StateMachine`2.Current(System.Threading.CancellationToken)">
+            <inheritdoc cref="M:Telegrator.Core.States.IStateMachine`1.Current(Telegrator.Core.States.IStateStorage,System.String,System.Threading.CancellationToken)"/>
+        </member>
+        <member name="M:Telegrator.States.StateMachine`2.Reset(System.Threading.CancellationToken)">
+            <inheritdoc cref="M:Telegrator.Core.States.IStateMachine`1.Reset(Telegrator.Core.States.IStateStorage,System.String,System.Threading.CancellationToken)"/>
+        </member>
+        <member name="M:Telegrator.States.StateMachine`2.Retreat(System.Threading.CancellationToken)">
+            <inheritdoc cref="M:Telegrator.Core.States.IStateMachine`1.Retreat(Telegrator.Core.States.IStateStorage,System.String,System.Threading.CancellationToken)"/>
         </member>
         <member name="T:Telegrator.TelegramBotInfo">
             <summary>
@@ -6872,6 +7011,73 @@
             </summary>
             <returns>An enumerable of bot commands.</returns>
         </member>
+        <member name="T:Telegrator.StateStorageExtensions">
+            <summary>
+            Provides extension methods for <see cref="T:Telegrator.Core.States.IStateStorage"/> to easily initialize state machines.
+            </summary>
+        </member>
+        <member name="M:Telegrator.StateStorageExtensions.GetStateMachine``1(Telegrator.Core.States.IStateStorage,Telegram.Bot.Types.Update)">
+            <summary>
+            Initializes a state machine using the default <see cref="T:Telegrator.States.EnumStateMachine`1"/> for the specified update.
+            </summary>
+            <typeparam name="TState">The enum type representing the state.</typeparam>
+            <param name="stateStorage">The storage mechanism used to persist the state.</param>
+            <param name="handlingUpdate">The update context to resolve the state key from.</param>
+            <returns>A new instance of <see cref="T:Telegrator.States.StateMachine`2"/>.</returns>
+        </member>
+        <member name="M:Telegrator.StateStorageExtensions.GetStateMachine``2(Telegrator.Core.States.IStateStorage,Telegram.Bot.Types.Update)">
+            <summary>
+            Initializes a specific custom state machine for the specified update.
+            </summary>
+            <typeparam name="TMachine">The type of the state machine logic implementation.</typeparam>
+            <typeparam name="TState">The type of the state.</typeparam>
+            <param name="stateStorage">The storage mechanism used to persist the state.</param>
+            <param name="handlingUpdate">The update context to resolve the state key from.</param>
+            <returns>A new instance of <see cref="T:Telegrator.States.StateMachine`2"/>.</returns>
+        </member>
+        <member name="M:Telegrator.StateStorageExtensions.ByChatId``2(Telegrator.Core.States.IStateStorage,Telegram.Bot.Types.Update)">
+            <summary>
+            Initializes a state machine and explicitly configures it to resolve keys by the chat ID.
+            </summary>
+            <typeparam name="TMachine">The type of the state machine logic implementation.</typeparam>
+            <typeparam name="TState">The type of the state.</typeparam>
+            <param name="stateStorage">The storage mechanism used to persist the state.</param>
+            <param name="handlingUpdate">The update context to resolve the state key from.</param>
+            <returns>A configured instance of <see cref="T:Telegrator.States.StateMachine`2"/>.</returns>
+        </member>
+        <member name="M:Telegrator.StateStorageExtensions.BySenderId``2(Telegrator.Core.States.IStateStorage,Telegram.Bot.Types.Update)">
+            <summary>
+            Initializes a state machine and explicitly configures it to resolve keys by the sender (user) ID.
+            </summary>
+            <typeparam name="TMachine">The type of the state machine logic implementation.</typeparam>
+            <typeparam name="TState">The type of the state.</typeparam>
+            <param name="stateStorage">The storage mechanism used to persist the state.</param>
+            <param name="handlingUpdate">The update context to resolve the state key from.</param>
+            <returns>A configured instance of <see cref="T:Telegrator.States.StateMachine`2"/>.</returns>
+        </member>
+        <member name="T:Telegrator.StateMachineExtensions">
+            <summary>
+            Provides fluent extension methods for configuring <see cref="T:Telegrator.States.StateMachine`2"/> instances.
+            </summary>
+        </member>
+        <member name="M:Telegrator.StateMachineExtensions.ByChatId``2(Telegrator.States.StateMachine{``0,``1})">
+            <summary>
+            Configures the state machine to use a <see cref="T:Telegrator.States.ChatIdResolver"/> for state key resolution.
+            </summary>
+            <typeparam name="TMachine">The type of the state machine logic implementation.</typeparam>
+            <typeparam name="TState">The type of the state.</typeparam>
+            <param name="stateMachine">The state machine instance to configure.</param>
+            <returns>The same state machine instance for method chaining.</returns>
+        </member>
+        <member name="M:Telegrator.StateMachineExtensions.BySenderId``2(Telegrator.States.StateMachine{``0,``1})">
+            <summary>
+            Configures the state machine to use a <see cref="T:Telegrator.States.SenderIdResolver"/> for state key resolution.
+            </summary>
+            <typeparam name="TMachine">The type of the state machine logic implementation.</typeparam>
+            <typeparam name="TState">The type of the state.</typeparam>
+            <param name="stateMachine">The state machine instance to configure.</param>
+            <returns>The same state machine instance for method chaining.</returns>
+        </member>
         <member name="T:Telegrator.HandlersCollectionExtensions">
             <summary>
             Extension methods for handlers collections.
@@ -7033,6 +7239,583 @@
             </summary>
             <param name="updateType"></param>
             <returns></returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.CallbackData``1(``0,System.String)">
+            <summary>
+            Adds a CallbackDataAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "data">The data.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.CallbackInlineId``1(``0,System.String)">
+            <summary>
+            Adds a CallbackInlineIdAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "inlineMessageId">The inlineMessageId.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.CommandAllias``1(``0,System.String[])">
+            <summary>
+            Adds a CommandAlliasAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "alliases">The alliases.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.ArgumentCount``1(``0,System.Int32)">
+            <summary>
+            Adds a ArgumentCountAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "count">The count.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.ArgumentStartsWith``1(``0,System.String,System.StringComparison,System.Int32)">
+            <summary>
+            Adds a ArgumentStartsWithAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "content">The content.</param>
+            <param name = "comparison">The comparison.</param>
+            <param name = "index">The index.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.ArgumentEndsWith``1(``0,System.String,System.StringComparison,System.Int32)">
+            <summary>
+            Adds a ArgumentEndsWithAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "content">The content.</param>
+            <param name = "comparison">The comparison.</param>
+            <param name = "index">The index.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.ArgumentContains``1(``0,System.String,System.StringComparison,System.Int32)">
+            <summary>
+            Adds a ArgumentContainsAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "content">The content.</param>
+            <param name = "comparison">The comparison.</param>
+            <param name = "index">The index.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.ArgumentEquals``1(``0,System.String,System.StringComparison,System.Int32)">
+            <summary>
+            Adds a ArgumentEqualsAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "content">The content.</param>
+            <param name = "comparison">The comparison.</param>
+            <param name = "index">The index.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.ArgumentRegex``1(``0,System.String,System.Text.RegularExpressions.RegexOptions,System.Int32)">
+            <summary>
+            Adds a ArgumentRegexAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "pattern">The pattern.</param>
+            <param name = "options">The options.</param>
+            <param name = "index">The index.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.IsDebugEnvironment``1(``0)">
+            <summary>
+            Adds a IsDebugEnvironmentAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.IsReleaseEnvironment``1(``0)">
+            <summary>
+            Adds a IsReleaseEnvironmentAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.EnvironmentVariable``1(``0,System.String,System.String,System.StringComparison)">
+            <summary>
+            Adds a EnvironmentVariableAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "variable">The variable.</param>
+            <param name = "value">The value.</param>
+            <param name = "comparison">The comparison.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.EnvironmentVariable``1(``0,System.String,System.String)">
+            <summary>
+            Adds a EnvironmentVariableAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "variable">The variable.</param>
+            <param name = "value">The value.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.EnvironmentVariable``1(``0,System.String)">
+            <summary>
+            Adds a EnvironmentVariableAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "variable">The variable.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.EnvironmentVariable``1(``0,System.String,System.StringComparison)">
+            <summary>
+            Adds a EnvironmentVariableAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "variable">The variable.</param>
+            <param name = "comparison">The comparison.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.Mentioned``1(``0)">
+            <summary>
+            Adds a MentionedAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.Mentioned``1(``0,System.Int32)">
+            <summary>
+            Adds a MentionedAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "offset">The offset.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.Mentioned``1(``0,System.String)">
+            <summary>
+            Adds a MentionedAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "mention">The mention.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.Mentioned``1(``0,System.String,System.Int32)">
+            <summary>
+            Adds a MentionedAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "mention">The mention.</param>
+            <param name = "offset">The offset.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.ChatIsForum``1(``0)">
+            <summary>
+            Adds a ChatIsForumAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.ChatId``1(``0,System.Int64)">
+            <summary>
+            Adds a ChatIdAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "id">The id.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.InChatType``1(``0,Telegram.Bot.Types.Enums.ChatType)">
+            <summary>
+            Adds a ChatTypeAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "type">The type.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.InChatType``1(``0,Telegrator.ChatTypeFlags)">
+            <summary>
+            Adds a ChatTypeAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "flags">The flags.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.ChatTitle``1(``0,System.String,System.StringComparison)">
+            <summary>
+            Adds a ChatTitleAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "title">The title.</param>
+            <param name = "comparison">The comparison.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.ChatTitle``1(``0,System.String)">
+            <summary>
+            Adds a ChatTitleAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "title">The title.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.ChatUsername``1(``0,System.String,System.StringComparison)">
+            <summary>
+            Adds a ChatUsernameAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "userName">The userName.</param>
+            <param name = "comparison">The comparison.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.ChatUsername``1(``0,System.String)">
+            <summary>
+            Adds a ChatUsernameAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "userName">The userName.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.ChatName``1(``0,System.String,System.String,System.StringComparison)">
+            <summary>
+            Adds a ChatNameAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "firstName">The firstName.</param>
+            <param name = "lastName">The lastName.</param>
+            <param name = "comparison">The comparison.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.ChatName``1(``0,System.String,System.String)">
+            <summary>
+            Adds a ChatNameAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "firstName">The firstName.</param>
+            <param name = "lastName">The lastName.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.MessageRegex``1(``0,System.String,System.Text.RegularExpressions.RegexOptions)">
+            <summary>
+            Adds a MessageRegexAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "pattern">The pattern.</param>
+            <param name = "regexOptions">The regexOptions.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.MessageRegex``1(``0,System.Text.RegularExpressions.Regex)">
+            <summary>
+            Adds a MessageRegexAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "regex">The regex.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.DiceThrowed``1(``0,System.Int32)">
+            <summary>
+            Adds a DiceThrowedAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "value">The value.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.DiceThrowed``1(``0,Telegrator.DiceType,System.Int32)">
+            <summary>
+            Adds a DiceThrowedAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "diceType">The diceType.</param>
+            <param name = "value">The value.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.IsAutomaticFormwardMessage``1(``0)">
+            <summary>
+            Adds a IsAutomaticFormwardMessageAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.IsFromOfflineMessage``1(``0)">
+            <summary>
+            Adds a IsFromOfflineMessageAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.IsServiceMessageMessage``1(``0)">
+            <summary>
+            Adds a IsServiceMessageMessageAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.IsTopicMessageMessage``1(``0)">
+            <summary>
+            Adds a IsTopicMessageMessageAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.MessageHasEntity``1(``0,Telegram.Bot.Types.Enums.MessageEntityType)">
+            <summary>
+            Adds a MessageHasEntityAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "type">The type.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.MessageHasEntity``1(``0,Telegram.Bot.Types.Enums.MessageEntityType,System.Int32,System.Nullable{System.Int32})">
+            <summary>
+            Adds a MessageHasEntityAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "type">The type.</param>
+            <param name = "offset">The offset.</param>
+            <param name = "length">The length.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.MessageHasEntity``1(``0,Telegram.Bot.Types.Enums.MessageEntityType,System.String,System.StringComparison)">
+            <summary>
+            Adds a MessageHasEntityAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "type">The type.</param>
+            <param name = "content">The content.</param>
+            <param name = "stringComparison">The stringComparison.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.MessageHasEntity``1(``0,Telegram.Bot.Types.Enums.MessageEntityType,System.Int32,System.Nullable{System.Int32},System.String,System.StringComparison)">
+            <summary>
+            Adds a MessageHasEntityAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "type">The type.</param>
+            <param name = "offset">The offset.</param>
+            <param name = "length">The length.</param>
+            <param name = "content">The content.</param>
+            <param name = "stringComparison">The stringComparison.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.MeReplied``1(``0)">
+            <summary>
+            Adds a MeRepliedAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.HasReply``1(``0,System.Int32)">
+            <summary>
+            Adds a HasReplyAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "replyDepth">The replyDepth.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.FromReplyChain``1(``0,System.Int32)">
+            <summary>
+            Adds a FromReplyChainAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "replyDepth">The replyDepth.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.FromUsername``1(``0,System.String)">
+            <summary>
+            Adds a FromUsernameAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "username">The username.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.FromUsername``1(``0,System.String,System.StringComparison)">
+            <summary>
+            Adds a FromUsernameAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "username">The username.</param>
+            <param name = "comparison">The comparison.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.FromUser``1(``0,System.String,System.String,System.StringComparison)">
+            <summary>
+            Adds a FromUserAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "firstName">The firstName.</param>
+            <param name = "lastName">The lastName.</param>
+            <param name = "comparison">The comparison.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.FromUser``1(``0,System.String,System.String)">
+            <summary>
+            Adds a FromUserAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "firstName">The firstName.</param>
+            <param name = "lastName">The lastName.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.FromUser``1(``0,System.String)">
+            <summary>
+            Adds a FromUserAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "firstName">The firstName.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.FromUser``1(``0,System.String,System.StringComparison)">
+            <summary>
+            Adds a FromUserAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "firstName">The firstName.</param>
+            <param name = "comparison">The comparison.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.FromUserId``1(``0,System.Int64)">
+            <summary>
+            Adds a FromUserIdAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "userId">The userId.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.NotFromBot``1(``0)">
+            <summary>
+            Adds a NotFromBotAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.FromBot``1(``0)">
+            <summary>
+            Adds a FromBotAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.FromPremiumUser``1(``0)">
+            <summary>
+            Adds a FromPremiumUserAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.TextStartsWith``1(``0,System.String,System.StringComparison)">
+            <summary>
+            Adds a TextStartsWithAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "content">The content.</param>
+            <param name = "comparison">The comparison.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.TextEndsWith``1(``0,System.String,System.StringComparison)">
+            <summary>
+            Adds a TextEndsWithAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "content">The content.</param>
+            <param name = "comparison">The comparison.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.TextContains``1(``0,System.String,System.StringComparison)">
+            <summary>
+            Adds a TextContainsAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "content">The content.</param>
+            <param name = "comparison">The comparison.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.TextEquals``1(``0,System.String,System.StringComparison)">
+            <summary>
+            Adds a TextEqualsAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "content">The content.</param>
+            <param name = "comparison">The comparison.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.HasText``1(``0)">
+            <summary>
+            Adds a HasTextAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.TextContainsWord``1(``0,System.String,System.StringComparison,System.Int32)">
+            <summary>
+            Adds a TextContainsWordAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "word">The word.</param>
+            <param name = "comparison">The comparison.</param>
+            <param name = "startIndex">The startIndex.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.Welcome``1(``0,System.Boolean)">
+            <summary>
+            Adds a WelcomeAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "onlyFirst">The onlyFirst.</param>
+            <returns>The same builder instance.</returns>
         </member>
     </members>
 </doc>

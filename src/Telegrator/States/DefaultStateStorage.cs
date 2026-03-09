@@ -3,10 +3,14 @@ using Telegrator.Core.States;
 
 namespace Telegrator.States;
 
+/// <summary>
+/// Defines default in-memory state storage
+/// </summary>
 public class DefaultStateStorage : IStateStorage
 {
     private readonly ConcurrentDictionary<string, object> storage = [];
 
+    /// <inheritdoc/>
     public Task DeleteAsync(string key, CancellationToken cancellationToken = default)
     {
         if (key is null)
@@ -18,6 +22,7 @@ public class DefaultStateStorage : IStateStorage
         return Task.CompletedTask;
     }
 
+    /// <inheritdoc/>
     public Task<T?> GetAsync<T>(string key, CancellationToken ccancellationTokent = default)
     {
         if (key is null)
@@ -29,6 +34,7 @@ public class DefaultStateStorage : IStateStorage
         return Task.FromResult(default(T));
     }
 
+    /// <inheritdoc/>
     public Task SetAsync<T>(string key, T state, CancellationToken cancellationToken = default)
     {
         if (key is null)

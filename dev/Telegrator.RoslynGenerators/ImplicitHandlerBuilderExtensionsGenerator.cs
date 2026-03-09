@@ -100,7 +100,13 @@ public class ImplicitHandlerBuilderExtensionsGenerator : IIncrementalGenerator
                 continue;
 
             usings.UnionAdd(classDeclaration.FindAncestor<CompilationUnitSyntax>().Usings, UsingEqualityComparer);
-            MethodDeclarationSyntax targeter = FindTargetterMethod(targetters, classDeclaration);
+            MethodDeclarationSyntax? targeter = FindTargetterMethod(targetters, classDeclaration);
+
+            if (targeter == null)
+            {
+                debugExport.AppendLine("Targetter not found");
+                continue;
+            }
 
             if (classDeclaration.ParameterList != null && classDeclaration.BaseList != null)
             {
@@ -227,7 +233,7 @@ public class ImplicitHandlerBuilderExtensionsGenerator : IIncrementalGenerator
     private static IEnumerable<ConstructorDeclarationSyntax> GetConstructors(ClassDeclarationSyntax classDeclaration)
         => classDeclaration.Members.OfType<ConstructorDeclarationSyntax>().Where(ctor => ctor.Modifiers.HasModifiers("public"));
 
-    private static MethodDeclarationSyntax FindTargetterMethod(Dictionary<string, MethodDeclarationSyntax> targeters, ClassDeclarationSyntax classDeclaration)
+    private static MethodDeclarationSyntax? FindTargetterMethod(Dictionary<string, MethodDeclarationSyntax> targeters, ClassDeclarationSyntax classDeclaration)
     {
         if (targeters.TryGetValue(classDeclaration.Identifier.ValueText, out MethodDeclarationSyntax targeter))
             return targeter;
@@ -235,7 +241,7 @@ public class ImplicitHandlerBuilderExtensionsGenerator : IIncrementalGenerator
         if (classDeclaration.BaseList != null && targeters.TryGetValue(classDeclaration.BaseList.Types.ElementAt(0).Type.ToString(), out targeter))
             return targeter;
 
-        throw new TargteterNotFoundException();
+        return null;
     }
 
     private static SyntaxTriviaList BuildExtensionXmlDocTrivia(ClassDeclarationSyntax classDeclaration, ParameterListSyntax methodParameters)

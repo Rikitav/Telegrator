@@ -4,6 +4,10 @@ using Telegrator.Core.States;
 
 namespace Telegrator.States;
 
+/// <summary>
+/// Provides a Redis-based implementation of the <see cref="IStateStorage"/> interface.
+/// Serializes state objects to JSON format before storing them in the Redis database.
+/// </summary>
 public class RedisStateStorage(IConnectionMultiplexer redis) : IStateStorage
 {
     private readonly IDatabase _db = redis.GetDatabase();
@@ -30,6 +34,6 @@ public class RedisStateStorage(IConnectionMultiplexer redis) : IStateStorage
     /// <inheritdoc/>
     public async Task DeleteAsync(string key, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        await _db.KeyDeleteAsync(key);
     }
 }

@@ -284,30 +284,74 @@ namespace Telegrator
         }
     }
 
+    /// <summary>
+    /// Provides extension methods for <see cref="IStateStorage"/> to easily initialize state machines.
+    /// </summary>
     public static class StateStorageExtensions
     {
+        /// <summary>
+        /// Initializes a state machine using the default <see cref="EnumStateMachine{TState}"/> for the specified update.
+        /// </summary>
+        /// <typeparam name="TState">The enum type representing the state.</typeparam>
+        /// <param name="stateStorage">The storage mechanism used to persist the state.</param>
+        /// <param name="handlingUpdate">The update context to resolve the state key from.</param>
+        /// <returns>A new instance of <see cref="StateMachine{TMachine, TState}"/>.</returns>
         public static StateMachine<EnumStateMachine<TState>, TState> GetStateMachine<TState>(this IStateStorage stateStorage, Update handlingUpdate)
             where TState : struct, Enum, IEquatable<TState>
             => new StateMachine<EnumStateMachine<TState>, TState>(stateStorage, handlingUpdate);
 
+        /// <summary>
+        /// Initializes a specific custom state machine for the specified update.
+        /// </summary>
+        /// <typeparam name="TMachine">The type of the state machine logic implementation.</typeparam>
+        /// <typeparam name="TState">The type of the state.</typeparam>
+        /// <param name="stateStorage">The storage mechanism used to persist the state.</param>
+        /// <param name="handlingUpdate">The update context to resolve the state key from.</param>
+        /// <returns>A new instance of <see cref="StateMachine{TMachine, TState}"/>.</returns>
         public static StateMachine<TMachine, TState> GetStateMachine<TMachine, TState>(this IStateStorage stateStorage, Update handlingUpdate)
             where TMachine : IStateMachine<TState>, new()
             where TState : IEquatable<TState>
             => new StateMachine<TMachine, TState>(stateStorage, handlingUpdate);
 
+        /// <summary>
+        /// Initializes a state machine and explicitly configures it to resolve keys by the chat ID.
+        /// </summary>
+        /// <typeparam name="TMachine">The type of the state machine logic implementation.</typeparam>
+        /// <typeparam name="TState">The type of the state.</typeparam>
+        /// <param name="stateStorage">The storage mechanism used to persist the state.</param>
+        /// <param name="handlingUpdate">The update context to resolve the state key from.</param>
+        /// <returns>A configured instance of <see cref="StateMachine{TMachine, TState}"/>.</returns>
         public static StateMachine<TMachine, TState> ByChatId<TMachine, TState>(this IStateStorage stateStorage, Update handlingUpdate)
             where TMachine : IStateMachine<TState>, new()
             where TState : IEquatable<TState>
             => new StateMachine<TMachine, TState>(stateStorage, handlingUpdate).ByChatId();
 
+        /// <summary>
+        /// Initializes a state machine and explicitly configures it to resolve keys by the sender (user) ID.
+        /// </summary>
+        /// <typeparam name="TMachine">The type of the state machine logic implementation.</typeparam>
+        /// <typeparam name="TState">The type of the state.</typeparam>
+        /// <param name="stateStorage">The storage mechanism used to persist the state.</param>
+        /// <param name="handlingUpdate">The update context to resolve the state key from.</param>
+        /// <returns>A configured instance of <see cref="StateMachine{TMachine, TState}"/>.</returns>
         public static StateMachine<TMachine, TState> BySenderId<TMachine, TState>(this IStateStorage stateStorage, Update handlingUpdate)
             where TMachine : IStateMachine<TState>, new()
             where TState : IEquatable<TState>
             => new StateMachine<TMachine, TState>(stateStorage, handlingUpdate).BySenderId();
     }
 
+    /// <summary>
+    /// Provides fluent extension methods for configuring <see cref="StateMachine{TMachine, TState}"/> instances.
+    /// </summary>
     public static class StateMachineExtensions
     {
+        /// <summary>
+        /// Configures the state machine to use a <see cref="ChatIdResolver"/> for state key resolution.
+        /// </summary>
+        /// <typeparam name="TMachine">The type of the state machine logic implementation.</typeparam>
+        /// <typeparam name="TState">The type of the state.</typeparam>
+        /// <param name="stateMachine">The state machine instance to configure.</param>
+        /// <returns>The same state machine instance for method chaining.</returns>
         public static StateMachine<TMachine, TState> ByChatId<TMachine, TState>(this StateMachine<TMachine, TState> stateMachine)
             where TMachine : IStateMachine<TState>, new()
             where TState : IEquatable<TState>
@@ -316,6 +360,13 @@ namespace Telegrator
             return stateMachine;
         }
 
+        /// <summary>
+        /// Configures the state machine to use a <see cref="SenderIdResolver"/> for state key resolution.
+        /// </summary>
+        /// <typeparam name="TMachine">The type of the state machine logic implementation.</typeparam>
+        /// <typeparam name="TState">The type of the state.</typeparam>
+        /// <param name="stateMachine">The state machine instance to configure.</param>
+        /// <returns>The same state machine instance for method chaining.</returns>
         public static StateMachine<TMachine, TState> BySenderId<TMachine, TState>(this StateMachine<TMachine, TState> stateMachine)
             where TMachine : IStateMachine<TState>, new()
             where TState : IEquatable<TState>

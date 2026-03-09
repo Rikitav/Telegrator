@@ -61,6 +61,7 @@ namespace Telegrator.Handlers
         /// <param name="extraData"></param>
         /// <param name="filters"></param>
         /// <param name="awaitingProvider"></param>
+        /// <param name="stateStorage"></param>
         public HandlerContainer(TUpdate actualUpdate, Update handlingUpdate, ITelegramBotClient client, Dictionary<string, object> extraData, CompletedFiltersList filters, IAwaitingProvider awaitingProvider, IStateStorage stateStorage)
         {
             ActualUpdate = actualUpdate;

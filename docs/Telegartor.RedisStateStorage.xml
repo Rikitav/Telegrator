@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Telegartor.RedisStateStorage</name>
+    </assembly>
+    <members>
+        <member name="T:Telegrator.States.RedisStateStorage">
+            <summary>
+            Provides a Redis-based implementation of the <see cref="T:Telegrator.Core.States.IStateStorage"/> interface.
+            Serializes state objects to JSON format before storing them in the Redis database.
+            </summary>
+        </member>
+        <member name="M:Telegrator.States.RedisStateStorage.#ctor(StackExchange.Redis.IConnectionMultiplexer)">
+            <summary>
+            Provides a Redis-based implementation of the <see cref="T:Telegrator.Core.States.IStateStorage"/> interface.
+            Serializes state objects to JSON format before storing them in the Redis database.
+            </summary>
+        </member>
+        <member name="M:Telegrator.States.RedisStateStorage.SetAsync``1(System.String,``0,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Telegrator.States.RedisStateStorage.GetAsync``1(System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Telegrator.States.RedisStateStorage.DeleteAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+    </members>
+</doc>
