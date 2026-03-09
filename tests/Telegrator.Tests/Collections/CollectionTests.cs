@@ -44,7 +44,7 @@ public class CollectionTests
     {
         // Arrange
         var list = new HandlerDescriptorList();
-        var descriptor = CreateTestDescriptor(UpdateType.Message);
+        var descriptor = CreateTestDescriptor();
 
         // Act
         list.Add(descriptor);
@@ -64,9 +64,9 @@ public class CollectionTests
     {
         // Arrange
         var list = new HandlerDescriptorList();
-        var descriptor1 = CreateTestDescriptor(UpdateType.Message);
-        var descriptor2 = CreateTestDescriptor(UpdateType.CallbackQuery);
-        var descriptor3 = CreateTestDescriptor(UpdateType.InlineQuery);
+        var descriptor1 = CreateTestDescriptor();
+        var descriptor2 = CreateTestDescriptor();
+        var descriptor3 = CreateTestDescriptor();
 
         // Act
         list.Add(descriptor1);
@@ -89,7 +89,7 @@ public class CollectionTests
     public void HandlerDescriptorList_Indexer_ShouldReturnDescriptorAtIndex()
     {
         // Arrange
-        var descriptor = CreateTestDescriptor(UpdateType.Message);
+        var descriptor = CreateTestDescriptor();
         var list = new HandlerDescriptorList
         {
             descriptor
@@ -116,7 +116,7 @@ public class CollectionTests
         // Arrange
         var list = new HandlerDescriptorList
         {
-            CreateTestDescriptor(UpdateType.Message)
+            CreateTestDescriptor()
         };
 
         // Act & Assert
@@ -133,8 +133,8 @@ public class CollectionTests
     public void HandlerDescriptorList_ShouldBeEnumerable()
     {
         // Arrange
-        var descriptor1 = CreateTestDescriptor(UpdateType.Message);
-        var descriptor2 = CreateTestDescriptor(UpdateType.CallbackQuery);
+        var descriptor1 = CreateTestDescriptor();
+        var descriptor2 = CreateTestDescriptor();
         var list = new HandlerDescriptorList
         {
             descriptor1,
@@ -161,8 +161,8 @@ public class CollectionTests
         // Arrange
         var list = new HandlerDescriptorList
         {
-            CreateTestDescriptor(UpdateType.Message),
-            CreateTestDescriptor(UpdateType.CallbackQuery)
+            CreateTestDescriptor(),
+            CreateTestDescriptor()
         };
 
         // Act
@@ -183,8 +183,8 @@ public class CollectionTests
     {
         // Arrange
         var list = new HandlerDescriptorList();
-        var descriptor = CreateTestDescriptor(UpdateType.Message);
-        var nonExistentDescriptor = CreateTestDescriptor(UpdateType.CallbackQuery);
+        var descriptor = CreateTestDescriptor();
+        var nonExistentDescriptor = CreateTestDescriptor();
 
         // Act
         list.Add(descriptor);
@@ -206,7 +206,7 @@ public class CollectionTests
     {
         // Arrange
         var list = new HandlerDescriptorList();
-        var descriptor = CreateTestDescriptor(UpdateType.Message);
+        var descriptor = CreateTestDescriptor();
         list.Add(descriptor);
 
         // Act
@@ -228,7 +228,7 @@ public class CollectionTests
     {
         // Arrange
         var list = new HandlerDescriptorList();
-        var nonExistentDescriptor = CreateTestDescriptor(UpdateType.CallbackQuery);
+        var nonExistentDescriptor = CreateTestDescriptor();
 
         // Act
         var removed = list.Remove(nonExistentDescriptor);
@@ -269,7 +269,7 @@ public class CollectionTests
         // Act
         for (int i = 0; i < itemsCount; i++)
         {
-            list.Add(CreateTestDescriptor(UpdateType.Message));
+            list.Add(CreateTestDescriptor());
         }
 
         // Assert
@@ -295,7 +295,7 @@ public class CollectionTests
             {
                 for (int j = 0; j < 10; j++)
                 {
-                    list.Add(CreateTestDescriptor(UpdateType.Message));
+                    list.Add(CreateTestDescriptor());
                 }
             }));
         }
@@ -309,7 +309,7 @@ public class CollectionTests
     /// <summary>
     /// Вспомогательный метод для создания тестового дескриптора.
     /// </summary>
-    private static HandlerDescriptor CreateTestDescriptor(UpdateType updateType)
+    private static HandlerDescriptor CreateTestDescriptor()
     {
         return new HandlerDescriptor(DescriptorType.General, typeof(TestUpdateHandler));
     }

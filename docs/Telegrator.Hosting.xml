@@ -221,7 +221,7 @@
         <member name="T:Telegrator.Providers.HostAwaitingProvider">
             <inheritdoc/>
         </member>
-        <member name="M:Telegrator.Providers.HostAwaitingProvider.#ctor(Microsoft.Extensions.Options.IOptions{Telegrator.TelegratorOptions},Microsoft.Extensions.Logging.ILogger{Telegrator.Providers.HostAwaitingProvider})">
+        <member name="M:Telegrator.Providers.HostAwaitingProvider.#ctor(Microsoft.Extensions.Options.IOptions{Telegrator.TelegratorOptions})">
             <inheritdoc/>
         </member>
         <member name="T:Telegrator.Providers.HostHandlersCollection">
@@ -239,7 +239,7 @@
         <member name="T:Telegrator.Providers.HostHandlersProvider">
             <inheritdoc/>
         </member>
-        <member name="M:Telegrator.Providers.HostHandlersProvider.#ctor(Telegrator.Core.IHandlersCollection,Microsoft.Extensions.Options.IOptions{Telegrator.TelegratorOptions},System.IServiceProvider,Microsoft.Extensions.Logging.ILogger{Telegrator.Providers.HostHandlersProvider})">
+        <member name="M:Telegrator.Providers.HostHandlersProvider.#ctor(Telegrator.Core.IHandlersCollection,Microsoft.Extensions.Options.IOptions{Telegrator.TelegratorOptions},System.IServiceProvider)">
             <inheritdoc/>
         </member>
         <member name="M:Telegrator.Providers.HostHandlersProvider.GetHandlerInstance(Telegrator.Core.Descriptors.HandlerDescriptor,System.Threading.CancellationToken)">
@@ -273,6 +273,14 @@
             Contains extensions for <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>
             Provides method to configure Telegram Bot Host
             </summary>
+        </member>
+        <member name="M:Telegrator.ServicesCollectionExtensions.AddStateStorage``1(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Registers <see cref="T:Telegrator.Core.States.IStateStorage"/> service
+            </summary>
+            <typeparam name="TStorage"></typeparam>
+            <param name="services"></param>
+            <returns></returns>
         </member>
         <member name="M:Telegrator.ServicesCollectionExtensions.AddTelegramBotHostDefaults(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
             <summary>

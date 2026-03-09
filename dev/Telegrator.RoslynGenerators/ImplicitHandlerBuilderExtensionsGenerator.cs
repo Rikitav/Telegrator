@@ -148,6 +148,7 @@ public class ImplicitHandlerBuilderExtensionsGenerator : IIncrementalGenerator
                 .AddMembers([.. targetters.Values, .. extensions]);
 
             NamespaceDeclarationSyntax namespaceDeclaration = SyntaxFactory.NamespaceDeclaration(SyntaxFactory.ParseName("Telegrator"))
+                .WithLeadingTrivia(SyntaxFactory.ParseLeadingTrivia("#pragma warning disable CS1591"))
                 .WithMembers([extensionsClass]);
 
             CompilationUnitSyntax compilationUnit = SyntaxFactory.CompilationUnit()

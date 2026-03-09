@@ -7161,6 +7161,11 @@
             Provides extension methods for working with Telegram Update objects.
             </summary>
         </member>
+        <member name="M:Telegrator.UpdateExtensions.GetUserLanguageCode(Telegram.Bot.Types.Update)">
+            <summary>
+            Extracts the IETF language tag of the user's client from the update.
+            </summary>
+        </member>
         <member name="M:Telegrator.UpdateExtensions.GetSenderId(Telegram.Bot.Types.Update)">
             <summary>
             Selects from Update an object from which you can get the sender's ID

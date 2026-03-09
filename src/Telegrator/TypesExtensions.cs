@@ -516,6 +516,21 @@ public static partial class HandlersCollectionExtensions
 public static partial class UpdateExtensions
 {
     /// <summary>
+    /// Extracts the IETF language tag of the user's client from the update.
+    /// </summary>
+    public static string? GetUserLanguageCode(this Update update) => update switch
+    {
+        { Message.From: { } from } => from.LanguageCode,
+        { EditedMessage.From: { } from } => from.LanguageCode,
+        { CallbackQuery.From: { } from } => from.LanguageCode,
+        { InlineQuery.From: { } from } => from.LanguageCode,
+        { ChatJoinRequest.From: { } from } => from.LanguageCode,
+        { PreCheckoutQuery.From: { } from } => from.LanguageCode,
+        { ShippingQuery.From: { } from } => from.LanguageCode,
+        _ => null
+    };
+
+    /// <summary>
     /// Selects from Update an object from which you can get the sender's ID
     /// </summary>
     /// <param name="update"></param>

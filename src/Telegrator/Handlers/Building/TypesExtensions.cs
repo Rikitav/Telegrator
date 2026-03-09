@@ -58,7 +58,8 @@ public static partial class HandlerBuilderExtensions
         handlerBuilder.AddFilters(filters);
         return handlerBuilder;
     }
-
+    
+#pragma warning disable CS1574
     /// <inheritdoc cref="HandlerBuilderBase.SetState{TKey, TValue}(TValue?)"/>
     public static TBuilder SetState<TBuilder, TKey, TValue>(this TBuilder handlerBuilder, TValue? myState)
         where TBuilder : HandlerBuilderBase
@@ -68,6 +69,7 @@ public static partial class HandlerBuilderExtensions
         handlerBuilder.SetState<TKey, TValue>(myState);
         return handlerBuilder;
     }
+#pragma warning restore CS1574
 
     /// <summary>
     /// Adds a targeted filter for a specific filter target type.

@@ -16,7 +16,7 @@ public class DefaultStateStorage : IStateStorage
         if (key is null)
             throw new ArgumentNullException(nameof(key));
 
-        if (!storage.TryRemove(key, out object value))
+        if (!storage.TryRemove(key, out _))
             throw new Exception("Failed to remove key '" + key + "' from storage.");
 
         return Task.CompletedTask;

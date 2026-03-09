@@ -10,7 +10,7 @@ namespace Telegrator.States;
 public class EnumStateMachine<TEnum> : IStateMachine<TEnum> where TEnum : struct, Enum, IEquatable<TEnum>
 {
     private readonly TEnum[] _states = Enum.GetValues(typeof(TEnum)).Cast<TEnum>().ToArray();
-    private TEnum _defaultState => _states.FirstOrDefault();
+    private TEnum DefaultState => _states.FirstOrDefault();
 
     /// <inheritdoc/>
     public async Task<TEnum> Current(IStateStorage storage, string updateKey, CancellationToken cancellationToken = default)
@@ -19,7 +19,7 @@ public class EnumStateMachine<TEnum> : IStateMachine<TEnum> where TEnum : struct
         TEnum state = await storage.GetAsync<TEnum>(key, cancellationToken);
 
         return EqualityComparer<TEnum>.Default.Equals(state, default)
-            ? _defaultState : state;
+            ? DefaultState : state;
     }
 
     /// <inheritdoc/>
@@ -54,7 +54,7 @@ public class EnumStateMachine<TEnum> : IStateMachine<TEnum> where TEnum : struct
     public async Task Reset(IStateStorage storage, string updateKey, CancellationToken cancellationToken = default)
     {
         string key = FormatKey(updateKey);
-        await storage.SetAsync(key, _defaultState, cancellationToken);
+        await storage.SetAsync(key, DefaultState, cancellationToken);
     }
 
     private static string FormatKey(string updateKey)
