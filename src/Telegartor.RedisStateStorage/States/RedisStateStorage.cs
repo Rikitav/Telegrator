@@ -16,7 +16,7 @@ public class RedisStateStorage(IConnectionMultiplexer redis) : IStateStorage
     }
 
     /// <inheritdoc/>
-    public async Task<T?> GetAsync<T>(string key, CancellationToken cancellationToken) where T : default
+    public async Task<T?> GetAsync<T>(string key, CancellationToken cancellationToken)
     {
         RedisValue json = await _db.StringGetAsync(key);
         string? jsonStr = json;
