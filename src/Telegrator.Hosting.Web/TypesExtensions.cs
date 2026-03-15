@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -42,7 +43,27 @@ namespace Telegrator
         /// <summary>
         /// Replaces TelegramBotWebHostBuilder. Configures DI, options, and handlers.
         /// </summary>
-        public static IHostApplicationBuilder AddTelegratorWeb(this IHostApplicationBuilder builder, TelegratorOptions? options = null, IHandlersCollection? handlers = null)
+        public static ITelegramBotHostBuilder AddTelegratorWeb(this ITelegramBotHostBuilder builder, TelegratorOptions? options = null, IHandlersCollection? handlers = null, Action<ITelegramBotHostBuilder>? action = null)
+        {
+            builder.AddTelegratorWebInternal(options, handlers);
+            action?.Invoke(builder);
+            return builder;
+        }
+
+        /// <summary>
+        /// Replaces TelegramBotWebHostBuilder. Configures DI, options, and handlers.
+        /// </summary>
+        public static IHostApplicationBuilder AddTelegratorWeb(this WebApplicationBuilder builder, TelegratorOptions? options = null, IHandlersCollection? handlers = null, Action<ITelegramBotHostBuilder>? action = null)
+        {
+            builder.AddTelegratorWebInternal(options, handlers);
+            action?.Invoke(new TelegramBotWebHostBuilder(builder));
+            return builder;
+        }
+
+        /// <summary>
+        /// Replaces TelegramBotWebHostBuilder. Configures DI, options, and handlers.
+        /// </summary>
+        internal static IHostApplicationBuilder AddTelegratorWebInternal(this IHostApplicationBuilder builder, TelegratorOptions? options = null, IHandlersCollection? handlers = null)
         {
             IServiceCollection services = builder.Services;
             IConfigurationManager configuration = builder.Configuration;
@@ -103,11 +124,12 @@ namespace Telegrator
         /// Replaces the initialization logic from TelegramBotWebHost constructor. 
         /// Initializes the bot and logs handlers on application startup.
         /// </summary>
-        public static WebApplication UseTelegratorWeb(this WebApplication app)
+        public static T UseTelegratorWeb<T>(this T app) where T : IEndpointRouteBuilder, IHost
         {
-            ITelegramBotInfo info = app.Services.GetRequiredService<ITelegramBotInfo>();
-            IHandlersCollection handlers = app.Services.GetRequiredService<IHandlersCollection>();
-            ILoggerFactory loggerFactory = app.Services.GetRequiredService<ILoggerFactory>();
+            HostedUpdateWebhooker webhooker = app.ServiceProvider.GetRequiredService<HostedUpdateWebhooker>();
+            ITelegramBotInfo info = app.ServiceProvider.GetRequiredService<ITelegramBotInfo>();
+            IHandlersCollection handlers = app.ServiceProvider.GetRequiredService<IHandlersCollection>();
+            ILoggerFactory loggerFactory = app.ServiceProvider.GetRequiredService<ILoggerFactory>();
             ILogger logger = loggerFactory.CreateLogger("Telegrator.Hosting.Web.TelegratorHost");
 
             if (logger.IsEnabled(LogLevel.Information))
@@ -117,6 +139,7 @@ namespace Telegrator
                 logger.LogHandlers(handlers);
             }
 
+            webhooker.MapWebhook(app);
             return app;
         }
 

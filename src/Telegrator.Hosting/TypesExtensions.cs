@@ -30,7 +30,7 @@ public static class HostBuilderExtensions
     /// </summary>
     public const string HandlersCollectionPropertyKey = nameof(IHandlersCollection);
 
-    extension (IHostApplicationBuilder builder)
+    extension (HostApplicationBuilder builder)
     {
         /// <summary>
         /// Gets the <see cref="IHandlersCollection"/> from the builder properties.
@@ -39,18 +39,35 @@ public static class HostBuilderExtensions
         {
             get
             {
-                if (builder is TelegramBotHostBuilder botHostBuilder)
-                    return botHostBuilder.Handlers;
-
-                return (IHandlersCollection)builder.Properties[HandlersCollectionPropertyKey];
+                return (IHandlersCollection)((IHostApplicationBuilder)builder).Properties[HandlersCollectionPropertyKey];
             }
         }
     }
 
     /// <summary>
-    /// Replaces TelegramBotWebHostBuilder. Configures DI, options, and handlers.
+    /// Replaces TelegramBotHostBuilder. Configures DI, options, and handlers.
     /// </summary>
-    public static IHostApplicationBuilder AddTelegrator(this IHostApplicationBuilder builder, TelegratorOptions? options = null, IHandlersCollection? handlers = null)
+    public static ITelegramBotHostBuilder AddTelegrator(this ITelegramBotHostBuilder builder, TelegratorOptions? options = null, IHandlersCollection? handlers = null, Action<ITelegramBotHostBuilder>? action = null)
+    {
+        builder.AddTelegratorInternal(options, handlers);
+        action?.Invoke(builder);
+        return builder;
+    }
+
+    /// <summary>
+    /// Replaces TelegramBotHostBuilder. Configures DI, options, and handlers.
+    /// </summary>
+    public static IHostApplicationBuilder AddTelegrator(this HostApplicationBuilder builder, TelegratorOptions? options = null, IHandlersCollection? handlers = null, Action<ITelegramBotHostBuilder>? action = null)
+    {
+        builder.AddTelegratorInternal(options, handlers);
+        action?.Invoke(new TelegramBotHostBuilder(builder));
+        return builder;
+    }
+
+    /// <summary>
+    /// Replaces TelegramBotHostBuilder. Configures DI, options, and handlers.
+    /// </summary>
+    public static IHostApplicationBuilder AddTelegratorInternal(this IHostApplicationBuilder builder, TelegratorOptions? options = null, IHandlersCollection? handlers = null)
     {
         IServiceCollection services = builder.Services;
         IConfigurationManager configuration = builder.Configuration;
@@ -133,7 +150,6 @@ public static class ServicesCollectionExtensions
     /// <returns></returns>
     public static IServiceCollection AddTelegramBotHostDefaults(this IServiceCollection services)
     {
-        services.AddLogging(builder => builder.AddConsole().AddDebug());
         services.AddSingleton<IAwaitingProvider, HostAwaitingProvider>();
         services.AddSingleton<IHandlersProvider, HostHandlersProvider>();
         services.AddSingleton<IUpdateRouter, HostUpdateRouter>();

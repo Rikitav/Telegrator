@@ -12,7 +12,7 @@ namespace Telegrator.Hosting.Web;
 /// <summary>
 /// Represents a web hosted telegram bots and services builder that helps manage configuration, logging, lifetime, and more.
 /// </summary>
-public class TelegramBotWebHostBuilder : IHostApplicationBuilder, ICollectingProvider
+public class TelegramBotWebHostBuilder : ITelegramBotHostBuilder
 {
     private readonly WebApplicationBuilder _innerBuilder;
     private readonly WebApplicationOptions _settings;
@@ -48,8 +48,6 @@ public class TelegramBotWebHostBuilder : IHostApplicationBuilder, ICollectingPro
     {
         _innerBuilder = webApplicationBuilder ?? throw new ArgumentNullException(nameof(webApplicationBuilder));
         _settings = settings ?? throw new ArgumentNullException(nameof(settings));
-
-        this.AddTelegratorWeb();
     }
 
     /// <summary>
@@ -62,8 +60,6 @@ public class TelegramBotWebHostBuilder : IHostApplicationBuilder, ICollectingPro
     {
         _innerBuilder = webApplicationBuilder ?? throw new ArgumentNullException(nameof(webApplicationBuilder));
         _settings = settings ?? throw new ArgumentNullException(nameof(settings));
-
-        this.AddTelegratorWeb(options, null);
     }
 
     /// <summary>
@@ -76,8 +72,6 @@ public class TelegramBotWebHostBuilder : IHostApplicationBuilder, ICollectingPro
     {
         _innerBuilder = webApplicationBuilder ?? throw new ArgumentNullException(nameof(webApplicationBuilder));
         _settings = settings ?? throw new ArgumentNullException(nameof(settings));
-
-        this.AddTelegratorWeb(null, handlers);
     }
 
     /// <summary>
@@ -91,8 +85,6 @@ public class TelegramBotWebHostBuilder : IHostApplicationBuilder, ICollectingPro
     {
         _innerBuilder = webApplicationBuilder ?? throw new ArgumentNullException(nameof(webApplicationBuilder));
         _settings = settings ?? throw new ArgumentNullException(nameof(settings));
-
-        this.AddTelegratorWeb(options, handlers);
     }
 
     /// <summary>

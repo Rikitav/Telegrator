@@ -255,15 +255,25 @@
             The key used to store the <see cref="T:Telegrator.Core.IHandlersCollection"/> in the builder properties.
             </summary>
         </member>
-        <member name="M:Telegrator.HostBuilderExtensions.get_Handlers(Microsoft.Extensions.Hosting.IHostApplicationBuilder)">
-            <inheritdoc cref="P:Telegrator.HostBuilderExtensions.&lt;G&gt;$605D8CCF64349EA050C790D67C500BD9.Handlers"/>
+        <member name="M:Telegrator.HostBuilderExtensions.get_Handlers(Microsoft.Extensions.Hosting.HostApplicationBuilder)">
+            <inheritdoc cref="P:Telegrator.HostBuilderExtensions.&lt;G&gt;$BF7227490CCA365283B3A9274C9033C7.Handlers"/>
         </member>
-        <member name="M:Telegrator.HostBuilderExtensions.AddTelegrator(Microsoft.Extensions.Hosting.IHostApplicationBuilder,Telegrator.TelegratorOptions,Telegrator.Core.IHandlersCollection)">
+        <member name="M:Telegrator.HostBuilderExtensions.AddTelegrator(Telegrator.Hosting.ITelegramBotHostBuilder,Telegrator.TelegratorOptions,Telegrator.Core.IHandlersCollection,System.Action{Telegrator.Hosting.ITelegramBotHostBuilder})">
             <summary>
-            Replaces TelegramBotWebHostBuilder. Configures DI, options, and handlers.
+            Replaces TelegramBotHostBuilder. Configures DI, options, and handlers.
             </summary>
         </member>
-        <member name="P:Telegrator.HostBuilderExtensions.&lt;G&gt;$605D8CCF64349EA050C790D67C500BD9.Handlers">
+        <member name="M:Telegrator.HostBuilderExtensions.AddTelegrator(Microsoft.Extensions.Hosting.HostApplicationBuilder,Telegrator.TelegratorOptions,Telegrator.Core.IHandlersCollection,System.Action{Telegrator.Hosting.ITelegramBotHostBuilder})">
+            <summary>
+            Replaces TelegramBotHostBuilder. Configures DI, options, and handlers.
+            </summary>
+        </member>
+        <member name="M:Telegrator.HostBuilderExtensions.AddTelegratorInternal(Microsoft.Extensions.Hosting.IHostApplicationBuilder,Telegrator.TelegratorOptions,Telegrator.Core.IHandlersCollection)">
+            <summary>
+            Replaces TelegramBotHostBuilder. Configures DI, options, and handlers.
+            </summary>
+        </member>
+        <member name="P:Telegrator.HostBuilderExtensions.&lt;G&gt;$BF7227490CCA365283B3A9274C9033C7.Handlers">
             <summary>
             Gets the <see cref="T:Telegrator.Core.IHandlersCollection"/> from the builder properties.
             </summary>

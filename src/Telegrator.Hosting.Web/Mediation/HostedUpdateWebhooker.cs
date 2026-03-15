@@ -19,7 +19,6 @@ public class HostedUpdateWebhooker : IHostedService
 {
     private const string SecretTokenHeader = "X-Telegram-Bot-Api-Secret-Token";
 
-    private readonly IEndpointRouteBuilder _botHost;
     private readonly ITelegramBotClient _botClient;
     private readonly IUpdateRouter _updateRouter;
     private readonly WebhookerOptions _options;
@@ -32,12 +31,11 @@ public class HostedUpdateWebhooker : IHostedService
     /// <param name="updateRouter"></param>
     /// <param name="options"></param>
     /// <exception cref="ArgumentNullException"></exception>
-    public HostedUpdateWebhooker(IEndpointRouteBuilder botHost, ITelegramBotClient botClient, IUpdateRouter updateRouter, IOptions<WebhookerOptions> options)
+    public HostedUpdateWebhooker(ITelegramBotClient botClient, IUpdateRouter updateRouter, IOptions<WebhookerOptions> options)
     {
         if (string.IsNullOrEmpty(options.Value.WebhookUri))
             throw new ArgumentNullException(nameof(options), "Option \"WebhookUrl\" must be set to subscribe for update recieving");
 
-        _botHost = botHost;
         _botClient = botClient;
         _updateRouter = updateRouter;
         _options = options.Value;
@@ -52,9 +50,6 @@ public class HostedUpdateWebhooker : IHostedService
 
     private async void StartInternal(CancellationToken cancellationToken)
     {
-        string pattern = new UriBuilder(_options.WebhookUri).Path;
-        _botHost.MapPost(pattern, (Delegate)ReceiveUpdate);
-
         await _botClient.SetWebhook(
             url: _options.WebhookUri,
             maxConnections: _options.MaxConnections,
@@ -69,6 +64,16 @@ public class HostedUpdateWebhooker : IHostedService
     {
         _botClient.DeleteWebhook(_options.DropPendingUpdates, cancellationToken);
         return Task.CompletedTask;
+    }
+
+    /// <summary>
+    /// Maps bot webhook to application builder
+    /// </summary>
+    /// <param name="routeBuilder"></param>
+    public void MapWebhook(IEndpointRouteBuilder routeBuilder)
+    {
+        string pattern = new UriBuilder(_options.WebhookUri).Path;
+        routeBuilder.MapPost(pattern, (Delegate)ReceiveUpdate);
     }
 
     private async Task<IResult> ReceiveUpdate(HttpContext ctx)

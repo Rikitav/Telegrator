@@ -11,7 +11,7 @@ namespace Telegrator.Hosting;
 /// <summary>
 /// Represents a hosted telegram bots and services builder that helps manage configuration, logging, lifetime, and more.
 /// </summary>
-public class TelegramBotHostBuilder : IHostApplicationBuilder, ICollectingProvider
+public class TelegramBotHostBuilder : ITelegramBotHostBuilder
 {
     private readonly HostApplicationBuilder _innerBuilder;
     private readonly HostApplicationBuilderSettings _settings;
@@ -47,8 +47,6 @@ public class TelegramBotHostBuilder : IHostApplicationBuilder, ICollectingProvid
     {
         _innerBuilder = hostApplicationBuilder ?? throw new ArgumentNullException(nameof(hostApplicationBuilder));
         _settings = settings ?? new HostApplicationBuilderSettings();
-
-        this.AddTelegrator();
     }
 
     /// <summary>
@@ -61,8 +59,6 @@ public class TelegramBotHostBuilder : IHostApplicationBuilder, ICollectingProvid
     {
         _innerBuilder = hostApplicationBuilder ?? throw new ArgumentNullException(nameof(hostApplicationBuilder));
         _settings = settings ?? new HostApplicationBuilderSettings();
-
-        this.AddTelegrator(options, null);
     }
 
     /// <summary>
@@ -75,8 +71,6 @@ public class TelegramBotHostBuilder : IHostApplicationBuilder, ICollectingProvid
     {
         _innerBuilder = hostApplicationBuilder ?? throw new ArgumentNullException(nameof(hostApplicationBuilder));
         _settings = settings ?? new HostApplicationBuilderSettings();
-
-        this.AddTelegrator(null, handlers);
     }
 
     /// <summary>
@@ -90,8 +84,6 @@ public class TelegramBotHostBuilder : IHostApplicationBuilder, ICollectingProvid
     {
         _innerBuilder = hostApplicationBuilder ?? throw new ArgumentNullException(nameof(hostApplicationBuilder));
         _settings = settings ?? new HostApplicationBuilderSettings();
-
-        this.AddTelegrator(options, handlers);
     }
 
     /// <summary>
@@ -108,6 +100,6 @@ public class TelegramBotHostBuilder : IHostApplicationBuilder, ICollectingProvid
     /// <inheritdoc/>
     public void ConfigureContainer<TContainerBuilder>(IServiceProviderFactory<TContainerBuilder> factory, Action<TContainerBuilder>? configure = null) where TContainerBuilder : notnull
     {
-        this.ConfigureContainer(factory, configure);
+        _innerBuilder.ConfigureContainer(factory, configure);
     }
 }

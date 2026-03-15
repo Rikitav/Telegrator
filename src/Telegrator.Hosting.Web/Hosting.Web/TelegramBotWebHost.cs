@@ -39,11 +39,13 @@ public class TelegramBotWebHost : IHost, IApplicationBuilder, IEndpointRouteBuil
     /// </summary>
     public ILogger<TelegramBotWebHost> Logger => _logger;
 
+    /// <inheritdoc/>
+    public IDictionary<string, object?> Properties => ((IApplicationBuilder)_innerApp).Properties;
+
     // Private interface fields
     IServiceProvider IEndpointRouteBuilder.ServiceProvider => Services;
     IServiceProvider IApplicationBuilder.ApplicationServices { get => Services; set => throw new NotImplementedException(); }
     IFeatureCollection IApplicationBuilder.ServerFeatures => ((IApplicationBuilder)_innerApp).ServerFeatures;
-    IDictionary<string, object?> IApplicationBuilder.Properties => ((IApplicationBuilder)_innerApp).Properties;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="WebApplicationBuilder"/> class.
@@ -68,9 +70,7 @@ public class TelegramBotWebHost : IHost, IApplicationBuilder, IEndpointRouteBuil
         ArgumentNullException.ThrowIfNull(settings, nameof(settings));
         WebApplicationBuilder innerApp = WebApplication.CreateBuilder(settings);
         TelegramBotWebHostBuilder builder = new TelegramBotWebHostBuilder(innerApp, settings);
-
-        builder.Services.AddTelegramBotHostDefaults();
-        builder.Services.AddTelegramWebhook();
+        builder.AddTelegratorWeb();
         return builder;
     }
 
@@ -83,9 +83,7 @@ public class TelegramBotWebHost : IHost, IApplicationBuilder, IEndpointRouteBuil
         ArgumentNullException.ThrowIfNull(settings, nameof(settings));
         WebApplicationBuilder innerApp = WebApplication.CreateSlimBuilder(settings);
         TelegramBotWebHostBuilder builder = new TelegramBotWebHostBuilder(innerApp, settings);
-
-        builder.Services.AddTelegramBotHostDefaults();
-        builder.Services.AddTelegramWebhook();
+        builder.AddTelegratorWeb();
         return builder;
     }
 
@@ -97,7 +95,9 @@ public class TelegramBotWebHost : IHost, IApplicationBuilder, IEndpointRouteBuil
     {
         ArgumentNullException.ThrowIfNull(settings, nameof(settings));
         WebApplicationBuilder innerApp = WebApplication.CreateEmptyBuilder(settings);
-        return new TelegramBotWebHostBuilder(innerApp, settings);
+        TelegramBotWebHostBuilder builder = new TelegramBotWebHostBuilder(innerApp, settings);
+        builder.AddTelegratorWeb();
+        return builder;
     }
 
     /// <inheritdoc/>
