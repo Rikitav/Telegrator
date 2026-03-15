@@ -94,7 +94,7 @@ public class TelegramBotWebHostBuilder : ITelegramBotHostBuilder
     public TelegramBotWebHost Build()
     {
         TelegramBotWebHost host = new TelegramBotWebHost(_innerBuilder);
-        host.UseTelegrator();
+        host.UseTelegratorWeb();
         return host;
     }
 

@@ -14,7 +14,7 @@
     <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
 	  
     <Title>Telegrator : Telegram.Bot mediator framework</Title>
-    <Version>1.16.6</Version>
+    <Version>1.16.7</Version>
 	<Authors>Rikitav Tim4ik</Authors>
 	<Company>Rikitav Tim4ik</Company>
     <RepositoryUrl>https://github.com/Rikitav/Telegrator</RepositoryUrl>

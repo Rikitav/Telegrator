@@ -126,7 +126,9 @@ namespace Telegrator
         /// </summary>
         public static T UseTelegratorWeb<T>(this T app) where T : IEndpointRouteBuilder, IHost
         {
-            HostedUpdateWebhooker webhooker = app.ServiceProvider.GetRequiredService<HostedUpdateWebhooker>();
+            if (app.ServiceProvider.GetServices<IHostedService>().FirstOrDefault(s => s is HostedUpdateWebhooker) is not HostedUpdateWebhooker webhooker)
+                throw new InvalidOperationException("No service for type 'Telegrator.Mediation.HostedUpdateWebhooker' has been registered.");
+
             ITelegramBotInfo info = app.ServiceProvider.GetRequiredService<ITelegramBotInfo>();
             IHandlersCollection handlers = app.ServiceProvider.GetRequiredService<IHandlersCollection>();
             ILoggerFactory loggerFactory = app.ServiceProvider.GetRequiredService<ILoggerFactory>();
