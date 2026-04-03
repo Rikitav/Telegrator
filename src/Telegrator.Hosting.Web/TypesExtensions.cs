@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System.Diagnostics.CodeAnalysis;
 using Telegram.Bot;
 using Telegrator.Core;
 using Telegrator.Hosting;
@@ -45,7 +46,10 @@ namespace Telegrator
         /// </summary>
         public static ITelegramBotHostBuilder AddTelegratorWeb(this ITelegramBotHostBuilder builder, TelegratorOptions? options = null, IHandlersCollection? handlers = null, Action<ITelegramBotHostBuilder>? action = null)
         {
-            builder.AddTelegratorWebInternal(options, handlers);
+            AddTelegratorWebInternal(builder.Services, builder.Configuration, builder.Properties, ref handlers, options);
+            if (builder is TelegramBotWebHostBuilder telegramBotHostBuilder)
+                telegramBotHostBuilder._handlers = handlers;
+
             action?.Invoke(builder);
             return builder;
         }
@@ -55,7 +59,7 @@ namespace Telegrator
         /// </summary>
         public static IHostApplicationBuilder AddTelegratorWeb(this WebApplicationBuilder builder, TelegratorOptions? options = null, IHandlersCollection? handlers = null, Action<ITelegramBotHostBuilder>? action = null)
         {
-            builder.AddTelegratorWebInternal(options, handlers);
+            AddTelegratorWebInternal(builder.Services, builder.Configuration, ((IHostApplicationBuilder)builder).Properties, ref handlers, options);
             action?.Invoke(new TelegramBotWebHostBuilder(builder));
             return builder;
         }
@@ -63,11 +67,8 @@ namespace Telegrator
         /// <summary>
         /// Replaces TelegramBotWebHostBuilder. Configures DI, options, and handlers.
         /// </summary>
-        internal static IHostApplicationBuilder AddTelegratorWebInternal(this IHostApplicationBuilder builder, TelegratorOptions? options = null, IHandlersCollection? handlers = null)
+        internal static void AddTelegratorWebInternal(IServiceCollection services, IConfiguration configuration, IDictionary<object, object> properties, [NotNull] ref IHandlersCollection? handlers, TelegratorOptions? options = null)
         {
-            IServiceCollection services = builder.Services;
-            IConfigurationManager configuration = builder.Configuration;
-
             if (options == null)
             {
                 options = configuration.GetSection(nameof(TelegratorOptions)).Get<TelegratorOptions>();
@@ -92,10 +93,7 @@ namespace Telegrator
 
             handlers ??= new HostHandlersCollection(services, options);
             services.AddSingleton(handlers);
-
-            builder.Properties.Add(HandlersCollectionPropertyKey, handlers);
-            if (builder is TelegramBotWebHostBuilder botHostBuilder)
-                botHostBuilder._handlers = handlers;
+            properties.Add(HandlersCollectionPropertyKey, handlers);
 
             if (!services.Any(srvc => srvc.ImplementationType == typeof(IOptions<WebhookerOptions>)))
             {
@@ -117,16 +115,27 @@ namespace Telegrator
 
             services.AddTelegramBotHostDefaults();
             services.AddTelegramWebhook();
-            return builder;
+        }
+
+        /// <summary>
+        /// Searchs for <see cref="HostedUpdateWebhooker"/> hosted service inside hosts services
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="webhooker"></param>
+        /// <returns></returns>
+        public static bool TryFindWebhooker(this IServiceProvider services, [NotNullWhen(true)] out HostedUpdateWebhooker? webhooker)
+        {
+            webhooker = services.GetServices<IHostedService>().FirstOrDefault(s => s is HostedUpdateWebhooker) as HostedUpdateWebhooker;
+            return webhooker != null;
         }
 
         /// <summary>
         /// Replaces the initialization logic from TelegramBotWebHost constructor. 
         /// Initializes the bot and logs handlers on application startup.
         /// </summary>
-        public static T UseTelegratorWeb<T>(this T app) where T : IEndpointRouteBuilder, IHost
+        public static T UseTelegratorWeb<T>(this T app, bool dontMap = false) where T : IEndpointRouteBuilder, IHost
         {
-            if (app.ServiceProvider.GetServices<IHostedService>().FirstOrDefault(s => s is HostedUpdateWebhooker) is not HostedUpdateWebhooker webhooker)
+            if (!app.ServiceProvider.TryFindWebhooker(out HostedUpdateWebhooker? webhooker))
                 throw new InvalidOperationException("No service for type 'Telegrator.Mediation.HostedUpdateWebhooker' has been registered.");
 
             ITelegramBotInfo info = app.ServiceProvider.GetRequiredService<ITelegramBotInfo>();
@@ -141,7 +150,25 @@ namespace Telegrator
                 logger.LogHandlers(handlers);
             }
 
-            webhooker.MapWebhook(app);
+            if (!dontMap)
+                webhooker.MapWebhook(app);
+            
+            return app;
+        }
+
+        /// <summary>
+        /// Allows to remap receiving webhook endpoint and map new route to webhost.
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="webhookUri"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        public static T RemapWebhook<T>(this T app, string webhookUri) where T : IEndpointRouteBuilder, IHost
+        {
+            if (!app.ServiceProvider.TryFindWebhooker(out HostedUpdateWebhooker? webhooker))
+                throw new InvalidOperationException("No service for type 'Telegrator.Mediation.HostedUpdateWebhooker' has been registered.");
+
+            webhooker.RemapWebhook(app, webhookUri, default).GetAwaiter().GetResult();
             return app;
         }
 

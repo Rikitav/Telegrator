@@ -84,9 +84,7 @@
             </summary>
         </member>
         <member name="T:Telegrator.Hosting.Web.TelegramBotWebHostBuilder">
-            <summary>
-            Represents a web hosted telegram bots and services builder that helps manage configuration, logging, lifetime, and more.
-            </summary>
+            <inheritdoc/>
         </member>
         <member name="P:Telegrator.Hosting.Web.TelegramBotWebHostBuilder.Handlers">
             <inheritdoc/>
@@ -109,37 +107,18 @@
         <member name="P:Telegrator.Hosting.Web.TelegramBotWebHostBuilder.Metrics">
             <inheritdoc/>
         </member>
-        <member name="M:Telegrator.Hosting.Web.TelegramBotWebHostBuilder.#ctor(Microsoft.AspNetCore.Builder.WebApplicationBuilder,Microsoft.AspNetCore.Builder.WebApplicationOptions)">
+        <member name="M:Telegrator.Hosting.Web.TelegramBotWebHostBuilder.#ctor(Microsoft.AspNetCore.Builder.WebApplicationBuilder)">
             <summary>
             Initializes a new instance of the <see cref="T:Telegrator.Hosting.Web.TelegramBotWebHostBuilder"/> class.
             </summary>
             <param name="webApplicationBuilder"></param>
-            <param name="settings"></param>
         </member>
-        <member name="M:Telegrator.Hosting.Web.TelegramBotWebHostBuilder.#ctor(Microsoft.AspNetCore.Builder.WebApplicationBuilder,Telegrator.TelegratorOptions,Microsoft.AspNetCore.Builder.WebApplicationOptions)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Telegrator.Hosting.Web.TelegramBotWebHostBuilder"/> class.
-            </summary>
-            <param name="webApplicationBuilder"></param>
-            <param name="options"></param>
-            <param name="settings"></param>
-        </member>
-        <member name="M:Telegrator.Hosting.Web.TelegramBotWebHostBuilder.#ctor(Microsoft.AspNetCore.Builder.WebApplicationBuilder,Telegrator.Core.IHandlersCollection,Microsoft.AspNetCore.Builder.WebApplicationOptions)">
+        <member name="M:Telegrator.Hosting.Web.TelegramBotWebHostBuilder.#ctor(Microsoft.AspNetCore.Builder.WebApplicationBuilder,Telegrator.Core.IHandlersCollection)">
             <summary>
             Initializes a new instance of the <see cref="T:Telegrator.Hosting.Web.TelegramBotWebHostBuilder"/> class.
             </summary>
             <param name="webApplicationBuilder"></param>
             <param name="handlers"></param>
-            <param name="settings"></param>
-        </member>
-        <member name="M:Telegrator.Hosting.Web.TelegramBotWebHostBuilder.#ctor(Microsoft.AspNetCore.Builder.WebApplicationBuilder,Telegrator.Core.IHandlersCollection,Telegrator.TelegratorOptions,Microsoft.AspNetCore.Builder.WebApplicationOptions)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Telegrator.Hosting.Web.TelegramBotWebHostBuilder"/> class.
-            </summary>
-            <param name="webApplicationBuilder"></param>
-            <param name="handlers"></param>
-            <param name="options"></param>
-            <param name="settings"></param>
         </member>
         <member name="M:Telegrator.Hosting.Web.TelegramBotWebHostBuilder.Build">
             <summary>
@@ -188,7 +167,6 @@
             <summary>
             Initiallizes new instance of <see cref="T:Telegrator.Mediation.HostedUpdateWebhooker"/>
             </summary>
-            <param name="botHost"></param>
             <param name="botClient"></param>
             <param name="updateRouter"></param>
             <param name="options"></param>
@@ -199,6 +177,16 @@
         </member>
         <member name="M:Telegrator.Mediation.HostedUpdateWebhooker.StopAsync(System.Threading.CancellationToken)">
             <inheritdoc/>
+        </member>
+        <member name="M:Telegrator.Mediation.HostedUpdateWebhooker.RemapWebhook(Microsoft.AspNetCore.Routing.IEndpointRouteBuilder,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Allows to remap receiving webhook endpoint and map new route to webhost.
+            </summary>
+            <param name="routeBuilder"></param>
+            <param name="webhookUri"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentException"></exception>
         </member>
         <member name="M:Telegrator.Mediation.HostedUpdateWebhooker.MapWebhook(Microsoft.AspNetCore.Routing.IEndpointRouteBuilder)">
             <summary>
@@ -230,16 +218,33 @@
             Replaces TelegramBotWebHostBuilder. Configures DI, options, and handlers.
             </summary>
         </member>
-        <member name="M:Telegrator.ServicesCollectionExtensions.AddTelegratorWebInternal(Microsoft.Extensions.Hosting.IHostApplicationBuilder,Telegrator.TelegratorOptions,Telegrator.Core.IHandlersCollection)">
+        <member name="M:Telegrator.ServicesCollectionExtensions.AddTelegratorWebInternal(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration,System.Collections.Generic.IDictionary{System.Object,System.Object},Telegrator.Core.IHandlersCollection@,Telegrator.TelegratorOptions)">
             <summary>
             Replaces TelegramBotWebHostBuilder. Configures DI, options, and handlers.
             </summary>
         </member>
-        <member name="M:Telegrator.ServicesCollectionExtensions.UseTelegratorWeb``1(``0)">
+        <member name="M:Telegrator.ServicesCollectionExtensions.TryFindWebhooker(System.IServiceProvider,Telegrator.Mediation.HostedUpdateWebhooker@)">
+            <summary>
+            Searchs for <see cref="T:Telegrator.Mediation.HostedUpdateWebhooker"/> hosted service inside hosts services
+            </summary>
+            <param name="services"></param>
+            <param name="webhooker"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Telegrator.ServicesCollectionExtensions.UseTelegratorWeb``1(``0,System.Boolean)">
             <summary>
             Replaces the initialization logic from TelegramBotWebHost constructor. 
             Initializes the bot and logs handlers on application startup.
             </summary>
+        </member>
+        <member name="M:Telegrator.ServicesCollectionExtensions.RemapWebhook``1(``0,System.String)">
+            <summary>
+            Allows to remap receiving webhook endpoint and map new route to webhost.
+            </summary>
+            <param name="app"></param>
+            <param name="webhookUri"></param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentException"></exception>
         </member>
         <member name="M:Telegrator.ServicesCollectionExtensions.AddTelegramWebhook(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
             <summary>

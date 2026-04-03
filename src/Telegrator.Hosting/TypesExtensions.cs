@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
@@ -49,7 +50,10 @@ public static class HostBuilderExtensions
     /// </summary>
     public static ITelegramBotHostBuilder AddTelegrator(this ITelegramBotHostBuilder builder, TelegratorOptions? options = null, IHandlersCollection? handlers = null, Action<ITelegramBotHostBuilder>? action = null)
     {
-        builder.AddTelegratorInternal(options, handlers);
+        AddTelegratorInternal(builder.Services, builder.Configuration, builder.Properties, ref handlers, options);
+        if (builder is TelegramBotHostBuilder telegramBotHostBuilder)
+            telegramBotHostBuilder._handlers = handlers;
+
         action?.Invoke(builder);
         return builder;
     }
@@ -59,19 +63,34 @@ public static class HostBuilderExtensions
     /// </summary>
     public static IHostApplicationBuilder AddTelegrator(this HostApplicationBuilder builder, TelegratorOptions? options = null, IHandlersCollection? handlers = null, Action<ITelegramBotHostBuilder>? action = null)
     {
-        builder.AddTelegratorInternal(options, handlers);
-        action?.Invoke(new TelegramBotHostBuilder(builder));
+        AddTelegratorInternal(builder.Services, builder.Configuration, ((IHostApplicationBuilder)builder).Properties, ref handlers, options);
+        action?.Invoke(new TelegramBotHostBuilder(builder, handlers));
         return builder;
     }
 
     /// <summary>
     /// Replaces TelegramBotHostBuilder. Configures DI, options, and handlers.
     /// </summary>
-    public static IHostApplicationBuilder AddTelegratorInternal(this IHostApplicationBuilder builder, TelegratorOptions? options = null, IHandlersCollection? handlers = null)
+    public static IHostApplicationBuilder AddTelegrator(this IHostApplicationBuilder builder, TelegratorOptions? options = null, IHandlersCollection? handlers = null)
     {
-        IServiceCollection services = builder.Services;
-        IConfigurationManager configuration = builder.Configuration;
+        AddTelegratorInternal(builder.Services, builder.Configuration, builder.Properties, ref handlers, options);
+        return builder;
+    }
 
+    /// <summary>
+    /// Replaces TelegramBotHostBuilder. Configures DI, options, and handlers.
+    /// </summary>
+    public static IHostBuilder AddTelegrator(this IHostBuilder builder, TelegratorOptions? options = null, IHandlersCollection? handlers = null)
+    {
+        builder.ConfigureServices((ctx, sp) => AddTelegratorInternal(sp, ctx.Configuration, builder.Properties, ref handlers, options));
+        return builder;
+    }
+
+    /// <summary>
+    /// Replaces TelegramBotHostBuilder. Configures DI, options, and handlers.
+    /// </summary>
+    internal static void AddTelegratorInternal(IServiceCollection services, IConfiguration configuration, IDictionary<object, object> properties, [NotNull] ref IHandlersCollection? handlers, TelegratorOptions? options = null)
+    {
         if (options == null)
         {
             options = configuration.GetSection(nameof(TelegratorOptions)).Get<TelegratorOptions>();
@@ -96,10 +115,7 @@ public static class HostBuilderExtensions
 
         handlers ??= new HostHandlersCollection(services, options);
         services.AddSingleton(handlers);
-
-        builder.Properties.Add(HandlersCollectionPropertyKey, handlers);
-        if (builder is TelegramBotHostBuilder botHostBuilder)
-            botHostBuilder._handlers = handlers;
+        properties.Add(HandlersCollectionPropertyKey, handlers);
 
         if (!services.Any(srvc => srvc.ImplementationType == typeof(IOptions<ReceiverOptions>)))
         {
@@ -119,9 +135,8 @@ public static class HostBuilderExtensions
             }));
         }
 
-        services.AddTelegramReceiver();
         services.AddTelegramBotHostDefaults();
-        return builder;
+        services.AddTelegramReceiver();
     }
 }
 

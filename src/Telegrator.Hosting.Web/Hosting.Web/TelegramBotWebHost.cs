@@ -65,11 +65,11 @@ public class TelegramBotWebHost : IHost, IApplicationBuilder, IEndpointRouteBuil
     /// Creates new <see cref="TelegramBotHostBuilder"/> with default services and webhook update receiving scheme
     /// </summary>
     /// <returns></returns>
-    public static TelegramBotWebHostBuilder CreateBuilder(WebApplicationOptions settings)
+    public static TelegramBotWebHostBuilder CreateBuilder(WebApplicationOptions? settings)
     {
         ArgumentNullException.ThrowIfNull(settings, nameof(settings));
         WebApplicationBuilder innerApp = WebApplication.CreateBuilder(settings);
-        TelegramBotWebHostBuilder builder = new TelegramBotWebHostBuilder(innerApp, settings);
+        TelegramBotWebHostBuilder builder = new TelegramBotWebHostBuilder(innerApp);
         builder.AddTelegratorWeb();
         return builder;
     }
@@ -78,11 +78,11 @@ public class TelegramBotWebHost : IHost, IApplicationBuilder, IEndpointRouteBuil
     /// Creates new SLIM <see cref="TelegramBotHostBuilder"/> with default services and webhook update receiving scheme
     /// </summary>
     /// <returns></returns>
-    public static TelegramBotWebHostBuilder CreateSlimBuilder(WebApplicationOptions settings)
+    public static TelegramBotWebHostBuilder CreateSlimBuilder(WebApplicationOptions? settings)
     {
         ArgumentNullException.ThrowIfNull(settings, nameof(settings));
         WebApplicationBuilder innerApp = WebApplication.CreateSlimBuilder(settings);
-        TelegramBotWebHostBuilder builder = new TelegramBotWebHostBuilder(innerApp, settings);
+        TelegramBotWebHostBuilder builder = new TelegramBotWebHostBuilder(innerApp);
         builder.AddTelegratorWeb();
         return builder;
     }
@@ -91,11 +91,11 @@ public class TelegramBotWebHost : IHost, IApplicationBuilder, IEndpointRouteBuil
     /// Creates new EMPTY <see cref="TelegramBotHostBuilder"/> WITHOUT any services or update receiving schemes
     /// </summary>
     /// <returns></returns>
-    public static TelegramBotWebHostBuilder CreateEmptyBuilder(WebApplicationOptions settings)
+    public static TelegramBotWebHostBuilder CreateEmptyBuilder(WebApplicationOptions? settings)
     {
         ArgumentNullException.ThrowIfNull(settings, nameof(settings));
         WebApplicationBuilder innerApp = WebApplication.CreateEmptyBuilder(settings);
-        TelegramBotWebHostBuilder builder = new TelegramBotWebHostBuilder(innerApp, settings);
+        TelegramBotWebHostBuilder builder = new TelegramBotWebHostBuilder(innerApp);
         builder.AddTelegratorWeb();
         return builder;
     }

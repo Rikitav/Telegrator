@@ -51,7 +51,7 @@ public class TelegramBotHost : IHost, ITelegratorBot
     public static TelegramBotHostBuilder CreateBuilder()
     {
         HostApplicationBuilder innerBuilder = new HostApplicationBuilder(settings: null);
-        TelegramBotHostBuilder builder = new TelegramBotHostBuilder(innerBuilder, null);
+        TelegramBotHostBuilder builder = new TelegramBotHostBuilder(innerBuilder);
         return builder;
     }
 
@@ -62,7 +62,7 @@ public class TelegramBotHost : IHost, ITelegratorBot
     public static TelegramBotHostBuilder CreateBuilder(HostApplicationBuilderSettings? settings)
     {
         HostApplicationBuilder innerBuilder = new HostApplicationBuilder(settings);
-        TelegramBotHostBuilder builder = new TelegramBotHostBuilder(innerBuilder, settings);
+        TelegramBotHostBuilder builder = new TelegramBotHostBuilder(innerBuilder);
         return builder;
     }
 
@@ -73,7 +73,7 @@ public class TelegramBotHost : IHost, ITelegratorBot
     public static TelegramBotHostBuilder CreateEmptyBuilder()
     {
         HostApplicationBuilder innerBuilder = Host.CreateEmptyApplicationBuilder(null);
-        return new TelegramBotHostBuilder(innerBuilder, null);
+        return new TelegramBotHostBuilder(innerBuilder);
     }
 
     /// <summary>
@@ -82,8 +82,8 @@ public class TelegramBotHost : IHost, ITelegratorBot
     /// <returns></returns>
     public static TelegramBotHostBuilder CreateEmptyBuilder(HostApplicationBuilderSettings? settings)
     {
-        HostApplicationBuilder innerBuilder = Host.CreateEmptyApplicationBuilder(null);
-        return new TelegramBotHostBuilder(innerBuilder, settings);
+        HostApplicationBuilder innerBuilder = Host.CreateEmptyApplicationBuilder(settings);
+        return new TelegramBotHostBuilder(innerBuilder);
     }
 
     /// <inheritdoc/>

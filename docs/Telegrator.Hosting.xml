@@ -35,6 +35,11 @@
             Provides access to configuration of this Hosted telegram bot
             </summary>
         </member>
+        <member name="T:Telegrator.Hosting.ITelegramBotHostBuilder">
+            <summary>
+            Represents a hosted telegram bots and services builder that helps manage configuration, logging, lifetime, and more.
+            </summary>
+        </member>
         <member name="T:Telegrator.Hosting.TelegramBotHost">
             <summary>
             Represents a hosted telegram bot
@@ -93,9 +98,7 @@
             </summary>
         </member>
         <member name="T:Telegrator.Hosting.TelegramBotHostBuilder">
-            <summary>
-            Represents a hosted telegram bots and services builder that helps manage configuration, logging, lifetime, and more.
-            </summary>
+            <inheritdoc/>
         </member>
         <member name="P:Telegrator.Hosting.TelegramBotHostBuilder.Handlers">
             <inheritdoc/>
@@ -118,37 +121,18 @@
         <member name="P:Telegrator.Hosting.TelegramBotHostBuilder.Metrics">
             <inheritdoc/>
         </member>
-        <member name="M:Telegrator.Hosting.TelegramBotHostBuilder.#ctor(Microsoft.Extensions.Hosting.HostApplicationBuilder,Microsoft.Extensions.Hosting.HostApplicationBuilderSettings)">
+        <member name="M:Telegrator.Hosting.TelegramBotHostBuilder.#ctor(Microsoft.Extensions.Hosting.HostApplicationBuilder)">
             <summary>
             Initializes a new instance of the <see cref="T:Telegrator.Hosting.TelegramBotHostBuilder"/> class.
             </summary>
             <param name="hostApplicationBuilder"></param>
-            <param name="settings"></param>
         </member>
-        <member name="M:Telegrator.Hosting.TelegramBotHostBuilder.#ctor(Microsoft.Extensions.Hosting.HostApplicationBuilder,Telegrator.TelegratorOptions,Microsoft.Extensions.Hosting.HostApplicationBuilderSettings)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Telegrator.Hosting.TelegramBotHostBuilder"/> class.
-            </summary>
-            <param name="hostApplicationBuilder"></param>
-            <param name="options"></param>
-            <param name="settings"></param>
-        </member>
-        <member name="M:Telegrator.Hosting.TelegramBotHostBuilder.#ctor(Microsoft.Extensions.Hosting.HostApplicationBuilder,Telegrator.Core.IHandlersCollection,Microsoft.Extensions.Hosting.HostApplicationBuilderSettings)">
+        <member name="M:Telegrator.Hosting.TelegramBotHostBuilder.#ctor(Microsoft.Extensions.Hosting.HostApplicationBuilder,Telegrator.Core.IHandlersCollection)">
             <summary>
             Initializes a new instance of the <see cref="T:Telegrator.Hosting.TelegramBotHostBuilder"/> class.
             </summary>
             <param name="hostApplicationBuilder"></param>
             <param name="handlers"></param>
-            <param name="settings"></param>
-        </member>
-        <member name="M:Telegrator.Hosting.TelegramBotHostBuilder.#ctor(Microsoft.Extensions.Hosting.HostApplicationBuilder,Telegrator.Core.IHandlersCollection,Telegrator.TelegratorOptions,Microsoft.Extensions.Hosting.HostApplicationBuilderSettings)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Telegrator.Hosting.TelegramBotHostBuilder"/> class.
-            </summary>
-            <param name="hostApplicationBuilder"></param>
-            <param name="handlers"></param>
-            <param name="options"></param>
-            <param name="settings"></param>
         </member>
         <member name="M:Telegrator.Hosting.TelegramBotHostBuilder.Build">
             <summary>
@@ -268,7 +252,17 @@
             Replaces TelegramBotHostBuilder. Configures DI, options, and handlers.
             </summary>
         </member>
-        <member name="M:Telegrator.HostBuilderExtensions.AddTelegratorInternal(Microsoft.Extensions.Hosting.IHostApplicationBuilder,Telegrator.TelegratorOptions,Telegrator.Core.IHandlersCollection)">
+        <member name="M:Telegrator.HostBuilderExtensions.AddTelegrator(Microsoft.Extensions.Hosting.IHostApplicationBuilder,Telegrator.TelegratorOptions,Telegrator.Core.IHandlersCollection)">
+            <summary>
+            Replaces TelegramBotHostBuilder. Configures DI, options, and handlers.
+            </summary>
+        </member>
+        <member name="M:Telegrator.HostBuilderExtensions.AddTelegrator(Microsoft.Extensions.Hosting.IHostBuilder,Telegrator.TelegratorOptions,Telegrator.Core.IHandlersCollection)">
+            <summary>
+            Replaces TelegramBotHostBuilder. Configures DI, options, and handlers.
+            </summary>
+        </member>
+        <member name="M:Telegrator.HostBuilderExtensions.AddTelegratorInternal(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration,System.Collections.Generic.IDictionary{System.Object,System.Object},Telegrator.Core.IHandlersCollection@,Telegrator.TelegratorOptions)">
             <summary>
             Replaces TelegramBotHostBuilder. Configures DI, options, and handlers.
             </summary>

@@ -1,11 +1,11 @@
 ﻿using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Telegrator.Core;
 
 namespace Telegrator.Hosting;
 
+/// <summary>
+/// Represents a hosted telegram bots and services builder that helps manage configuration, logging, lifetime, and more.
+/// </summary>
 public interface ITelegramBotHostBuilder : IHostApplicationBuilder, ICollectingProvider
 {
 

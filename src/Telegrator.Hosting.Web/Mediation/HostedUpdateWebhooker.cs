@@ -26,7 +26,6 @@ public class HostedUpdateWebhooker : IHostedService
     /// <summary>
     /// Initiallizes new instance of <see cref="HostedUpdateWebhooker"/>
     /// </summary>
-    /// <param name="botHost"></param>
     /// <param name="botClient"></param>
     /// <param name="updateRouter"></param>
     /// <param name="options"></param>
@@ -48,17 +47,6 @@ public class HostedUpdateWebhooker : IHostedService
         return Task.CompletedTask;
     }
 
-    private async void StartInternal(CancellationToken cancellationToken)
-    {
-        await _botClient.SetWebhook(
-            url: _options.WebhookUri,
-            maxConnections: _options.MaxConnections,
-            allowedUpdates: _updateRouter.HandlersProvider.AllowedTypes,
-            dropPendingUpdates: _options.DropPendingUpdates,
-            secretToken: _options.SecretToken,
-            cancellationToken: cancellationToken);
-    }
-
     /// <inheritdoc/>
     public Task StopAsync(CancellationToken cancellationToken)
     {
@@ -67,13 +55,47 @@ public class HostedUpdateWebhooker : IHostedService
     }
 
     /// <summary>
+    /// Allows to remap receiving webhook endpoint and map new route to webhost.
+    /// </summary>
+    /// <param name="routeBuilder"></param>
+    /// <param name="webhookUri"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
+    public async Task RemapWebhook(IEndpointRouteBuilder routeBuilder, string webhookUri, CancellationToken cancellationToken = default)
+    {
+        if (!Uri.TryCreate(webhookUri, UriKind.Absolute, out Uri? result))
+            throw new ArgumentException("invalid URL");
+
+        _options.WebhookUri = result.ToString();
+        await SetWebhook(cancellationToken);
+        MapWebhook(routeBuilder);
+    }
+
+    /// <summary>
     /// Maps bot webhook to application builder
     /// </summary>
     /// <param name="routeBuilder"></param>
-    public void MapWebhook(IEndpointRouteBuilder routeBuilder)
+    internal void MapWebhook(IEndpointRouteBuilder routeBuilder)
     {
         string pattern = new UriBuilder(_options.WebhookUri).Path;
         routeBuilder.MapPost(pattern, (Delegate)ReceiveUpdate);
+    }
+
+    private async void StartInternal(CancellationToken cancellationToken)
+    {
+        await SetWebhook(cancellationToken);
+    }
+
+    private async Task SetWebhook(CancellationToken cancellationToken)
+    {
+        await _botClient.SetWebhook(
+            url: _options.WebhookUri,
+            maxConnections: _options.MaxConnections,
+            allowedUpdates: _updateRouter.HandlersProvider.AllowedTypes,
+            dropPendingUpdates: _options.DropPendingUpdates,
+            secretToken: _options.SecretToken,
+            cancellationToken: cancellationToken);
     }
 
     private async Task<IResult> ReceiveUpdate(HttpContext ctx)

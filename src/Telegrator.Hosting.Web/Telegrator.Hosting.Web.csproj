@@ -15,7 +15,7 @@
     <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
 	  
     <Title>Telegrator.Hosting.Web</Title>
-    <Version>1.16.7</Version>
+    <Version>1.16.8</Version>
 	<Authors>Rikitav Tim4ik</Authors>
     <Company>Rikitav Tim4ik</Company>
     <RepositoryUrl>https://github.com/Rikitav/Telegrator</RepositoryUrl>

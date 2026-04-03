@@ -9,13 +9,10 @@ using Telegrator.Core;
 #pragma warning disable IDE0001
 namespace Telegrator.Hosting.Web;
 
-/// <summary>
-/// Represents a web hosted telegram bots and services builder that helps manage configuration, logging, lifetime, and more.
-/// </summary>
+/// <inheritdoc/>
 public class TelegramBotWebHostBuilder : ITelegramBotHostBuilder
 {
     private readonly WebApplicationBuilder _innerBuilder;
-    private readonly WebApplicationOptions _settings;
     internal IHandlersCollection _handlers = null!;
 
     /// <inheritdoc/>
@@ -43,23 +40,9 @@ public class TelegramBotWebHostBuilder : ITelegramBotHostBuilder
     /// Initializes a new instance of the <see cref="TelegramBotWebHostBuilder"/> class.
     /// </summary>
     /// <param name="webApplicationBuilder"></param>
-    /// <param name="settings"></param>
-    public TelegramBotWebHostBuilder(WebApplicationBuilder webApplicationBuilder, WebApplicationOptions? settings = null)
+    public TelegramBotWebHostBuilder(WebApplicationBuilder webApplicationBuilder)
     {
         _innerBuilder = webApplicationBuilder ?? throw new ArgumentNullException(nameof(webApplicationBuilder));
-        _settings = settings ?? throw new ArgumentNullException(nameof(settings));
-    }
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="TelegramBotWebHostBuilder"/> class.
-    /// </summary>
-    /// <param name="webApplicationBuilder"></param>
-    /// <param name="options"></param>
-    /// <param name="settings"></param>
-    public TelegramBotWebHostBuilder(WebApplicationBuilder webApplicationBuilder, TelegratorOptions? options, WebApplicationOptions? settings)
-    {
-        _innerBuilder = webApplicationBuilder ?? throw new ArgumentNullException(nameof(webApplicationBuilder));
-        _settings = settings ?? throw new ArgumentNullException(nameof(settings));
     }
 
     /// <summary>
@@ -67,24 +50,10 @@ public class TelegramBotWebHostBuilder : ITelegramBotHostBuilder
     /// </summary>
     /// <param name="webApplicationBuilder"></param>
     /// <param name="handlers"></param>
-    /// <param name="settings"></param>
-    public TelegramBotWebHostBuilder(WebApplicationBuilder webApplicationBuilder, IHandlersCollection handlers, WebApplicationOptions settings)
+    public TelegramBotWebHostBuilder(WebApplicationBuilder webApplicationBuilder, IHandlersCollection handlers)
     {
         _innerBuilder = webApplicationBuilder ?? throw new ArgumentNullException(nameof(webApplicationBuilder));
-        _settings = settings ?? throw new ArgumentNullException(nameof(settings));
-    }
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="TelegramBotWebHostBuilder"/> class.
-    /// </summary>
-    /// <param name="webApplicationBuilder"></param>
-    /// <param name="handlers"></param>
-    /// <param name="options"></param>
-    /// <param name="settings"></param>
-    public TelegramBotWebHostBuilder(WebApplicationBuilder webApplicationBuilder, IHandlersCollection handlers, TelegratorOptions? options, WebApplicationOptions settings)
-    {
-        _innerBuilder = webApplicationBuilder ?? throw new ArgumentNullException(nameof(webApplicationBuilder));
-        _settings = settings ?? throw new ArgumentNullException(nameof(settings));
+        _handlers = handlers ?? throw new ArgumentNullException(nameof(handlers));
     }
 
     /// <summary>
