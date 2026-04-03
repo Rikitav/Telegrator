@@ -36,7 +36,8 @@ internal class Program
         builder.Handlers.CollectHandlersAssemblyWide();
 
         builder.Build()
-            .UseTelegratorWeb()
+            .UseTelegratorWeb(dontMap: true)
+            .RemapWebhook("https://awesome-butt-sex.cloudpub.ru/")
             .AddLoggingAdapter()
             .SetBotCommands()
             .Run();
