@@ -16,7 +16,8 @@ internal class Program
             ApplicationName = "TelegramBotWebHost example",
         });
 
-        builder.Handlers.CollectHandlersAssemblyWide();
+        builder.Handlers
+            .CollectHandlersAssemblyWide();
 
         builder.Build()
             .AddLoggingAdapter()
@@ -32,9 +33,9 @@ internal class Program
             ApplicationName = "WebApplication example",
         });
 
-        builder.AddTelegratorWeb();
-        builder.Handlers.CollectHandlersAssemblyWide();
-
+        builder.AddTelegratorWeb(action: builder => builder.Handlers
+            .CollectHandlersAssemblyWide());
+        
         builder.Build()
             .UseTelegratorWeb(dontMap: true)
             .RemapWebhook("https://awesome-butt-sex.cloudpub.ru/")
@@ -55,7 +56,8 @@ internal class Program
             Configuration = configuration
         });
 
-        builder.Handlers.CollectHandlersAssemblyWide();
+        builder.Handlers
+            .CollectHandlersAssemblyWide();
 
         builder.Build()
             .AddLoggingAdapter()
@@ -71,8 +73,8 @@ internal class Program
             ApplicationName = "Host example",
         });
 
-        builder.AddTelegrator();
-        builder.Handlers.CollectHandlersAssemblyWide();
+        builder.AddTelegrator(action: builder => builder.Handlers
+            .CollectHandlersAssemblyWide());
 
         builder.Build()
             .UseTelegrator()

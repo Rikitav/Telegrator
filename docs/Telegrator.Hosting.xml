@@ -239,9 +239,6 @@
             The key used to store the <see cref="T:Telegrator.Core.IHandlersCollection"/> in the builder properties.
             </summary>
         </member>
-        <member name="M:Telegrator.HostBuilderExtensions.get_Handlers(Microsoft.Extensions.Hosting.HostApplicationBuilder)">
-            <inheritdoc cref="P:Telegrator.HostBuilderExtensions.&lt;G&gt;$BF7227490CCA365283B3A9274C9033C7.Handlers"/>
-        </member>
         <member name="M:Telegrator.HostBuilderExtensions.AddTelegrator(Telegrator.Hosting.ITelegramBotHostBuilder,Telegrator.TelegratorOptions,Telegrator.Core.IHandlersCollection,System.Action{Telegrator.Hosting.ITelegramBotHostBuilder})">
             <summary>
             Replaces TelegramBotHostBuilder. Configures DI, options, and handlers.
@@ -265,11 +262,6 @@
         <member name="M:Telegrator.HostBuilderExtensions.AddTelegratorInternal(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration,System.Collections.Generic.IDictionary{System.Object,System.Object},Telegrator.Core.IHandlersCollection@,Telegrator.TelegratorOptions)">
             <summary>
             Replaces TelegramBotHostBuilder. Configures DI, options, and handlers.
-            </summary>
-        </member>
-        <member name="P:Telegrator.HostBuilderExtensions.&lt;G&gt;$BF7227490CCA365283B3A9274C9033C7.Handlers">
-            <summary>
-            Gets the <see cref="T:Telegrator.Core.IHandlersCollection"/> from the builder properties.
             </summary>
         </member>
         <member name="T:Telegrator.ServicesCollectionExtensions">
