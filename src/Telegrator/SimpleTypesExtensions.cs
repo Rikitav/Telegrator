@@ -136,7 +136,7 @@ public static partial class ColletionsExtensions
     /// <typeparam name="T"></typeparam>
     /// <param name="source"></param>
     /// <returns></returns>
-    public static T? SingleSafe<T>(this IEnumerable<T> source)
+    public static T? SingleOrNothing<T>(this IEnumerable<T> source)
         => source.Count() == 1 ? source.ElementAt(0) : default;
 
     /// <summary>
@@ -147,7 +147,7 @@ public static partial class ColletionsExtensions
     /// <param name="source"></param>
     /// <param name="predicate"></param>
     /// <returns></returns>
-    public static T? SingleSafe<T>(this IEnumerable<T> source, Func<T, bool> predicate)
+    public static T? SingleOrNothing<T>(this IEnumerable<T> source, Func<T, bool> predicate)
     {
         source = source.Where(predicate);
         return source.Count() == 1 ? source.ElementAt(0) : default;
@@ -205,7 +205,7 @@ public static partial class ReflectionExtensions
     /// <param name="type"></param>
     /// <returns></returns>
     public static bool HasPublicProperties(this Type type)
-        => type.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).Where(prop => prop.Name != "IsCollectible").Any();
+        => type.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).Any(prop => prop.Name != "IsCollectible");
 
     /// <summary>
     /// Determines whether an instance of a specified type can be assigned to an instance of the current type

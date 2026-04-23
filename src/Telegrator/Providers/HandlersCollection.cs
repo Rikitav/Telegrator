@@ -96,8 +96,7 @@ public class HandlersCollection(TelegratorOptions? options) : IHandlersCollectio
     protected virtual HandlerDescriptorList GetDescriptorList(HandlerDescriptor descriptor)
     {
         UpdateType updateType = UpdateTypeExtensions.SuppressTypes.TryGetValue(descriptor.UpdateType, out UpdateType suppressType) 
-            ? suppressType
-            : descriptor.UpdateType;
+            ? suppressType : descriptor.UpdateType;
 
         if (!InnerDictionary.TryGetValue(updateType, out HandlerDescriptorList? list))
         {
@@ -126,5 +125,11 @@ public class HandlersCollection(TelegratorOptions? options) : IHandlersCollectio
             throw new Exception(descriptor.HandlerType.FullName);
 
         CommandAliasses.AddRange(alliasAttribute.Alliases);
+    }
+
+    /// <inheritdoc/>
+    public bool TryGetDescriptorList(UpdateType updateType, out HandlerDescriptorList list)
+    {
+        return InnerDictionary.TryGetValue(updateType, out list);
     }
 }

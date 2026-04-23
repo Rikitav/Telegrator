@@ -19,6 +19,12 @@ public class AwaitingProvider(TelegratorOptions options) : HandlersProvider([], 
     /// <inheritdoc/>
     public override bool TryGetDescriptorList(UpdateType updateType, out HandlerDescriptorList? list)
     {
+        if (HandlersList.HandlingType != updateType)
+        {
+            list = null;
+            return false;
+        }
+
         list = HandlersList;
         return true;
     }

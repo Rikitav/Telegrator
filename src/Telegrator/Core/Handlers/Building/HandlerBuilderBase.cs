@@ -15,7 +15,7 @@ public abstract class HandlerBuilderBase(Type buildingHandlerType, UpdateType up
     private static int HandlerServiceKeyIndex = 0;
 
     /// <summary>
-    /// <see cref="IHandlersCollection"/> to ehich new builded handlers is adding
+    /// <see cref="IHandlersCollection"/> to which new builded handlers is adding
     /// </summary>
     protected readonly IHandlersCollection? HandlerCollection = handlerCollection;
 

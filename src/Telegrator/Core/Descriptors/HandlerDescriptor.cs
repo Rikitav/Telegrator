@@ -43,7 +43,6 @@ public class HandlerDescriptor
     public DescriptorType Type
     {
         get;
-        private set;
     }
 
     /// <summary>
@@ -52,7 +51,6 @@ public class HandlerDescriptor
     public Type HandlerType
     {
         get;
-        private set;
     }
 
     /// <summary>
@@ -164,7 +162,7 @@ public class HandlerDescriptor
             return;
 
         UpdateHandlerAttributeBase handlerAttribute = HandlerInspector.GetHandlerAttribute(handlerType);
-        if (handlerAttribute.ExpectingHandlerType != null && !handlerAttribute.ExpectingHandlerType.Contains(handlerType.BaseType))
+        if (handlerAttribute.ExpectingHandlerType?.Contains(handlerType.BaseType) == false)
             throw new ArgumentException(string.Format("This handler attribute cannot be attached to this class. Attribute can be attached on next handlers : {0}", string.Join(", ", handlerAttribute.ExpectingHandlerType.AsEnumerable())));
 
         IFilter<Update>? stateKeeperAttribute = HandlerInspector.GetStateKeeperAttribute(handlerType);

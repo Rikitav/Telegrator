@@ -15,7 +15,7 @@ public interface IHandlersProvider
     public IEnumerable<UpdateType> AllowedTypes { get; }
 
     /// <summary>
-    /// 
+    /// Gets the collection of <see cref="UpdateType"/> keys for the handler lists.
     /// </summary>
     /// <param name="updateType"></param>
     /// <param name="list"></param>

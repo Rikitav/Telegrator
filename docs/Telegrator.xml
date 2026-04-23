@@ -2226,7 +2226,7 @@
         </member>
         <member name="F:Telegrator.Core.Handlers.Building.HandlerBuilderBase.HandlerCollection">
             <summary>
-            <see cref="T:Telegrator.Core.IHandlersCollection"/> to ehich new builded handlers is adding
+            <see cref="T:Telegrator.Core.IHandlersCollection"/> to which new builded handlers is adding
             </summary>
         </member>
         <member name="F:Telegrator.Core.Handlers.Building.HandlerBuilderBase.UpdateType">
@@ -2749,6 +2749,14 @@
             <param name="updateType">The update type key.</param>
             <returns>The handler descriptor list for the given update type.</returns>
         </member>
+        <member name="M:Telegrator.Core.IHandlersCollection.TryGetDescriptorList(Telegram.Bot.Types.Enums.UpdateType,Telegrator.Core.Descriptors.HandlerDescriptorList@)">
+            <summary>
+            Tryes to get the <see cref="T:Telegrator.Core.Descriptors.HandlerDescriptorList"/> for the specified <see cref="T:Telegram.Bot.Types.Enums.UpdateType"/>.
+            </summary>
+            <param name="updateType"></param>
+            <param name="list"></param>
+            <returns></returns>
+        </member>
         <member name="M:Telegrator.Core.IHandlersCollection.AddDescriptor(Telegrator.Core.Descriptors.HandlerDescriptor)">
             <summary>
             Adds a <see cref="T:Telegrator.Core.Descriptors.HandlerDescriptor"/> to the collection and returns the updated collection.
@@ -2774,7 +2782,7 @@
         </member>
         <member name="M:Telegrator.Core.IHandlersProvider.TryGetDescriptorList(Telegram.Bot.Types.Enums.UpdateType,Telegrator.Core.Descriptors.HandlerDescriptorList@)">
             <summary>
-            
+            Gets the collection of <see cref="T:Telegram.Bot.Types.Enums.UpdateType"/> keys for the handler lists.
             </summary>
             <param name="updateType"></param>
             <param name="list"></param>
@@ -6237,6 +6245,9 @@
             <param name="descriptor">The handler descriptor to check for command aliases.</param>
             <exception cref="T:System.Exception">Thrown when intersecting command aliases are found and ExceptIntersectingCommandAliases is enabled.</exception>
         </member>
+        <member name="M:Telegrator.Providers.HandlersCollection.TryGetDescriptorList(Telegram.Bot.Types.Enums.UpdateType,Telegrator.Core.Descriptors.HandlerDescriptorList@)">
+            <inheritdoc/>
+        </member>
         <member name="T:Telegrator.Providers.HandlersManagerBase">
             <summary>
             Provides functionality of incrementally collecting, organizing and resolving handlers instances.
@@ -6502,7 +6513,7 @@
             <param name="predicate"></param>
             <returns></returns>
         </member>
-        <member name="M:Telegrator.ColletionsExtensions.SingleSafe``1(System.Collections.Generic.IEnumerable{``0})">
+        <member name="M:Telegrator.ColletionsExtensions.SingleOrNothing``1(System.Collections.Generic.IEnumerable{``0})">
             <summary>
             Returns the only element of a sequence, or a default value if the sequence is empty.
             This method returns default if there is more than one element in the sequence.
@@ -6511,7 +6522,7 @@
             <param name="source"></param>
             <returns></returns>
         </member>
-        <member name="M:Telegrator.ColletionsExtensions.SingleSafe``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean})">
+        <member name="M:Telegrator.ColletionsExtensions.SingleOrNothing``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean})">
             <summary>
             Returns the only element of a sequence that satisfies a specified condition or a default value if no such element exists.
             This method return default if more than one element satisfies the condition.
@@ -6976,6 +6987,16 @@
             <param name="handlingUpdate">The update that triggered the awaiter creation.</param>
             <returns>An awaiter handler builder for the specified update type.</returns>
         </member>
+        <member name="M:Telegrator.AwaitingProviderExtensions.CreateDeleting``1(Telegrator.Core.IAwaitingProvider,Telegram.Bot.Types.Enums.UpdateType,Telegram.Bot.Types.Update)">
+            <summary>
+            Creates an awaiter handler builder for a specific update type that will delete the awaiting handler after awaiting is completed.
+            </summary>
+            <typeparam name="TUpdate"></typeparam>
+            <param name="awaitingProvider"></param>
+            <param name="updateType"></param>
+            <param name="handlingUpdate"></param>
+            <returns></returns>
+        </member>
         <member name="M:Telegrator.AwaitingProviderExtensions.AwaitAny(Telegrator.Core.IAwaitingProvider,Telegram.Bot.Types.Update)">
             <summary>
             Creates an awaiter builder for any update type.
@@ -6999,6 +7020,14 @@
             <param name="awaitingProvider"></param>
             <param name="handlingUpdate"></param>
             <returns>An awaiter builder for callback query updates.</returns>
+        </member>
+        <member name="M:Telegrator.AwaitingProviderExtensions.CancellAllCallbacks(Telegrator.Core.IAwaitingProvider,Telegram.Bot.Types.Update)">
+            <summary>
+            Deletes all awaiting handlers for callback query updates.
+            </summary>
+            <param name="awaitingProvider"></param>
+            <param name="handlingUpdate"></param>
+            <returns></returns>
         </member>
         <member name="T:Telegrator.HandlersProviderExtensions">
             <summary>

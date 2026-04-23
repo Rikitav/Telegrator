@@ -6,5 +6,5 @@
 /// </summary>
 public interface IHandlersManager : IHandlersCollection, IHandlersProvider
 {
-
+    // :P
 }

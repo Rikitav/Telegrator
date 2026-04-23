@@ -95,7 +95,7 @@ public abstract class HandlersManagerBase(TelegratorOptions options) : IHandlers
     /// <exception cref="Exception">Thrown when intersecting command aliases are found and ExceptIntersectingCommandAliases is enabled.</exception>
     protected virtual void IntersectCommands(HandlerDescriptor descriptor)
     {
-        if (Options == null || !Options.ExceptIntersectingCommandAliases)
+        if (Options?.ExceptIntersectingCommandAliases is not true)
             return;
 
         CommandAlliasAttribute? alliasAttribute = descriptor.HandlerType.GetCustomAttribute<CommandAlliasAttribute>();

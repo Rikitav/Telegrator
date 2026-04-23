@@ -232,6 +232,17 @@ public static class AwaitingProviderExtensions
         => new AwaiterHandlerBuilder<TUpdate>(updateType, handlingUpdate, awaitingProvider);
 
     /// <summary>
+    /// Creates an awaiter handler builder for a specific update type that will delete the awaiting handler after awaiting is completed.
+    /// </summary>
+    /// <typeparam name="TUpdate"></typeparam>
+    /// <param name="awaitingProvider"></param>
+    /// <param name="updateType"></param>
+    /// <param name="handlingUpdate"></param>
+    /// <returns></returns>
+    public static IAwaiterHandlerBuilder<TUpdate> CreateDeleting<TUpdate>(this IAwaitingProvider awaitingProvider, UpdateType updateType, Update handlingUpdate) where TUpdate : class
+        => new AwaiterHandlerDeleter<TUpdate>(updateType, handlingUpdate, awaitingProvider);
+
+    /// <summary>
     /// Creates an awaiter builder for any update type.
     /// </summary>
     /// <param name="awaitingProvider"></param>
@@ -257,6 +268,15 @@ public static class AwaitingProviderExtensions
     /// <returns>An awaiter builder for callback query updates.</returns>
     public static IAwaiterHandlerBuilder<CallbackQuery> AwaitCallbackQuery(this IAwaitingProvider awaitingProvider, Update handlingUpdate)
         => awaitingProvider.CreateAbstract<CallbackQuery>(UpdateType.CallbackQuery, handlingUpdate);
+
+    /// <summary>
+    /// Deletes all awaiting handlers for callback query updates.
+    /// </summary>
+    /// <param name="awaitingProvider"></param>
+    /// <param name="handlingUpdate"></param>
+    /// <returns></returns>
+    public static IAwaiterHandlerBuilder<CallbackQuery> CancellAllCallbacks(this IAwaitingProvider awaitingProvider, Update handlingUpdate)
+        => awaitingProvider.CreateDeleting<CallbackQuery>(UpdateType.CallbackQuery, handlingUpdate);
 }
 
 /// <summary>
@@ -418,8 +438,7 @@ public static partial class HandlersCollectionExtensions
     {
         (collectingTarget ?? Assembly.GetCallingAssembly())
             .GetExportedTypes()
-            .Where(type => type.GetCustomAttribute<DontCollectAttribute>() == null)
-            .Where(type => type.IsHandlerRealization())
+            .Where(type => type.GetCustomAttribute<DontCollectAttribute>() == null && type.IsHandlerRealization())
             .ForEach(type => handlers.AddHandler(type));
 
         return handlers;

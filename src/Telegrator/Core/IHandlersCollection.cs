@@ -32,6 +32,14 @@ public interface IHandlersCollection
     public HandlerDescriptorList this[UpdateType updateType] { get; }
 
     /// <summary>
+    /// Tryes to get the <see cref="HandlerDescriptorList"/> for the specified <see cref="UpdateType"/>.
+    /// </summary>
+    /// <param name="updateType"></param>
+    /// <param name="list"></param>
+    /// <returns></returns>
+    public bool TryGetDescriptorList(UpdateType updateType, out HandlerDescriptorList? list);
+
+    /// <summary>
     /// Adds a <see cref="HandlerDescriptor"/> to the collection and returns the updated collection.
     /// </summary>
     /// <param name="descriptor">The handler descriptor to add.</param>
