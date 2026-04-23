@@ -25,6 +25,9 @@ public class HostedUpdateReceiver(ITelegramBotClient botClient, IUpdateRouter up
     {
         logger.LogInformation("Starting receiving updates via long-polling");
         _receiverOptions.AllowedUpdates = _updateRouter.HandlersProvider.AllowedTypes.ToArray();
+
+        botClient.DeleteWebhook(options.Value.DropPendingUpdates).Wait();
+
         DefaultUpdateReceiver updateReceiver = new DefaultUpdateReceiver(botClient, _receiverOptions);
         await updateReceiver.ReceiveAsync(_updateRouter, stoppingToken).ConfigureAwait(false);
     }
