@@ -15,7 +15,7 @@
     <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
 	  
     <Title>Telegrator.Hosting</Title>
-    <Version>1.16.8</Version>
+    <Version>1.16.9</Version>
 	<Authors>Rikitav Tim4ik</Authors>
     <Company>Rikitav Tim4ik</Company>
     <RepositoryUrl>https://github.com/Rikitav/Telegrator</RepositoryUrl>
@@ -31,8 +31,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.5" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.7" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.7" />
   </ItemGroup>
 
   <ItemGroup>

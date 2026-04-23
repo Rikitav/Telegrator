@@ -15,8 +15,8 @@ internal class AwaiterHandler(UpdateType handlingUpdateType) : UpdateHandlerBase
     /// <summary>
     /// Manual reset event used for synchronization.
     /// </summary>
-    private ManualResetEventSlim ResetEvent = new ManualResetEventSlim(false);
-    
+    private readonly TaskCompletionSource<Update> ResetEvent = new TaskCompletionSource<Update>();
+
     /// <summary>
     /// Gets the update that triggered this awaiter handler.
     /// </summary>
@@ -26,10 +26,10 @@ internal class AwaiterHandler(UpdateType handlingUpdateType) : UpdateHandlerBase
     /// Waits for the specified update type to be received.
     /// </summary>
     /// <param name="cancellationToken">The cancellation token to cancel the wait operation.</param>
-    public void Wait(CancellationToken cancellationToken)
+    public async Task<Update> Await(CancellationToken cancellationToken)
     {
-        ResetEvent.Reset();
-        ResetEvent.Wait(cancellationToken);
+        cancellationToken.ThrowIfCancellationRequested();
+        return await ResetEvent.Task.ConfigureAwait(false);
     }
 
     /// <summary>
@@ -51,8 +51,18 @@ internal class AwaiterHandler(UpdateType handlingUpdateType) : UpdateHandlerBase
     /// <returns>A completed task.</returns>
     protected override Task<Result> ExecuteInternal(IHandlerContainer container, CancellationToken cancellation)
     {
-        ResetEvent.Set();
-        return Task.FromResult(Result.Ok());
+        try
+        {
+            if (!ResetEvent.TrySetResult(HandlingUpdate))
+                ResetEvent.TrySetCanceled(cancellation);
+
+            return Task.FromResult(Result.Ok());
+        }
+        catch (Exception ex)
+        {
+            ResetEvent.TrySetException(ex);
+            return Task.FromResult(Result.Fault());
+        }
     }
 
     /// <inheritdoc/>
@@ -61,8 +71,7 @@ internal class AwaiterHandler(UpdateType handlingUpdateType) : UpdateHandlerBase
         if (!disposing)
             return true;
 
-        ResetEvent.Dispose();
-        ResetEvent = null!;
+        ResetEvent.TrySetCanceled();
         return true;
     }
 }

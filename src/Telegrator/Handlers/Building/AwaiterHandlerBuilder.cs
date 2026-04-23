@@ -73,13 +73,11 @@ public class AwaiterHandlerBuilder<TUpdate> : HandlerBuilderBase, IAwaiterHandle
         
         AwaiterHandler handlerInstance = new AwaiterHandler(UpdateType);
         HandlerDescriptor descriptor = BuildImplicitDescriptor(handlerInstance);
-        
+
         using (HandlerProvider.UseHandler(descriptor))
         {
-            handlerInstance.Wait(cancellationToken);
+            await handlerInstance.Await(cancellationToken);
+            return handlerInstance.HandlingUpdate.GetActualUpdateObject<TUpdate>();
         }
-
-        await Task.CompletedTask;
-        return handlerInstance.HandlingUpdate.GetActualUpdateObject<TUpdate>();
     }
 }

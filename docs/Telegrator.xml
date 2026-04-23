@@ -4529,7 +4529,7 @@
             Gets the update that triggered this awaiter handler.
             </summary>
         </member>
-        <member name="M:Telegrator.Handlers.Building.AwaiterHandler.Wait(System.Threading.CancellationToken)">
+        <member name="M:Telegrator.Handlers.Building.AwaiterHandler.Await(System.Threading.CancellationToken)">
             <summary>
             Waits for the specified update type to be received.
             </summary>

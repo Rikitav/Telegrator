@@ -14,7 +14,7 @@
     <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
 	  
     <Title>Telegrator : Telegram.Bot mediator framework</Title>
-    <Version>1.16.8</Version>
+    <Version>1.16.9</Version>
 	<Authors>Rikitav Tim4ik</Authors>
 	<Company>Rikitav Tim4ik</Company>
     <RepositoryUrl>https://github.com/Rikitav/Telegrator</RepositoryUrl>
@@ -23,6 +23,7 @@
     <PackageIcon>telegrator_nuget.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <UserSecretsId>b78bc62d-e49f-4ef0-b2de-ff4ceb3971af</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -32,9 +33,9 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="10.0.5" />
-    <PackageReference Include="System.Threading.Channels" Version="10.0.5" />
-    <PackageReference Include="Telegram.Bot" Version="22.9.5.3" />	  
+    <PackageReference Include="Telegram.Bot" Version="22.9.6.1" />
+	<PackageReference Include="System.Threading.Channels" Version="10.0.7" />
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="10.0.7" />
   </ItemGroup>
 
   <ItemGroup>

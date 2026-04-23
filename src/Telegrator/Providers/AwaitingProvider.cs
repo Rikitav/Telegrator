@@ -46,7 +46,7 @@ public class AwaitingProvider(TelegratorOptions options) : HandlersProvider([], 
         public readonly void Register()
         {
             if (handlerDescriptor.SingletonInstance == null)
-                throw new Exception();
+                throw new Exception("Handler descriptor has no singleton instance.");
 
             handlersList.Add(handlerDescriptor);
         }
