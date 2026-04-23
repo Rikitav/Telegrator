@@ -31,20 +31,6 @@ public static class HostBuilderExtensions
     /// </summary>
     public const string HandlersCollectionPropertyKey = nameof(IHandlersCollection);
 
-    extension (HostApplicationBuilder builder)
-    {
-        /// <summary>
-        /// Gets the <see cref="IHandlersCollection"/> from the builder properties.
-        /// </summary>
-        public IHandlersCollection Handlers
-        {
-            get
-            {
-                return (IHandlersCollection)((IHostApplicationBuilder)builder).Properties[HandlersCollectionPropertyKey];
-            }
-        }
-    }
-
     /// <summary>
     /// Replaces TelegramBotHostBuilder. Configures DI, options, and handlers.
     /// </summary>

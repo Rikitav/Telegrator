@@ -27,20 +27,6 @@ namespace Telegrator
         /// </summary>
         public const string HandlersCollectionPropertyKey = nameof(IHandlersCollection);
 
-        extension(WebApplicationBuilder builder)
-        {
-            /// <summary>
-            /// Gets the <see cref="IHandlersCollection"/> from the builder properties.
-            /// </summary>
-            public IHandlersCollection Handlers
-            {
-                get
-                {
-                    return (IHandlersCollection)builder.Host.Properties[HandlersCollectionPropertyKey];
-                }
-            }
-        }
-
         /// <summary>
         /// Replaces TelegramBotWebHostBuilder. Configures DI, options, and handlers.
         /// </summary>
@@ -60,7 +46,7 @@ namespace Telegrator
         public static IHostApplicationBuilder AddTelegratorWeb(this WebApplicationBuilder builder, TelegratorOptions? options = null, IHandlersCollection? handlers = null, Action<ITelegramBotHostBuilder>? action = null)
         {
             AddTelegratorWebInternal(builder.Services, builder.Configuration, ((IHostApplicationBuilder)builder).Properties, ref handlers, options);
-            action?.Invoke(new TelegramBotWebHostBuilder(builder));
+            action?.Invoke(new TelegramBotWebHostBuilder(builder, handlers));
             return builder;
         }
 
