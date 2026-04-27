@@ -6027,6 +6027,9 @@
             Manages the distribution of updates between regular handlers and awaiting handlers.
             </summary>
         </member>
+        <member name="P:Telegrator.Mediation.UpdateRouter.Options">
+            <inheritdoc/>
+        </member>
         <member name="P:Telegrator.Mediation.UpdateRouter.HandlersProvider">
             <inheritdoc/>
         </member>
@@ -6034,9 +6037,6 @@
             <inheritdoc/>
         </member>
         <member name="P:Telegrator.Mediation.UpdateRouter.StateStorage">
-            <inheritdoc/>
-        </member>
-        <member name="P:Telegrator.Mediation.UpdateRouter.Options">
             <inheritdoc/>
         </member>
         <member name="P:Telegrator.Mediation.UpdateRouter.HandlersPool">
@@ -6377,14 +6377,9 @@
             Represents handler results, allowing to communicate with router and control aspect execution
             </summary>
         </member>
-        <member name="P:Telegrator.Result.Positive">
+        <member name="P:Telegrator.Result.InterruptRouter">
             <summary>
-            Is result positive
-            </summary>
-        </member>
-        <member name="P:Telegrator.Result.RouteNext">
-            <summary>
-            Should router search for next matching handler
+            Tell router to stop describing
             </summary>
         </member>
         <member name="P:Telegrator.Result.NextType">
@@ -6447,6 +6442,14 @@
             <typeparam name="TValue"></typeparam>
             <param name="source"></param>
             <param name="keySelector"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Telegrator.ColletionsExtensions.Squeeze``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Remove all <see langword="null"/> values and returns collection without nullable type.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="source"></param>
             <returns></returns>
         </member>
         <member name="M:Telegrator.ColletionsExtensions.ForEach``1(System.Collections.Generic.IEnumerable{``0},System.Action{``0})">
@@ -6558,7 +6561,7 @@
             <param name="type"></param>
             <returns></returns>
         </member>
-        <member name="M:Telegrator.ReflectionExtensions.IsHandlerRealization(System.Type)">
+        <member name="M:Telegrator.ReflectionExtensions.IsHandlerImplementation(System.Type)">
             <summary>
             Checks if <paramref name="type"/> is an implementation of <see cref="T:Telegrator.Core.Handlers.UpdateHandlerBase"/> class or its descendants
             </summary>
@@ -6802,7 +6805,7 @@
             Initializes the update router and begins polling for updates.
             </summary>
             <param name="receiverOptions">Optional receiver options for configuring update polling.</param>
-            <param name="cancellationToken">The cancellation token to stop receiving updates.</param>
+            <param name="globalCancellationToken">The cancellation token to stop receiving updates.</param>
         </member>
         <member name="M:Telegrator.TelegratorClient.StartReceivingInternal(Telegram.Bot.Polling.ReceiverOptions,System.Threading.CancellationToken)">
             <summary>
@@ -7112,6 +7115,14 @@
             Extension methods for handlers collections.
             Provides convenient methods for creating implicit handlers.
             </summary>
+        </member>
+        <member name="M:Telegrator.HandlersCollectionExtensions.CollectHandlers(Telegrator.Core.IHandlersCollection)">
+            <summary>
+            Collects all handlers from current app domain.
+            Scans for handlers exported by analyzer into class `Telegrator.Analyzers.AnalyzerExport` in each assembly and registers them to the collection.
+            </summary>
+            <param name="handlers"></param>
+            <returns></returns>
         </member>
         <member name="M:Telegrator.HandlersCollectionExtensions.CollectHandlersDomainWide(Telegrator.Core.IHandlersCollection)">
             <summary>

@@ -112,7 +112,7 @@ public class ImplicitHandlerBuilderExtensionsGenerator : IIncrementalGenerator
             {
                 try
                 {
-                    PrimaryConstructorBaseTypeSyntax primaryConstructor = (PrimaryConstructorBaseTypeSyntax)classDeclaration.BaseList.Types.ElementAt(0);
+                    PrimaryConstructorBaseTypeSyntax primaryConstructor = (PrimaryConstructorBaseTypeSyntax)classDeclaration.BaseList.Types[0];
                     MethodDeclarationSyntax genExtension = GeneratedExtensionsMethod(classDeclaration, classDeclaration.ParameterList, primaryConstructor.ArgumentList, targeter);
                     extensions.Add(genExtension);
                 }
@@ -239,7 +239,7 @@ public class ImplicitHandlerBuilderExtensionsGenerator : IIncrementalGenerator
         if (targeters.TryGetValue(classDeclaration.Identifier.ValueText, out MethodDeclarationSyntax targeter))
             return targeter;
 
-        if (classDeclaration.BaseList != null && targeters.TryGetValue(classDeclaration.BaseList.Types.ElementAt(0).Type.ToString(), out targeter))
+        if (classDeclaration.BaseList != null && targeters.TryGetValue(classDeclaration.BaseList.Types[0].Type.ToString(), out targeter))
             return targeter;
 
         return null;

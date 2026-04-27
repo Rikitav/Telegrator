@@ -19,27 +19,22 @@ namespace Telegrator.Mediation;
 /// </summary>
 public class UpdateRouter : IUpdateRouter
 {
-    private readonly TelegratorOptions _options;
-    private readonly IHandlersProvider _handlersProvider;
-    private readonly IAwaitingProvider _awaitingProvider;
-    private readonly IStateStorage _stateStorage;
-    private readonly IUpdateHandlersPool _HandlersPool;
     private readonly ITelegramBotInfo _botInfo;
 
     /// <inheritdoc/>
-    public IHandlersProvider HandlersProvider => _handlersProvider;
+    public TelegratorOptions Options { get; }
 
     /// <inheritdoc/>
-    public IAwaitingProvider AwaitingProvider => _awaitingProvider;
+    public IHandlersProvider HandlersProvider { get; }
 
     /// <inheritdoc/>
-    public IStateStorage StateStorage => _stateStorage;
+    public IAwaitingProvider AwaitingProvider { get; }
 
     /// <inheritdoc/>
-    public TelegratorOptions Options => _options;
+    public IStateStorage StateStorage { get; }
 
     /// <inheritdoc/>
-    public IUpdateHandlersPool HandlersPool => _HandlersPool;
+    public IUpdateHandlersPool HandlersPool { get; }
 
     /// <inheritdoc/>
     public IRouterExceptionHandler? ExceptionHandler { get; set; }
@@ -57,11 +52,11 @@ public class UpdateRouter : IUpdateRouter
     /// <param name="botInfo"></param>
     public UpdateRouter(IHandlersProvider handlersProvider, IAwaitingProvider awaitingProvider, IStateStorage stateStorage, TelegratorOptions options, ITelegramBotInfo botInfo)
     {
-        _options = options;
-        _handlersProvider = handlersProvider;
-        _awaitingProvider = awaitingProvider;
-        _stateStorage = stateStorage;
-        _HandlersPool = new UpdateHandlersPool(this, _options, _options.GlobalCancellationToken);
+        Options = options;
+        HandlersProvider = handlersProvider;
+        AwaitingProvider = awaitingProvider;
+        StateStorage = stateStorage;
+        HandlersPool = new UpdateHandlersPool(this, Options, Options.GlobalCancellationToken);
         _botInfo = botInfo;
     }
 
@@ -116,7 +111,7 @@ public class UpdateRouter : IUpdateRouter
                 if (lastResult == null)
                     break; // Smth went horribly wrong, better to stop routing
 
-                if (lastResult != null && !lastResult.RouteNext)
+                if (lastResult.InterruptRouter)
                     break;
 
                 TelegratorLogging.LogTrace("Handler '{0}' requested route continuation (Update {1})", handlerInfo.DisplayString, handlerInfo.HandlingUpdate.Id);
@@ -146,7 +141,7 @@ public class UpdateRouter : IUpdateRouter
                 if (lastResult == null)
                     break; // Smth went horribly wrong, better to stop routing
 
-                if (lastResult != null && !lastResult.RouteNext)
+                if (lastResult.InterruptRouter)
                     break;
 
                 TelegratorLogging.LogTrace("Handler '{0}' requested route continuation (Update {1})", handlerInfo.DisplayString, handlerInfo.HandlingUpdate.Id);
@@ -248,17 +243,13 @@ public class UpdateRouter : IUpdateRouter
         {
             FiltersFallbackReport report = new FiltersFallbackReport(descriptor, filterContext);
             Result filtersResult = descriptor.Filters.Validate(filterContext, descriptor.FormReport, ref report);
+            
+            if (filtersResult.InterruptRouter)
+                return null;
 
-            if (filtersResult.RouteNext)
-            {
-                Result fallbackResult = handlerInstance.FiltersFallback(report, client, cancellationToken).Result;
-                breakRouting = !fallbackResult.RouteNext;
-                return null;
-            }
-            else if (!filtersResult.Positive)
-            {
-                return null;
-            }
+            Result fallbackResult = handlerInstance.FiltersFallback(report, client, cancellationToken).Result;
+            breakRouting = fallbackResult.InterruptRouter;
+            return null;
         }
 
         return new DescribedHandlerDescriptor(descriptor, this, AwaitingProvider, StateStorage, client, handlerInstance, filterContext, descriptor.DisplayString);
@@ -307,6 +298,4 @@ public class UpdateRouter : IUpdateRouter
 
         TelegratorLogging.LogTrace(sb.ToString());
     }
-
-    private class BreakDescribingException : Exception { }
 }

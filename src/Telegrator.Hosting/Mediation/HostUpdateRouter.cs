@@ -5,9 +5,8 @@ using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
 using Telegrator.Core;
 using Telegrator.Core.States;
-using Telegrator.Mediation;
 
-namespace Telegrator.Polling;
+namespace Telegrator.Mediation;
 
 /// <inheritdoc/>
 public class HostUpdateRouter : UpdateRouter

@@ -15,7 +15,7 @@ using Telegrator.Core.Descriptors;
 using Telegrator.Core.States;
 using Telegrator.Hosting;
 using Telegrator.Logging;
-using Telegrator.Polling;
+using Telegrator.Mediation;
 using Telegrator.Providers;
 using Telegrator.States;
 
@@ -34,20 +34,7 @@ public static class HostBuilderExtensions
     /// <summary>
     /// Replaces TelegramBotHostBuilder. Configures DI, options, and handlers.
     /// </summary>
-    public static ITelegramBotHostBuilder AddTelegrator(this ITelegramBotHostBuilder builder, TelegratorOptions? options = null, IHandlersCollection? handlers = null, Action<ITelegramBotHostBuilder>? action = null)
-    {
-        AddTelegratorInternal(builder.Services, builder.Configuration, builder.Properties, ref handlers, options);
-        if (builder is TelegramBotHostBuilder telegramBotHostBuilder)
-            telegramBotHostBuilder._handlers = handlers;
-
-        action?.Invoke(builder);
-        return builder;
-    }
-
-    /// <summary>
-    /// Replaces TelegramBotHostBuilder. Configures DI, options, and handlers.
-    /// </summary>
-    public static IHostApplicationBuilder AddTelegrator(this HostApplicationBuilder builder, TelegratorOptions? options = null, IHandlersCollection? handlers = null, Action<ITelegramBotHostBuilder>? action = null)
+    public static IHostApplicationBuilder AddTelegrator(this IHostApplicationBuilder builder, TelegratorOptions? options = null, IHandlersCollection? handlers = null, Action<ITelegramBotHostBuilder>? action = null)
     {
         AddTelegratorInternal(builder.Services, builder.Configuration, ((IHostApplicationBuilder)builder).Properties, ref handlers, options);
         action?.Invoke(new TelegramBotHostBuilder(builder, handlers));
@@ -75,13 +62,23 @@ public static class HostBuilderExtensions
     /// <summary>
     /// Replaces TelegramBotHostBuilder. Configures DI, options, and handlers.
     /// </summary>
+    public static IHostBuilder AddTelegrator(this IHostBuilder builder, TelegratorOptions? options = null, IHandlersCollection? handlers = null, Action<IHandlersCollection>? action = null)
+    {
+        builder.ConfigureServices((ctx, sp) => AddTelegratorInternal(sp, ctx.Configuration, builder.Properties, ref handlers, options));
+        action?.Invoke(handlers!); // AddTelegratorInternal initializes `handlers`
+        return builder;
+    }
+
+    /// <summary>
+    /// Replaces TelegramBotHostBuilder. Configures DI, options, and handlers.
+    /// </summary>
     internal static void AddTelegratorInternal(IServiceCollection services, IConfiguration configuration, IDictionary<object, object> properties, [NotNull] ref IHandlersCollection? handlers, TelegratorOptions? options = null)
     {
         if (options == null)
         {
             options = configuration.GetSection(nameof(TelegratorOptions)).Get<TelegratorOptions>();
             if (options == null)
-                throw new MissingMemberException("Auto configuration disabled, yet no options of type 'TelegratorOptions' wasn't registered. This configuration is runtime required!");
+                throw new MissingMemberException("Auto configuration disabled, yet no options of type 'TelegratorOptions' was registered. This configuration is runtime required!");
         }
 
         CancellationTokenSource globallCancell = new CancellationTokenSource();
@@ -103,11 +100,11 @@ public static class HostBuilderExtensions
         services.AddSingleton(handlers);
         properties.Add(HandlersCollectionPropertyKey, handlers);
 
-        if (!services.Any(srvc => srvc.ImplementationType == typeof(IOptions<ReceiverOptions>)))
+        if (!services.Any(srvc => srvc.ServiceType == typeof(IOptions<ReceiverOptions>)))
         {
             ReceiverOptions? receiverOptions = configuration.GetSection(nameof(ReceiverOptions)).Get<ReceiverOptions>();
             if (receiverOptions == null)
-                throw new MissingMemberException("Auto configuration disabled, yet no options of type 'ReceiverOptions' wasn't registered. This configuration is runtime required!");
+                throw new MissingMemberException("Auto configuration disabled, yet no options of type 'ReceiverOptions' was registered. This configuration is runtime required!");
 
             services.AddSingleton(Options.Create(receiverOptions));
         }
@@ -132,6 +129,18 @@ public static class HostBuilderExtensions
 /// </summary>
 public static class ServicesCollectionExtensions
 {
+    public static IServiceCollection ConfigureTelegram(this IServiceCollection services, TelegramBotClientOptions options)
+    {
+        services.AddSingleton(Options.Create(options));
+        return services;
+    }
+
+    public static IServiceCollection ConfigureReceiver(this IServiceCollection services, ReceiverOptions options)
+    {
+        services.AddSingleton(Options.Create(options));
+        return services;
+    }
+
     /// <summary>
     /// Registers <see cref="IStateStorage"/> service
     /// </summary>
@@ -145,7 +154,7 @@ public static class ServicesCollectionExtensions
     }
 
     /// <summary>
-    /// Registers <see cref="TelegramBotHost"/> default services
+    /// Registers <see cref="Telegrator"/> default services
     /// </summary>
     /// <param name="services"></param>
     /// <returns></returns>
@@ -188,7 +197,7 @@ public static class ServicesCollectionExtensions
 public static class TelegramBotHostExtensions
 {
     /// <summary>
-    /// Replaces the initialization logic from TelegramBotWebHost constructor. 
+    /// Replaces the initialization logic from TelegramBotWebHost constructor.
     /// Initializes the bot and logs handlers on application startup.
     /// </summary>
     public static IHost UseTelegrator(this IHost botHost)
@@ -200,11 +209,14 @@ public static class TelegramBotHostExtensions
 
         if (logger.IsEnabled(Microsoft.Extensions.Logging.LogLevel.Information))
         {
-            logger.LogInformation("Telegrator Bot .NET Host started");
+            logger.LogInformation("Telegrator Bot Host started (Generic Host)");
+            logger.LogInformation("Receiving mode : LONG-POLLING");
             logger.LogInformation("Telegram Bot : {firstname}, @{usrname}, id:{id},", info.User.FirstName ?? "[NULL]", info.User.Username ?? "[NULL]", info.User.Id);
             logger.LogHandlers(handlers);
         }
 
+        botHost.AddLoggingAdapter();
+        botHost.SetBotCommands();
         return botHost;
     }
 
@@ -219,7 +231,12 @@ public static class TelegramBotHostExtensions
         IUpdateRouter router = botHost.Services.GetRequiredService<IUpdateRouter>();
 
         IEnumerable<BotCommand> aliases = router.HandlersProvider.GetBotCommands();
-        client.SetMyCommands(aliases).Wait();
+        if (aliases.Any())
+        {
+            client.SetMyCommands(aliases)
+                .ConfigureAwait(false).GetAwaiter().GetResult();
+        }
+
         return botHost;
     }
 
@@ -255,7 +272,7 @@ public static class LoggerExtensions
 
         StringBuilder logBuilder = new StringBuilder("Registered handlers : ");
         if (!handlers.Keys.Any())
-            throw new Exception();
+            throw new Exception("No update types were registered");
 
         foreach (UpdateType updateType in handlers.Keys)
         {

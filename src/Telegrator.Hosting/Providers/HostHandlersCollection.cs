@@ -17,41 +17,60 @@ public class HostHandlersCollection(IServiceCollection hostServiceColletion, Tel
     {
         switch (descriptor.Type)
         {
+            default:
+                throw new Exception("Unknown descriptor type");
+
             case DescriptorType.General:
                 {
                     if (descriptor.InstanceFactory != null)
+                    {
                         Services.AddScoped(descriptor.HandlerType, _ => descriptor.InstanceFactory.Invoke());
-                    else
-                        Services.AddScoped(descriptor.HandlerType);
+                        break;
+                    }
 
+                    Services.AddScoped(descriptor.HandlerType);
                     break;
                 }
 
             case DescriptorType.Keyed:
                 {
                     if (descriptor.InstanceFactory != null)
+                    {
                         Services.AddKeyedScoped(descriptor.HandlerType, descriptor.ServiceKey, (_, _) => descriptor.InstanceFactory.Invoke());
-                    else
-                        Services.AddKeyedScoped(descriptor.HandlerType, descriptor.ServiceKey);
+                        break;
+                    }
 
+                    Services.AddKeyedScoped(descriptor.HandlerType, descriptor.ServiceKey);
                     break;
                 }
 
             case DescriptorType.Singleton:
                 {
-                    Services.AddSingleton(descriptor.HandlerType, descriptor.SingletonInstance ?? (descriptor.InstanceFactory != null
-                        ? descriptor.InstanceFactory.Invoke()
-                        : throw new Exception()));
+                    if (descriptor.SingletonInstance != null)
+                    {
+                        Services.AddSingleton(descriptor.HandlerType, descriptor.SingletonInstance);
+                        break;
+                    }
 
+                    if (descriptor.InstanceFactory == null)
+                        throw new InvalidOperationException("Singleton handler descriptor without singleton instance should implement `InstanceFactory`");
+
+                    Services.AddSingleton(descriptor.HandlerType, descriptor.InstanceFactory.Invoke());
                     break;
                 }
 
             case DescriptorType.Implicit:
                 {
-                    Services.AddKeyedSingleton(descriptor.HandlerType, descriptor.ServiceKey, descriptor.SingletonInstance ?? (descriptor.InstanceFactory != null
-                        ? descriptor.InstanceFactory.Invoke()
-                        : throw new Exception()));
-                    
+                    if (descriptor.SingletonInstance != null)
+                    {
+                        Services.AddKeyedSingleton(descriptor.HandlerType, descriptor.ServiceKey, descriptor.SingletonInstance);
+                        break;
+                    }
+
+                    if (descriptor.InstanceFactory == null)
+                        throw new InvalidOperationException("Implicit handler descriptor without singleton instance should implement `InstanceFactory`");
+
+                    Services.AddKeyedSingleton(descriptor.HandlerType, descriptor.ServiceKey, descriptor.InstanceFactory.Invoke());
                     break;
                 }
         }

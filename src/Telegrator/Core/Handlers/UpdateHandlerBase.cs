@@ -56,7 +56,7 @@ public abstract class UpdateHandlerBase(UpdateType handlingUpdateType) : IUpdate
                         .ExecutePre(this, container, cancellationToken)
                         .ConfigureAwait(false);
 
-                    if (!preResult.Positive)
+                    if (!preResult.InterruptRouter)
                         return preResult;
                 }
                 catch (NotImplementedException)
@@ -69,7 +69,7 @@ public abstract class UpdateHandlerBase(UpdateType handlingUpdateType) : IUpdate
             {
                 // Executing handler
                 Result execResult = await ExecuteInternal(container, cancellationToken).ConfigureAwait(false);
-                if (!execResult.Positive)
+                if (!execResult.InterruptRouter)
                     return execResult;
             }
             catch (NotImplementedException)
@@ -86,7 +86,7 @@ public abstract class UpdateHandlerBase(UpdateType handlingUpdateType) : IUpdate
                         .ExecutePost(this, container, cancellationToken)
                         .ConfigureAwait(false);
 
-                    if (!postResult.Positive)
+                    if (!postResult.InterruptRouter)
                         return postResult;
                 }
             }

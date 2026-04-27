@@ -29,7 +29,7 @@ public class TelegratorClient : TelegramBotClient, ITelegratorBot, ICollectingPr
     public ITelegramBotInfo BotInfo { get; private set; }
 
     /// <inheritdoc/>
-    public IUpdateRouter UpdateRouter { get => updateRouter ?? throw new Exception(); }
+    public IUpdateRouter UpdateRouter => updateRouter ?? throw new InvalidOperationException("Router's not created yet. Invoke `StartReceiving` to initialize this property.");
 
     /// <summary>
     /// Initializes a new instance of the <see cref="TelegratorClient"/> class with a bot token.
@@ -68,11 +68,11 @@ public class TelegratorClient : TelegramBotClient, ITelegratorBot, ICollectingPr
     /// Initializes the update router and begins polling for updates.
     /// </summary>
     /// <param name="receiverOptions">Optional receiver options for configuring update polling.</param>
-    /// <param name="cancellationToken">The cancellation token to stop receiving updates.</param>
-    public void StartReceiving(ReceiverOptions? receiverOptions = null, CancellationToken cancellationToken = default)
+    /// <param name="globalCancellationToken">The cancellation token to stop receiving updates.</param>
+    public void StartReceiving(ReceiverOptions? receiverOptions = null, CancellationToken globalCancellationToken = default)
     {
         if (Options.GlobalCancellationToken == CancellationToken.None)
-            Options.GlobalCancellationToken = cancellationToken;
+            Options.GlobalCancellationToken = globalCancellationToken;
 
         HandlersProvider handlerProvider = new HandlersProvider(Handlers, Options);
         AwaitingProvider awaitingProvider = new AwaitingProvider(Options);
@@ -82,8 +82,7 @@ public class TelegratorClient : TelegramBotClient, ITelegratorBot, ICollectingPr
         
         // Log startup
         TelegratorLogging.LogInformation($"Telegrator bot starting up - BotId: {BotInfo.User.Id}, Username: {BotInfo.User.Username}, MaxParallelHandlers: {Options.MaximumParallelWorkingHandlers ?? -1}");
-
-        StartReceivingInternal(receiverOptions, cancellationToken);
+        StartReceivingInternal(receiverOptions, globalCancellationToken);
     }
 
     /// <summary>
@@ -115,6 +114,4 @@ public class TelegratorClient : TelegramBotClient, ITelegratorBot, ICollectingPr
             TelegratorLogging.LogInformation("Telegrator bot stopped (cancelled)");
         }
     }
-
-
 }

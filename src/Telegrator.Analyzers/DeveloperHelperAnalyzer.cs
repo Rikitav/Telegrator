@@ -10,6 +10,8 @@ namespace Telegrator.Analyzers;
 [Generator(LanguageNames.CSharp)]
 public class DeveloperHelperAnalyzer : IIncrementalGenerator
 {
+    internal record class HandlerDeclarationModel(string ClassName, string NamespaceName, string? AttributeName, string? BaseClassName, Location Location);
+
     private static readonly DiagnosticDescriptor MissingBaseClassWarning = new(
         id: "TLG101",
         title: "Missing handlers base class",
@@ -131,9 +133,8 @@ public class DeveloperHelperAnalyzer : IIncrementalGenerator
 
     private static FieldDeclarationSyntax GenerateTypeField(HandlerDeclarationModel handler)
     {
-        string fullTypeName = handler.Namespace == "Global"
-            ? handler.ClassName
-            : $"{handler.Namespace}.{handler.ClassName}";
+        string fullTypeName = handler.NamespaceName == "Global"
+            ? handler.ClassName : $"{handler.NamespaceName}.{handler.ClassName}";
 
         TypeOfExpressionSyntax typeofExpression = SyntaxFactory.TypeOfExpression(SyntaxFactory.ParseTypeName(fullTypeName));
         VariableDeclaratorSyntax variableDeclarator = SyntaxFactory.VariableDeclarator(SyntaxFactory.Identifier($"{handler.ClassName}Type"))
@@ -147,15 +148,6 @@ public class DeveloperHelperAnalyzer : IIncrementalGenerator
                 SyntaxFactory.Token(SyntaxKind.StaticKeyword),
                 SyntaxFactory.Token(SyntaxKind.ReadOnlyKeyword)));
     }
-}
-
-internal class HandlerDeclarationModel(string className, string namespaceName, string? attributeName, string? baseClassName, Location location)
-{
-    public readonly string ClassName = className;
-    public readonly string Namespace = namespaceName;
-    public readonly string? AttributeName = attributeName;
-    public readonly string? BaseClassName = baseClassName;
-    public readonly Location Location = location;
 }
 
 internal static class DeveloperHelperAnalyzerExtensions

@@ -40,63 +40,6 @@
             Represents a hosted telegram bots and services builder that helps manage configuration, logging, lifetime, and more.
             </summary>
         </member>
-        <member name="T:Telegrator.Hosting.TelegramBotHost">
-            <summary>
-            Represents a hosted telegram bot
-            </summary>
-        </member>
-        <member name="P:Telegrator.Hosting.TelegramBotHost.Services">
-            <inheritdoc/>
-        </member>
-        <member name="P:Telegrator.Hosting.TelegramBotHost.UpdateRouter">
-            <inheritdoc/>
-        </member>
-        <member name="P:Telegrator.Hosting.TelegramBotHost.Logger">
-            <summary>
-            This application's logger
-            </summary>
-        </member>
-        <member name="M:Telegrator.Hosting.TelegramBotHost.#ctor(Microsoft.Extensions.Hosting.HostApplicationBuilder)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Telegrator.Hosting.TelegramBotHost"/> class.
-            </summary>
-            <param name="hostApplicationBuilder">The proxied instance of host builder.</param>
-        </member>
-        <member name="M:Telegrator.Hosting.TelegramBotHost.CreateBuilder">
-            <summary>
-            Creates new <see cref="T:Telegrator.Hosting.TelegramBotHostBuilder"/> with default configuration, services and long-polling update receiving scheme
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Telegrator.Hosting.TelegramBotHost.CreateBuilder(Microsoft.Extensions.Hosting.HostApplicationBuilderSettings)">
-            <summary>
-            Creates new <see cref="T:Telegrator.Hosting.TelegramBotHostBuilder"/> with default services and long-polling update receiving scheme
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Telegrator.Hosting.TelegramBotHost.CreateEmptyBuilder">
-            <summary>
-            Creates new EMPTY <see cref="T:Telegrator.Hosting.TelegramBotHostBuilder"/> WITHOUT any services or update receiving schemes
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Telegrator.Hosting.TelegramBotHost.CreateEmptyBuilder(Microsoft.Extensions.Hosting.HostApplicationBuilderSettings)">
-            <summary>
-            Creates new EMPTY <see cref="T:Telegrator.Hosting.TelegramBotHostBuilder"/> WITHOUT any services or update receiving schemes
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Telegrator.Hosting.TelegramBotHost.StartAsync(System.Threading.CancellationToken)">
-            <inheritdoc/>
-        </member>
-        <member name="M:Telegrator.Hosting.TelegramBotHost.StopAsync(System.Threading.CancellationToken)">
-            <inheritdoc/>
-        </member>
-        <member name="M:Telegrator.Hosting.TelegramBotHost.Dispose">
-            <summary>
-            Disposes the host.
-            </summary>
-        </member>
         <member name="T:Telegrator.Hosting.TelegramBotHostBuilder">
             <inheritdoc/>
         </member>
@@ -121,24 +64,18 @@
         <member name="P:Telegrator.Hosting.TelegramBotHostBuilder.Metrics">
             <inheritdoc/>
         </member>
-        <member name="M:Telegrator.Hosting.TelegramBotHostBuilder.#ctor(Microsoft.Extensions.Hosting.HostApplicationBuilder)">
+        <member name="M:Telegrator.Hosting.TelegramBotHostBuilder.#ctor(Microsoft.Extensions.Hosting.IHostApplicationBuilder)">
             <summary>
             Initializes a new instance of the <see cref="T:Telegrator.Hosting.TelegramBotHostBuilder"/> class.
             </summary>
             <param name="hostApplicationBuilder"></param>
         </member>
-        <member name="M:Telegrator.Hosting.TelegramBotHostBuilder.#ctor(Microsoft.Extensions.Hosting.HostApplicationBuilder,Telegrator.Core.IHandlersCollection)">
+        <member name="M:Telegrator.Hosting.TelegramBotHostBuilder.#ctor(Microsoft.Extensions.Hosting.IHostApplicationBuilder,Telegrator.Core.IHandlersCollection)">
             <summary>
             Initializes a new instance of the <see cref="T:Telegrator.Hosting.TelegramBotHostBuilder"/> class.
             </summary>
             <param name="hostApplicationBuilder"></param>
             <param name="handlers"></param>
-        </member>
-        <member name="M:Telegrator.Hosting.TelegramBotHostBuilder.Build">
-            <summary>
-            Builds the host.
-            </summary>
-            <returns></returns>
         </member>
         <member name="M:Telegrator.Hosting.TelegramBotHostBuilder.ConfigureContainer``1(Microsoft.Extensions.DependencyInjection.IServiceProviderFactory{``0},System.Action{``0})">
             <inheritdoc/>
@@ -158,7 +95,7 @@
         <member name="M:Telegrator.Logging.MicrosoftLoggingAdapter.Log(Telegrator.Logging.LogLevel,System.String,System.Exception)">
             <inheritdoc/>
         </member>
-        <member name="T:Telegrator.Polling.HostedUpdateReceiver">
+        <member name="T:Telegrator.Mediation.HostedUpdateReceiver">
             <summary>
             Service for receiving updates for Hosted telegram bots
             </summary>
@@ -167,7 +104,7 @@
             <param name="options"></param>
             <param name="logger"></param>
         </member>
-        <member name="M:Telegrator.Polling.HostedUpdateReceiver.#ctor(Telegram.Bot.ITelegramBotClient,Telegrator.Core.IUpdateRouter,Microsoft.Extensions.Options.IOptions{Telegram.Bot.Polling.ReceiverOptions},Microsoft.Extensions.Logging.ILogger{Telegrator.Polling.HostedUpdateReceiver})">
+        <member name="M:Telegrator.Mediation.HostedUpdateReceiver.#ctor(Telegram.Bot.ITelegramBotClient,Telegrator.Core.IUpdateRouter,Microsoft.Extensions.Options.IOptions{Telegram.Bot.Polling.ReceiverOptions},Microsoft.Extensions.Logging.ILogger{Telegrator.Mediation.HostedUpdateReceiver})">
             <summary>
             Service for receiving updates for Hosted telegram bots
             </summary>
@@ -176,24 +113,24 @@
             <param name="options"></param>
             <param name="logger"></param>
         </member>
-        <member name="M:Telegrator.Polling.HostedUpdateReceiver.ExecuteAsync(System.Threading.CancellationToken)">
+        <member name="M:Telegrator.Mediation.HostedUpdateReceiver.ExecuteAsync(System.Threading.CancellationToken)">
             <inheritdoc/>
         </member>
-        <member name="T:Telegrator.Polling.HostUpdateRouter">
+        <member name="T:Telegrator.Mediation.HostUpdateRouter">
             <inheritdoc/>
         </member>
-        <member name="F:Telegrator.Polling.HostUpdateRouter.Logger">
+        <member name="F:Telegrator.Mediation.HostUpdateRouter.Logger">
             <summary>
             <see cref="T:Microsoft.Extensions.Logging.ILogger"/> of this router
             </summary>
         </member>
-        <member name="M:Telegrator.Polling.HostUpdateRouter.#ctor(Telegrator.Core.IHandlersProvider,Telegrator.Core.IAwaitingProvider,Telegrator.Core.States.IStateStorage,Microsoft.Extensions.Options.IOptions{Telegrator.TelegratorOptions},Telegrator.Core.ITelegramBotInfo,Microsoft.Extensions.Logging.ILogger{Telegrator.Polling.HostUpdateRouter})">
+        <member name="M:Telegrator.Mediation.HostUpdateRouter.#ctor(Telegrator.Core.IHandlersProvider,Telegrator.Core.IAwaitingProvider,Telegrator.Core.States.IStateStorage,Microsoft.Extensions.Options.IOptions{Telegrator.TelegratorOptions},Telegrator.Core.ITelegramBotInfo,Microsoft.Extensions.Logging.ILogger{Telegrator.Mediation.HostUpdateRouter})">
             <inheritdoc/>
         </member>
-        <member name="M:Telegrator.Polling.HostUpdateRouter.HandleUpdateAsync(Telegram.Bot.ITelegramBotClient,Telegram.Bot.Types.Update,System.Threading.CancellationToken)">
+        <member name="M:Telegrator.Mediation.HostUpdateRouter.HandleUpdateAsync(Telegram.Bot.ITelegramBotClient,Telegram.Bot.Types.Update,System.Threading.CancellationToken)">
             <inheritdoc/>
         </member>
-        <member name="M:Telegrator.Polling.HostUpdateRouter.HandleException(Telegram.Bot.ITelegramBotClient,System.Exception,Telegram.Bot.Polling.HandleErrorSource,System.Threading.CancellationToken)">
+        <member name="M:Telegrator.Mediation.HostUpdateRouter.HandleException(Telegram.Bot.ITelegramBotClient,System.Exception,Telegram.Bot.Polling.HandleErrorSource,System.Threading.CancellationToken)">
             <summary>
             Default exception handler of this router
             </summary>
@@ -239,12 +176,7 @@
             The key used to store the <see cref="T:Telegrator.Core.IHandlersCollection"/> in the builder properties.
             </summary>
         </member>
-        <member name="M:Telegrator.HostBuilderExtensions.AddTelegrator(Telegrator.Hosting.ITelegramBotHostBuilder,Telegrator.TelegratorOptions,Telegrator.Core.IHandlersCollection,System.Action{Telegrator.Hosting.ITelegramBotHostBuilder})">
-            <summary>
-            Replaces TelegramBotHostBuilder. Configures DI, options, and handlers.
-            </summary>
-        </member>
-        <member name="M:Telegrator.HostBuilderExtensions.AddTelegrator(Microsoft.Extensions.Hosting.HostApplicationBuilder,Telegrator.TelegratorOptions,Telegrator.Core.IHandlersCollection,System.Action{Telegrator.Hosting.ITelegramBotHostBuilder})">
+        <member name="M:Telegrator.HostBuilderExtensions.AddTelegrator(Microsoft.Extensions.Hosting.IHostApplicationBuilder,Telegrator.TelegratorOptions,Telegrator.Core.IHandlersCollection,System.Action{Telegrator.Hosting.ITelegramBotHostBuilder})">
             <summary>
             Replaces TelegramBotHostBuilder. Configures DI, options, and handlers.
             </summary>
@@ -255,6 +187,11 @@
             </summary>
         </member>
         <member name="M:Telegrator.HostBuilderExtensions.AddTelegrator(Microsoft.Extensions.Hosting.IHostBuilder,Telegrator.TelegratorOptions,Telegrator.Core.IHandlersCollection)">
+            <summary>
+            Replaces TelegramBotHostBuilder. Configures DI, options, and handlers.
+            </summary>
+        </member>
+        <member name="M:Telegrator.HostBuilderExtensions.AddTelegrator(Microsoft.Extensions.Hosting.IHostBuilder,Telegrator.TelegratorOptions,Telegrator.Core.IHandlersCollection,System.Action{Telegrator.Core.IHandlersCollection})">
             <summary>
             Replaces TelegramBotHostBuilder. Configures DI, options, and handlers.
             </summary>
@@ -280,14 +217,14 @@
         </member>
         <member name="M:Telegrator.ServicesCollectionExtensions.AddTelegramBotHostDefaults(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
             <summary>
-            Registers <see cref="T:Telegrator.Hosting.TelegramBotHost"/> default services
+            Registers <see cref="N:Telegrator"/> default services
             </summary>
             <param name="services"></param>
             <returns></returns>
         </member>
         <member name="M:Telegrator.ServicesCollectionExtensions.AddTelegramReceiver(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
             <summary>
-            Registers <see cref="T:Telegram.Bot.ITelegramBotClient"/> service with <see cref="T:Telegrator.Polling.HostedUpdateReceiver"/> to receive updates using long polling
+            Registers <see cref="T:Telegram.Bot.ITelegramBotClient"/> service with <see cref="T:Telegrator.Mediation.HostedUpdateReceiver"/> to receive updates using long polling
             </summary>
             <param name="services"></param>
             <returns></returns>
@@ -307,7 +244,7 @@
         </member>
         <member name="M:Telegrator.TelegramBotHostExtensions.UseTelegrator(Microsoft.Extensions.Hosting.IHost)">
             <summary>
-            Replaces the initialization logic from TelegramBotWebHost constructor. 
+            Replaces the initialization logic from TelegramBotWebHost constructor.
             Initializes the bot and logs handlers on application startup.
             </summary>
         </member>

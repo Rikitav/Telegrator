@@ -27,6 +27,21 @@ public static partial class ColletionsExtensions
     }
 
     /// <summary>
+    /// Remove all <see langword="null"/> values and returns collection without nullable type.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="source"></param>
+    /// <returns></returns>
+    public static IEnumerable<T> Squeeze<T>(this IEnumerable<T?> source)
+    {
+        foreach (T? item in source)
+        {
+            if (item is not null)
+                yield return item;
+        }
+    }
+
+    /// <summary>
     /// Enumerates objects in a <paramref name="source"/> and executes an <paramref name="action"/> on each one
     /// </summary>
     /// <typeparam name="TValue"></typeparam>
@@ -188,7 +203,7 @@ public static partial class ReflectionExtensions
     /// </summary>
     /// <param name="type"></param>
     /// <returns></returns>
-    public static bool IsHandlerRealization(this Type type)
+    public static bool IsHandlerImplementation(this Type type)
         => !type.IsAbstract && type != typeof(UpdateHandlerBase) && typeof(UpdateHandlerBase).IsAssignableFrom(type);
 
     /// <summary>
@@ -260,6 +275,7 @@ public static partial class StringExtensions
     {
         char[] chars = target.ToCharArray();
         int index = chars.IndexOf(char.IsLetter);
+        
         chars[index] = char.ToUpper(chars[index]);
         return new string(chars);
     }
@@ -273,6 +289,7 @@ public static partial class StringExtensions
     {
         char[] chars = target.ToCharArray();
         int index = chars.IndexOf(char.IsLetter);
+
         chars[index] = char.ToLower(chars[index]);
         return new string(chars);
     }

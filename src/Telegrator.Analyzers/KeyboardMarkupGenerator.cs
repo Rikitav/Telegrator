@@ -8,8 +8,12 @@ using System.Text;
 namespace Telegrator.Analyzers;
 
 [Generator(LanguageNames.CSharp)]
-public class GeneratedKeyboardMarkupGenerator : IIncrementalGenerator
+public class KeyboardMarkupGenerator : IIncrementalGenerator
 {
+    // Records
+    private record class GeneratedMarkupMethodModel(MethodDeclarationSyntax OriginalMethod, FieldDeclarationSyntax GeneratedField, MethodDeclarationSyntax GeneratedMethod);
+    private record class GeneratedMarkupPropertyModel(PropertyDeclarationSyntax OriginalProperty, PropertyDeclarationSyntax GeneratedProperty);
+
     // Return types
     private const string InlineReturnType = "InlineKeyboardMarkup";
     private const string ReplyReturnType = "ReplyKeyboardMarkup";
@@ -458,31 +462,5 @@ public class GeneratedKeyboardMarkupGenerator : IIncrementalGenerator
             SyntaxKind.SimpleMemberAccessExpression,
             SyntaxFactory.IdentifierName(className),
             SyntaxFactory.IdentifierName(methodName));
-    }
-
-    private class GeneratedMarkupMethodModel
-    {
-        public MethodDeclarationSyntax OriginalMethod { get; }
-        public FieldDeclarationSyntax GeneratedField { get; }
-        public MethodDeclarationSyntax GeneratedMethod { get; }
-
-        public GeneratedMarkupMethodModel(MethodDeclarationSyntax originalMethod, FieldDeclarationSyntax generatedField, MethodDeclarationSyntax generatedMethod)
-        {
-            OriginalMethod = originalMethod;
-            GeneratedField = generatedField;
-            GeneratedMethod = generatedMethod;
-        }
-    }
-
-    private class GeneratedMarkupPropertyModel
-    {
-        public PropertyDeclarationSyntax OriginalProperty { get; }
-        public PropertyDeclarationSyntax GeneratedProperty { get; }
-
-        public GeneratedMarkupPropertyModel(PropertyDeclarationSyntax originalProperty, PropertyDeclarationSyntax generatedProperty)
-        {
-            OriginalProperty = originalProperty;
-            GeneratedProperty = generatedProperty;
-        }
     }
 }

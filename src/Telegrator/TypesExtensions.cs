@@ -413,6 +413,26 @@ public static partial class HandlersCollectionExtensions
     ];
 
     /// <summary>
+    /// Collects all handlers from current app domain.
+    /// Scans for handlers exported by analyzer into class `Telegrator.Analyzers.AnalyzerExport` in each assembly and registers them to the collection.
+    /// </summary>
+    /// <param name="handlers"></param>
+    /// <returns></returns>
+    public static IHandlersCollection CollectHandlers(this IHandlersCollection handlers)
+    {
+        const string exportClassName = "Telegrator.Analyzers.AnalyzerExport";
+        AppDomain.CurrentDomain.GetAssemblies()
+            .Select(ass => ass.GetType(exportClassName))
+            .Squeeze()
+            .SelectMany(t => t.GetFields())
+            .Select(f => f.GetValue(null) as Type)
+            .Squeeze()
+            .ForEach(v => handlers.AddHandler(v));
+
+        return handlers;
+    }
+
+    /// <summary>
     /// Collects all public handlers from the current app domain.
     /// Scans for types that implement handlers and adds them to the collection.
     /// </summary>
@@ -438,7 +458,7 @@ public static partial class HandlersCollectionExtensions
     {
         (collectingTarget ?? Assembly.GetCallingAssembly())
             .GetExportedTypes()
-            .Where(type => type.GetCustomAttribute<DontCollectAttribute>() == null && type.IsHandlerRealization())
+            .Where(type => type.GetCustomAttribute<DontCollectAttribute>() == null && type.IsHandlerImplementation())
             .ForEach(type => handlers.AddHandler(type));
 
         return handlers;
@@ -496,7 +516,7 @@ public static partial class HandlersCollectionExtensions
     /// <exception cref="Exception">Thrown when the type is not a valid handler implementation.</exception>
     public static IHandlersCollection AddHandler(this IHandlersCollection handlers, Type handlerType)
     {
-        if (!handlerType.IsHandlerRealization())
+        if (!handlerType.IsHandlerImplementation())
             throw new Exception();
 
         if (handlerType.IsCustomDescriptorsProvider())

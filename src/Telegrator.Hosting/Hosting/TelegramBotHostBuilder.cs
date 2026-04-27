@@ -11,7 +11,7 @@ namespace Telegrator.Hosting;
 /// <inheritdoc/>
 public class TelegramBotHostBuilder : ITelegramBotHostBuilder
 {
-    private readonly HostApplicationBuilder _innerBuilder;
+    private readonly IHostApplicationBuilder _innerBuilder;
     internal IHandlersCollection _handlers = null!;
 
     /// <inheritdoc/>
@@ -30,7 +30,7 @@ public class TelegramBotHostBuilder : ITelegramBotHostBuilder
     public IHostEnvironment Environment => _innerBuilder.Environment;
 
     /// <inheritdoc/>
-    public IDictionary<object, object> Properties => ((IHostApplicationBuilder)_innerBuilder).Properties;
+    public IDictionary<object, object> Properties => _innerBuilder.Properties;
 
     /// <inheritdoc/>
     public IMetricsBuilder Metrics => _innerBuilder.Metrics;
@@ -39,7 +39,7 @@ public class TelegramBotHostBuilder : ITelegramBotHostBuilder
     /// Initializes a new instance of the <see cref="TelegramBotHostBuilder"/> class.
     /// </summary>
     /// <param name="hostApplicationBuilder"></param>
-    public TelegramBotHostBuilder(HostApplicationBuilder hostApplicationBuilder)
+    public TelegramBotHostBuilder(IHostApplicationBuilder hostApplicationBuilder)
     {
         _innerBuilder = hostApplicationBuilder ?? throw new ArgumentNullException(nameof(hostApplicationBuilder));
     }
@@ -49,21 +49,10 @@ public class TelegramBotHostBuilder : ITelegramBotHostBuilder
     /// </summary>
     /// <param name="hostApplicationBuilder"></param>
     /// <param name="handlers"></param>
-    public TelegramBotHostBuilder(HostApplicationBuilder hostApplicationBuilder, IHandlersCollection handlers)
+    public TelegramBotHostBuilder(IHostApplicationBuilder hostApplicationBuilder, IHandlersCollection handlers)
     {
         _innerBuilder = hostApplicationBuilder ?? throw new ArgumentNullException(nameof(hostApplicationBuilder));
         _handlers = handlers ?? throw new ArgumentNullException(nameof(handlers));
-    }
-
-    /// <summary>
-    /// Builds the host.
-    /// </summary>
-    /// <returns></returns>
-    public TelegramBotHost Build()
-    {
-        TelegramBotHost host = new TelegramBotHost(_innerBuilder);
-        host.UseTelegrator();
-        return host;
     }
 
     /// <inheritdoc/>
