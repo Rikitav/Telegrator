@@ -201,13 +201,13 @@
             Replaces TelegramBotHostBuilder. Configures DI, options, and handlers.
             </summary>
         </member>
-        <member name="T:Telegrator.ServicesCollectionExtensions">
+        <member name="T:Telegrator.HostServicesCollectionExtensions">
             <summary>
             Contains extensions for <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>
             Provides method to configure Telegram Bot Host
             </summary>
         </member>
-        <member name="M:Telegrator.ServicesCollectionExtensions.AddStateStorage``1(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+        <member name="M:Telegrator.HostServicesCollectionExtensions.AddStateStorage``1(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
             <summary>
             Registers <see cref="T:Telegrator.Core.States.IStateStorage"/> service
             </summary>
@@ -215,21 +215,21 @@
             <param name="services"></param>
             <returns></returns>
         </member>
-        <member name="M:Telegrator.ServicesCollectionExtensions.AddTelegramBotHostDefaults(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+        <member name="M:Telegrator.HostServicesCollectionExtensions.AddTelegramBotHostDefaults(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
             <summary>
             Registers <see cref="N:Telegrator"/> default services
             </summary>
             <param name="services"></param>
             <returns></returns>
         </member>
-        <member name="M:Telegrator.ServicesCollectionExtensions.AddTelegramReceiver(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+        <member name="M:Telegrator.HostServicesCollectionExtensions.AddTelegramReceiver(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
             <summary>
             Registers <see cref="T:Telegram.Bot.ITelegramBotClient"/> service with <see cref="T:Telegrator.Mediation.HostedUpdateReceiver"/> to receive updates using long polling
             </summary>
             <param name="services"></param>
             <returns></returns>
         </member>
-        <member name="M:Telegrator.ServicesCollectionExtensions.TypedTelegramBotClientFactory(System.Net.Http.HttpClient,System.IServiceProvider)">
+        <member name="M:Telegrator.HostServicesCollectionExtensions.TypedTelegramBotClientFactory(System.Net.Http.HttpClient,System.IServiceProvider)">
             <summary>
             <see cref="T:Telegram.Bot.ITelegramBotClient"/> factory method
             </summary>

@@ -69,33 +69,33 @@
             </summary>
             <param name="routeBuilder"></param>
         </member>
-        <member name="T:Telegrator.ServicesCollectionExtensions">
+        <member name="T:Telegrator.WebHostBuilderExtensions">
+            <summary>
+            Provides extension methods for <see cref="T:Microsoft.Extensions.Hosting.IHostApplicationBuilder"/> to configure Telegrator.
+            </summary>
+        </member>
+        <member name="M:Telegrator.WebHostBuilderExtensions.AddTelegratorWeb(Microsoft.Extensions.Hosting.IHostApplicationBuilder,Telegrator.TelegratorOptions,Telegrator.Core.IHandlersCollection)">
+            <summary>
+            Replaces TelegramBotWebHostBuilder. Configures DI, options, and handlers.
+            </summary>
+        </member>
+        <member name="M:Telegrator.WebHostBuilderExtensions.AddTelegratorWeb(Microsoft.Extensions.Hosting.IHostApplicationBuilder,Telegrator.TelegratorOptions,Telegrator.Core.IHandlersCollection,System.Action{Telegrator.Hosting.ITelegramBotHostBuilder})">
+            <summary>
+            Replaces TelegramBotWebHostBuilder. Configures DI, options, and handlers.
+            </summary>
+        </member>
+        <member name="M:Telegrator.WebHostBuilderExtensions.AddTelegratorWebInternal(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration,System.Collections.Generic.IDictionary{System.Object,System.Object},Telegrator.Core.IHandlersCollection@,Telegrator.TelegratorOptions)">
+            <summary>
+            Replaces TelegramBotWebHostBuilder. Configures DI, options, and handlers.
+            </summary>
+        </member>
+        <member name="T:Telegrator.WebServicesCollectionExtensions">
             <summary>
             Contains extensions for <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>
             Provides method to configure Telegram Bot WebHost
             </summary>
         </member>
-        <member name="M:Telegrator.ServicesCollectionExtensions.AddTelegratorWeb(Microsoft.Extensions.Hosting.IHostApplicationBuilder,Telegrator.TelegratorOptions,Telegrator.Core.IHandlersCollection)">
-            <summary>
-            Replaces TelegramBotWebHostBuilder. Configures DI, options, and handlers.
-            </summary>
-        </member>
-        <member name="M:Telegrator.ServicesCollectionExtensions.AddTelegratorWeb(Microsoft.Extensions.Hosting.IHostApplicationBuilder,Telegrator.TelegratorOptions,Telegrator.Core.IHandlersCollection,System.Action{Telegrator.Hosting.ITelegramBotHostBuilder})">
-            <summary>
-            Replaces TelegramBotWebHostBuilder. Configures DI, options, and handlers.
-            </summary>
-        </member>
-        <member name="M:Telegrator.ServicesCollectionExtensions.AddTelegratorWebInternal(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration,System.Collections.Generic.IDictionary{System.Object,System.Object},Telegrator.Core.IHandlersCollection@,Telegrator.TelegratorOptions)">
-            <summary>
-            Replaces TelegramBotWebHostBuilder. Configures DI, options, and handlers.
-            </summary>
-        </member>
-        <member name="T:Telegrator.TelegramBotHostExtensions">
-            <summary>
-            Provides useful methods to adjust Telegram bot Host
-            </summary>
-        </member>
-        <member name="M:Telegrator.TelegramBotHostExtensions.TryFindWebhooker(System.IServiceProvider,Telegrator.Mediation.HostedUpdateWebhooker@)">
+        <member name="M:Telegrator.WebServicesCollectionExtensions.TryFindWebhooker(System.IServiceProvider,Telegrator.Mediation.HostedUpdateWebhooker@)">
             <summary>
             Searchs for <see cref="T:Telegrator.Mediation.HostedUpdateWebhooker"/> hosted service inside hosts services
             </summary>
@@ -103,13 +103,18 @@
             <param name="webhooker"></param>
             <returns></returns>
         </member>
-        <member name="M:Telegrator.TelegramBotHostExtensions.UseTelegratorWeb``1(``0,System.Boolean)">
+        <member name="T:Telegrator.WebTelegramBotHostExtensions">
+            <summary>
+            Provides useful methods to adjust Telegram bot Host
+            </summary>
+        </member>
+        <member name="M:Telegrator.WebTelegramBotHostExtensions.UseTelegratorWeb``1(``0,System.Boolean)">
             <summary>
             Replaces the initialization logic from TelegramBotWebHost constructor. 
             Initializes the bot and logs handlers on application startup.
             </summary>
         </member>
-        <member name="M:Telegrator.TelegramBotHostExtensions.RemapWebhook``1(``0,System.String)">
+        <member name="M:Telegrator.WebTelegramBotHostExtensions.RemapWebhook``1(``0,System.String)">
             <summary>
             Allows to remap receiving webhook endpoint and map new route to webhost.
             </summary>
@@ -118,7 +123,7 @@
             <returns></returns>
             <exception cref="T:System.ArgumentException"></exception>
         </member>
-        <member name="M:Telegrator.TelegramBotHostExtensions.AddTelegramWebhook(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+        <member name="M:Telegrator.WebTelegramBotHostExtensions.AddTelegramWebhook(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
             <summary>
             Registers <see cref="T:Telegram.Bot.ITelegramBotClient"/> service with <see cref="T:Telegrator.Mediation.HostedUpdateWebhooker"/> to receive updates using webhook
             </summary>

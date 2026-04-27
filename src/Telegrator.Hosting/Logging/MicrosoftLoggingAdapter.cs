@@ -32,11 +32,13 @@ public class MicrosoftLoggingAdapter : ITelegratorLogger
 
         if (exception != null)
         {
-            _logger.Log(msLogLevel, default, message, exception, (str, exc) => string.Format("{0} : {1}", str, exc));
+            _logger.Log(msLogLevel, default, message, exception,
+                (str, exc) => string.Format("{0} : {1}", str, exc));
         }
         else
         {
-            _logger.Log(msLogLevel, default, message, null, (str, _) => str);
+            _logger.Log(msLogLevel, default, message, null,
+                (str, _) => str);
         }
     }
 }

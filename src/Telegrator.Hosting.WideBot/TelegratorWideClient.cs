@@ -1,6 +1,5 @@
-﻿// Maybe later...
-
-/*
+﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Net.Http;
 using System.Threading;
@@ -55,8 +54,8 @@ public class TelegratorWClient : WTelegramBotClient, ITelegratorBot, ICollecting
         {
             try
             {
-                await new HostedWideBotUpdateReceiver(this)
-                    .ReceiveAsync(UpdateRouter, cancellationToken)
+                await new HostedWideBotUpdateReceiver(NullLoggerFactory.Instance.CreateLogger<HostedWideBotUpdateReceiver>(), this, UpdateRouter, null)
+                    .StartAsync(cancellationToken)
                     .ConfigureAwait(false);
             }
             catch (Exception exception)
@@ -73,4 +72,3 @@ public class TelegratorWClient : WTelegramBotClient, ITelegratorBot, ICollecting
         }
     }
 }
-*/

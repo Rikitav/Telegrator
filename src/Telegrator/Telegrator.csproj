@@ -14,7 +14,7 @@
     <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
 	  
     <Title>Telegrator : Telegram.Bot mediator framework</Title>
-    <Version>1.16.9</Version>
+    <Version>1.17.0</Version>
 	<Authors>Rikitav Tim4ik</Authors>
 	<Company>Rikitav Tim4ik</Company>
     <RepositoryUrl>https://github.com/Rikitav/Telegrator</RepositoryUrl>
@@ -23,7 +23,6 @@
     <PackageIcon>telegrator_nuget.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <UserSecretsId>b78bc62d-e49f-4ef0-b2de-ff4ceb3971af</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

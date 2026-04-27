@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Routing;
+﻿using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -8,7 +7,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Diagnostics.CodeAnalysis;
 using Telegram.Bot;
-using Telegram.Bot.Polling;
 using Telegrator.Core;
 using Telegrator.Hosting;
 using Telegrator.Hosting.Web;
@@ -18,17 +16,10 @@ using Telegrator.Providers;
 namespace Telegrator;
 
 /// <summary>
-/// Contains extensions for <see cref="IServiceCollection"/>
-/// Provides method to configure Telegram Bot WebHost
+/// Provides extension methods for <see cref="IHostApplicationBuilder"/> to configure Telegrator.
 /// </summary>
-public static class ServicesCollectionExtensions
+public static class WebHostBuilderExtensions
 {
-    public static IServiceCollection ConfigureWebhooker(this IServiceCollection services, WebhookerOptions options)
-    {
-        services.AddSingleton(Options.Create(options));
-        return services;
-    }
-
     /// <summary>
     /// Replaces TelegramBotWebHostBuilder. Configures DI, options, and handlers.
     /// </summary>
@@ -103,10 +94,17 @@ public static class ServicesCollectionExtensions
 }
 
 /// <summary>
-/// Provides useful methods to adjust Telegram bot Host
+/// Contains extensions for <see cref="IServiceCollection"/>
+/// Provides method to configure Telegram Bot WebHost
 /// </summary>
-public static class TelegramBotHostExtensions
+public static class WebServicesCollectionExtensions
 {
+    public static IServiceCollection ConfigureWebhooker(this IServiceCollection services, WebhookerOptions options)
+    {
+        services.AddSingleton(Options.Create(options));
+        return services;
+    }
+
     /// <summary>
     /// Searchs for <see cref="HostedUpdateWebhooker"/> hosted service inside hosts services
     /// </summary>
@@ -118,7 +116,13 @@ public static class TelegramBotHostExtensions
         webhooker = services.GetServices<IHostedService>().FirstOrDefault(s => s is HostedUpdateWebhooker) as HostedUpdateWebhooker;
         return webhooker != null;
     }
+}
 
+/// <summary>
+/// Provides useful methods to adjust Telegram bot Host
+/// </summary>
+public static class WebTelegramBotHostExtensions
+{
     /// <summary>
     /// Replaces the initialization logic from TelegramBotWebHost constructor. 
     /// Initializes the bot and logs handlers on application startup.

@@ -27,13 +27,26 @@ public static class HandlersExtensions
 {
     extension<TUpdate>(AbstractUpdateHandler<TUpdate> handler) where TUpdate : class
     {
-        public WUpdate WUpdate
+        public WTelegramBotClient WClient
         {
             get
             {
-                object? update = typeof(AbstractUpdateHandler<TUpdate>).GetField("HandlingUpdate")?.GetValue(handler);
+                object? client = handler.GetType().GetField("Client")?.GetValue(handler);
+                if (client is not WTelegramBotClient wideClient)
+                    throw new InvalidCastException("Client is not assignable to `WTelegram.Bot.WTelegramBotClient`");
+
+                return wideClient;
+            }
+
+        }
+
+        public WUpdate WideUpdate
+        {
+            get
+            {
+                object? update = handler.GetType().GetField("HandlingUpdate")?.GetValue(handler);
                 if (update is not WUpdate wUpdate)
-                    throw new InvalidCastException();
+                    throw new InvalidCastException("Update is not assignable to `WTelegram.Types.Update`");
 
                 return wUpdate;
             }
@@ -41,7 +54,7 @@ public static class HandlersExtensions
 
         public TLUpdate? TLUpdate
         {
-            get => handler.WUpdate.TLUpdate;
+            get => handler.WideUpdate.TLUpdate;
         }
     }
 
@@ -55,14 +68,8 @@ public static class HandlersExtensions
 /// <summary>
 /// Provides extension methods for <see cref="IHostApplicationBuilder"/> to configure Telegrator.
 /// </summary>
-public static class ServiceCollectionExtensions
+public static class WideHostBuilderExtensions
 {
-    public static IServiceCollection ConfigureWideTelegram(this IServiceCollection services, WTelegramBotClientOptions options)
-    {
-        services.AddSingleton(Options.Create(options));
-        return services;
-    }
-
     /// <summary>
     /// Replaces TelegramBotHostBuilder. Configures DI, options, and handlers.
     /// </summary>
@@ -133,6 +140,19 @@ public static class ServiceCollectionExtensions
         services.AddTelegramBotHostDefaults();
         services.AddMTProtoUpdateReceiver();
     }
+}
+
+/// <summary>
+/// Contains extensions for <see cref="IServiceCollection"/>
+/// Provides method to configure Telegram Bot WebHost
+/// </summary>
+public static class WideBotServiceCollectionExtensions
+{
+    public static IServiceCollection ConfigureWideTelegram(this IServiceCollection services, WTelegramBotClientOptions options)
+    {
+        services.AddSingleton(Options.Create(options));
+        return services;
+    }
 
     public static IServiceCollection AddMTProtoUpdateReceiver(this IServiceCollection services)
     {
@@ -149,8 +169,12 @@ public static class ServiceCollectionExtensions
 /// <summary>
 /// Provides useful methods to adjust Telegram bot Host
 /// </summary>
-public static class TelegramBotHostExtensions
+public static class WideTelegramBotHostExtensions
 {
+    /// <summary>
+    /// Replaces the initialization logic from TelegramBotWebHost constructor. 
+    /// Initializes the bot and logs handlers on application startup.
+    /// </summary>
     public static IHost UseWideTelegrator(this IHost botHost)
     {
         if (!botHost.Services.TryFindWTelegramBotClient())

@@ -127,7 +127,7 @@ public static class HostBuilderExtensions
 /// Contains extensions for <see cref="IServiceCollection"/>
 /// Provides method to configure Telegram Bot Host
 /// </summary>
-public static class ServicesCollectionExtensions
+public static class HostServicesCollectionExtensions
 {
     public static IServiceCollection ConfigureTelegram(this IServiceCollection services, TelegramBotClientOptions options)
     {

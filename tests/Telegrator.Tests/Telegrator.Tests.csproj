@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.7" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
     <PackageReference Include="xunit" Version="2.6.6" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.5.6" />
@@ -18,6 +19,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Telegartor.RedisStateStorage\Telegartor.RedisStateStorage.csproj" />
+    <ProjectReference Include="..\..\src\Telegrator.Hosting.Web\Telegrator.Hosting.Web.csproj" />
+    <ProjectReference Include="..\..\src\Telegrator.Hosting.WideBot\Telegrator.Hosting.WideBot.csproj" />
+    <ProjectReference Include="..\..\src\Telegrator.Localized\Telegrator.Localized.csproj" />
     <ProjectReference Include="..\..\src\Telegrator\Telegrator.csproj" />
     <ProjectReference Include="..\..\src\Telegrator.Hosting\Telegrator.Hosting.csproj" />
   </ItemGroup>

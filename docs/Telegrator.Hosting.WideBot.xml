@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Telegrator.Hosting.WideBot</name>
+    </assembly>
+    <members>
+        <member name="T:Telegrator.WideHostBuilderExtensions">
+            <summary>
+            Provides extension methods for <see cref="T:Microsoft.Extensions.Hosting.IHostApplicationBuilder"/> to configure Telegrator.
+            </summary>
+        </member>
+        <member name="M:Telegrator.WideHostBuilderExtensions.AddWideTelegrator(Microsoft.Extensions.Hosting.IHostApplicationBuilder,Telegrator.TelegratorOptions,Telegrator.Core.IHandlersCollection,System.Action{Telegrator.Hosting.ITelegramBotHostBuilder})">
+            <summary>
+            Replaces TelegramBotHostBuilder. Configures DI, options, and handlers.
+            </summary>
+        </member>
+        <member name="M:Telegrator.WideHostBuilderExtensions.AddWideTelegrator(Microsoft.Extensions.Hosting.IHostApplicationBuilder,Telegrator.TelegratorOptions,Telegrator.Core.IHandlersCollection)">
+            <summary>
+            Replaces TelegramBotHostBuilder. Configures DI, options, and handlers.
+            </summary>
+        </member>
+        <member name="M:Telegrator.WideHostBuilderExtensions.AddTelegratorInternal(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration,System.Collections.Generic.IDictionary{System.Object,System.Object},Telegrator.Core.IHandlersCollection@,Telegrator.TelegratorOptions)">
+            <summary>
+            Replaces TelegramBotHostBuilder. Configures DI, options, and handlers.
+            </summary>
+        </member>
+        <member name="T:Telegrator.WideBotServiceCollectionExtensions">
+            <summary>
+            Contains extensions for <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>
+            Provides method to configure Telegram Bot WebHost
+            </summary>
+        </member>
+        <member name="T:Telegrator.WideTelegramBotHostExtensions">
+            <summary>
+            Provides useful methods to adjust Telegram bot Host
+            </summary>
+        </member>
+        <member name="M:Telegrator.WideTelegramBotHostExtensions.UseWideTelegrator(Microsoft.Extensions.Hosting.IHost)">
+            <summary>
+            Replaces the initialization logic from TelegramBotWebHost constructor. 
+            Initializes the bot and logs handlers on application startup.
+            </summary>
+        </member>
+    </members>
+</doc>
