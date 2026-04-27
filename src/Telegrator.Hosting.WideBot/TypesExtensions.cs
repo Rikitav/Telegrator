@@ -4,12 +4,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Net.Http;
-using System.Threading;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegrator.Core;
@@ -58,6 +53,12 @@ public static class HandlersExtensions
         }
     }
 
+    public static WTelegramBotClient AsWClient(this ITelegramBotClient client)
+    {
+        return client as WTelegramBotClient
+            ?? throw new InvalidCastException("Client is not assignable to `WTelegram.Bot.WTelegramBotClient`");
+    }
+
     public static WUpdate AsWUpdate(this Update update)
     {
         return update as WUpdate
@@ -75,7 +76,7 @@ public static class WideHostBuilderExtensions
     /// </summary>
     public static IHostApplicationBuilder AddWideTelegrator(this IHostApplicationBuilder builder, TelegratorOptions? options = null, IHandlersCollection? handlers = null, Action<ITelegramBotHostBuilder>? action = null)
     {
-        AddTelegratorInternal(builder.Services, builder.Configuration, builder.Properties, ref handlers, options);
+        AddWideTelegratorInternal(builder.Services, builder.Configuration, builder.Properties, ref handlers, options);
         action?.Invoke(new TelegramBotHostBuilder(builder, handlers));
         return builder;
     }
@@ -85,14 +86,14 @@ public static class WideHostBuilderExtensions
     /// </summary>
     public static IHostApplicationBuilder AddWideTelegrator(this IHostApplicationBuilder builder, TelegratorOptions? options = null, IHandlersCollection? handlers = null)
     {
-        AddTelegratorInternal(builder.Services, builder.Configuration, builder.Properties, ref handlers, options);
+        AddWideTelegratorInternal(builder.Services, builder.Configuration, builder.Properties, ref handlers, options);
         return builder;
     }
 
     /// <summary>
     /// Replaces TelegramBotHostBuilder. Configures DI, options, and handlers.
     /// </summary>
-    internal static void AddTelegratorInternal(IServiceCollection services, IConfiguration configuration, IDictionary<object, object> properties, [NotNull] ref IHandlersCollection? handlers, TelegratorOptions? options = null)
+    internal static void AddWideTelegratorInternal(IServiceCollection services, IConfiguration configuration, IDictionary<object, object> properties, [NotNull] ref IHandlersCollection? handlers, TelegratorOptions? options = null)
     {
         if (services.Any(srvc => srvc.ServiceType == typeof(HostedUpdateReceiver)))
             throw new InvalidOperationException("`HostedUpdateReceiver` found in services. WideHost extension is not compatible with long-polling receiving. Please, remove `AddTelegrator` invocation from your WebApp configuration.");
@@ -123,7 +124,7 @@ public static class WideHostBuilderExtensions
         services.AddSingleton(handlers);
         properties.Add(HostBuilderExtensions.HandlersCollectionPropertyKey, handlers);
 
-        if (!services.Any(srvc => srvc.ImplementationType == typeof(IOptions<WTelegramBotClientOptions>)))
+        if (!services.Any(srvc => srvc.ServiceType == typeof(IOptions<WTelegramBotClientOptions>)))
         {
             // For now, there's no way to configure this from IConfiguration, use `ConfigureWideTelegram` instead
             throw new MissingMemberException("No options of type 'WTelegramBotClientOptions' was registered. This configuration is runtime required! Use `ConfigureWideTelegram` to register options.");
@@ -163,7 +164,13 @@ public static class WideBotServiceCollectionExtensions
     }
 
     private static WTelegramBotClient TypedTelegramBotClientFactory(HttpClient httpClient, IServiceProvider provider)
-        => new WTelegramBotClient(provider.GetRequiredService<IOptions<WTelegramBotClientOptions>>().Value, httpClient);
+    {
+        ILogger<WTelegramBotClient> logger = provider.GetRequiredService<ILogger<WTelegramBotClient>>();
+        WTelegramBotClient client = new WTelegramBotClient(provider.GetRequiredService<IOptions<WTelegramBotClientOptions>>().Value, httpClient);
+
+        WTelegram.Helpers.Log = (lvl, str) => logger.Log((LogLevel)lvl, str);
+        return client;
+    }
 }
 
 /// <summary>

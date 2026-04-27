@@ -6377,9 +6377,14 @@
             Represents handler results, allowing to communicate with router and control aspect execution
             </summary>
         </member>
-        <member name="P:Telegrator.Result.InterruptRouter">
+        <member name="P:Telegrator.Result.Success">
             <summary>
             Tell router to stop describing
+            </summary>
+        </member>
+        <member name="P:Telegrator.Result.RouteNext">
+            <summary>
+            Tell router to continue describing
             </summary>
         </member>
         <member name="P:Telegrator.Result.NextType">

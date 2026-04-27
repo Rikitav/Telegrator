@@ -56,7 +56,7 @@ public abstract class UpdateHandlerBase(UpdateType handlingUpdateType) : IUpdate
                         .ExecutePre(this, container, cancellationToken)
                         .ConfigureAwait(false);
 
-                    if (!preResult.InterruptRouter)
+                    if (!preResult.Success)
                         return preResult;
                 }
                 catch (NotImplementedException)
@@ -69,7 +69,7 @@ public abstract class UpdateHandlerBase(UpdateType handlingUpdateType) : IUpdate
             {
                 // Executing handler
                 Result execResult = await ExecuteInternal(container, cancellationToken).ConfigureAwait(false);
-                if (!execResult.InterruptRouter)
+                if (!execResult.Success)
                     return execResult;
             }
             catch (NotImplementedException)
@@ -86,7 +86,7 @@ public abstract class UpdateHandlerBase(UpdateType handlingUpdateType) : IUpdate
                         .ExecutePost(this, container, cancellationToken)
                         .ConfigureAwait(false);
 
-                    if (!postResult.InterruptRouter)
+                    if (!postResult.Success)
                         return postResult;
                 }
             }
@@ -166,7 +166,7 @@ public abstract class UpdateHandlerBase(UpdateType handlingUpdateType) : IUpdate
     /// <returns></returns>
     public virtual Task<Result> FiltersFallback(FiltersFallbackReport report, ITelegramBotClient client, CancellationToken cancellationToken = default)
     {
-        return Task.FromResult(Result.Ok());
+        return Task.FromResult(Result.Next());
     }
 
     /// <inheritdoc/>

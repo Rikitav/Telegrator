@@ -97,11 +97,8 @@ public class UpdateRouter : IUpdateRouter
             Result? lastResult = null;
             foreach (DescribedHandlerDescriptor handlerInfo in GetHandlers(AwaitingProvider, botClient, update, cancellationToken))
             {
-                if (lastResult?.NextType != null)
-                {
-                    if (lastResult.NextType != handlerInfo.From.HandlerType)
-                        continue;
-                }
+                if (lastResult?.NextType is not null && lastResult?.NextType != handlerInfo.From.HandlerType)
+                    continue;
 
                 // Enqueuing found awiting handlers
                 await HandlersPool.Enqueue(handlerInfo);
@@ -111,7 +108,7 @@ public class UpdateRouter : IUpdateRouter
                 if (lastResult == null)
                     break; // Smth went horribly wrong, better to stop routing
 
-                if (lastResult.InterruptRouter)
+                if (!lastResult.RouteNext)
                     break;
 
                 TelegratorLogging.LogTrace("Handler '{0}' requested route continuation (Update {1})", handlerInfo.DisplayString, handlerInfo.HandlingUpdate.Id);
@@ -127,11 +124,8 @@ public class UpdateRouter : IUpdateRouter
             // Queuing reagular handlers for execution
             foreach (DescribedHandlerDescriptor handlerInfo in GetHandlers(HandlersProvider, botClient, update, cancellationToken))
             {
-                if (lastResult?.NextType != null)
-                {
-                    if (lastResult.NextType != handlerInfo.From.HandlerType)
-                        continue;
-                }
+                if (lastResult?.NextType is not null && lastResult?.NextType != handlerInfo.From.HandlerType)
+                    continue;
 
                 // Enqueuing found handlers
                 await HandlersPool.Enqueue(handlerInfo);
@@ -141,7 +135,7 @@ public class UpdateRouter : IUpdateRouter
                 if (lastResult == null)
                     break; // Smth went horribly wrong, better to stop routing
 
-                if (lastResult.InterruptRouter)
+                if (!lastResult.RouteNext)
                     break;
 
                 TelegratorLogging.LogTrace("Handler '{0}' requested route continuation (Update {1})", handlerInfo.DisplayString, handlerInfo.HandlingUpdate.Id);
@@ -243,13 +237,17 @@ public class UpdateRouter : IUpdateRouter
         {
             FiltersFallbackReport report = new FiltersFallbackReport(descriptor, filterContext);
             Result filtersResult = descriptor.Filters.Validate(filterContext, descriptor.FormReport, ref report);
-            
-            if (filtersResult.InterruptRouter)
-                return null;
 
-            Result fallbackResult = handlerInstance.FiltersFallback(report, client, cancellationToken).Result;
-            breakRouting = fallbackResult.InterruptRouter;
-            return null;
+            if (filtersResult.RouteNext)
+            {
+                Result fallbackResult = handlerInstance.FiltersFallback(report, client, cancellationToken).Result;
+                breakRouting = !fallbackResult.RouteNext;
+                return null;
+            }
+            else if (!filtersResult.Success)
+            {
+                return null;
+            }
         }
 
         return new DescribedHandlerDescriptor(descriptor, this, AwaitingProvider, StateStorage, client, handlerInstance, filterContext, descriptor.DisplayString);

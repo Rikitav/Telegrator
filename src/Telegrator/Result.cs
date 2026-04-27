@@ -10,23 +10,29 @@ namespace Telegrator;
 /// </summary>
 public sealed class Result
 {
-    private static readonly Result ok = new Result(true, null);
-    private static readonly Result fault = new Result(true, null);
-    private static readonly Result next = new Result(false, null);
+    private static readonly Result ok = new Result(true, false, null);
+    private static readonly Result fault = new Result(false, false, null);
+    private static readonly Result next = new Result(true, true, null);
 
     /// <summary>
     /// Tell router to stop describing
     /// </summary>
-    public bool InterruptRouter { get; }
+    public bool Success { get; }
+
+    /// <summary>
+    /// Tell router to continue describing
+    /// </summary>
+    public bool RouteNext { get; }
 
     /// <summary>
     /// Exact type that router should search
     /// </summary>
     public Type? NextType { get; }
 
-    internal Result(bool interruptRouter, Type? nextType)
+    internal Result(bool success, bool routeNext, Type? nextType)
     {
-        InterruptRouter = interruptRouter;
+        Success = success;
+        RouteNext = routeNext;
         NextType = nextType;
     }
 
@@ -73,5 +79,5 @@ public sealed class Result
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
     public static Result Next<T>()
-        => new Result(false, typeof(T));
+        => new Result(true, true, typeof(T));
 }

@@ -1,4 +1,7 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 using System.Reflection;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
@@ -21,6 +24,11 @@ public static class HandlerInspector
     /// <returns></returns>
     public static string? GetDisplayName(MemberInfo handlerType)
     {
+        if (handlerType == null)
+        {
+            throw new ArgumentNullException(nameof(handlerType));
+        }
+
         return handlerType.GetCustomAttribute<DisplayNameAttribute>()?.DisplayName;
     }
 
@@ -31,11 +39,26 @@ public static class HandlerInspector
     /// <returns>The handler attribute.</returns>
     public static UpdateHandlerAttributeBase GetHandlerAttribute(MemberInfo handlerType)
     {
-        // Getting polling handler attribute
-        IEnumerable<UpdateHandlerAttributeBase> handlerAttrs = handlerType.GetCustomAttributes<UpdateHandlerAttributeBase>();
+        if (handlerType == null)
+        {
+            throw new ArgumentNullException(nameof(handlerType));
+        }
 
-        //
-        return handlerAttrs.Single();
+        List<UpdateHandlerAttributeBase> handlerAttrs = handlerType.GetCustomAttributes<UpdateHandlerAttributeBase>().ToList();
+
+        if (handlerAttrs.Count == 0)
+        {
+            throw new InvalidOperationException(
+                $"Failed to register handler '{handlerType.Name}': Missing required attribute derived from '{nameof(UpdateHandlerAttributeBase)}'.");
+        }
+
+        if (handlerAttrs.Count > 1)
+        {
+            throw new InvalidOperationException(
+                $"Failed to register handler '{handlerType.Name}': Multiple handler attributes found. A handler must have exactly one attribute derived from '{nameof(UpdateHandlerAttributeBase)}'.");
+        }
+
+        return handlerAttrs[0];
     }
 
     /// <summary>
@@ -45,10 +68,16 @@ public static class HandlerInspector
     /// <returns>The state keeper attribute, or null if not present.</returns>
     public static IFilter<Update>? GetStateKeeperAttribute(MemberInfo handlerType)
     {
-        // Getting polling handler attribute
-        Attribute stateAttr = handlerType.GetCustomAttribute(typeof(StateAttribute<,>));
+        if (handlerType == null)
+            throw new ArgumentNullException(nameof(handlerType));
 
-        //
+        Attribute? stateAttr = handlerType.GetCustomAttributes()
+            .FirstOrDefault(attr =>
+            {
+                Type type = attr.GetType();
+                return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(StateAttribute<,>);
+            });
+
         return stateAttr as IFilter<Update>;
     }
 
@@ -60,12 +89,19 @@ public static class HandlerInspector
     /// <returns>An enumerable of filter attributes.</returns>
     public static IEnumerable<IFilter<Update>> GetFilterAttributes(MemberInfo handlerType, UpdateType validUpdType)
     {
-        //
-        IEnumerable<UpdateFilterAttributeBase> filters = handlerType.GetCustomAttributes<UpdateFilterAttributeBase>();
+        if (handlerType == null)
+            throw new ArgumentNullException(nameof(handlerType));
 
-        //
-        if (filters.Any(filterAttr => !filterAttr.AllowedTypes.Contains(validUpdType)))
-            throw new InvalidOperationException();
+        List<UpdateFilterAttributeBase> filters = handlerType.GetCustomAttributes<UpdateFilterAttributeBase>().ToList();
+
+        UpdateFilterAttributeBase? invalidFilter = filters.FirstOrDefault(f => !f.AllowedTypes.Contains(validUpdType));
+        if (invalidFilter != null)
+        {
+            string allowedTypesStr = string.Join(", ", invalidFilter.AllowedTypes);
+            throw new InvalidOperationException(
+                $"Filter conflict on handler '{handlerType.Name}': The filter '{invalidFilter.GetType().Name}' " +
+                $"does not support update type '{validUpdType}'. Allowed types: [{allowedTypesStr}].");
+        }
 
         UpdateFilterAttributeBase? lastFilterAttribute = null;
         foreach (UpdateFilterAttributeBase filterAttribute in filters)
@@ -78,7 +114,6 @@ public static class HandlerInspector
             else
             {
                 lastFilterAttribute = filterAttribute;
-                continue;
             }
         }
     }
@@ -91,8 +126,24 @@ public static class HandlerInspector
     /// <returns>A <see cref="DescriptorAspectsSet"/> containing the aspects configuration.</returns>
     public static DescriptorAspectsSet GetAspects(Type handlerType)
     {
-        Type? typedPre = handlerType.GetCustomAttribute(typeof(BeforeExecutionAttribute<>))?.GetType().GetGenericArguments()[0];
-        Type? typedPost = handlerType.GetCustomAttribute(typeof(AfterExecutionAttribute<>))?.GetType().GetGenericArguments()[0];
+        if (handlerType == null)
+            throw new ArgumentNullException(nameof(handlerType));
+
+        Type? typedPre = GetGenericArgumentFromOpenGenericAttribute(handlerType, typeof(BeforeExecutionAttribute<>));
+        Type? typedPost = GetGenericArgumentFromOpenGenericAttribute(handlerType, typeof(AfterExecutionAttribute<>));
+
         return new DescriptorAspectsSet(typedPre, typedPost);
+    }
+
+    private static Type? GetGenericArgumentFromOpenGenericAttribute(Type handlerType, Type openGenericAttributeType)
+    {
+        Attribute? attribute = handlerType.GetCustomAttributes()
+            .FirstOrDefault(attr =>
+            {
+                Type type = attr.GetType();
+                return type.IsGenericType && type.GetGenericTypeDefinition() == openGenericAttributeType;
+            });
+
+        return attribute?.GetType().GetGenericArguments().FirstOrDefault();
     }
 }

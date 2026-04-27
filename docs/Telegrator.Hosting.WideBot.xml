@@ -19,7 +19,7 @@
             Replaces TelegramBotHostBuilder. Configures DI, options, and handlers.
             </summary>
         </member>
-        <member name="M:Telegrator.WideHostBuilderExtensions.AddTelegratorInternal(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration,System.Collections.Generic.IDictionary{System.Object,System.Object},Telegrator.Core.IHandlersCollection@,Telegrator.TelegratorOptions)">
+        <member name="M:Telegrator.WideHostBuilderExtensions.AddWideTelegratorInternal(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration,System.Collections.Generic.IDictionary{System.Object,System.Object},Telegrator.Core.IHandlersCollection@,Telegrator.TelegratorOptions)">
             <summary>
             Replaces TelegramBotHostBuilder. Configures DI, options, and handlers.
             </summary>

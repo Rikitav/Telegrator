@@ -125,7 +125,8 @@ public sealed class DescriptorFiltersSet
         if (!anyErrors)
             return Result.Ok();
 
-        return formReport ? Result.Next() : Result.Fault();
+        return formReport
+            ? Result.Next() : Result.Fault();
     }
 
     private static bool ExecuteFilter<T>(IFilter<T> filter, FilterExecutionContext<T> context, out Exception? exception) where T : class
