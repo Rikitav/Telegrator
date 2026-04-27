@@ -114,7 +114,10 @@ public static class WideHostBuilderExtensions
     internal static void AddWideTelegratorInternal(IServiceCollection services, IConfiguration configuration, IDictionary<object, object> properties, [NotNull] ref IHandlersCollection? handlers, TelegratorOptions? options = null)
     {
         if (services.Any(srvc => srvc.ServiceType == typeof(HostedUpdateReceiver)))
-            throw new InvalidOperationException("`HostedUpdateReceiver` found in services. WideHost extension is not compatible with long-polling receiving. Please, remove `AddTelegrator` invocation from your WebApp configuration.");
+            throw new InvalidOperationException("`HostedUpdateReceiver` found in services. WideHost extension is not compatible with default long-polling receiver. Please, remove `AddTelegrator` invocation from your Host configuration.");
+
+        if (services.Any(srvc => srvc.ServiceType.Name == "HostedUpdateWebhooker"))
+            throw new InvalidOperationException("`HostedUpdateWebhooker` found in services. WideHost extension is not compatible with webhooking yet. Please, remove `AddWebTelegrator` invocation from your Host configuration.");
 
         if (options == null)
         {
