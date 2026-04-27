@@ -32,7 +32,7 @@ internal static class Program
             ApplicationName = "WBot example",
         });
 
-        using DbConnection connection = new SqliteConnection(@"Data Source=wtgb.db");
+        using DbConnection connection = new SqliteConnection("Data Source=wtgb.db");
         builder.Services.ConfigureWideTelegram(
             new WTelegramBotClientOptions(token: "BOT_TOKEN", apiId: 123, apiHash: "API_HASH", dbConnection: connection));
 

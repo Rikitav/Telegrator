@@ -13,18 +13,33 @@ using Telegrator.States;
 
 namespace Telegrator;
 
+/// <summary>
+/// Client class for the Telegrator library with Wider functionality, provided by WTelegramBotClient.
+/// Extends TelegramBotClient with reactive capabilities for handling updates.
+/// </summary>
 public class TelegratorWClient : WTelegramBotClient, ITelegratorBot, ICollectingProvider
 {
     private IUpdateRouter? _updateRouter = null;
 
+    /// <inheritdoc/>
     public TelegratorOptions Options { get; }
-    
+
+    /// <inheritdoc/>
     public IHandlersCollection Handlers { get; }
-    
+
+    /// <inheritdoc/>
     public ITelegramBotInfo BotInfo { get; }
 
+    /// <inheritdoc/>
     public IUpdateRouter UpdateRouter => _updateRouter ?? throw new InvalidOperationException("Router's not created yet. Invoke `StartReceiving` to initialize this property.");
 
+    /// <summary>
+    /// Initializes new instance of <see cref="TelegratorWClient"/>
+    /// </summary>
+    /// <param name="wOptions"></param>
+    /// <param name="telegratorOptions"></param>
+    /// <param name="httpClient"></param>
+    /// <param name="cancellationToken"></param>
     public TelegratorWClient(WTelegramBotClientOptions wOptions, TelegratorOptions? telegratorOptions = null, HttpClient? httpClient = null, CancellationToken cancellationToken = default)
         : base(wOptions, httpClient, cancellationToken)
     {
@@ -33,7 +48,8 @@ public class TelegratorWClient : WTelegramBotClient, ITelegratorBot, ICollecting
         BotInfo = new TelegramBotInfo(GetMe(cancellationToken).Result);
     }
 
-    public void StartReceiving(CancellationToken cancellationToken = default)
+    /// <inheritdoc/>
+    public void StartReceiving(ReceiverOptions? _, CancellationToken cancellationToken = default)
     {
         if (Options.GlobalCancellationToken == CancellationToken.None)
             Options.GlobalCancellationToken = cancellationToken;
@@ -45,10 +61,27 @@ public class TelegratorWClient : WTelegramBotClient, ITelegratorBot, ICollecting
         _updateRouter = new UpdateRouter(handlerProvider, awaitingProvider, stateStorage, Options, BotInfo);
         TelegratorLogging.LogInformation($"TelegratorW bot starting up - BotId: {BotInfo.User.Id}, Username: {BotInfo.User.Username}");
 
-        StartReceivingInternal(Options.GlobalCancellationToken);
+        StartReceivingInternal(Options.GlobalCancellationToken)
+            .ConfigureAwait(false).GetAwaiter().GetResult();
     }
 
-    private async void StartReceivingInternal(CancellationToken cancellationToken)
+    /// <inheritdoc/>
+    public async Task StartReceivingAsync(ReceiverOptions? receiverOptions = null,CancellationToken cancellationToken = default)
+    {
+        if (Options.GlobalCancellationToken == CancellationToken.None)
+            Options.GlobalCancellationToken = cancellationToken;
+
+        HandlersProvider handlerProvider = new HandlersProvider(Handlers, Options);
+        AwaitingProvider awaitingProvider = new AwaitingProvider(Options);
+        DefaultStateStorage stateStorage = new DefaultStateStorage();
+
+        _updateRouter = new UpdateRouter(handlerProvider, awaitingProvider, stateStorage, Options, BotInfo);
+        TelegratorLogging.LogInformation($"TelegratorW bot starting up - BotId: {BotInfo.User.Id}, Username: {BotInfo.User.Username}");
+
+        await StartReceivingInternal(Options.GlobalCancellationToken);
+    }
+    
+    private async Task StartReceivingInternal(CancellationToken cancellationToken)
     {
         try
         {

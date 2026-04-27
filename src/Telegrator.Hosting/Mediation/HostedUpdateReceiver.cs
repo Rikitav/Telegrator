@@ -8,7 +8,7 @@ using Telegrator.Core;
 namespace Telegrator.Mediation;
 
 /// <summary>
-/// Service for receiving updates for Hosted telegram bots
+/// Service for receiving updates for Hosted telegram botsand queuing them to router
 /// </summary>
 /// <param name="botClient"></param>
 /// <param name="updateRouter"></param>

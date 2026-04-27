@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.Payments;
@@ -12,6 +13,24 @@ using Telegrator.Handlers.Building;
 using Telegrator.States;
 
 namespace Telegrator;
+
+/// <summary>
+/// Provides usefull helper methods for TelegratorBot
+/// </summary>
+public static class TelegratorBotExtensions
+{
+    /// <summary>
+    /// Initializes the update router and begins polling for updates synchronously (Blocking calling thread).
+    /// </summary>
+    /// <param name="bot"></param>
+    /// <param name="receiverOptions">Optional receiver options for configuring update polling.</param>
+    /// <param name="cancellationToken">The cancellation token to stop receiving updates.</param>
+    public static void StartReceiving(this ITelegratorBot bot, ReceiverOptions? receiverOptions = null, CancellationToken cancellationToken = default)
+    {
+        bot.StartReceivingAsync(receiverOptions, cancellationToken)
+            .ConfigureAwait(false).GetAwaiter().GetResult();
+    }
+}
 
 /// <summary>
 /// Provides usefull helper methods for messages

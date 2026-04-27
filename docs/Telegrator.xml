@@ -5483,6 +5483,14 @@
             Gets the update router for handling incoming updates.
             </summary>
         </member>
+        <member name="M:Telegrator.ITelegratorBot.StartReceivingAsync(Telegram.Bot.Polling.ReceiverOptions,System.Threading.CancellationToken)">
+            <summary>
+            Initializes the update router and begins polling for updates asynchronously.
+            </summary>
+            <param name="receiverOptions">Optional receiver options for configuring update polling.</param>
+            <param name="cancellationToken">The cancellation token to stop receiving updates.</param>
+            <returns></returns>
+        </member>
         <member name="T:Telegrator.Logging.ConsoleLogger">
             <summary>
             Console logger implementation that writes to System.Console.
@@ -6804,13 +6812,8 @@
             <param name="httpClient">Optional HTTP client for making requests.</param>
             <param name="cancellationToken">The cancellation token.</param>
         </member>
-        <member name="M:Telegrator.TelegratorClient.StartReceiving(Telegram.Bot.Polling.ReceiverOptions,System.Threading.CancellationToken)">
-            <summary>
-            Starts receiving updates from Telegram.
-            Initializes the update router and begins polling for updates.
-            </summary>
-            <param name="receiverOptions">Optional receiver options for configuring update polling.</param>
-            <param name="globalCancellationToken">The cancellation token to stop receiving updates.</param>
+        <member name="M:Telegrator.TelegratorClient.StartReceivingAsync(Telegram.Bot.Polling.ReceiverOptions,System.Threading.CancellationToken)">
+            <inheritdoc/>
         </member>
         <member name="M:Telegrator.TelegratorClient.StartReceivingInternal(Telegram.Bot.Polling.ReceiverOptions,System.Threading.CancellationToken)">
             <summary>
@@ -6870,6 +6873,19 @@
             <summary>
             Gets or sets the global cancellation token for all bot operations.
             </summary>
+        </member>
+        <member name="T:Telegrator.TelegratorBotExtensions">
+            <summary>
+            Provides usefull helper methods for TelegratorBot
+            </summary>
+        </member>
+        <member name="M:Telegrator.TelegratorBotExtensions.StartReceiving(Telegrator.ITelegratorBot,Telegram.Bot.Polling.ReceiverOptions,System.Threading.CancellationToken)">
+            <summary>
+            Initializes the update router and begins polling for updates synchronously (Blocking calling thread).
+            </summary>
+            <param name="bot"></param>
+            <param name="receiverOptions">Optional receiver options for configuring update polling.</param>
+            <param name="cancellationToken">The cancellation token to stop receiving updates.</param>
         </member>
         <member name="T:Telegrator.MessageExtensions">
             <summary>

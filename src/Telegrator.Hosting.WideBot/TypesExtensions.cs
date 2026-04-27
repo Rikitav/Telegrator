@@ -13,15 +13,21 @@ using Telegrator.Hosting;
 using Telegrator.Mediation;
 using Telegrator.Providers;
 
-using TLUpdate = TL.Update;
 using WUpdate = WTelegram.Types.Update;
+using TLUpdate = TL.Update;
 
 namespace Telegrator;
 
+/// <summary>
+/// Provides extensions memebrs for <see cref="UpdateHandlerBase"/> for easy access to Wider bot functions and update
+/// </summary>
 public static class HandlersExtensions
 {
     extension<TUpdate>(AbstractUpdateHandler<TUpdate> handler) where TUpdate : class
     {
+        /// <summary>
+        /// Casts Update to <see cref="WTelegramBotClient"/>
+        /// </summary>
         public WTelegramBotClient WClient
         {
             get
@@ -35,6 +41,9 @@ public static class HandlersExtensions
 
         }
 
+        /// <summary>
+        /// Casts Update to <see cref="WUpdate"/>
+        /// </summary>
         public WUpdate WideUpdate
         {
             get
@@ -47,18 +56,27 @@ public static class HandlersExtensions
             }
         }
 
+        /// <summary>
+        /// Casts Update to <see cref="TLUpdate"/>
+        /// </summary>
         public TLUpdate? TLUpdate
         {
             get => handler.WideUpdate.TLUpdate;
         }
     }
 
+    /// <summary>
+    /// Casts Update to <see cref="WTelegramBotClient"/>
+    /// </summary>
     public static WTelegramBotClient AsWClient(this ITelegramBotClient client)
     {
         return client as WTelegramBotClient
             ?? throw new InvalidCastException("Client is not assignable to `WTelegram.Bot.WTelegramBotClient`");
     }
 
+    /// <summary>
+    /// Casts Update to <see cref="WUpdate"/>
+    /// </summary>
     public static WUpdate AsWUpdate(this Update update)
     {
         return update as WUpdate
@@ -149,20 +167,45 @@ public static class WideHostBuilderExtensions
 /// </summary>
 public static class WideBotServiceCollectionExtensions
 {
+    /// <summary>
+    /// Adds WTelegramBotClientOptions to services
+    /// </summary>
+    /// <param name="services"></param>
+    /// <param name="options"></param>
+    /// <returns></returns>
     public static IServiceCollection ConfigureWideTelegram(this IServiceCollection services, WTelegramBotClientOptions options)
     {
+        services.RemoveAll<IOptions<WTelegramBotClientOptions>>();
         services.AddSingleton(Options.Create(options));
         return services;
     }
 
-    public static IServiceCollection AddMTProtoUpdateReceiver(this IServiceCollection services)
+    /// <summary>
+    /// Adds WTelegramBotClient 
+    /// </summary>
+    /// <param name="services"></param>
+    /// <param name="useHttp"></param>
+    /// <returns></returns>
+    public static IServiceCollection AddMTProtoUpdateReceiver(this IServiceCollection services, bool useHttp = false)
     {
-        services.AddHttpClient<WTelegramBotClient>("tgmtproto").RemoveAllLoggers().AddTypedClient(TypedTelegramBotClientFactory);
+        services.RemoveAll<ITelegramBotClient>();
+        services.RemoveAll<HostedWideBotUpdateReceiver>();
+
+        if (useHttp)
+        {
+            services.AddHttpClient<WTelegramBotClient>("tgmtproto").RemoveAllLoggers().AddTypedClient(TypedTelegramBotClientFactory);
+        }
+        else
+        {
+            services.AddSingleton(TypedTelegramBotClientFactory);
+        }
+
         services.AddSingleton<ITelegramBotClient>(sp => sp.GetRequiredService<WTelegramBotClient>());
         services.AddHostedService<HostedWideBotUpdateReceiver>();
         return services;
     }
 
+#pragma warning disable CA2254
     private static WTelegramBotClient TypedTelegramBotClientFactory(HttpClient httpClient, IServiceProvider provider)
     {
         ILogger<WTelegramBotClient> logger = provider.GetRequiredService<ILogger<WTelegramBotClient>>();
@@ -171,6 +214,16 @@ public static class WideBotServiceCollectionExtensions
         WTelegram.Helpers.Log = (lvl, str) => logger.Log((LogLevel)lvl, str);
         return client;
     }
+
+    private static WTelegramBotClient TypedTelegramBotClientFactory(IServiceProvider provider)
+    {
+        ILogger<WTelegramBotClient> logger = provider.GetRequiredService<ILogger<WTelegramBotClient>>();
+        WTelegramBotClient client = new WTelegramBotClient(provider.GetRequiredService<IOptions<WTelegramBotClientOptions>>().Value);
+
+        WTelegram.Helpers.Log = (lvl, str) => logger.Log((LogLevel)lvl, str);
+        return client;
+    }
+#pragma warning restore CA2254
 }
 
 /// <summary>

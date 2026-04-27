@@ -97,7 +97,7 @@
         </member>
         <member name="T:Telegrator.Mediation.HostedUpdateReceiver">
             <summary>
-            Service for receiving updates for Hosted telegram bots
+            Service for receiving updates for Hosted telegram botsand queuing them to router
             </summary>
             <param name="botClient"></param>
             <param name="updateRouter"></param>
@@ -106,7 +106,7 @@
         </member>
         <member name="M:Telegrator.Mediation.HostedUpdateReceiver.#ctor(Telegram.Bot.ITelegramBotClient,Telegrator.Core.IUpdateRouter,Microsoft.Extensions.Options.IOptions{Telegram.Bot.Polling.ReceiverOptions},Microsoft.Extensions.Logging.ILogger{Telegrator.Mediation.HostedUpdateReceiver})">
             <summary>
-            Service for receiving updates for Hosted telegram bots
+            Service for receiving updates for Hosted telegram botsand queuing them to router
             </summary>
             <param name="botClient"></param>
             <param name="updateRouter"></param>
@@ -206,6 +206,22 @@
             Contains extensions for <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>
             Provides method to configure Telegram Bot Host
             </summary>
+        </member>
+        <member name="M:Telegrator.HostServicesCollectionExtensions.ConfigureTelegram(Microsoft.Extensions.DependencyInjection.IServiceCollection,Telegram.Bot.TelegramBotClientOptions)">
+            <summary>
+            Adds TelegramBotClientOptions to services
+            </summary>
+            <param name="services"></param>
+            <param name="options"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Telegrator.HostServicesCollectionExtensions.ConfigureReceiver(Microsoft.Extensions.DependencyInjection.IServiceCollection,Telegram.Bot.Polling.ReceiverOptions)">
+            <summary>
+            Adds ReceiverOptions to services
+            </summary>
+            <param name="services"></param>
+            <param name="options"></param>
+            <returns></returns>
         </member>
         <member name="M:Telegrator.HostServicesCollectionExtensions.AddStateStorage``1(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
             <summary>

@@ -1,18 +1,22 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
 using Telegrator.Core;
 
 namespace Telegrator.Mediation;
 
-//Hosting.WideBot
+/// <summary>
+/// Service for receiving updates for Hosted wide telegram bots and queuing them to router
+/// </summary>
+/// <param name="logger"></param>
+/// <param name="botClient"></param>
+/// <param name="updateRouter"></param>
+/// <param name="options"></param>
 public class HostedWideBotUpdateReceiver(ILogger<HostedWideBotUpdateReceiver> logger, ITelegramBotClient botClient, IUpdateRouter updateRouter, IOptions<ReceiverOptions>? options) : BackgroundService
 {
+    /// <inheritdoc/>
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         if (botClient is not WTelegramBotClient wideBotClient)

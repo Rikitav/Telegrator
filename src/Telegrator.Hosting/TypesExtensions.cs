@@ -129,14 +129,28 @@ public static class HostBuilderExtensions
 /// </summary>
 public static class HostServicesCollectionExtensions
 {
+    /// <summary>
+    /// Adds TelegramBotClientOptions to services
+    /// </summary>
+    /// <param name="services"></param>
+    /// <param name="options"></param>
+    /// <returns></returns>
     public static IServiceCollection ConfigureTelegram(this IServiceCollection services, TelegramBotClientOptions options)
     {
+        services.RemoveAll<IOptions<TelegramBotClientOptions>>();
         services.AddSingleton(Options.Create(options));
         return services;
     }
 
+    /// <summary>
+    /// Adds ReceiverOptions to services
+    /// </summary>
+    /// <param name="services"></param>
+    /// <param name="options"></param>
+    /// <returns></returns>
     public static IServiceCollection ConfigureReceiver(this IServiceCollection services, ReceiverOptions options)
     {
+        services.RemoveAll<IOptions<ReceiverOptions>>();
         services.AddSingleton(Options.Create(options));
         return services;
     }
@@ -176,6 +190,9 @@ public static class HostServicesCollectionExtensions
     /// <returns></returns>
     public static IServiceCollection AddTelegramReceiver(this IServiceCollection services)
     {
+        services.RemoveAll<ITelegramBotClient>();
+        services.RemoveAll<HostedUpdateReceiver>();
+
         services.AddHttpClient<ITelegramBotClient>("tgreceiver").RemoveAllLoggers().AddTypedClient(TypedTelegramBotClientFactory);
         services.AddHostedService<HostedUpdateReceiver>();
         return services;

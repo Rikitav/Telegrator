@@ -99,8 +99,15 @@ public static class WebHostBuilderExtensions
 /// </summary>
 public static class WebServicesCollectionExtensions
 {
+    /// <summary>
+    /// Adds WebhookerOptions to services
+    /// </summary>
+    /// <param name="services"></param>
+    /// <param name="options"></param>
+    /// <returns></returns>
     public static IServiceCollection ConfigureWebhooker(this IServiceCollection services, WebhookerOptions options)
     {
+        services.RemoveAll<IOptions<WebhookerOptions>>();
         services.AddSingleton(Options.Create(options));
         return services;
     }
@@ -176,6 +183,9 @@ public static class WebTelegramBotHostExtensions
     /// <returns></returns>
     public static IServiceCollection AddTelegramWebhook(this IServiceCollection services)
     {
+        services.RemoveAll<IOptions<HostedUpdateWebhooker>>();
+        services.RemoveAll<ITelegramBotClient>();
+
         services.AddHttpClient<ITelegramBotClient>("tgwebhook").RemoveAllLoggers().AddTypedClient(TypedTelegramBotClientFactory);
         services.AddHostedService<HostedUpdateWebhooker>();
         return services;

@@ -13,7 +13,7 @@ using Telegrator.Hosting.Web;
 namespace Telegrator.Mediation;
 
 /// <summary>
-/// Service for receiving updates for Hosted telegram bots via Webhooks
+/// Service for receiving updates for Hosted telegram bots via Webhooks and queuing them to router
 /// </summary>
 public class HostedUpdateWebhooker : IHostedService
 {

@@ -35,7 +35,7 @@
         </member>
         <member name="T:Telegrator.Mediation.HostedUpdateWebhooker">
             <summary>
-            Service for receiving updates for Hosted telegram bots via Webhooks
+            Service for receiving updates for Hosted telegram bots via Webhooks and queuing them to router
             </summary>
         </member>
         <member name="M:Telegrator.Mediation.HostedUpdateWebhooker.#ctor(Telegram.Bot.ITelegramBotClient,Telegrator.Core.IUpdateRouter,Microsoft.Extensions.Options.IOptions{Telegrator.Hosting.Web.WebhookerOptions})">
@@ -94,6 +94,14 @@
             Contains extensions for <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>
             Provides method to configure Telegram Bot WebHost
             </summary>
+        </member>
+        <member name="M:Telegrator.WebServicesCollectionExtensions.ConfigureWebhooker(Microsoft.Extensions.DependencyInjection.IServiceCollection,Telegrator.Hosting.Web.WebhookerOptions)">
+            <summary>
+            Adds WebhookerOptions to services
+            </summary>
+            <param name="services"></param>
+            <param name="options"></param>
+            <returns></returns>
         </member>
         <member name="M:Telegrator.WebServicesCollectionExtensions.TryFindWebhooker(System.IServiceProvider,Telegrator.Mediation.HostedUpdateWebhooker@)">
             <summary>

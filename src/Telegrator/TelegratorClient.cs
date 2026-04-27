@@ -20,13 +20,13 @@ public class TelegratorClient : TelegramBotClient, ITelegratorBot, ICollectingPr
     private IUpdateRouter? updateRouter = null;
 
     /// <inheritdoc/>
-    public TelegratorOptions Options { get; private set; }
+    public TelegratorOptions Options { get; }
 
     /// <inheritdoc/>
-    public IHandlersCollection Handlers { get; private set; }
+    public IHandlersCollection Handlers { get; }
 
     /// <inheritdoc/>
-    public ITelegramBotInfo BotInfo { get; private set; }
+    public ITelegramBotInfo BotInfo { get; }
 
     /// <inheritdoc/>
     public IUpdateRouter UpdateRouter => updateRouter ?? throw new InvalidOperationException("Router's not created yet. Invoke `StartReceiving` to initialize this property.");
@@ -63,26 +63,19 @@ public class TelegratorClient : TelegramBotClient, ITelegratorBot, ICollectingPr
         BotInfo = new TelegramBotInfo(this.GetMe(cancellationToken).Result);
     }
 
-    /// <summary>
-    /// Starts receiving updates from Telegram.
-    /// Initializes the update router and begins polling for updates.
-    /// </summary>
-    /// <param name="receiverOptions">Optional receiver options for configuring update polling.</param>
-    /// <param name="globalCancellationToken">The cancellation token to stop receiving updates.</param>
-    public void StartReceiving(ReceiverOptions? receiverOptions = null, CancellationToken globalCancellationToken = default)
+    /// <inheritdoc/>
+    public async Task StartReceivingAsync(ReceiverOptions? receiverOptions = null, CancellationToken cancellationToken = default)
     {
         if (Options.GlobalCancellationToken == CancellationToken.None)
-            Options.GlobalCancellationToken = globalCancellationToken;
+            Options.GlobalCancellationToken = cancellationToken;
 
         HandlersProvider handlerProvider = new HandlersProvider(Handlers, Options);
         AwaitingProvider awaitingProvider = new AwaitingProvider(Options);
         DefaultStateStorage stateStorage = new DefaultStateStorage();
 
-        updateRouter = new UpdateRouter(handlerProvider, awaitingProvider, stateStorage, Options, BotInfo);
-        
-        // Log startup
         TelegratorLogging.LogInformation($"Telegrator bot starting up - BotId: {BotInfo.User.Id}, Username: {BotInfo.User.Username}, MaxParallelHandlers: {Options.MaximumParallelWorkingHandlers ?? -1}");
-        StartReceivingInternal(receiverOptions, globalCancellationToken);
+        updateRouter = new UpdateRouter(handlerProvider, awaitingProvider, stateStorage, Options, BotInfo);
+        await StartReceivingInternal(receiverOptions, Options.GlobalCancellationToken);
     }
 
     /// <summary>
@@ -91,7 +84,7 @@ public class TelegratorClient : TelegramBotClient, ITelegratorBot, ICollectingPr
     /// </summary>
     /// <param name="receiverOptions">Optional receiver options for configuring update polling.</param>
     /// <param name="cancellationToken">The cancellation token to stop receiving updates.</param>
-    private async void StartReceivingInternal(ReceiverOptions? receiverOptions, CancellationToken cancellationToken)
+    private async Task StartReceivingInternal(ReceiverOptions? receiverOptions, CancellationToken cancellationToken)
     {
         try
         {

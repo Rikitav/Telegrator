@@ -4,6 +4,116 @@
         <name>Telegrator.Hosting.WideBot</name>
     </assembly>
     <members>
+        <member name="T:Telegrator.Mediation.HostedWideBotUpdateReceiver">
+            <summary>
+            Service for receiving updates for Hosted wide telegram bots and queuing them to router
+            </summary>
+            <param name="logger"></param>
+            <param name="botClient"></param>
+            <param name="updateRouter"></param>
+            <param name="options"></param>
+        </member>
+        <member name="M:Telegrator.Mediation.HostedWideBotUpdateReceiver.#ctor(Microsoft.Extensions.Logging.ILogger{Telegrator.Mediation.HostedWideBotUpdateReceiver},Telegram.Bot.ITelegramBotClient,Telegrator.Core.IUpdateRouter,Microsoft.Extensions.Options.IOptions{Telegram.Bot.Polling.ReceiverOptions})">
+            <summary>
+            Service for receiving updates for Hosted wide telegram bots and queuing them to router
+            </summary>
+            <param name="logger"></param>
+            <param name="botClient"></param>
+            <param name="updateRouter"></param>
+            <param name="options"></param>
+        </member>
+        <member name="M:Telegrator.Mediation.HostedWideBotUpdateReceiver.ExecuteAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Mediation.WideUpdateReceiver">
+            <summary>
+            Reactive implementation of <see cref="T:Telegrator.Core.IUpdateReceiver"/> for polling updates from Telegram.
+            Provides custom update receiving logic with error handling and configuration options.
+            </summary>
+            <param name="client">The Telegram bot client for making API requests.</param>
+        </member>
+        <member name="M:Telegrator.Mediation.WideUpdateReceiver.#ctor(Telegram.Bot.WTelegramBotClient)">
+            <summary>
+            Reactive implementation of <see cref="T:Telegrator.Core.IUpdateReceiver"/> for polling updates from Telegram.
+            Provides custom update receiving logic with error handling and configuration options.
+            </summary>
+            <param name="client">The Telegram bot client for making API requests.</param>
+        </member>
+        <member name="M:Telegrator.Mediation.WideUpdateReceiver.ReceiveAsync(Telegram.Bot.Polling.IUpdateHandler,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.TelegratorWClient">
+            <summary>
+            Client class for the Telegrator library with Wider functionality, provided by WTelegramBotClient.
+            Extends TelegramBotClient with reactive capabilities for handling updates.
+            </summary>
+        </member>
+        <member name="P:Telegrator.TelegratorWClient.Options">
+            <inheritdoc/>
+        </member>
+        <member name="P:Telegrator.TelegratorWClient.Handlers">
+            <inheritdoc/>
+        </member>
+        <member name="P:Telegrator.TelegratorWClient.BotInfo">
+            <inheritdoc/>
+        </member>
+        <member name="P:Telegrator.TelegratorWClient.UpdateRouter">
+            <inheritdoc/>
+        </member>
+        <member name="M:Telegrator.TelegratorWClient.#ctor(Telegram.Bot.WTelegramBotClientOptions,Telegrator.TelegratorOptions,System.Net.Http.HttpClient,System.Threading.CancellationToken)">
+            <summary>
+            Initializes new instance of <see cref="T:Telegrator.TelegratorWClient"/>
+            </summary>
+            <param name="wOptions"></param>
+            <param name="telegratorOptions"></param>
+            <param name="httpClient"></param>
+            <param name="cancellationToken"></param>
+        </member>
+        <member name="M:Telegrator.TelegratorWClient.StartReceiving(Telegram.Bot.Polling.ReceiverOptions,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Telegrator.TelegratorWClient.StartReceivingAsync(Telegram.Bot.Polling.ReceiverOptions,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.HandlersExtensions">
+            <summary>
+            Provides extensions memebrs for <see cref="T:Telegrator.Core.Handlers.UpdateHandlerBase"/> for easy access to Wider bot functions and update
+            </summary>
+        </member>
+        <member name="M:Telegrator.HandlersExtensions.get_WClient``1(Telegrator.Core.Handlers.AbstractUpdateHandler{``0})">
+            <inheritdoc cref="P:Telegrator.HandlersExtensions.&lt;G&gt;$F89AF16C011F73161937A1614DCDDD7A`1.WClient"/>
+        </member>
+        <member name="M:Telegrator.HandlersExtensions.get_WideUpdate``1(Telegrator.Core.Handlers.AbstractUpdateHandler{``0})">
+            <inheritdoc cref="P:Telegrator.HandlersExtensions.&lt;G&gt;$F89AF16C011F73161937A1614DCDDD7A`1.WideUpdate"/>
+        </member>
+        <member name="M:Telegrator.HandlersExtensions.get_TLUpdate``1(Telegrator.Core.Handlers.AbstractUpdateHandler{``0})">
+            <inheritdoc cref="P:Telegrator.HandlersExtensions.&lt;G&gt;$F89AF16C011F73161937A1614DCDDD7A`1.TLUpdate"/>
+        </member>
+        <member name="M:Telegrator.HandlersExtensions.AsWClient(Telegram.Bot.ITelegramBotClient)">
+            <summary>
+            Casts Update to <see cref="T:Telegram.Bot.WTelegramBotClient"/>
+            </summary>
+        </member>
+        <member name="M:Telegrator.HandlersExtensions.AsWUpdate(Telegram.Bot.Types.Update)">
+            <summary>
+            Casts Update to <see cref="T:WTelegram.Types.Update"/>
+            </summary>
+        </member>
+        <member name="P:Telegrator.HandlersExtensions.&lt;G&gt;$F89AF16C011F73161937A1614DCDDD7A`1.WClient">
+            <summary>
+            Casts Update to <see cref="T:Telegram.Bot.WTelegramBotClient"/>
+            </summary>
+        </member>
+        <member name="P:Telegrator.HandlersExtensions.&lt;G&gt;$F89AF16C011F73161937A1614DCDDD7A`1.WideUpdate">
+            <summary>
+            Casts Update to <see cref="T:WTelegram.Types.Update"/>
+            </summary>
+        </member>
+        <member name="P:Telegrator.HandlersExtensions.&lt;G&gt;$F89AF16C011F73161937A1614DCDDD7A`1.TLUpdate">
+            <summary>
+            Casts Update to <see cref="T:TL.Update"/>
+            </summary>
+        </member>
         <member name="T:Telegrator.WideHostBuilderExtensions">
             <summary>
             Provides extension methods for <see cref="T:Microsoft.Extensions.Hosting.IHostApplicationBuilder"/> to configure Telegrator.
@@ -29,6 +139,22 @@
             Contains extensions for <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>
             Provides method to configure Telegram Bot WebHost
             </summary>
+        </member>
+        <member name="M:Telegrator.WideBotServiceCollectionExtensions.ConfigureWideTelegram(Microsoft.Extensions.DependencyInjection.IServiceCollection,Telegram.Bot.WTelegramBotClientOptions)">
+            <summary>
+            Adds WTelegramBotClientOptions to services
+            </summary>
+            <param name="services"></param>
+            <param name="options"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Telegrator.WideBotServiceCollectionExtensions.AddMTProtoUpdateReceiver(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Boolean)">
+            <summary>
+            Adds WTelegramBotClient 
+            </summary>
+            <param name="services"></param>
+            <param name="useHttp"></param>
+            <returns></returns>
         </member>
         <member name="T:Telegrator.WideTelegramBotHostExtensions">
             <summary>
