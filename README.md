@@ -8,6 +8,10 @@ Telegrator is a modern C# framework for building Telegram bots, inspired by AOP 
 
 ---
 
+## Learn and Docs
+
+Learn Telegrator on [Official documentation site](https://rikitav.github.io/telegrator.docs).
+
 The documentation may not be completely transparent, informative or even actual to latest version, so if you have any questions or problems, please write them in the [Telegram.Bot](https://t.me/joinchat/B35YY0QbLfd034CFnvCtCA) group. I am a member of this group and will notice you! If you have any suggestions or want to participate in building documentation, make push requests and open issues on this repository!
 
 ---
