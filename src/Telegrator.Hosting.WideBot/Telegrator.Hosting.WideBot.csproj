@@ -30,7 +30,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="WTelegramBot" Version="9.5.1" />
+    <PackageReference Include="WTelegramBot" Version="9.6.0" />
   </ItemGroup>
 
   <ItemGroup>
