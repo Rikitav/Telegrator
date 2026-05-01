@@ -175,5 +175,31 @@
             Initializes the bot and logs handlers on application startup.
             </summary>
         </member>
+        <member name="T:Telegrator.WideBotOptions">
+            <summary>
+            Represents configuration options for initializing and customizing the behavior of a WideBot instance.
+            </summary>
+            <remarks>Use this class to specify required API credentials, optional proxy settings, update handling
+            preferences, and SQL command detection for WideBot. All required properties must be set before using the options
+            with a WideBot instance.
+            </remarks>
+        </member>
+        <member name="P:Telegrator.WideBotOptions.ApiId">
+            <inheritdoc cref="P:Telegram.Bot.WTelegramBotClientOptions.ApiId"/>
+        </member>
+        <member name="P:Telegrator.WideBotOptions.ApiHash">
+            <inheritdoc cref="P:Telegram.Bot.WTelegramBotClientOptions.ApiHash"/>
+        </member>
+        <member name="P:Telegrator.WideBotOptions.MTProxy">
+            <inheritdoc cref="P:Telegram.Bot.WTelegramBotClientOptions.MTProxy"/>
+        </member>
+        <member name="P:Telegrator.WideBotOptions.SqlCommands">
+            <inheritdoc cref="P:Telegram.Bot.WTelegramBotClientOptions.SqlCommands"/>
+        </member>
+        <member name="P:Telegrator.WideBotOptions.DropPendingUpdates">
+            <summary>
+            Gets or sets a value indicating whether pending updates should be discarded.
+            </summary>
+        </member>
     </members>
 </doc>
