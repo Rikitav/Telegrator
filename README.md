@@ -128,7 +128,7 @@ bot.Handlers.AddHandler<StateKeepFirst>();
 
 ## 📚 Documentation & Examples
 
-- [Documentation](https://github.com/Rikitav/Telegrator/wiki/)
+- [Documentation](https://rikitav.github.io/telegrator.docs)
 - [Usage examples (WIP)](https://github.com/Rikitav/Telegrator/tree/master/examples)
 
 ---
