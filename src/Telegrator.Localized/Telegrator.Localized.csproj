@@ -2,7 +2,31 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
 	<LangVersion>latest</LangVersion>
+	<RootNamespace>Telegrator</RootNamespace>
+	<BaseOutputPath>..\..\bin</BaseOutputPath>
+	<DocumentationFile>..\..\docs\$(AssemblyName).xml</DocumentationFile>
+	  
+    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <EnableNETAnalyzers>True</EnableNETAnalyzers>
+    <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+    <IncludeSymbols>True</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <SignAssembly>False</SignAssembly>
+	  
+    <Title>Telegrator.Localized</Title>
+    <Version>1.17.1</Version>
+	<Authors>Rikitav Tim4ik</Authors>
+    <Company>Rikitav Tim4ik</Company>
+    <RepositoryUrl>https://github.com/Rikitav/Telegrator</RepositoryUrl>
+    <PackageTags>telegram;bot;mediator;attributes;aspect;hosting;host;framework;easy;simple;handlers</PackageTags>
+	  
+    <PackageIcon>telegrator_nuget.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,6 +35,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Telegrator\Telegrator.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include=".\README.md" Pack="True" PackagePath="\" />
+    <None Include="..\..\LICENSE" Pack="True" PackagePath="\" />
+    <None Include="..\..\resources\telegrator_nuget.png" Pack="True" PackagePath="\" />
   </ItemGroup>
 
 </Project>

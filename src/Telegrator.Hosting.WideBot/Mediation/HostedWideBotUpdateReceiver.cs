@@ -14,7 +14,7 @@ namespace Telegrator.Mediation;
 /// <param name="botClient"></param>
 /// <param name="updateRouter"></param>
 /// <param name="options"></param>
-public class HostedWideBotUpdateReceiver(ILogger<HostedWideBotUpdateReceiver> logger, ITelegramBotClient botClient, IUpdateRouter updateRouter, IOptions<ReceiverOptions>? options) : BackgroundService
+public class HostedWideBotUpdateReceiver(ILogger<HostedWideBotUpdateReceiver> logger, ITelegramBotClient botClient, IUpdateRouter updateRouter, IOptions<WideBotOptions>? options) : BackgroundService
 {
     /// <inheritdoc/>
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)

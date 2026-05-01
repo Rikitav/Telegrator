@@ -13,6 +13,9 @@
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <EnableNETAnalyzers>True</EnableNETAnalyzers>
     <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+    <IncludeSymbols>True</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <SignAssembly>False</SignAssembly>
 	  
     <Title>Telegrator.RedisStateStorage</Title>
     <Version>1.16.6</Version>

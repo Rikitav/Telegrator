@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace Telegrator.Hosting.Web;
+namespace Telegrator;
 
 /// <summary>
 /// Configuration options for Telegram bot behavior and execution settings.

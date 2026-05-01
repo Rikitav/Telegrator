@@ -15,6 +15,7 @@ using Telegrator.Providers;
 
 using WUpdate = WTelegram.Types.Update;
 using TLUpdate = TL.Update;
+using System.Data.Common;
 
 namespace Telegrator;
 
@@ -92,9 +93,9 @@ public static class WideHostBuilderExtensions
     /// <summary>
     /// Replaces TelegramBotHostBuilder. Configures DI, options, and handlers.
     /// </summary>
-    public static IHostApplicationBuilder AddWideTelegrator(this IHostApplicationBuilder builder, TelegratorOptions? options = null, IHandlersCollection? handlers = null, Action<ITelegramBotHostBuilder>? action = null)
+    public static IHostApplicationBuilder AddWideTelegrator(this IHostApplicationBuilder builder, Func<IServiceProvider, DbConnection> dbConnectionFactory, Action<ITelegramBotHostBuilder>? action = null, TelegratorOptions? options = null, IHandlersCollection? handlers = null)
     {
-        AddWideTelegratorInternal(builder.Services, builder.Configuration, builder.Properties, ref handlers, options);
+        AddWideTelegratorInternal(builder.Services, builder.Configuration, builder.Properties, dbConnectionFactory, ref handlers, options);
         action?.Invoke(new TelegramBotHostBuilder(builder, handlers));
         return builder;
     }
@@ -102,16 +103,16 @@ public static class WideHostBuilderExtensions
     /// <summary>
     /// Replaces TelegramBotHostBuilder. Configures DI, options, and handlers.
     /// </summary>
-    public static IHostApplicationBuilder AddWideTelegrator(this IHostApplicationBuilder builder, TelegratorOptions? options = null, IHandlersCollection? handlers = null)
+    public static IHostApplicationBuilder AddWideTelegrator(this IHostApplicationBuilder builder, Func<IServiceProvider, DbConnection> dbConnectionFactory, TelegratorOptions? options = null, IHandlersCollection? handlers = null)
     {
-        AddWideTelegratorInternal(builder.Services, builder.Configuration, builder.Properties, ref handlers, options);
+        AddWideTelegratorInternal(builder.Services, builder.Configuration, builder.Properties, dbConnectionFactory, ref handlers, options);
         return builder;
     }
 
     /// <summary>
     /// Replaces TelegramBotHostBuilder. Configures DI, options, and handlers.
     /// </summary>
-    internal static void AddWideTelegratorInternal(IServiceCollection services, IConfiguration configuration, IDictionary<object, object> properties, [NotNull] ref IHandlersCollection? handlers, TelegratorOptions? options = null)
+    internal static void AddWideTelegratorInternal(IServiceCollection services, IConfiguration configuration, IDictionary<object, object> properties, Func<IServiceProvider, DbConnection> dbConnectionFactory, [NotNull] ref IHandlersCollection? handlers, TelegratorOptions? options = null)
     {
         if (services.Any(srvc => srvc.ServiceType == typeof(HostedUpdateReceiver)))
             throw new InvalidOperationException("`HostedUpdateReceiver` found in services. WideHost extension is not compatible with default long-polling receiver. Please, remove `AddTelegrator` invocation from your Host configuration.");
@@ -147,16 +148,32 @@ public static class WideHostBuilderExtensions
 
         if (!services.Any(srvc => srvc.ServiceType == typeof(IOptions<WTelegramBotClientOptions>)))
         {
-            // For now, there's no way to configure this from IConfiguration, use `ConfigureWideTelegram` instead
-            throw new MissingMemberException("No options of type 'WTelegramBotClientOptions' was registered. This configuration is runtime required! Use `ConfigureWideTelegram` to register options.");
+            WideBotOptions? wideBotOptions = configuration.GetSection(nameof(WideBotOptions)).Get<WideBotOptions>();
+            if (wideBotOptions == null)
+                throw new MissingMemberException("Auto configuration disabled, yet no options of type 'WideBotOptions' was registered. This configuration is runtime required!");
 
-            /*
-            services.AddSingleton(Options.Create(new WTelegramBotClientOptions(options.Token, options.BaseUrl, options.UseTestEnvironment)
+            services.AddSingleton(provider =>
             {
-                RetryCount = options.RetryCount,
-                RetryThreshold = options.RetryThreshold
-            }));
-            */
+                IHostApplicationLifetime lifetime = provider.GetRequiredService<IHostApplicationLifetime>();
+
+                DbConnection dbConnection = dbConnectionFactory.Invoke(provider);
+                lifetime.ApplicationStopping.Register(() => dbConnection.Dispose());
+
+                WTelegramBotClientOptions wideOptions = new WTelegramBotClientOptions(
+                    token: options.Token,
+                    apiId: wideBotOptions.ApiId,
+                    apiHash: wideBotOptions.ApiHash,
+                    dbConnection: dbConnection,
+                    sqlCommands: wideBotOptions.SqlCommands,
+                    useTestEnvironment: options.UseTestEnvironment,
+                    mtproxy: wideBotOptions.MTProxy)
+                {
+                    RetryCount = options.RetryCount,
+                    RetryThreshold = options.RetryThreshold
+                };
+
+                return Options.Create(wideOptions);
+            });
         }
 
         services.AddTelegramBotHostDefaults();
@@ -179,6 +196,19 @@ public static class WideBotServiceCollectionExtensions
     public static IServiceCollection ConfigureWideTelegram(this IServiceCollection services, WTelegramBotClientOptions options)
     {
         services.RemoveAll<IOptions<WTelegramBotClientOptions>>();
+        services.AddSingleton(Options.Create(options));
+        return services;
+    }
+
+    /// <summary>
+    /// Adds WTelegramBotClientOptions to services
+    /// </summary>
+    /// <param name="services"></param>
+    /// <param name="options"></param>
+    /// <returns></returns>
+    public static IServiceCollection ConfigureWideBot(this IServiceCollection services, WideBotOptions options)
+    {
+        services.RemoveAll<IOptions<WideBotOptions>>();
         services.AddSingleton(Options.Create(options));
         return services;
     }

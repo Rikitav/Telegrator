@@ -12,9 +12,12 @@
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <EnableNETAnalyzers>True</EnableNETAnalyzers>
     <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+    <IncludeSymbols>True</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <SignAssembly>False</SignAssembly>
 	  
     <Title>Telegrator : Telegram.Bot mediator framework</Title>
-    <Version>1.17.0</Version>
+    <Version>1.17.1</Version>
 	<Authors>Rikitav Tim4ik</Authors>
 	<Company>Rikitav Tim4ik</Company>
     <RepositoryUrl>https://github.com/Rikitav/Telegrator</RepositoryUrl>

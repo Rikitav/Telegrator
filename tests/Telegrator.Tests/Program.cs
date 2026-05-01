@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Hosting;
-using System.Data.Common;
-using Telegram.Bot;
+using Telegram.Bot.Polling;
 
 namespace Telegrator.Tests;
 
@@ -14,6 +13,12 @@ internal static class Program
         {
             Args = args,
             ApplicationName = "Host example",
+        });
+
+        builder.Services.ConfigureReceiver(new ReceiverOptions()
+        {
+            DropPendingUpdates = true,
+            Limit = 100
         });
 
         builder.AddTelegrator(action: builder => builder.Handlers
@@ -32,12 +37,16 @@ internal static class Program
             ApplicationName = "WBot example",
         });
 
-        using DbConnection connection = new SqliteConnection("Data Source=wtgb.db");
-        builder.Services.ConfigureWideTelegram(
-            new WTelegramBotClientOptions(token: "BOT_TOKEN", apiId: 123, apiHash: "API_HASH", dbConnection: connection));
+        builder.Services.ConfigureWideBot(new WideBotOptions()
+        {
+            ApiId = 123,
+            ApiHash = "API_HASH",
+            DropPendingUpdates = true,
+        });
 
-        builder.AddWideTelegrator(action: builder => builder.Handlers
-            .CollectHandlersAssemblyWide());
+        builder.AddWideTelegrator(
+            dbConnectionFactory: provider => new SqliteConnection($"Data Source={Environment.ExpandEnvironmentVariables("%AppData%\\Telegrator\\%wtgb.db")}"),
+            action: builder => builder.Handlers.CollectHandlersAssemblyWide());
 
         builder.Build()
             .UseWideTelegrator()
@@ -50,6 +59,13 @@ internal static class Program
         {
             Args = args,
             ApplicationName = "WebApplication example",
+        });
+
+        builder.Services.ConfigureWebhooker(new WebhookerOptions()
+        {
+            WebhookUri = "https://medic-gaming.com/",
+            DropPendingUpdates = true,
+            SecretToken = "MEDIC_GAMING"
         });
 
         builder.AddTelegratorWeb(action: builder => builder.Handlers

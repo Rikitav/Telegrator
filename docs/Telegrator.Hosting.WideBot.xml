@@ -13,7 +13,7 @@
             <param name="updateRouter"></param>
             <param name="options"></param>
         </member>
-        <member name="M:Telegrator.Mediation.HostedWideBotUpdateReceiver.#ctor(Microsoft.Extensions.Logging.ILogger{Telegrator.Mediation.HostedWideBotUpdateReceiver},Telegram.Bot.ITelegramBotClient,Telegrator.Core.IUpdateRouter,Microsoft.Extensions.Options.IOptions{Telegram.Bot.Polling.ReceiverOptions})">
+        <member name="M:Telegrator.Mediation.HostedWideBotUpdateReceiver.#ctor(Microsoft.Extensions.Logging.ILogger{Telegrator.Mediation.HostedWideBotUpdateReceiver},Telegram.Bot.ITelegramBotClient,Telegrator.Core.IUpdateRouter,Microsoft.Extensions.Options.IOptions{Telegrator.WideBotOptions})">
             <summary>
             Service for receiving updates for Hosted wide telegram bots and queuing them to router
             </summary>
@@ -119,17 +119,17 @@
             Provides extension methods for <see cref="T:Microsoft.Extensions.Hosting.IHostApplicationBuilder"/> to configure Telegrator.
             </summary>
         </member>
-        <member name="M:Telegrator.WideHostBuilderExtensions.AddWideTelegrator(Microsoft.Extensions.Hosting.IHostApplicationBuilder,Telegrator.TelegratorOptions,Telegrator.Core.IHandlersCollection,System.Action{Telegrator.Hosting.ITelegramBotHostBuilder})">
+        <member name="M:Telegrator.WideHostBuilderExtensions.AddWideTelegrator(Microsoft.Extensions.Hosting.IHostApplicationBuilder,System.Func{System.IServiceProvider,System.Data.Common.DbConnection},System.Action{Telegrator.Hosting.ITelegramBotHostBuilder},Telegrator.TelegratorOptions,Telegrator.Core.IHandlersCollection)">
             <summary>
             Replaces TelegramBotHostBuilder. Configures DI, options, and handlers.
             </summary>
         </member>
-        <member name="M:Telegrator.WideHostBuilderExtensions.AddWideTelegrator(Microsoft.Extensions.Hosting.IHostApplicationBuilder,Telegrator.TelegratorOptions,Telegrator.Core.IHandlersCollection)">
+        <member name="M:Telegrator.WideHostBuilderExtensions.AddWideTelegrator(Microsoft.Extensions.Hosting.IHostApplicationBuilder,System.Func{System.IServiceProvider,System.Data.Common.DbConnection},Telegrator.TelegratorOptions,Telegrator.Core.IHandlersCollection)">
             <summary>
             Replaces TelegramBotHostBuilder. Configures DI, options, and handlers.
             </summary>
         </member>
-        <member name="M:Telegrator.WideHostBuilderExtensions.AddWideTelegratorInternal(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration,System.Collections.Generic.IDictionary{System.Object,System.Object},Telegrator.Core.IHandlersCollection@,Telegrator.TelegratorOptions)">
+        <member name="M:Telegrator.WideHostBuilderExtensions.AddWideTelegratorInternal(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration,System.Collections.Generic.IDictionary{System.Object,System.Object},System.Func{System.IServiceProvider,System.Data.Common.DbConnection},Telegrator.Core.IHandlersCollection@,Telegrator.TelegratorOptions)">
             <summary>
             Replaces TelegramBotHostBuilder. Configures DI, options, and handlers.
             </summary>
@@ -141,6 +141,14 @@
             </summary>
         </member>
         <member name="M:Telegrator.WideBotServiceCollectionExtensions.ConfigureWideTelegram(Microsoft.Extensions.DependencyInjection.IServiceCollection,Telegram.Bot.WTelegramBotClientOptions)">
+            <summary>
+            Adds WTelegramBotClientOptions to services
+            </summary>
+            <param name="services"></param>
+            <param name="options"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Telegrator.WideBotServiceCollectionExtensions.ConfigureWideBot(Microsoft.Extensions.DependencyInjection.IServiceCollection,Telegrator.WideBotOptions)">
             <summary>
             Adds WTelegramBotClientOptions to services
             </summary>
