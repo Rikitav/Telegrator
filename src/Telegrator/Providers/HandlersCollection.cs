@@ -67,9 +67,10 @@ public class HandlersCollection(TelegratorOptions? options) : IHandlersCollectio
     /// <exception cref="Exception">Thrown when the handler type doesn't have a parameterless constructor and MustHaveParameterlessCtor is true.</exception>
     public virtual IHandlersCollection AddDescriptor(HandlerDescriptor descriptor)
     {
+        /*
         if (MustHaveParameterlessCtor && !descriptor.HandlerType.HasParameterlessCtor())
             throw new Exception("This handler (" + descriptor.HandlerType.FullName + "), must contain constructor without parameters.");
-
+        */
         _allowedTypes.UnionAdd(descriptor.UpdateType);
         MightAwaitAttribute? mightAwait = descriptor.HandlerType.GetCustomAttribute<MightAwaitAttribute>();
         if (mightAwait != null)

@@ -1,7 +1,12 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using System.Text;
 using Telegram.Bot.Polling;
+using Telegram.Bot.Types.Enums;
+using Telegrator.Core.Descriptors;
+using Telegrator.Logging;
 
 namespace Telegrator.Tests;
 
@@ -9,6 +14,8 @@ internal static class Program
 {
     public static void HostApplicationBuilder_Example(string[] args)
     {
+        TelegratorLogging.MinimalLevel = Telegrator.Logging.LogLevel.Trace;
+
         HostApplicationBuilder builder = Host.CreateApplicationBuilder(new HostApplicationBuilderSettings()
         {
             Args = args,

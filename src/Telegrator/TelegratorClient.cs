@@ -75,7 +75,7 @@ public class TelegratorClient : TelegramBotClient, ITelegratorBot, ICollectingPr
 
         TelegratorLogging.LogInformation($"Telegrator bot starting up - BotId: {BotInfo.User.Id}, Username: {BotInfo.User.Username}, MaxParallelHandlers: {Options.MaximumParallelWorkingHandlers ?? -1}");
         updateRouter = new UpdateRouter(handlerProvider, awaitingProvider, stateStorage, Options, BotInfo);
-        await StartReceivingInternal(receiverOptions, Options.GlobalCancellationToken);
+        //await StartReceivingInternal(receiverOptions, Options.GlobalCancellationToken);
     }
 
     /// <summary>
