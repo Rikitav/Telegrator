@@ -39,7 +39,7 @@ public abstract class UpdateHandlerBase(UpdateType handlingUpdateType) : IUpdate
     public async Task<Result> Execute(DescribedHandlerDescriptor described, CancellationToken cancellationToken = default)
     {
         if (LifetimeToken.IsEnded)
-            throw new Exception();
+            throw new InvalidOperationException("Handler execution lifetime token is already ended.");
 
         try
         {
@@ -134,7 +134,7 @@ public abstract class UpdateHandlerBase(UpdateType handlingUpdateType) : IUpdate
         if (handlerInfo.UpdateRouter.DefaultContainerFactory is not null)
             return handlerInfo.UpdateRouter.DefaultContainerFactory.CreateContainer(handlerInfo);
 
-        throw new Exception();
+        throw new InvalidOperationException("No suitable container factory found for handler descriptor.");
     }
 
     /// <summary>

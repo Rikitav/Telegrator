@@ -109,7 +109,7 @@ public static class MessageExtensions
         {
             args = message.Text.Substring(command.Length);
         }
-        
+
         if (command.Contains('@'))
         {
             string[] split = command.Split('@');
@@ -536,7 +536,7 @@ public static partial class HandlersCollectionExtensions
     public static IHandlersCollection AddHandler(this IHandlersCollection handlers, Type handlerType)
     {
         if (!handlerType.IsHandlerImplementation())
-            throw new Exception();
+            throw new ArgumentException($"Type {handlerType.FullName} is not a valid handler implementation.");
 
         if (handlerType.IsCustomDescriptorsProvider())
         {
@@ -546,7 +546,7 @@ public static partial class HandlersCollectionExtensions
         }
         else
         {
-            HandlerDescriptor descriptor = new HandlerDescriptor(DescriptorType.General, handlerType);
+            HandlerDescriptor descriptor = handlers.CreateClassDescriptor(handlerType);
             handlers.AddDescriptor(descriptor);
         }
 
@@ -715,9 +715,9 @@ public static partial class UpdateExtensions
         if (update is T upd)
             return upd;
 
-        object actualUpdate = update.GetActualUpdateObject() ?? throw new Exception();
+        object actualUpdate = update.GetActualUpdateObject() ?? throw new InvalidOperationException("Failed to retrieve actual update object (it is null).");
         if (actualUpdate is not T actualCasted)
-            throw new Exception();
+            throw new InvalidCastException($"Cannot cast actual update object of type {actualUpdate.GetType().Name} to {typeof(T).Name}.");
 
         return actualCasted;
     }

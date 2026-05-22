@@ -10,7 +10,10 @@ public class HostHandlersCollection(IServiceCollection hostServiceColletion, Tel
     private readonly IServiceCollection Services = hostServiceColletion;
 
     /// <inheritdoc/>
-    protected override bool MustHaveParameterlessCtor => false;
+    public override HandlerDescriptor CreateClassDescriptor(Type handlerType)
+    {
+        return new HostClassHandlerDescriptor(DescriptorType.General, handlerType);
+    }
 
     /// <inheritdoc/>
     public override IHandlersCollection AddDescriptor(HandlerDescriptor descriptor)

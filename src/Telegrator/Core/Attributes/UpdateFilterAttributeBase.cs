@@ -35,7 +35,7 @@ public abstract class UpdateFilterAttributeBase : Attribute
     protected internal UpdateFilterAttributeBase()
     {
         if (AllowedTypes.Length == 0)
-            throw new ArgumentException();
+            throw new ArgumentException("UpdateFilterAttributeBase must have at least one allowed UpdateType.");
     }
 
     /// <summary>

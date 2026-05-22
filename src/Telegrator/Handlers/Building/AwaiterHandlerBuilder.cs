@@ -20,7 +20,7 @@ public class AwaiterHandlerBuilder<TUpdate> : HandlerBuilderBase, IAwaiterHandle
     /// The awaiting provider for managing handler registration.
     /// </summary>
     private readonly IAwaitingProvider HandlerProvider;
-    
+
     /// <summary>
     /// The update that triggered the awaiter creation.
     /// </summary>
@@ -36,7 +36,7 @@ public class AwaiterHandlerBuilder<TUpdate> : HandlerBuilderBase, IAwaiterHandle
     public AwaiterHandlerBuilder(UpdateType updateType, Update handlingUpdate, IAwaitingProvider handlerProvider) : base(typeof(AwaiterHandler), updateType, null)
     {
         if (!updateType.IsValidUpdateObject<TUpdate>())
-            throw new Exception();
+            throw new ArgumentException($"UpdateType {updateType} is not valid for {typeof(TUpdate).Name}.");
 
         HandlerProvider = handlerProvider;
         HandlingUpdate = handlingUpdate;
@@ -70,7 +70,7 @@ public class AwaiterHandlerBuilder<TUpdate> : HandlerBuilderBase, IAwaiterHandle
 
             return key == handlingKey;
         }));
-        
+
         AwaiterHandler handlerInstance = new AwaiterHandler(UpdateType);
         HandlerDescriptor descriptor = BuildImplicitDescriptor(handlerInstance);
 

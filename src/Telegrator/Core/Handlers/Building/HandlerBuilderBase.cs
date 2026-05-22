@@ -23,12 +23,12 @@ public abstract class HandlerBuilderBase(Type buildingHandlerType, UpdateType up
     /// <see cref="UpdateType"/> of building handler
     /// </summary>
     protected readonly UpdateType UpdateType = updateType;
-    
+
     /// <summary>
     /// Type of handler to build
     /// </summary>
     protected readonly Type BuildingHandlerType = buildingHandlerType;
-    
+
     /// <summary>
     /// Filters applied to handler
     /// </summary>
@@ -38,12 +38,12 @@ public abstract class HandlerBuilderBase(Type buildingHandlerType, UpdateType up
     /// <see cref="DescriptorIndexer"/> of building handler
     /// </summary>
     protected DescriptorIndexer Indexer = new DescriptorIndexer(0, 0, 0);
-    
+
     /// <summary>
     /// Update validation filter of building handler
     /// </summary>
     protected IFilter<Update>? ValidateFilter;
-    
+
     /// <summary>
     /// State keeper of building handler
     /// </summary>
@@ -58,7 +58,7 @@ public abstract class HandlerBuilderBase(Type buildingHandlerType, UpdateType up
     {
         object handlerServiceKey = GetImplicitHandlerServiceKey(BuildingHandlerType);
 
-        HandlerDescriptor descriptor = new HandlerDescriptor(
+        HandlerDescriptor descriptor = new ImplicitHandlerDescriptor(
             DescriptorType.Implicit, BuildingHandlerType,
             UpdateType, Indexer, ValidateFilter,
             Filters.ToArray(), StateKeeper,

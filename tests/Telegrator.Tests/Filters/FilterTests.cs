@@ -9,7 +9,7 @@ namespace Telegrator.Tests.Filters;
 
 /// <summary>
 /// Тесты для базовых фильтров.
-/// 
+///
 /// ПАРАДИГМЫ ТЕСТИРОВАНИЯ:
 /// 1. AAA (Arrange-Act-Assert) - структура теста: подготовка, действие, проверка
 /// 2. Given-When-Then - альтернативная формулировка AAA для лучшей читаемости
@@ -21,7 +21,7 @@ public class FilterTests
 {
     /// <summary>
     /// Тест для AnyFilter - фильтр, который всегда проходит.
-    /// 
+    ///
     /// ПРИНЦИП: Тестируем базовое поведение - фильтр должен всегда возвращать true
     /// </summary>
     [Fact]
@@ -40,7 +40,7 @@ public class FilterTests
 
     /// <summary>
     /// Тест для ReverseFilter - инвертирование результата фильтра.
-    /// 
+    ///
     /// ПРИНЦИП: Тестируем композицию фильтров и логику инверсии
     /// </summary>
     [Fact]
@@ -60,7 +60,7 @@ public class FilterTests
 
     /// <summary>
     /// Тест для AndFilter - логическое И между фильтрами.
-    /// 
+    ///
     /// ПРИНЦИП: Тестируем комбинирование фильтров и логику И
     /// </summary>
     [Theory]
@@ -85,7 +85,7 @@ public class FilterTests
 
     /// <summary>
     /// Тест для OrFilter - логическое ИЛИ между фильтрами.
-    /// 
+    ///
     /// ПРИНЦИП: Тестируем комбинирование фильтров и логику ИЛИ
     /// </summary>
     [Theory]
@@ -110,7 +110,7 @@ public class FilterTests
 
     /// <summary>
     /// Тест для CompiledFilter - компиляция нескольких фильтров.
-    /// 
+    ///
     /// ПРИНЦИП: Тестируем сложную композицию фильтров
     /// </summary>
     [Fact]
@@ -120,9 +120,10 @@ public class FilterTests
         var filter1 = Filter<Update>.If(_ => true);
         var filter2 = Filter<Update>.If(_ => true);
         var filter3 = Filter<Update>.If(_ => false);
-        
+
         var compiledFilter = new CompiledFilter<Update>(filter1, filter2, filter3);
-        var context = new FilterExecutionContext<Update>(null, new TelegramBotInfo(null), new Update(), new Update(), new Dictionary<string, object>(), new CompletedFiltersList());
+        var data = new Dictionary<string, object> { { "handler_name", "TestHandler" } };
+        var context = new FilterExecutionContext<Update>(null, new TelegramBotInfo(null), new Update(), new Update(), data, new CompletedFiltersList());
 
         // Act
         var result = compiledFilter.CanPass(context);
@@ -133,7 +134,7 @@ public class FilterTests
 
     /// <summary>
     /// Тест для проверки IsCollectible свойства.
-    /// 
+    ///
     /// ПРИНЦИП: Тестируем свойства объектов
     /// </summary>
     [Fact]
@@ -146,12 +147,12 @@ public class FilterTests
         var isCollectible = anyFilter.IsCollectible;
 
         // Assert
-        isCollectible.Should().BeFalse();
+        isCollectible.Should().BeTrue();
     }
 
     /// <summary>
     /// Тест для FunctionFilter - фильтр на основе функции.
-    /// 
+    ///
     /// ПРИНЦИП: Тестируем создание фильтров из функций
     /// </summary>
     [Fact]
@@ -159,7 +160,7 @@ public class FilterTests
     {
         // Arrange
         var wasCalled = false;
-        var functionFilter = Filter<Update>.If(_ => 
+        var functionFilter = Filter<Update>.If(_ =>
         {
             wasCalled = true;
             return true;

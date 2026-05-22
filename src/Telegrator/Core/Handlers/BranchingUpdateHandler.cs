@@ -55,7 +55,7 @@ public abstract class BranchingUpdateHandler<TUpdate> : AbstractUpdateHandler<TU
 
         MethodInfo[] handlerBranches = thisType.GetMethods().Where(branch => branch.DeclaringType == thisType).ToArray();
         if (handlerBranches.Length == 0)
-            throw new Exception();
+            throw new InvalidOperationException("BranchingUpdateHandler must have at least one handler branch.");
 
         foreach (MethodInfo branch in handlerBranches)
             yield return DescribeBranch(branch, updateHandlerAttribute, handlerFilters);
@@ -119,7 +119,7 @@ public abstract class BranchingUpdateHandler<TUpdate> : AbstractUpdateHandler<TU
     public override async Task<Result> Execute(IHandlerContainer<TUpdate> container, CancellationToken cancellation)
     {
         if (branchMethodInfo is null)
-            throw new Exception();
+            throw new InvalidOperationException($"No suitable branch method found for update.");
 
         Cancellation = cancellation;
         return await BranchExecuteWrapper(container, branchMethodInfo);
@@ -141,8 +141,8 @@ public abstract class BranchingUpdateHandler<TUpdate> : AbstractUpdateHandler<TU
         {
             object branchReturn = methodInfo.Invoke(this, []);
             if (branchReturn is not Task<Result> branchTask)
-                throw new InvalidOperationException();
-            
+                throw new InvalidOperationException($"Branch method {methodInfo.Name} is expected to return Task<Result>.");
+
             return await branchTask;
         }
     }
@@ -155,7 +155,7 @@ public abstract class BranchingUpdateHandler<TUpdate> : AbstractUpdateHandler<TU
             LazyInitialization = handler =>
             {
                 if (handler is not BranchingUpdateHandler<TUpdate> brancher)
-                    throw new InvalidDataException();
+                    throw new InvalidDataException($"Expected {nameof(BranchingUpdateHandler<TUpdate>)}, got {handler.GetType().Name}.");
 
                 brancher.branchMethodInfo = method;
             };

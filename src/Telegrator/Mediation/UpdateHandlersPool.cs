@@ -112,8 +112,6 @@ public class UpdateHandlersPool : IUpdateHandlersPool
                 if (ExecutionLimiter != null)
                     await ExecutionLimiter.WaitAsync(GlobalCancellationToken);
 
-                // Как только слот получен, "отстреливаем" задачу в ThreadPool 
-                // и идем на следующий круг цикла за новым обработчиком из канала.
                 _ = ProcessHandler(handlerInfo);
             }
         }

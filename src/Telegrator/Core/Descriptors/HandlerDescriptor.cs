@@ -35,7 +35,7 @@ public enum DescriptorType
 /// <summary>
 /// Describes a handler, its type, filters, and instantiation logic.
 /// </summary>
-public class HandlerDescriptor
+public abstract class HandlerDescriptor
 {
     /// <summary>
     /// The type of the descriptor.
@@ -152,7 +152,7 @@ public class HandlerDescriptor
     /// <param name="handlerType">The type of the handler to describe</param>
     /// <param name="dontInspect"></param>
     /// <exception cref="ArgumentException">Thrown when the handler type is not compatible with the expected handler type</exception>
-    public HandlerDescriptor(DescriptorType descriptorType, Type handlerType, bool dontInspect = false)
+    protected HandlerDescriptor(DescriptorType descriptorType, Type handlerType, bool dontInspect = false)
     {
         Type = descriptorType;
         HandlerType = handlerType;
@@ -182,7 +182,7 @@ public class HandlerDescriptor
     /// <param name="handlerType">The type of the handler to describe</param>
     /// <param name="serviceKey">The service key for dependency injection</param>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="serviceKey"/> is null</exception>
-    public HandlerDescriptor(Type handlerType, object serviceKey) : this(DescriptorType.Keyed, handlerType)
+    protected HandlerDescriptor(Type handlerType, object serviceKey) : this(DescriptorType.Keyed, handlerType)
     {
         ServiceKey = serviceKey ?? throw new ArgumentNullException(nameof(serviceKey));
     }
@@ -195,7 +195,7 @@ public class HandlerDescriptor
     /// <param name="updateType">The type of update this handler processes</param>
     /// <param name="indexer">The indexer for handler concurrency and priority</param>
     /// <param name="filters">The set of filters associated with this handler</param>
-    public HandlerDescriptor(DescriptorType type, Type handlerType, UpdateType updateType, DescriptorIndexer indexer, DescriptorFiltersSet filters)
+    protected HandlerDescriptor(DescriptorType type, Type handlerType, UpdateType updateType, DescriptorIndexer indexer, DescriptorFiltersSet filters)
     {
         Type = type;
         HandlerType = handlerType;
@@ -215,7 +215,7 @@ public class HandlerDescriptor
     /// <param name="serviceKey">The service key for dependency injection</param>
     /// <param name="singletonInstance">The singleton instance of the handler</param>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="serviceKey"/> or <paramref name="singletonInstance"/> is null</exception>
-    public HandlerDescriptor(DescriptorType type, Type handlerType, UpdateType updateType, DescriptorIndexer indexer, DescriptorFiltersSet filters, object serviceKey, UpdateHandlerBase singletonInstance)
+    protected HandlerDescriptor(DescriptorType type, Type handlerType, UpdateType updateType, DescriptorIndexer indexer, DescriptorFiltersSet filters, object serviceKey, UpdateHandlerBase singletonInstance)
     {
         Type = type;
         HandlerType = handlerType;
@@ -236,7 +236,7 @@ public class HandlerDescriptor
     /// <param name="filters">The set of filters associated with this handler</param>
     /// <param name="instanceFactory">Factory for creating handler instances</param>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="instanceFactory"/> is null</exception>
-    public HandlerDescriptor(DescriptorType type, Type handlerType, UpdateType updateType, DescriptorIndexer indexer, DescriptorFiltersSet filters, Func<UpdateHandlerBase> instanceFactory)
+    protected HandlerDescriptor(DescriptorType type, Type handlerType, UpdateType updateType, DescriptorIndexer indexer, DescriptorFiltersSet filters, Func<UpdateHandlerBase> instanceFactory)
     {
         Type = type;
         HandlerType = handlerType;
@@ -257,7 +257,7 @@ public class HandlerDescriptor
     /// <param name="serviceKey">The service key for dependency injection</param>
     /// <param name="instanceFactory">Factory for creating handler instances</param>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="serviceKey"/> or <paramref name="instanceFactory"/> is null</exception>
-    public HandlerDescriptor(DescriptorType type, Type handlerType, UpdateType updateType, DescriptorIndexer indexer, DescriptorFiltersSet filters, object serviceKey, Func<UpdateHandlerBase> instanceFactory)
+    protected HandlerDescriptor(DescriptorType type, Type handlerType, UpdateType updateType, DescriptorIndexer indexer, DescriptorFiltersSet filters, object serviceKey, Func<UpdateHandlerBase> instanceFactory)
     {
         Type = type;
         HandlerType = handlerType;
@@ -276,7 +276,7 @@ public class HandlerDescriptor
     /// <param name="pollingHandlerAttribute">The polling handler attribute containing configuration</param>
     /// <param name="filters">Optional array of filters to apply</param>
     /// <param name="stateKeepFilter">Optional state keeping filter</param>
-    public HandlerDescriptor(DescriptorType type, Type handlerType, UpdateHandlerAttributeBase pollingHandlerAttribute, IFilter<Update>[]? filters, IFilter<Update>? stateKeepFilter)
+    protected HandlerDescriptor(DescriptorType type, Type handlerType, UpdateHandlerAttributeBase pollingHandlerAttribute, IFilter<Update>[]? filters, IFilter<Update>? stateKeepFilter)
     {
         Type = type;
         HandlerType = handlerType;
@@ -296,7 +296,7 @@ public class HandlerDescriptor
     /// <param name="serviceKey">The service key for dependency injection</param>
     /// <param name="singletonInstance">The singleton instance of the handler</param>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="serviceKey"/> or <paramref name="singletonInstance"/> is null</exception>
-    public HandlerDescriptor(DescriptorType type, Type handlerType, UpdateHandlerAttributeBase pollingHandlerAttribute, IFilter<Update>[]? filters, IFilter<Update>? stateKeepFilter, object serviceKey, UpdateHandlerBase singletonInstance)
+    protected HandlerDescriptor(DescriptorType type, Type handlerType, UpdateHandlerAttributeBase pollingHandlerAttribute, IFilter<Update>[]? filters, IFilter<Update>? stateKeepFilter, object serviceKey, UpdateHandlerBase singletonInstance)
     {
         Type = type;
         HandlerType = handlerType;
@@ -317,7 +317,7 @@ public class HandlerDescriptor
     /// <param name="stateKeepFilter">Optional state keeping filter</param>
     /// <param name="instanceFactory">Factory for creating handler instances</param>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="instanceFactory"/> is null</exception>
-    public HandlerDescriptor(DescriptorType type, Type handlerType, UpdateHandlerAttributeBase pollingHandlerAttribute, IFilter<Update>[]? filters, IFilter<Update>? stateKeepFilter, Func<UpdateHandlerBase> instanceFactory)
+    protected HandlerDescriptor(DescriptorType type, Type handlerType, UpdateHandlerAttributeBase pollingHandlerAttribute, IFilter<Update>[]? filters, IFilter<Update>? stateKeepFilter, Func<UpdateHandlerBase> instanceFactory)
     {
         Type = type;
         HandlerType = handlerType;
@@ -338,7 +338,7 @@ public class HandlerDescriptor
     /// <param name="serviceKey">The service key for dependency injection</param>
     /// <param name="instanceFactory">Factory for creating handler instances</param>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="serviceKey"/> or <paramref name="instanceFactory"/> is null</exception>
-    public HandlerDescriptor(DescriptorType type, Type handlerType, UpdateHandlerAttributeBase pollingHandlerAttribute, IFilter<Update>[]? filters, IFilter<Update>? stateKeepFilter, object serviceKey, Func<UpdateHandlerBase> instanceFactory)
+    protected HandlerDescriptor(DescriptorType type, Type handlerType, UpdateHandlerAttributeBase pollingHandlerAttribute, IFilter<Update>[]? filters, IFilter<Update>? stateKeepFilter, object serviceKey, Func<UpdateHandlerBase> instanceFactory)
     {
         Type = type;
         HandlerType = handlerType;
@@ -359,7 +359,7 @@ public class HandlerDescriptor
     /// <param name="validateFilter">Optional validation filter</param>
     /// <param name="filters">Optional array of filters to apply</param>
     /// <param name="stateKeepFilter">Optional state keeping filter</param>
-    public HandlerDescriptor(DescriptorType type, Type handlerType, UpdateType updateType, DescriptorIndexer indexer, IFilter<Update>? validateFilter, IFilter<Update>[]? filters, IFilter<Update>? stateKeepFilter)
+    protected HandlerDescriptor(DescriptorType type, Type handlerType, UpdateType updateType, DescriptorIndexer indexer, IFilter<Update>? validateFilter, IFilter<Update>[]? filters, IFilter<Update>? stateKeepFilter)
     {
         Type = type;
         HandlerType = handlerType;
@@ -381,7 +381,7 @@ public class HandlerDescriptor
     /// <param name="serviceKey">The service key for dependency injection</param>
     /// <param name="singletonInstance">The singleton instance of the handler</param>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="serviceKey"/> or <paramref name="singletonInstance"/> is null</exception>
-    public HandlerDescriptor(DescriptorType type, Type handlerType, UpdateType updateType, DescriptorIndexer indexer, IFilter<Update>? validateFilter, IFilter<Update>[]? filters, IFilter<Update>? stateKeepFilter, object serviceKey, UpdateHandlerBase singletonInstance)
+    protected HandlerDescriptor(DescriptorType type, Type handlerType, UpdateType updateType, DescriptorIndexer indexer, IFilter<Update>? validateFilter, IFilter<Update>[]? filters, IFilter<Update>? stateKeepFilter, object serviceKey, UpdateHandlerBase singletonInstance)
     {
         Type = type;
         HandlerType = handlerType;
@@ -404,7 +404,7 @@ public class HandlerDescriptor
     /// <param name="stateKeepFilter">Optional state keeping filter</param>
     /// <param name="instanceFactory">Factory for creating handler instances</param>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="instanceFactory"/> is null</exception>
-    public HandlerDescriptor(DescriptorType type, Type handlerType, UpdateType updateType, DescriptorIndexer indexer, IFilter<Update>? validateFilter, IFilter<Update>[]? filters, IFilter<Update>? stateKeepFilter, Func<UpdateHandlerBase> instanceFactory)
+    protected HandlerDescriptor(DescriptorType type, Type handlerType, UpdateType updateType, DescriptorIndexer indexer, IFilter<Update>? validateFilter, IFilter<Update>[]? filters, IFilter<Update>? stateKeepFilter, Func<UpdateHandlerBase> instanceFactory)
     {
         Type = type;
         HandlerType = handlerType;
@@ -427,7 +427,7 @@ public class HandlerDescriptor
     /// <param name="serviceKey">The service key for dependency injection</param>
     /// <param name="instanceFactory">Factory for creating handler instances</param>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="serviceKey"/> or <paramref name="instanceFactory"/> is null</exception>
-    public HandlerDescriptor(DescriptorType type, Type handlerType, UpdateType updateType, DescriptorIndexer indexer, IFilter<Update>? validateFilter, IFilter<Update>[]? filters, IFilter<Update>? stateKeepFilter, object serviceKey, Func<UpdateHandlerBase> instanceFactory)
+    protected HandlerDescriptor(DescriptorType type, Type handlerType, UpdateType updateType, DescriptorIndexer indexer, IFilter<Update>? validateFilter, IFilter<Update>[]? filters, IFilter<Update>? stateKeepFilter, object serviceKey, Func<UpdateHandlerBase> instanceFactory)
     {
         Type = type;
         HandlerType = handlerType;
@@ -447,7 +447,7 @@ public class HandlerDescriptor
     public void SetInstance(UpdateHandlerBase instance)
     {
         if (SingletonInstance != null)
-            throw new Exception();
+            throw new InvalidOperationException("SingletonInstance is already set.");
 
         SingletonInstance = instance;
     }

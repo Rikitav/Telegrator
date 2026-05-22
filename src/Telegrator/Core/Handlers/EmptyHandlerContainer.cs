@@ -11,20 +11,20 @@ namespace Telegrator.Core.Handlers;
 public class EmptyHandlerContainer : IHandlerContainer
 {
     /// <inheritdoc/>
-    public Update HandlingUpdate => throw new NotImplementedException();
+    public Update HandlingUpdate => throw new NotImplementedException("EmptyHandlerContainer does not provide this implementation.");
 
     /// <inheritdoc/>
-    public ITelegramBotClient Client => throw new NotImplementedException();
+    public ITelegramBotClient Client => throw new NotImplementedException("EmptyHandlerContainer does not provide this implementation.");
 
     /// <inheritdoc/>
-    public Dictionary<string, object> ExtraData => throw new NotImplementedException();
+    public Dictionary<string, object> ExtraData => throw new NotImplementedException("EmptyHandlerContainer does not provide this implementation.");
 
     /// <inheritdoc/>
-    public CompletedFiltersList CompletedFilters => throw new NotImplementedException();
+    public CompletedFiltersList CompletedFilters => throw new NotImplementedException("EmptyHandlerContainer does not provide this implementation.");
 
     /// <inheritdoc/>
-    public IAwaitingProvider AwaitingProvider => throw new NotImplementedException();
+    public IAwaitingProvider AwaitingProvider => throw new NotImplementedException("EmptyHandlerContainer does not provide this implementation.");
 
     /// <inheritdoc/>
-    public IStateStorage StateStorage => throw new NotImplementedException();
+    public IStateStorage StateStorage => throw new NotImplementedException("EmptyHandlerContainer does not provide this implementation.");
 }

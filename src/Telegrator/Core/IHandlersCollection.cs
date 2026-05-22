@@ -18,12 +18,12 @@ public interface IHandlersCollection
     /// Gets the collection of <see cref="UpdateType"/> keys for the handler lists.
     /// </summary>
     public IEnumerable<UpdateType> Keys { get; }
-    
+
     /// <summary>
     /// Gets the collection of <see cref="HandlerDescriptorList"/> values.
     /// </summary>
     public IEnumerable<HandlerDescriptorList> Values { get; }
-    
+
     /// <summary>
     /// Gets the <see cref="HandlerDescriptorList"/> for the specified <see cref="UpdateType"/>.
     /// </summary>
@@ -38,6 +38,13 @@ public interface IHandlersCollection
     /// <param name="list"></param>
     /// <returns></returns>
     public bool TryGetDescriptorList(UpdateType updateType, out HandlerDescriptorList? list);
+
+    /// <summary>
+    /// Creates a class handler descriptor for the specified handler type.
+    /// </summary>
+    /// <param name="handlerType">The type of the handler.</param>
+    /// <returns>A new <see cref="HandlerDescriptor"/>.</returns>
+    public HandlerDescriptor CreateClassDescriptor(Type handlerType);
 
     /// <summary>
     /// Adds a <see cref="HandlerDescriptor"/> to the collection and returns the updated collection.

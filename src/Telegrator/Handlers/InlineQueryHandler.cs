@@ -63,7 +63,7 @@ public abstract class InlineQueryHandler() : AbstractUpdateHandler<Update>(Updat
                 }
 
             default:
-                throw new NotImplementedException();
+                throw new NotImplementedException($"InlineQueryHandler does not support update type '{container.HandlingUpdate.Type}'.");
         }
     }
 

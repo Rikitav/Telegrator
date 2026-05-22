@@ -71,10 +71,10 @@ public sealed class HandlerDescriptorList : IEnumerable<HandlerDescriptor>
         lock (_lock)
         {
             if (IsReadOnly)
-                throw new CollectionFrozenException();
+                throw new InvalidOperationException("Cannot add descriptor, collection is read-only.");
 
             if (_handlingType != UpdateType.Unknown && descriptor.UpdateType != _handlingType)
-                throw new InvalidOperationException();
+                throw new InvalidOperationException($"Cannot add descriptor for {descriptor.UpdateType} to list handling {_handlingType}.");
 
             descriptor.Indexer = descriptor.Indexer.UpdateIndex(count++);
             _innerCollection.Add(descriptor.Indexer, descriptor);

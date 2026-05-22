@@ -115,6 +115,12 @@ public abstract class HandlersManagerBase(TelegratorOptions options) : IHandlers
     }
 
     /// <inheritdoc/>
+    public virtual HandlerDescriptor CreateClassDescriptor(Type handlerType)
+    {
+        return new ClassHandlerDescriptor(DescriptorType.General, handlerType);
+    }
+
+    /// <inheritdoc/>
     public bool IsEmpty()
     {
         return _handlersDictionary.Any(pair => pair.Value.Count != 0);

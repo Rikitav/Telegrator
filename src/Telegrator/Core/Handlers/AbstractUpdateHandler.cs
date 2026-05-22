@@ -60,7 +60,7 @@ public abstract class AbstractUpdateHandler<TUpdate> : UpdateHandlerBase, IHandl
     protected AbstractUpdateHandler(UpdateType handlingUpdateType) : base(handlingUpdateType)
     {
         if (!HandlingUpdateType.IsValidUpdateObject<TUpdate>())
-            throw new Exception();
+            throw new InvalidOperationException($"HandlingUpdateType {HandlingUpdateType} is not valid for {typeof(TUpdate).Name}.");
     }
 
     /// <summary>

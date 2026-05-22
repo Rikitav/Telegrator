@@ -22,17 +22,18 @@ public class HandlersCollection(TelegratorOptions? options) : IHandlersCollectio
     /// Dictionary that organizes handler descriptors by update type.
     /// </summary>
     protected readonly Dictionary<UpdateType, HandlerDescriptorList> InnerDictionary = [];
-    
+
     /// <summary>
     /// Configuration options for handler collecting.
     /// </summary>
     protected readonly TelegratorOptions? Options = options;
-    
-    /// <summary>
-    /// Gets whether handlers must have a parameterless constructor.
-    /// </summary>
-    protected virtual bool MustHaveParameterlessCtor => true;
-    
+
+    /// <inheritdoc/>
+    public virtual HandlerDescriptor CreateClassDescriptor(Type handlerType)
+    {
+        return new ClassHandlerDescriptor(DescriptorType.General, handlerType);
+    }
+
     /// <summary>
     /// List of command aliases that have been registered.
     /// </summary>
@@ -67,10 +68,6 @@ public class HandlersCollection(TelegratorOptions? options) : IHandlersCollectio
     /// <exception cref="Exception">Thrown when the handler type doesn't have a parameterless constructor and MustHaveParameterlessCtor is true.</exception>
     public virtual IHandlersCollection AddDescriptor(HandlerDescriptor descriptor)
     {
-        /*
-        if (MustHaveParameterlessCtor && !descriptor.HandlerType.HasParameterlessCtor())
-            throw new Exception("This handler (" + descriptor.HandlerType.FullName + "), must contain constructor without parameters.");
-        */
         _allowedTypes.UnionAdd(descriptor.UpdateType);
         MightAwaitAttribute? mightAwait = descriptor.HandlerType.GetCustomAttribute<MightAwaitAttribute>();
         if (mightAwait != null)
@@ -96,7 +93,7 @@ public class HandlersCollection(TelegratorOptions? options) : IHandlersCollectio
     /// <returns>The handler descriptor list containing the descriptor.</returns>
     protected virtual HandlerDescriptorList GetDescriptorList(HandlerDescriptor descriptor)
     {
-        UpdateType updateType = UpdateTypeExtensions.SuppressTypes.TryGetValue(descriptor.UpdateType, out UpdateType suppressType) 
+        UpdateType updateType = UpdateTypeExtensions.SuppressTypes.TryGetValue(descriptor.UpdateType, out UpdateType suppressType)
             ? suppressType : descriptor.UpdateType;
 
         if (!InnerDictionary.TryGetValue(updateType, out HandlerDescriptorList? list))

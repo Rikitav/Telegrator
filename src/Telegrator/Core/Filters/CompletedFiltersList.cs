@@ -61,7 +61,7 @@ public class CompletedFiltersList : IEnumerable<IFilterCollectable>
     public TFilter Get<TFilter>(int index) where TFilter : notnull, IFilterCollectable
     {
         IEnumerable<TFilter> filters = Get<TFilter>();
-        return filters.Any() ? filters.ElementAt(index) : throw new KeyNotFoundException();
+        return filters.Any() ? filters.ElementAt(index) : throw new KeyNotFoundException($"No filter of type {typeof(TFilter).Name} found at index {index}.");
     }
 
     /// <summary>

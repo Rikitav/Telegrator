@@ -145,13 +145,91 @@
         <member name="M:Telegrator.Providers.HostAwaitingProvider.#ctor(Microsoft.Extensions.Options.IOptions{Telegrator.TelegratorOptions})">
             <inheritdoc/>
         </member>
+        <member name="T:Telegrator.Providers.HostClassHandlerDescriptor">
+            <summary>
+            Descriptor for creating handlers from classes in a host environment
+            </summary>
+        </member>
+        <member name="M:Telegrator.Providers.HostClassHandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Telegrator.Providers.HostClassHandlerDescriptor"/> class.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Providers.HostClassHandlerDescriptor.#ctor(System.Type,System.Object)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Telegrator.Providers.HostClassHandlerDescriptor"/> class with a service key.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Providers.HostClassHandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegram.Bot.Types.Enums.UpdateType,Telegrator.Core.Descriptors.DescriptorIndexer,Telegrator.Core.Descriptors.DescriptorFiltersSet)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Telegrator.Providers.HostClassHandlerDescriptor"/> class.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Providers.HostClassHandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegram.Bot.Types.Enums.UpdateType,Telegrator.Core.Descriptors.DescriptorIndexer,Telegrator.Core.Descriptors.DescriptorFiltersSet,System.Object,Telegrator.Core.Handlers.UpdateHandlerBase)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Telegrator.Providers.HostClassHandlerDescriptor"/> class with a singleton instance.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Providers.HostClassHandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegram.Bot.Types.Enums.UpdateType,Telegrator.Core.Descriptors.DescriptorIndexer,Telegrator.Core.Descriptors.DescriptorFiltersSet,System.Func{Telegrator.Core.Handlers.UpdateHandlerBase})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Telegrator.Providers.HostClassHandlerDescriptor"/> class with an instance factory.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Providers.HostClassHandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegram.Bot.Types.Enums.UpdateType,Telegrator.Core.Descriptors.DescriptorIndexer,Telegrator.Core.Descriptors.DescriptorFiltersSet,System.Object,System.Func{Telegrator.Core.Handlers.UpdateHandlerBase})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Telegrator.Providers.HostClassHandlerDescriptor"/> class with a service key and instance factory.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Providers.HostClassHandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegrator.Core.Attributes.UpdateHandlerAttributeBase,Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update}[],Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Telegrator.Providers.HostClassHandlerDescriptor"/> class using a polling attribute.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Providers.HostClassHandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegrator.Core.Attributes.UpdateHandlerAttributeBase,Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update}[],Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},System.Object,Telegrator.Core.Handlers.UpdateHandlerBase)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Telegrator.Providers.HostClassHandlerDescriptor"/> class with a polling attribute and singleton instance.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Providers.HostClassHandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegrator.Core.Attributes.UpdateHandlerAttributeBase,Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update}[],Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},System.Func{Telegrator.Core.Handlers.UpdateHandlerBase})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Telegrator.Providers.HostClassHandlerDescriptor"/> class with a polling attribute and instance factory.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Providers.HostClassHandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegrator.Core.Attributes.UpdateHandlerAttributeBase,Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update}[],Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},System.Object,System.Func{Telegrator.Core.Handlers.UpdateHandlerBase})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Telegrator.Providers.HostClassHandlerDescriptor"/> class with a polling attribute, service key, and instance factory.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Providers.HostClassHandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegram.Bot.Types.Enums.UpdateType,Telegrator.Core.Descriptors.DescriptorIndexer,Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update}[],Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Telegrator.Providers.HostClassHandlerDescriptor"/> class with an update validation filter.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Providers.HostClassHandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegram.Bot.Types.Enums.UpdateType,Telegrator.Core.Descriptors.DescriptorIndexer,Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update}[],Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},System.Object,Telegrator.Core.Handlers.UpdateHandlerBase)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Telegrator.Providers.HostClassHandlerDescriptor"/> class with a validation filter and singleton instance.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Providers.HostClassHandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegram.Bot.Types.Enums.UpdateType,Telegrator.Core.Descriptors.DescriptorIndexer,Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update}[],Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},System.Func{Telegrator.Core.Handlers.UpdateHandlerBase})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Telegrator.Providers.HostClassHandlerDescriptor"/> class with a validation filter and instance factory.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Providers.HostClassHandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegram.Bot.Types.Enums.UpdateType,Telegrator.Core.Descriptors.DescriptorIndexer,Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update}[],Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},System.Object,System.Func{Telegrator.Core.Handlers.UpdateHandlerBase})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Telegrator.Providers.HostClassHandlerDescriptor"/> class with a validation filter, service key, and instance factory.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Providers.HostClassHandlerDescriptor.ValidateConstructor">
+            <inheritdoc/>
+        </member>
         <member name="T:Telegrator.Providers.HostHandlersCollection">
             <inheritdoc/>
         </member>
         <member name="M:Telegrator.Providers.HostHandlersCollection.#ctor(Microsoft.Extensions.DependencyInjection.IServiceCollection,Telegrator.TelegratorOptions)">
             <inheritdoc/>
         </member>
-        <member name="P:Telegrator.Providers.HostHandlersCollection.MustHaveParameterlessCtor">
+        <member name="M:Telegrator.Providers.HostHandlersCollection.CreateClassDescriptor(System.Type)">
             <inheritdoc/>
         </member>
         <member name="M:Telegrator.Providers.HostHandlersCollection.AddDescriptor(Telegrator.Core.Descriptors.HandlerDescriptor)">

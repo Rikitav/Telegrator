@@ -50,7 +50,10 @@ public class CompiledFilter<T> : Filter<T>, INamedFilter where T : class
             if (!filter.CanPass(context))
             {
                 if (filter is not AnonymousCompiledFilter && filter is not AnonymousTypeFilter)
-                    TelegratorLogging.LogTrace("{0} filter of {1} didnt pass! (Compiled)", filter.GetType().Name, context.Data["handler_name"]);
+                {
+                    string handlerName = context.Data.TryGetValue("handler_name", out object? nameObj) ? nameObj?.ToString() ?? "Unknown" : "Unknown";
+                    TelegratorLogging.LogTrace("{0} filter of {1} didnt pass! (Compiled)", filter.GetType().Name, handlerName);
+                }
 
                 return false;
             }

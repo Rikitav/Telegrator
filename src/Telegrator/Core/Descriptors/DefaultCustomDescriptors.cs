@@ -36,7 +36,7 @@ public class MethodHandlerDescriptor<TUpdate> : HandlerDescriptor where TUpdate 
         LazyInitialization = handler =>
         {
             if (handler is not MethodHandler methodHandler)
-                throw new InvalidDataException();
+                throw new InvalidDataException($"Expected a {nameof(MethodHandler)}, but got {handler.GetType().Name}.");
 
             methodHandler.Method = Method;
         };
@@ -49,7 +49,7 @@ public class MethodHandlerDescriptor<TUpdate> : HandlerDescriptor where TUpdate 
         public override async Task<Result> Execute(IHandlerContainer<TUpdate> container, CancellationToken cancellation)
         {
             if (Method is null)
-                throw new Exception();
+                throw new InvalidOperationException("Method property is not initialized.");
 
             if (Method.ReturnType == typeof(void))
             {
@@ -60,7 +60,7 @@ public class MethodHandlerDescriptor<TUpdate> : HandlerDescriptor where TUpdate 
             {
                 object branchReturn = Method.Invoke(this, [container, cancellation]);
                 if (branchReturn is not Task<Result> branchTask)
-                    throw new InvalidOperationException();
+                    throw new InvalidOperationException($"Method {Method.Name} is expected to return Task<Result>.");
 
                 return await branchTask;
             }

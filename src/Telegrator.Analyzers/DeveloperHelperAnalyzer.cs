@@ -15,7 +15,7 @@ public class DeveloperHelperAnalyzer : IIncrementalGenerator
     private static readonly DiagnosticDescriptor MissingBaseClassWarning = new(
         id: "TLG101",
         title: "Missing handlers base class",
-        messageFormat: "Class '{0}' has attribute [{1}], but doesn't inherits {1}",
+        messageFormat: "Class '{0}' has attribute [{1}], but doesn't inherit '{1}'",
         category: "Telegrator.Design",
         defaultSeverity: DiagnosticSeverity.Warning,
         isEnabledByDefault: true);
@@ -157,7 +157,7 @@ internal static class DeveloperHelperAnalyzerExtensions
         "AnyUpdateHandler",
         "CallbackQueryHandler",
         "CommandHandler",
-        "WelcomeHandler",
+        "InlineQueryHandler",
         "MessageHandler"
     ];
 
