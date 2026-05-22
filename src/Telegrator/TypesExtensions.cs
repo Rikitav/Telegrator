@@ -457,6 +457,7 @@ public static partial class HandlersCollectionExtensions
     /// </summary>
     /// <returns>This collection instance for method chaining.</returns>
     /// <exception cref="Exception">Thrown when the entry assembly cannot be found.</exception>
+    [Obsolete("This method uses reflection and would not work in AOT scenarios. Use `CollectHandlers` instead.")]
     public static IHandlersCollection CollectHandlersDomainWide(this IHandlersCollection handlers)
     {
         AppDomain.CurrentDomain
@@ -473,6 +474,7 @@ public static partial class HandlersCollectionExtensions
     /// </summary>
     /// <returns>This collection instance for method chaining.</returns>
     /// <exception cref="Exception">Thrown when the entry assembly cannot be found.</exception>
+    [Obsolete("This method uses reflection and would not work in AOT scenarios. Use `CollectHandlers` instead.")]
     public static IHandlersCollection CollectHandlersAssemblyWide(this IHandlersCollection handlers, Assembly? collectingTarget = null)
     {
         (collectingTarget ?? Assembly.GetCallingAssembly())

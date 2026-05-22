@@ -1,7 +1,7 @@
 using System.Globalization;
 using Telegrator.Core.Handlers;
 
-namespace Telegrator.Localized;
+namespace Telegrator;
 
 /// <summary>
 /// Service responsible for resolving the culture to use for localization based on the context of an incoming update.

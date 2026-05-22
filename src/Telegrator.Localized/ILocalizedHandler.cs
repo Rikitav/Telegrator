@@ -2,7 +2,7 @@
 using Telegram.Bot.Types;
 using Telegrator.Core.Handlers;
 
-namespace Telegrator.Localized;
+namespace Telegrator;
 
 /// <summary>
 /// Indicates that handler utilizes localization

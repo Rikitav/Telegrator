@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Telegartor.RedisStateStorage\Telegartor.RedisStateStorage.csproj" />
+    <ProjectReference Include="..\..\src\Telegrator.RedisStateStorage\Telegrator.RedisStateStorage.csproj" />
     <ProjectReference Include="..\..\src\Telegrator.Hosting.Web\Telegrator.Hosting.Web.csproj" />
     <ProjectReference Include="..\..\src\Telegrator.Hosting.WideBot\Telegrator.Hosting.WideBot.csproj" />
     <ProjectReference Include="..\..\src\Telegrator.Localized\Telegrator.Localized.csproj" />

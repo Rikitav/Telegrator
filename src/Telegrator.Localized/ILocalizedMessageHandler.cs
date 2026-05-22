@@ -1,6 +1,6 @@
 ﻿using Telegram.Bot.Types;
 
-namespace Telegrator.Localized;
+namespace Telegrator;
 
 /// <summary>
 /// Indicates that message handler utilizes localization

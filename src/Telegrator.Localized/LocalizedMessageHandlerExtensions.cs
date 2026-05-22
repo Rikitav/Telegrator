@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Telegram.Bot.Types;
 using Telegrator.Handlers;
 
-namespace Telegrator.Localized;
+namespace Telegrator;
 
 /// <summary>
 /// Provides extension methods for localized message handlers.

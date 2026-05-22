@@ -5,7 +5,7 @@ using Telegrator.Aspects;
 using Telegrator.Core.Handlers;
 using Telegram.Bot.Types;
 
-namespace Telegrator.Localized;
+namespace Telegrator;
 
 /// <summary>
 /// A handler pre-processor that intercepts execution and sets the current culture context
