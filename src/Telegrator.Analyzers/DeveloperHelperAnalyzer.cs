@@ -158,7 +158,26 @@ internal static class DeveloperHelperAnalyzerExtensions
         "CallbackQueryHandler",
         "CommandHandler",
         "InlineQueryHandler",
-        "MessageHandler"
+        "MessageHandler",
+        "EditedMessageHandler",
+        "ChannelPostHandler",
+        "EditedChannelPostHandler",
+        "BusinessMessageHandler",
+        "EditedBusinessMessageHandler",
+        "BusinessConnectionHandler",
+        "DeletedBusinessMessagesHandler",
+        "MessageReactionHandler",
+        "MessageReactionCountHandler",
+        "ShippingQueryHandler",
+        "PreCheckoutQueryHandler",
+        "PurchasedPaidMediaHandler",
+        "PollHandler",
+        "PollAnswerHandler",
+        "MyChatMemberHandler",
+        "ChatMemberHandler",
+        "ChatJoinRequestHandler",
+        "ChatBoostHandler",
+        "RemovedChatBoostHandler"
     ];
 
     // Ищет атрибут и возвращает его нормализованное имя (без суффикса Attribute)

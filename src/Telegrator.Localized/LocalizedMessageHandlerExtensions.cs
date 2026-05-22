@@ -25,6 +25,15 @@ public static class LocalizedMessageHandlerExtensions
     }
 
     /// <summary>
+    /// Sends a localized reply message using the handler's localization provider.
+    /// </summary>
+    public static async Task<Message> ReplyLocalized(this ILocalizedHandler<Message> localizedHandler, string localizedReplyIdentifier, params object[] formatArgs)
+    {
+        LocalizedString localizedString = localizedHandler.LocalizationProvider[localizedReplyIdentifier, formatArgs];
+        return await localizedHandler.Container.Reply(localizedString.Value);
+    }
+
+    /// <summary>
     /// Gets the localized string for a specific key.
     /// </summary>
     public static string Localize<T>(this ILocalizedHandler<T> localizedHandler, string key, params object[] formatArgs) where T : class

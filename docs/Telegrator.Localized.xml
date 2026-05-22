@@ -65,6 +65,11 @@
             Sends a localized response message using the handler's localization provider.
             </summary>
         </member>
+        <member name="M:Telegrator.Localized.LocalizedMessageHandlerExtensions.ReplyLocalized(Telegrator.Localized.ILocalizedHandler{Telegram.Bot.Types.Message},System.String,System.Object[])">
+            <summary>
+            Sends a localized reply message using the handler's localization provider.
+            </summary>
+        </member>
         <member name="M:Telegrator.Localized.LocalizedMessageHandlerExtensions.Localize``1(Telegrator.Localized.ILocalizedHandler{``0},System.String,System.Object[])">
             <summary>
             Gets the localized string for a specific key.

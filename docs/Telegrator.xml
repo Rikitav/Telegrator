@@ -4806,6 +4806,52 @@
             <param name="filters">The filters to add.</param>
             <returns>The builder instance.</returns>
         </member>
+        <member name="T:Telegrator.Handlers.BusinessConnectionHandlerAttribute">
+            <summary>
+            Attribute that marks a handler to process BusinessConnectionHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.BusinessConnectionHandlerAttribute.#ctor(System.Int32)">
+            <summary>
+            Attribute that marks a handler to process BusinessConnectionHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.BusinessConnectionHandlerAttribute.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Update})">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Handlers.BusinessConnectionHandler">
+            <summary>
+            Abstract base class for handlers that process BusinessConnectionHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.BusinessConnectionHandler.#ctor">
+            <summary>
+            Abstract base class for handlers that process BusinessConnectionHandler updates.
+            </summary>
+        </member>
+        <member name="T:Telegrator.Handlers.BusinessMessageHandlerAttribute">
+            <summary>
+            Attribute that marks a handler to process BusinessMessageHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.BusinessMessageHandlerAttribute.#ctor(System.Int32)">
+            <summary>
+            Attribute that marks a handler to process BusinessMessageHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.BusinessMessageHandlerAttribute.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Update})">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Handlers.BusinessMessageHandler">
+            <summary>
+            Abstract base class for handlers that process BusinessMessageHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.BusinessMessageHandler.#ctor">
+            <summary>
+            Abstract base class for handlers that process BusinessMessageHandler updates.
+            </summary>
+        </member>
         <member name="T:Telegrator.Handlers.CallbackQueryHandlerAttribute">
             <summary>
             Attribute that marks a handler to process callback query updates.
@@ -4887,6 +4933,98 @@
             <param name="url">A URL that will be opened by the client.</param>
             <param name="cacheTime">The maximum amount of time in seconds that the result of the callback query may be cached client-side.</param>
             <param name="cancellationToken">The cancellation token.</param>
+        </member>
+        <member name="T:Telegrator.Handlers.ChannelPostHandlerAttribute">
+            <summary>
+            Attribute that marks a handler to process ChannelPostHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.ChannelPostHandlerAttribute.#ctor(System.Int32)">
+            <summary>
+            Attribute that marks a handler to process ChannelPostHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.ChannelPostHandlerAttribute.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Update})">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Handlers.ChannelPostHandler">
+            <summary>
+            Abstract base class for handlers that process ChannelPostHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.ChannelPostHandler.#ctor">
+            <summary>
+            Abstract base class for handlers that process ChannelPostHandler updates.
+            </summary>
+        </member>
+        <member name="T:Telegrator.Handlers.ChatBoostHandlerAttribute">
+            <summary>
+            Attribute that marks a handler to process ChatBoostHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.ChatBoostHandlerAttribute.#ctor(System.Int32)">
+            <summary>
+            Attribute that marks a handler to process ChatBoostHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.ChatBoostHandlerAttribute.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Update})">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Handlers.ChatBoostHandler">
+            <summary>
+            Abstract base class for handlers that process ChatBoostHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.ChatBoostHandler.#ctor">
+            <summary>
+            Abstract base class for handlers that process ChatBoostHandler updates.
+            </summary>
+        </member>
+        <member name="T:Telegrator.Handlers.ChatJoinRequestHandlerAttribute">
+            <summary>
+            Attribute that marks a handler to process ChatJoinRequestHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.ChatJoinRequestHandlerAttribute.#ctor(System.Int32)">
+            <summary>
+            Attribute that marks a handler to process ChatJoinRequestHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.ChatJoinRequestHandlerAttribute.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Update})">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Handlers.ChatJoinRequestHandler">
+            <summary>
+            Abstract base class for handlers that process ChatJoinRequestHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.ChatJoinRequestHandler.#ctor">
+            <summary>
+            Abstract base class for handlers that process ChatJoinRequestHandler updates.
+            </summary>
+        </member>
+        <member name="T:Telegrator.Handlers.ChatMemberHandlerAttribute">
+            <summary>
+            Attribute that marks a handler to process ChatMemberHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.ChatMemberHandlerAttribute.#ctor(System.Int32)">
+            <summary>
+            Attribute that marks a handler to process ChatMemberHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.ChatMemberHandlerAttribute.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Update})">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Handlers.ChatMemberHandler">
+            <summary>
+            Abstract base class for handlers that process ChatMemberHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.ChatMemberHandler.#ctor">
+            <summary>
+            Abstract base class for handlers that process ChatMemberHandler updates.
+            </summary>
         </member>
         <member name="T:Telegrator.Handlers.CommandHandlerAttribute">
             <summary>
@@ -5002,6 +5140,29 @@
             Extracts the arguments string from the command message.
             </summary>
             <returns>The arguments string (everything after the command).</returns>
+        </member>
+        <member name="T:Telegrator.Handlers.DeletedBusinessMessagesHandlerAttribute">
+            <summary>
+            Attribute that marks a handler to process DeletedBusinessMessagesHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.DeletedBusinessMessagesHandlerAttribute.#ctor(System.Int32)">
+            <summary>
+            Attribute that marks a handler to process DeletedBusinessMessagesHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.DeletedBusinessMessagesHandlerAttribute.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Update})">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Handlers.DeletedBusinessMessagesHandler">
+            <summary>
+            Abstract base class for handlers that process DeletedBusinessMessagesHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.DeletedBusinessMessagesHandler.#ctor">
+            <summary>
+            Abstract base class for handlers that process DeletedBusinessMessagesHandler updates.
+            </summary>
         </member>
         <member name="T:Telegrator.Handlers.Diagnostics.FilterFallbackInfo">
             <summary>
@@ -5155,6 +5316,75 @@
         </member>
         <member name="M:Telegrator.Handlers.Diagnostics.ReportInspectorExtensions.Except``1(Telegrator.Handlers.Diagnostics.ReportInspector)">
             <inheritdoc cref="M:Telegrator.Handlers.Diagnostics.ReportInspector.Except(System.String)"/>
+        </member>
+        <member name="T:Telegrator.Handlers.EditedBusinessMessageHandlerAttribute">
+            <summary>
+            Attribute that marks a handler to process EditedBusinessMessageHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.EditedBusinessMessageHandlerAttribute.#ctor(System.Int32)">
+            <summary>
+            Attribute that marks a handler to process EditedBusinessMessageHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.EditedBusinessMessageHandlerAttribute.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Update})">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Handlers.EditedBusinessMessageHandler">
+            <summary>
+            Abstract base class for handlers that process EditedBusinessMessageHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.EditedBusinessMessageHandler.#ctor">
+            <summary>
+            Abstract base class for handlers that process EditedBusinessMessageHandler updates.
+            </summary>
+        </member>
+        <member name="T:Telegrator.Handlers.EditedChannelPostHandlerAttribute">
+            <summary>
+            Attribute that marks a handler to process EditedChannelPostHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.EditedChannelPostHandlerAttribute.#ctor(System.Int32)">
+            <summary>
+            Attribute that marks a handler to process EditedChannelPostHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.EditedChannelPostHandlerAttribute.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Update})">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Handlers.EditedChannelPostHandler">
+            <summary>
+            Abstract base class for handlers that process EditedChannelPostHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.EditedChannelPostHandler.#ctor">
+            <summary>
+            Abstract base class for handlers that process EditedChannelPostHandler updates.
+            </summary>
+        </member>
+        <member name="T:Telegrator.Handlers.EditedMessageHandlerAttribute">
+            <summary>
+            Attribute that marks a handler to process EditedMessageHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.EditedMessageHandlerAttribute.#ctor(System.Int32)">
+            <summary>
+            Attribute that marks a handler to process EditedMessageHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.EditedMessageHandlerAttribute.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Update})">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Handlers.EditedMessageHandler">
+            <summary>
+            Abstract base class for handlers that process EditedMessageHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.EditedMessageHandler.#ctor">
+            <summary>
+            Abstract base class for handlers that process EditedMessageHandler updates.
+            </summary>
         </member>
         <member name="T:Telegrator.Handlers.HandlerContainer`1">
             <summary>
@@ -5432,6 +5662,213 @@
             <param name="suggestedPostParameters"></param>
             <param name="cancellationToken">The cancellation token.</param>
             <returns>The sent message.</returns>
+        </member>
+        <member name="T:Telegrator.Handlers.MessageReactionCountHandlerAttribute">
+            <summary>
+            Attribute that marks a handler to process MessageReactionCountHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.MessageReactionCountHandlerAttribute.#ctor(System.Int32)">
+            <summary>
+            Attribute that marks a handler to process MessageReactionCountHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.MessageReactionCountHandlerAttribute.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Update})">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Handlers.MessageReactionCountHandler">
+            <summary>
+            Abstract base class for handlers that process MessageReactionCountHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.MessageReactionCountHandler.#ctor">
+            <summary>
+            Abstract base class for handlers that process MessageReactionCountHandler updates.
+            </summary>
+        </member>
+        <member name="T:Telegrator.Handlers.MessageReactionHandlerAttribute">
+            <summary>
+            Attribute that marks a handler to process MessageReactionHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.MessageReactionHandlerAttribute.#ctor(System.Int32)">
+            <summary>
+            Attribute that marks a handler to process MessageReactionHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.MessageReactionHandlerAttribute.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Update})">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Handlers.MessageReactionHandler">
+            <summary>
+            Abstract base class for handlers that process MessageReactionHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.MessageReactionHandler.#ctor">
+            <summary>
+            Abstract base class for handlers that process MessageReactionHandler updates.
+            </summary>
+        </member>
+        <member name="T:Telegrator.Handlers.MyChatMemberHandlerAttribute">
+            <summary>
+            Attribute that marks a handler to process MyChatMemberHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.MyChatMemberHandlerAttribute.#ctor(System.Int32)">
+            <summary>
+            Attribute that marks a handler to process MyChatMemberHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.MyChatMemberHandlerAttribute.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Update})">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Handlers.MyChatMemberHandler">
+            <summary>
+            Abstract base class for handlers that process MyChatMemberHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.MyChatMemberHandler.#ctor">
+            <summary>
+            Abstract base class for handlers that process MyChatMemberHandler updates.
+            </summary>
+        </member>
+        <member name="T:Telegrator.Handlers.PollAnswerHandlerAttribute">
+            <summary>
+            Attribute that marks a handler to process PollAnswerHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.PollAnswerHandlerAttribute.#ctor(System.Int32)">
+            <summary>
+            Attribute that marks a handler to process PollAnswerHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.PollAnswerHandlerAttribute.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Update})">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Handlers.PollAnswerHandler">
+            <summary>
+            Abstract base class for handlers that process PollAnswerHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.PollAnswerHandler.#ctor">
+            <summary>
+            Abstract base class for handlers that process PollAnswerHandler updates.
+            </summary>
+        </member>
+        <member name="T:Telegrator.Handlers.PollHandlerAttribute">
+            <summary>
+            Attribute that marks a handler to process PollHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.PollHandlerAttribute.#ctor(System.Int32)">
+            <summary>
+            Attribute that marks a handler to process PollHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.PollHandlerAttribute.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Update})">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Handlers.PollHandler">
+            <summary>
+            Abstract base class for handlers that process PollHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.PollHandler.#ctor">
+            <summary>
+            Abstract base class for handlers that process PollHandler updates.
+            </summary>
+        </member>
+        <member name="T:Telegrator.Handlers.PreCheckoutQueryHandlerAttribute">
+            <summary>
+            Attribute that marks a handler to process PreCheckoutQueryHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.PreCheckoutQueryHandlerAttribute.#ctor(System.Int32)">
+            <summary>
+            Attribute that marks a handler to process PreCheckoutQueryHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.PreCheckoutQueryHandlerAttribute.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Update})">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Handlers.PreCheckoutQueryHandler">
+            <summary>
+            Abstract base class for handlers that process PreCheckoutQueryHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.PreCheckoutQueryHandler.#ctor">
+            <summary>
+            Abstract base class for handlers that process PreCheckoutQueryHandler updates.
+            </summary>
+        </member>
+        <member name="T:Telegrator.Handlers.PurchasedPaidMediaHandlerAttribute">
+            <summary>
+            Attribute that marks a handler to process PurchasedPaidMediaHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.PurchasedPaidMediaHandlerAttribute.#ctor(System.Int32)">
+            <summary>
+            Attribute that marks a handler to process PurchasedPaidMediaHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.PurchasedPaidMediaHandlerAttribute.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Update})">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Handlers.PurchasedPaidMediaHandler">
+            <summary>
+            Abstract base class for handlers that process PurchasedPaidMediaHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.PurchasedPaidMediaHandler.#ctor">
+            <summary>
+            Abstract base class for handlers that process PurchasedPaidMediaHandler updates.
+            </summary>
+        </member>
+        <member name="T:Telegrator.Handlers.RemovedChatBoostHandlerAttribute">
+            <summary>
+            Attribute that marks a handler to process RemovedChatBoostHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.RemovedChatBoostHandlerAttribute.#ctor(System.Int32)">
+            <summary>
+            Attribute that marks a handler to process RemovedChatBoostHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.RemovedChatBoostHandlerAttribute.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Update})">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Handlers.RemovedChatBoostHandler">
+            <summary>
+            Abstract base class for handlers that process RemovedChatBoostHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.RemovedChatBoostHandler.#ctor">
+            <summary>
+            Abstract base class for handlers that process RemovedChatBoostHandler updates.
+            </summary>
+        </member>
+        <member name="T:Telegrator.Handlers.ShippingQueryHandlerAttribute">
+            <summary>
+            Attribute that marks a handler to process ShippingQueryHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.ShippingQueryHandlerAttribute.#ctor(System.Int32)">
+            <summary>
+            Attribute that marks a handler to process ShippingQueryHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.ShippingQueryHandlerAttribute.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Update})">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Handlers.ShippingQueryHandler">
+            <summary>
+            Abstract base class for handlers that process ShippingQueryHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.ShippingQueryHandler.#ctor">
+            <summary>
+            Abstract base class for handlers that process ShippingQueryHandler updates.
+            </summary>
         </member>
         <member name="T:Telegrator.Handlers.AbstractHandlerContainerExtensions">
             <summary>
