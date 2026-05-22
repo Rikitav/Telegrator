@@ -4,73 +4,73 @@
         <name>Telegrator.Localized</name>
     </assembly>
     <members>
-        <member name="T:Telegrator.Localized.DefaultCultureResolver">
+        <member name="T:Telegrator.DefaultCultureResolver">
             <summary>
-            A default implementation of <see cref="T:Telegrator.Localized.ICultureResolver"/> that uses the standard language code from the user info.
+            A default implementation of <see cref="T:Telegrator.ICultureResolver"/> that uses the standard language code from the user info.
             </summary>
         </member>
-        <member name="M:Telegrator.Localized.DefaultCultureResolver.ResolveAsync(Telegrator.Core.Handlers.IHandlerContainer)">
+        <member name="M:Telegrator.DefaultCultureResolver.ResolveAsync(Telegrator.Core.Handlers.IHandlerContainer)">
             <inheritdoc/>
         </member>
-        <member name="T:Telegrator.Localized.ICultureResolver">
+        <member name="T:Telegrator.ICultureResolver">
             <summary>
             Service responsible for resolving the culture to use for localization based on the context of an incoming update.
             </summary>
         </member>
-        <member name="M:Telegrator.Localized.ICultureResolver.ResolveAsync(Telegrator.Core.Handlers.IHandlerContainer)">
+        <member name="M:Telegrator.ICultureResolver.ResolveAsync(Telegrator.Core.Handlers.IHandlerContainer)">
             <summary>
             Resolves the <see cref="T:System.Globalization.CultureInfo"/> asynchronously from the current container context.
             </summary>
             <param name="container">The current handler container for the executing update.</param>
             <returns>The resolved <see cref="T:System.Globalization.CultureInfo"/>.</returns>
         </member>
-        <member name="T:Telegrator.Localized.ILocalizedHandler`1">
+        <member name="T:Telegrator.ILocalizedHandler`1">
             <summary>
             Indicates that handler utilizes localization
             </summary>
             <typeparam name="T"></typeparam>
         </member>
-        <member name="P:Telegrator.Localized.ILocalizedHandler`1.LocalizationProvider">
+        <member name="P:Telegrator.ILocalizedHandler`1.LocalizationProvider">
             <summary>
             Gets the localization provider associated with this handler.
             </summary>
         </member>
-        <member name="T:Telegrator.Localized.ILocalizedMessageHandler">
+        <member name="T:Telegrator.ILocalizedMessageHandler">
             <summary>
             Indicates that message handler utilizes localization
             </summary>
         </member>
-        <member name="T:Telegrator.Localized.LocalizedAspect">
+        <member name="T:Telegrator.LocalizedAspect">
             <summary>
             A handler pre-processor that intercepts execution and sets the current culture context
-            according to the <see cref="T:Telegrator.Localized.ICultureResolver"/>.
+            according to the <see cref="T:Telegrator.ICultureResolver"/>.
             </summary>
         </member>
-        <member name="M:Telegrator.Localized.LocalizedAspect.#ctor(Telegrator.Localized.ICultureResolver)">
+        <member name="M:Telegrator.LocalizedAspect.#ctor(Telegrator.ICultureResolver)">
             <summary>
-            Initializes a new instance of <see cref="T:Telegrator.Localized.LocalizedAspect"/>.
+            Initializes a new instance of <see cref="T:Telegrator.LocalizedAspect"/>.
             </summary>
             <param name="cultureResolver">The culture resolver used to get user language.</param>
         </member>
-        <member name="M:Telegrator.Localized.LocalizedAspect.BeforeExecution(Telegrator.Core.Handlers.IHandlerContainer,System.Threading.CancellationToken)">
+        <member name="M:Telegrator.LocalizedAspect.BeforeExecution(Telegrator.Core.Handlers.IHandlerContainer,System.Threading.CancellationToken)">
             <inheritdoc/>
         </member>
-        <member name="T:Telegrator.Localized.LocalizedMessageHandlerExtensions">
+        <member name="T:Telegrator.LocalizedMessageHandlerExtensions">
             <summary>
             Provides extension methods for localized message handlers.
             </summary>
         </member>
-        <member name="M:Telegrator.Localized.LocalizedMessageHandlerExtensions.ResponseLocalized(Telegrator.Localized.ILocalizedHandler{Telegram.Bot.Types.Message},System.String,System.Object[])">
+        <member name="M:Telegrator.LocalizedMessageHandlerExtensions.ResponseLocalized(Telegrator.ILocalizedHandler{Telegram.Bot.Types.Message},System.String,System.Object[])">
             <summary>
             Sends a localized response message using the handler's localization provider.
             </summary>
         </member>
-        <member name="M:Telegrator.Localized.LocalizedMessageHandlerExtensions.ReplyLocalized(Telegrator.Localized.ILocalizedHandler{Telegram.Bot.Types.Message},System.String,System.Object[])">
+        <member name="M:Telegrator.LocalizedMessageHandlerExtensions.ReplyLocalized(Telegrator.ILocalizedHandler{Telegram.Bot.Types.Message},System.String,System.Object[])">
             <summary>
             Sends a localized reply message using the handler's localization provider.
             </summary>
         </member>
-        <member name="M:Telegrator.Localized.LocalizedMessageHandlerExtensions.Localize``1(Telegrator.Localized.ILocalizedHandler{``0},System.String,System.Object[])">
+        <member name="M:Telegrator.LocalizedMessageHandlerExtensions.Localize``1(Telegrator.ILocalizedHandler{``0},System.String,System.Object[])">
             <summary>
             Gets the localized string for a specific key.
             </summary>

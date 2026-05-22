@@ -1,17 +1,22 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System.Text;
 using Telegram.Bot.Polling;
-using Telegram.Bot.Types.Enums;
-using Telegrator.Core.Descriptors;
+using Telegram.Bot.Types;
+using Telegrator.Handlers;
 using Telegrator.Logging;
 
 namespace Telegrator.Tests;
 
 internal static class Program
 {
+    [AnyUpdateHandler]
+    private sealed class DummyUpdateHandler : AnyUpdateHandler
+    {
+        public override Task<Result> Execute(IHandlerContainer<Update> container, CancellationToken cancellation)
+            => throw new NotImplementedException();
+    }
+
     public static void HostApplicationBuilder_Example(string[] args)
     {
         TelegratorLogging.MinimalLevel = Telegrator.Logging.LogLevel.Trace;
@@ -29,7 +34,7 @@ internal static class Program
         });
 
         builder.AddTelegrator(action: builder => builder.Handlers
-            .CollectHandlersAssemblyWide());
+            .CollectHandlers());
 
         builder.Build()
             .UseTelegrator()
@@ -53,7 +58,7 @@ internal static class Program
 
         builder.AddWideTelegrator(
             dbConnectionFactory: provider => new SqliteConnection($"Data Source={Environment.ExpandEnvironmentVariables("%AppData%\\Telegrator\\%wtgb.db")}"),
-            action: builder => builder.Handlers.CollectHandlersAssemblyWide());
+            action: builder => builder.Handlers.CollectHandlers());
 
         builder.Build()
             .UseWideTelegrator()
@@ -76,7 +81,7 @@ internal static class Program
         });
 
         builder.AddTelegratorWeb(action: builder => builder.Handlers
-            .CollectHandlersAssemblyWide());
+            .CollectHandlers());
         
         builder.Build()
             .UseTelegratorWeb(dontMap: true)

@@ -78,6 +78,16 @@ public class HostingUsageAnalyzer : DiagnosticAnalyzer
                               MismatchedHostingMethodsWarning,
                               MissingAddTelegratorWarning, MissingAddTelegratorWebWarning, MissingAddTelegratorWideWarning);
 
+    private enum CallKind
+    {
+        Add,
+        AddWeb,
+        AddWide,
+        Use,
+        UseWeb,
+        UseWide
+    }
+
     public override void Initialize(AnalysisContext context)
     {
         context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
@@ -85,135 +95,113 @@ public class HostingUsageAnalyzer : DiagnosticAnalyzer
 
         context.RegisterCompilationStartAction(compilationContext =>
         {
-            var addTelegratorInvocations = new ConcurrentBag<Location>();
-            var addTelegratorWebInvocations = new ConcurrentBag<Location>();
-            var addTelegratorWideInvocations = new ConcurrentBag<Location>();
-            var useTelegratorInvocations = new ConcurrentBag<Location>();
-            var useTelegratorWebInvocations = new ConcurrentBag<Location>();
-            var useTelegratorWideInvocations = new ConcurrentBag<Location>();
+            var invocations = new ConcurrentBag<(ISymbol Method, Location Loc, CallKind Kind)>();
 
             compilationContext.RegisterOperationAction(operationContext =>
             {
                 var invocation = (IInvocationOperation)operationContext.Operation;
                 var methodName = invocation.TargetMethod.Name;
+                var methodSymbol = operationContext.ContainingSymbol;
 
-                if (methodName == "AddTelegrator")
+                CallKind? kind = methodName switch
                 {
-                    addTelegratorInvocations.Add(invocation.Syntax.GetLocation());
-                }
-                else if (methodName == "AddTelegratorWeb")
+                    "AddTelegrator" => CallKind.Add,
+                    "AddTelegratorWeb" => CallKind.AddWeb,
+                    "AddWideTelegrator" => CallKind.AddWide,
+                    "UseTelegrator" => CallKind.Use,
+                    "UseTelegratorWeb" => CallKind.UseWeb,
+                    "UseWideTelegrator" => CallKind.UseWide,
+                    _ => null
+                };
+
+                if (kind.HasValue)
                 {
-                    addTelegratorWebInvocations.Add(invocation.Syntax.GetLocation());
-                }
-                else if (methodName == "AddWideTelegrator")
-                {
-                    addTelegratorWideInvocations.Add(invocation.Syntax.GetLocation());
-                }
-                else if (methodName == "UseTelegrator")
-                {
-                    useTelegratorInvocations.Add(invocation.Syntax.GetLocation());
-                }
-                else if (methodName == "UseTelegratorWeb")
-                {
-                    useTelegratorWebInvocations.Add(invocation.Syntax.GetLocation());
-                }
-                else if (methodName == "UseWideTelegrator")
-                {
-                    useTelegratorWideInvocations.Add(invocation.Syntax.GetLocation());
+                    invocations.Add((methodSymbol, invocation.Syntax.GetLocation(), kind.Value));
                 }
             }, OperationKind.Invocation);
 
             compilationContext.RegisterCompilationEndAction(endContext =>
             {
-                bool hasAdd = !addTelegratorInvocations.IsEmpty;
-                bool hasAddWeb = !addTelegratorWebInvocations.IsEmpty;
-                bool hasAddWide = !addTelegratorWideInvocations.IsEmpty;
+                var allInvocations = invocations.ToList();
+                if (allInvocations.Count == 0)
+                    return;
 
-                bool hasUse = !useTelegratorInvocations.IsEmpty;
-                bool hasUseWeb = !useTelegratorWebInvocations.IsEmpty;
-                bool hasUseWide = !useTelegratorWideInvocations.IsEmpty;
+                // 1. Глобальная проверка: убеждаемся, что для каждого типа Add существует парный тип Use в проекте
+                bool globalAdd = allInvocations.Any(x => x.Kind == CallKind.Add);
+                bool globalAddWeb = allInvocations.Any(x => x.Kind == CallKind.AddWeb);
+                bool globalAddWide = allInvocations.Any(x => x.Kind == CallKind.AddWide);
 
-                // Check mismatches
-                if (hasAdd && (hasUseWeb || hasUseWide))
+                bool globalUse = allInvocations.Any(x => x.Kind == CallKind.Use);
+                bool globalUseWeb = allInvocations.Any(x => x.Kind == CallKind.UseWeb);
+                bool globalUseWide = allInvocations.Any(x => x.Kind == CallKind.UseWide);
+
+                if (globalAdd && !globalUse)
+                    ReportMissing(endContext, allInvocations, CallKind.Add, MissingUseTelegratorWarning);
+
+                if (globalUse && !globalAdd)
+                    ReportMissing(endContext, allInvocations, CallKind.Use, MissingAddTelegratorWarning);
+
+                if (globalAddWeb && !globalUseWeb)
+                    ReportMissing(endContext, allInvocations, CallKind.AddWeb, MissingUseTelegratorWebWarning);
+
+                if (globalUseWeb && !globalAddWeb)
+                    ReportMissing(endContext, allInvocations, CallKind.UseWeb, MissingAddTelegratorWebWarning);
+
+                if (globalAddWide && !globalUseWide)
+                    ReportMissing(endContext, allInvocations, CallKind.AddWide, MissingUseTelegratorWideWarning);
+
+                if (globalUseWide && !globalAddWide)
+                    ReportMissing(endContext, allInvocations, CallKind.UseWide, MissingAddTelegratorWideWarning);
+
+                var methodGroups = allInvocations.GroupBy(x => x.Method, SymbolEqualityComparer.Default);
+
+                foreach (var group in methodGroups)
                 {
-                    foreach (var loc in addTelegratorInvocations)
-                        endContext.ReportDiagnostic(Diagnostic.Create(MismatchedHostingMethodsWarning, loc, "AddTelegrator", hasUseWeb ? "UseTelegratorWeb" : "UseWideTelegrator"));
+                    var localKinds = group.Select(x => x.Kind).ToImmutableHashSet();
 
-                    if (hasUseWeb)
-                        foreach (var loc in useTelegratorWebInvocations)
-                            endContext.ReportDiagnostic(Diagnostic.Create(MismatchedHostingMethodsWarning, loc, "AddTelegrator", "UseTelegratorWeb"));
+                    bool hasAdd = localKinds.Contains(CallKind.Add);
+                    bool hasAddWeb = localKinds.Contains(CallKind.AddWeb);
+                    bool hasAddWide = localKinds.Contains(CallKind.AddWide);
 
-                    if (hasUseWide)
-                        foreach (var loc in useTelegratorWideInvocations)
-                            endContext.ReportDiagnostic(Diagnostic.Create(MismatchedHostingMethodsWarning, loc, "AddTelegrator", "UseWideTelegrator"));
-                }
+                    bool hasUse = localKinds.Contains(CallKind.Use);
+                    bool hasUseWeb = localKinds.Contains(CallKind.UseWeb);
+                    bool hasUseWide = localKinds.Contains(CallKind.UseWide);
 
-                if (hasAddWeb && (hasUse || hasUseWide))
-                {
-                    foreach (var loc in addTelegratorWebInvocations)
-                        endContext.ReportDiagnostic(Diagnostic.Create(MismatchedHostingMethodsWarning, loc, "AddTelegratorWeb", hasUse ? "UseTelegrator" : "UseWideTelegrator"));
+                    if (hasAdd && hasUseWeb)
+                        ReportMismatch(endContext, group, CallKind.Add, CallKind.UseWeb, "AddTelegrator", "UseTelegratorWeb");
+                    
+                    if (hasAdd && hasUseWide)
+                        ReportMismatch(endContext, group, CallKind.Add, CallKind.UseWide, "AddTelegrator", "UseWideTelegrator");
 
-                    if (hasUse)
-                        foreach (var loc in useTelegratorInvocations)
-                            endContext.ReportDiagnostic(Diagnostic.Create(MismatchedHostingMethodsWarning, loc, "AddTelegratorWeb", "UseTelegrator"));
+                    if (hasAddWeb && hasUse)
+                        ReportMismatch(endContext, group, CallKind.AddWeb, CallKind.Use, "AddTelegratorWeb", "UseTelegrator");
+                    
+                    if (hasAddWeb && hasUseWide)
+                        ReportMismatch(endContext, group, CallKind.AddWeb, CallKind.UseWide, "AddTelegratorWeb", "UseWideTelegrator");
 
-                    if (hasUseWide)
-                        foreach (var loc in useTelegratorWideInvocations)
-                            endContext.ReportDiagnostic(Diagnostic.Create(MismatchedHostingMethodsWarning, loc, "AddTelegratorWeb", "UseWideTelegrator"));
-                }
-
-                if (hasAddWide && (hasUse || hasUseWeb))
-                {
-                    foreach (var loc in addTelegratorWideInvocations)
-                        endContext.ReportDiagnostic(Diagnostic.Create(MismatchedHostingMethodsWarning, loc, "AddWideTelegrator", hasUse ? "UseTelegrator" : "UseTelegratorWeb"));
-
-                    if (hasUse)
-                        foreach (var loc in useTelegratorInvocations)
-                            endContext.ReportDiagnostic(Diagnostic.Create(MismatchedHostingMethodsWarning, loc, "AddWideTelegrator", "UseTelegrator"));
-
-                    if (hasUseWeb)
-                        foreach (var loc in useTelegratorWebInvocations)
-                            endContext.ReportDiagnostic(Diagnostic.Create(MismatchedHostingMethodsWarning, loc, "AddWideTelegrator", "UseTelegratorWeb"));
-                }
-
-                // Check missing 'Use'
-                if (hasAdd && !hasUse && !hasUseWeb && !hasUseWide)
-                {
-                    foreach (var loc in addTelegratorInvocations)
-                        endContext.ReportDiagnostic(Diagnostic.Create(MissingUseTelegratorWarning, loc));
-                }
-
-                if (hasAddWeb && !hasUseWeb && !hasUse && !hasUseWide)
-                {
-                    foreach (var loc in addTelegratorWebInvocations)
-                        endContext.ReportDiagnostic(Diagnostic.Create(MissingUseTelegratorWebWarning, loc));
-                }
-
-                if (hasAddWide && !hasUseWide && !hasUse && !hasUseWeb)
-                {
-                    foreach (var loc in addTelegratorWideInvocations)
-                        endContext.ReportDiagnostic(Diagnostic.Create(MissingUseTelegratorWideWarning, loc));
-                }
-
-                // Check missing 'Add'
-                if (hasUse && !hasAdd && !hasAddWeb && !hasAddWide)
-                {
-                    foreach (var loc in useTelegratorInvocations)
-                        endContext.ReportDiagnostic(Diagnostic.Create(MissingAddTelegratorWarning, loc));
-                }
-
-                if (hasUseWeb && !hasAddWeb && !hasAdd && !hasAddWide)
-                {
-                    foreach (var loc in useTelegratorWebInvocations)
-                        endContext.ReportDiagnostic(Diagnostic.Create(MissingAddTelegratorWebWarning, loc));
-                }
-
-                if (hasUseWide && !hasAddWide && !hasAdd && !hasAddWeb)
-                {
-                    foreach (var loc in useTelegratorWideInvocations)
-                        endContext.ReportDiagnostic(Diagnostic.Create(MissingAddTelegratorWideWarning, loc));
+                    if (hasAddWide && hasUse)
+                        ReportMismatch(endContext, group, CallKind.AddWide, CallKind.Use, "AddWideTelegrator", "UseTelegrator");
+                    
+                    if (hasAddWide && hasUseWeb)
+                        ReportMismatch(endContext, group, CallKind.AddWide, CallKind.UseWeb, "AddWideTelegrator", "UseTelegratorWeb");
                 }
             });
         });
+    }
+
+    private static void ReportMissing(CompilationAnalysisContext context, System.Collections.Generic.IEnumerable<(ISymbol Method, Location Loc, CallKind Kind)> invocations, CallKind targetKind, DiagnosticDescriptor descriptor)
+    {
+        foreach (var item in invocations.Where(x => x.Kind == targetKind))
+        {
+            context.ReportDiagnostic(Diagnostic.Create(descriptor, item.Loc));
+        }
+    }
+
+    private static void ReportMismatch(CompilationAnalysisContext context, IGrouping<ISymbol?, (ISymbol Method, Location Loc, CallKind Kind)> group, CallKind kind1, CallKind kind2, string name1, string name2)
+    {
+        foreach (var item in group.Where(x => x.Kind == kind1 || x.Kind == kind2))
+        {
+            context.ReportDiagnostic(Diagnostic.Create(MismatchedHostingMethodsWarning, item.Loc, name1, name2));
+        }
     }
 }

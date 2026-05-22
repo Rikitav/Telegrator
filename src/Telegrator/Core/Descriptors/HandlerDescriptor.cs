@@ -145,6 +145,15 @@ public abstract class HandlerDescriptor
     }
 
     /// <summary>
+    /// Get or sets precompiled attributes for this handler. Used for registerring attributes assigned to handler for AOT platforms, where reflection is not available. If this property is set, attributes will not be extracted from handler type using reflection.
+    /// </summary>
+    public Attribute[]? PrecompiledAttributes
+    {
+        get;
+        set;
+    }
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="HandlerDescriptor"/> class with the specified descriptor type and handler type.
     /// Automatically inspects the handler type to extract attributes, filters, and configuration.
     /// </summary>

@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Diagnostics.CodeAnalysis;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
@@ -431,12 +432,14 @@ public static partial class HandlersCollectionExtensions
         "Ocelot", "BouncyCastle", "IdentityModel", "Telegrator"
     ];
 
+    /*
     /// <summary>
     /// Collects all handlers from current app domain.
     /// Scans for handlers exported by analyzer into class `Telegrator.Analyzers.AnalyzerExport` in each assembly and registers them to the collection.
     /// </summary>
     /// <param name="handlers"></param>
     /// <returns></returns>
+    [Obsolete("This method uses reflection and would not work in AOT scenarios. Use `CollectHandlers` instead.")]
     public static IHandlersCollection CollectHandlers(this IHandlersCollection handlers)
     {
         const string exportClassName = "Telegrator.Analyzers.AnalyzerExport";
@@ -450,6 +453,7 @@ public static partial class HandlersCollectionExtensions
 
         return handlers;
     }
+    */
 
     /// <summary>
     /// Collects all public handlers from the current app domain.
@@ -457,7 +461,9 @@ public static partial class HandlersCollectionExtensions
     /// </summary>
     /// <returns>This collection instance for method chaining.</returns>
     /// <exception cref="Exception">Thrown when the entry assembly cannot be found.</exception>
-    [Obsolete("This method uses reflection and would not work in AOT scenarios. Use `CollectHandlers` instead.")]
+    //[RequiresUnreferencedCode("Reflection-based handler collection is not compatible with Native AOT. Use generated `handlers.CollectHandlers()` instead.")]
+    //[RequiresDynamicCode("Reflection-based handler collection requires dynamic code generation.")]
+    [Obsolete("This method uses reflection and would not work in AOT scenarios. Use generated `CollectHandlers` instead.")]
     public static IHandlersCollection CollectHandlersDomainWide(this IHandlersCollection handlers)
     {
         AppDomain.CurrentDomain
@@ -474,7 +480,7 @@ public static partial class HandlersCollectionExtensions
     /// </summary>
     /// <returns>This collection instance for method chaining.</returns>
     /// <exception cref="Exception">Thrown when the entry assembly cannot be found.</exception>
-    [Obsolete("This method uses reflection and would not work in AOT scenarios. Use `CollectHandlers` instead.")]
+    [Obsolete("This method uses reflection and would not work in AOT scenarios. Use generated `CollectHandlers` instead.")]
     public static IHandlersCollection CollectHandlersAssemblyWide(this IHandlersCollection handlers, Assembly? collectingTarget = null)
     {
         (collectingTarget ?? Assembly.GetCallingAssembly())

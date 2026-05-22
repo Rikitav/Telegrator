@@ -7,6 +7,7 @@
 	<LangVersion>latest</LangVersion>
 	<BaseOutputPath>..\..\bin</BaseOutputPath>
 	<DocumentationFile>..\..\docs\$(AssemblyName).xml</DocumentationFile>
+	<IsAotCompatible>True</IsAotCompatible>
 	  
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
@@ -35,9 +36,13 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Telegram.Bot" Version="22.10.0" />
-	<PackageReference Include="System.Threading.Channels" Version="10.0.7" />
-    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="10.0.7" />
+    <PackageReference Include="PolySharp" Version="1.15.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Telegram.Bot" Version="22.10.0.1" />
+	<PackageReference Include="System.Threading.Channels" Version="10.0.8" />
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="10.0.8" />
   </ItemGroup>
 
   <ItemGroup>

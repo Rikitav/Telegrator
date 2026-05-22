@@ -1,5 +1,6 @@
 ﻿using Telegram.Bot.Types.Enums;
 using Telegrator.Core.Descriptors;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Telegrator.Core;
 
@@ -37,7 +38,7 @@ public interface IHandlersCollection
     /// <param name="updateType"></param>
     /// <param name="list"></param>
     /// <returns></returns>
-    public bool TryGetDescriptorList(UpdateType updateType, out HandlerDescriptorList? list);
+    public bool TryGetDescriptorList(UpdateType updateType, [NotNullWhen(true)] out HandlerDescriptorList? list);
 
     /// <summary>
     /// Creates a class handler descriptor for the specified handler type.

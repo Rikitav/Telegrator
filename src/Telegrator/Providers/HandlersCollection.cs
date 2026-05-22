@@ -3,6 +3,7 @@ using Telegram.Bot.Types.Enums;
 using Telegrator.Annotations;
 using Telegrator.Core;
 using Telegrator.Core.Descriptors;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Telegrator.Providers;
 
@@ -126,7 +127,7 @@ public class HandlersCollection(TelegratorOptions? options) : IHandlersCollectio
     }
 
     /// <inheritdoc/>
-    public bool TryGetDescriptorList(UpdateType updateType, out HandlerDescriptorList list)
+    public bool TryGetDescriptorList(UpdateType updateType, [NotNullWhen(true)] out HandlerDescriptorList? list)
     {
         return InnerDictionary.TryGetValue(updateType, out list);
     }
