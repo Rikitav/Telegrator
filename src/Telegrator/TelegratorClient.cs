@@ -1,6 +1,10 @@
-﻿using Telegram.Bot;
+﻿using System.Runtime.InteropServices;
+using System.Text;
+using Telegram.Bot;
 using Telegram.Bot.Polling;
+using Telegram.Bot.Types.Enums;
 using Telegrator.Core;
+using Telegrator.Core.Descriptors;
 using Telegrator.Logging;
 using Telegrator.Mediation;
 using Telegrator.Providers;
@@ -75,6 +79,25 @@ public class TelegratorClient : TelegramBotClient, ITelegratorBot, ICollectingPr
 
         TelegratorLogging.LogInformation($"Telegrator bot starting up - BotId: {BotInfo.User.Id}, Username: {BotInfo.User.Username}, MaxParallelHandlers: {Options.MaximumParallelWorkingHandlers ?? -1}");
         updateRouter = new UpdateRouter(handlerProvider, awaitingProvider, stateStorage, Options, BotInfo);
+
+        StringBuilder logBuilder = new StringBuilder("Registered handlers : ");
+        if (!Handlers.Keys.Any())
+            throw new Exception("No update types were registered");
+
+        foreach (UpdateType updateType in Handlers.Keys)
+        {
+            HandlerDescriptorList descriptors = Handlers[updateType];
+            logBuilder.Append("\n\tUpdateType." + updateType + " :");
+
+            foreach (HandlerDescriptor descriptor in descriptors.Reverse())
+            {
+                logBuilder.AppendFormat("\n\t* {0} - {1}",
+                    descriptor.Indexer.ToString(),
+                    descriptor.ToString());
+            }
+        }
+
+        TelegratorLogging.LogInformation(logBuilder.ToString());
         await StartReceivingInternal(receiverOptions, Options.GlobalCancellationToken);
     }
 

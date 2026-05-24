@@ -119,7 +119,7 @@ public static class HostBuilderExtensions
                 section = configuration.GetSection(nameof(TelegratorOptions));
 
             if (!section.Exists())
-                throw new MissingMemberException("Auto configuration disabled, yet no options of type 'TelegratorOptions' was registered. This configuration is runtime required!");
+                throw new MissingMemberException("Auto configuration enabled, yet no options of type 'TelegratorOptions' was registered. This configuration is runtime required!");
 
             options = ParseTelegratorOptions(section);
         }
