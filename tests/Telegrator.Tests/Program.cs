@@ -33,7 +33,9 @@ internal static class Program
             Limit = 100
         });
 
-        builder.AddTelegrator().WithPolling();
+        builder.AddTelegrator()
+            .WithPolling()
+            .Handlers.CollectHandlers();
 
         builder.Build()
             .UseTelegrator()
@@ -56,8 +58,8 @@ internal static class Program
         });
 
         builder.AddTelegrator()
-            .WithWide(
-                dbConnectionFactory: provider => new SqliteConnection($"Data Source={Environment.ExpandEnvironmentVariables("%AppData%\\Telegrator\\%wtgb.db")}"));
+            .WithWide(dbConnectionFactory: provider => new SqliteConnection($"Data Source={Environment.ExpandEnvironmentVariables("%AppData%\\Telegrator\\%wtgb.db")}"))
+            .Handlers.CollectHandlers();
 
         builder.Build()
             .UseTelegrator()
@@ -79,7 +81,9 @@ internal static class Program
             SecretToken = "MEDIC_GAMING"
         });
 
-        builder.AddTelegrator().WithWeb();
+        builder.AddTelegrator()
+            .WithWeb()
+            .Handlers.CollectHandlers();
 
         var app = builder.Build();
         app.UseTelegrator();
