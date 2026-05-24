@@ -115,9 +115,9 @@ public abstract class HandlersManagerBase(TelegratorOptions options) : IHandlers
     }
 
     /// <inheritdoc/>
-    public virtual HandlerDescriptor CreateClassDescriptor(Type handlerType)
+    public virtual HandlerDescriptor CreateClassDescriptor(Type handlerType, Attribute[]? precompiledAttributes = null)
     {
-        return new ClassHandlerDescriptor(DescriptorType.General, handlerType);
+        return new ClassHandlerDescriptor(DescriptorType.General, handlerType, dontInspect: false, precompiledAttributes);
     }
 
     /// <inheritdoc/>

@@ -1114,72 +1114,72 @@
             Descriptor for creating handlers from classes
             </summary>
         </member>
-        <member name="M:Telegrator.Core.Descriptors.ClassHandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,System.Boolean)">
+        <member name="M:Telegrator.Core.Descriptors.ClassHandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,System.Boolean,System.Attribute[])">
             <summary>
             Initializes a new instance of the <see cref="T:Telegrator.Core.Descriptors.ClassHandlerDescriptor"/> class.
             </summary>
         </member>
-        <member name="M:Telegrator.Core.Descriptors.ClassHandlerDescriptor.#ctor(System.Type,System.Object)">
+        <member name="M:Telegrator.Core.Descriptors.ClassHandlerDescriptor.#ctor(System.Type,System.Object,System.Attribute[])">
             <summary>
             Initializes a new instance of the <see cref="T:Telegrator.Core.Descriptors.ClassHandlerDescriptor"/> class with a service key.
             </summary>
         </member>
-        <member name="M:Telegrator.Core.Descriptors.ClassHandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegram.Bot.Types.Enums.UpdateType,Telegrator.Core.Descriptors.DescriptorIndexer,Telegrator.Core.Descriptors.DescriptorFiltersSet)">
+        <member name="M:Telegrator.Core.Descriptors.ClassHandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegram.Bot.Types.Enums.UpdateType,Telegrator.Core.Descriptors.DescriptorIndexer,Telegrator.Core.Descriptors.DescriptorFiltersSet,System.Attribute[])">
             <summary>
             Initializes a new instance of the <see cref="T:Telegrator.Core.Descriptors.ClassHandlerDescriptor"/> class.
             </summary>
         </member>
-        <member name="M:Telegrator.Core.Descriptors.ClassHandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegram.Bot.Types.Enums.UpdateType,Telegrator.Core.Descriptors.DescriptorIndexer,Telegrator.Core.Descriptors.DescriptorFiltersSet,System.Object,Telegrator.Core.Handlers.UpdateHandlerBase)">
+        <member name="M:Telegrator.Core.Descriptors.ClassHandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegram.Bot.Types.Enums.UpdateType,Telegrator.Core.Descriptors.DescriptorIndexer,Telegrator.Core.Descriptors.DescriptorFiltersSet,System.Object,Telegrator.Core.Handlers.UpdateHandlerBase,System.Attribute[])">
             <summary>
             Initializes a new instance of the <see cref="T:Telegrator.Core.Descriptors.ClassHandlerDescriptor"/> class with a singleton instance.
             </summary>
         </member>
-        <member name="M:Telegrator.Core.Descriptors.ClassHandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegram.Bot.Types.Enums.UpdateType,Telegrator.Core.Descriptors.DescriptorIndexer,Telegrator.Core.Descriptors.DescriptorFiltersSet,System.Func{Telegrator.Core.Handlers.UpdateHandlerBase})">
+        <member name="M:Telegrator.Core.Descriptors.ClassHandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegram.Bot.Types.Enums.UpdateType,Telegrator.Core.Descriptors.DescriptorIndexer,Telegrator.Core.Descriptors.DescriptorFiltersSet,System.Func{Telegrator.Core.Handlers.UpdateHandlerBase},System.Attribute[])">
             <summary>
             Initializes a new instance of the <see cref="T:Telegrator.Core.Descriptors.ClassHandlerDescriptor"/> class with an instance factory.
             </summary>
         </member>
-        <member name="M:Telegrator.Core.Descriptors.ClassHandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegram.Bot.Types.Enums.UpdateType,Telegrator.Core.Descriptors.DescriptorIndexer,Telegrator.Core.Descriptors.DescriptorFiltersSet,System.Object,System.Func{Telegrator.Core.Handlers.UpdateHandlerBase})">
+        <member name="M:Telegrator.Core.Descriptors.ClassHandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegram.Bot.Types.Enums.UpdateType,Telegrator.Core.Descriptors.DescriptorIndexer,Telegrator.Core.Descriptors.DescriptorFiltersSet,System.Object,System.Func{Telegrator.Core.Handlers.UpdateHandlerBase},System.Attribute[])">
             <summary>
             Initializes a new instance of the <see cref="T:Telegrator.Core.Descriptors.ClassHandlerDescriptor"/> class with a service key and instance factory.
             </summary>
         </member>
-        <member name="M:Telegrator.Core.Descriptors.ClassHandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegrator.Core.Attributes.UpdateHandlerAttributeBase,Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update}[],Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update})">
+        <member name="M:Telegrator.Core.Descriptors.ClassHandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegrator.Core.Attributes.UpdateHandlerAttributeBase,Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update}[],Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},System.Attribute[])">
             <summary>
             Initializes a new instance of the <see cref="T:Telegrator.Core.Descriptors.ClassHandlerDescriptor"/> class using a polling attribute.
             </summary>
         </member>
-        <member name="M:Telegrator.Core.Descriptors.ClassHandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegrator.Core.Attributes.UpdateHandlerAttributeBase,Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update}[],Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},System.Object,Telegrator.Core.Handlers.UpdateHandlerBase)">
+        <member name="M:Telegrator.Core.Descriptors.ClassHandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegrator.Core.Attributes.UpdateHandlerAttributeBase,Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update}[],Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},System.Object,Telegrator.Core.Handlers.UpdateHandlerBase,System.Attribute[])">
             <summary>
             Initializes a new instance of the <see cref="T:Telegrator.Core.Descriptors.ClassHandlerDescriptor"/> class with a polling attribute and singleton instance.
             </summary>
         </member>
-        <member name="M:Telegrator.Core.Descriptors.ClassHandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegrator.Core.Attributes.UpdateHandlerAttributeBase,Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update}[],Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},System.Func{Telegrator.Core.Handlers.UpdateHandlerBase})">
+        <member name="M:Telegrator.Core.Descriptors.ClassHandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegrator.Core.Attributes.UpdateHandlerAttributeBase,Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update}[],Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},System.Func{Telegrator.Core.Handlers.UpdateHandlerBase},System.Attribute[])">
             <summary>
             Initializes a new instance of the <see cref="T:Telegrator.Core.Descriptors.ClassHandlerDescriptor"/> class with a polling attribute and instance factory.
             </summary>
         </member>
-        <member name="M:Telegrator.Core.Descriptors.ClassHandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegrator.Core.Attributes.UpdateHandlerAttributeBase,Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update}[],Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},System.Object,System.Func{Telegrator.Core.Handlers.UpdateHandlerBase})">
+        <member name="M:Telegrator.Core.Descriptors.ClassHandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegrator.Core.Attributes.UpdateHandlerAttributeBase,Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update}[],Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},System.Object,System.Func{Telegrator.Core.Handlers.UpdateHandlerBase},System.Attribute[])">
             <summary>
             Initializes a new instance of the <see cref="T:Telegrator.Core.Descriptors.ClassHandlerDescriptor"/> class with a polling attribute, service key, and instance factory.
             </summary>
         </member>
-        <member name="M:Telegrator.Core.Descriptors.ClassHandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegram.Bot.Types.Enums.UpdateType,Telegrator.Core.Descriptors.DescriptorIndexer,Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update}[],Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update})">
+        <member name="M:Telegrator.Core.Descriptors.ClassHandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegram.Bot.Types.Enums.UpdateType,Telegrator.Core.Descriptors.DescriptorIndexer,Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update}[],Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},System.Attribute[])">
             <summary>
             Initializes a new instance of the <see cref="T:Telegrator.Core.Descriptors.ClassHandlerDescriptor"/> class with an update validation filter.
             </summary>
         </member>
-        <member name="M:Telegrator.Core.Descriptors.ClassHandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegram.Bot.Types.Enums.UpdateType,Telegrator.Core.Descriptors.DescriptorIndexer,Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update}[],Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},System.Object,Telegrator.Core.Handlers.UpdateHandlerBase)">
+        <member name="M:Telegrator.Core.Descriptors.ClassHandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegram.Bot.Types.Enums.UpdateType,Telegrator.Core.Descriptors.DescriptorIndexer,Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update}[],Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},System.Object,Telegrator.Core.Handlers.UpdateHandlerBase,System.Attribute[])">
             <summary>
             Initializes a new instance of the <see cref="T:Telegrator.Core.Descriptors.ClassHandlerDescriptor"/> class with a validation filter and singleton instance.
             </summary>
         </member>
-        <member name="M:Telegrator.Core.Descriptors.ClassHandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegram.Bot.Types.Enums.UpdateType,Telegrator.Core.Descriptors.DescriptorIndexer,Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update}[],Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},System.Func{Telegrator.Core.Handlers.UpdateHandlerBase})">
+        <member name="M:Telegrator.Core.Descriptors.ClassHandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegram.Bot.Types.Enums.UpdateType,Telegrator.Core.Descriptors.DescriptorIndexer,Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update}[],Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},System.Func{Telegrator.Core.Handlers.UpdateHandlerBase},System.Attribute[])">
             <summary>
             Initializes a new instance of the <see cref="T:Telegrator.Core.Descriptors.ClassHandlerDescriptor"/> class with a validation filter and instance factory.
             </summary>
         </member>
-        <member name="M:Telegrator.Core.Descriptors.ClassHandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegram.Bot.Types.Enums.UpdateType,Telegrator.Core.Descriptors.DescriptorIndexer,Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update}[],Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},System.Object,System.Func{Telegrator.Core.Handlers.UpdateHandlerBase})">
+        <member name="M:Telegrator.Core.Descriptors.ClassHandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegram.Bot.Types.Enums.UpdateType,Telegrator.Core.Descriptors.DescriptorIndexer,Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update}[],Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},System.Object,System.Func{Telegrator.Core.Handlers.UpdateHandlerBase},System.Attribute[])">
             <summary>
             Initializes a new instance of the <see cref="T:Telegrator.Core.Descriptors.ClassHandlerDescriptor"/> class with a validation filter, service key, and instance factory.
             </summary>
@@ -1537,7 +1537,7 @@
             Get or sets precompiled attributes for this handler. Used for registerring attributes assigned to handler for AOT platforms, where reflection is not available. If this property is set, attributes will not be extracted from handler type using reflection.
             </summary>
         </member>
-        <member name="M:Telegrator.Core.Descriptors.HandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,System.Boolean)">
+        <member name="M:Telegrator.Core.Descriptors.HandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,System.Boolean,System.Attribute[])">
             <summary>
             Initializes a new instance of the <see cref="T:Telegrator.Core.Descriptors.HandlerDescriptor"/> class with the specified descriptor type and handler type.
             Automatically inspects the handler type to extract attributes, filters, and configuration.
@@ -1545,17 +1545,19 @@
             <param name="descriptorType">The type of the descriptor</param>
             <param name="handlerType">The type of the handler to describe</param>
             <param name="dontInspect"></param>
+            <param name="precompiledAttributes">Precompiled attributes if available.</param>
             <exception cref="T:System.ArgumentException">Thrown when the handler type is not compatible with the expected handler type</exception>
         </member>
-        <member name="M:Telegrator.Core.Descriptors.HandlerDescriptor.#ctor(System.Type,System.Object)">
+        <member name="M:Telegrator.Core.Descriptors.HandlerDescriptor.#ctor(System.Type,System.Object,System.Attribute[])">
             <summary>
             Initializes a new instance of the <see cref="T:Telegrator.Core.Descriptors.HandlerDescriptor"/> class as a keyed handler with the specified service key.
             </summary>
             <param name="handlerType">The type of the handler to describe</param>
             <param name="serviceKey">The service key for dependency injection</param>
+            <param name="precompiledAttributes">Precompiled attributes</param>
             <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="serviceKey"/> is null</exception>
         </member>
-        <member name="M:Telegrator.Core.Descriptors.HandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegram.Bot.Types.Enums.UpdateType,Telegrator.Core.Descriptors.DescriptorIndexer,Telegrator.Core.Descriptors.DescriptorFiltersSet)">
+        <member name="M:Telegrator.Core.Descriptors.HandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegram.Bot.Types.Enums.UpdateType,Telegrator.Core.Descriptors.DescriptorIndexer,Telegrator.Core.Descriptors.DescriptorFiltersSet,System.Attribute[])">
             <summary>
             Initializes a new instance of the <see cref="T:Telegrator.Core.Descriptors.HandlerDescriptor"/> class with all basic properties.
             </summary>
@@ -1564,8 +1566,9 @@
             <param name="updateType">The type of update this handler processes</param>
             <param name="indexer">The indexer for handler concurrency and priority</param>
             <param name="filters">The set of filters associated with this handler</param>
+            <param name="precompiledAttributes">Precompiled attributes</param>
         </member>
-        <member name="M:Telegrator.Core.Descriptors.HandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegram.Bot.Types.Enums.UpdateType,Telegrator.Core.Descriptors.DescriptorIndexer,Telegrator.Core.Descriptors.DescriptorFiltersSet,System.Object,Telegrator.Core.Handlers.UpdateHandlerBase)">
+        <member name="M:Telegrator.Core.Descriptors.HandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegram.Bot.Types.Enums.UpdateType,Telegrator.Core.Descriptors.DescriptorIndexer,Telegrator.Core.Descriptors.DescriptorFiltersSet,System.Object,Telegrator.Core.Handlers.UpdateHandlerBase,System.Attribute[])">
             <summary>
             Initializes a new instance of the <see cref="T:Telegrator.Core.Descriptors.HandlerDescriptor"/> class with singleton instance support.
             </summary>
@@ -1576,9 +1579,10 @@
             <param name="filters">The set of filters associated with this handler</param>
             <param name="serviceKey">The service key for dependency injection</param>
             <param name="singletonInstance">The singleton instance of the handler</param>
+            <param name="precompiledAttributes">Precompiled attributes</param>
             <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="serviceKey"/> or <paramref name="singletonInstance"/> is null</exception>
         </member>
-        <member name="M:Telegrator.Core.Descriptors.HandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegram.Bot.Types.Enums.UpdateType,Telegrator.Core.Descriptors.DescriptorIndexer,Telegrator.Core.Descriptors.DescriptorFiltersSet,System.Func{Telegrator.Core.Handlers.UpdateHandlerBase})">
+        <member name="M:Telegrator.Core.Descriptors.HandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegram.Bot.Types.Enums.UpdateType,Telegrator.Core.Descriptors.DescriptorIndexer,Telegrator.Core.Descriptors.DescriptorFiltersSet,System.Func{Telegrator.Core.Handlers.UpdateHandlerBase},System.Attribute[])">
             <summary>
             Initializes a new instance of the <see cref="T:Telegrator.Core.Descriptors.HandlerDescriptor"/> class with instance factory support.
             </summary>
@@ -1588,9 +1592,10 @@
             <param name="indexer">The indexer for handler concurrency and priority</param>
             <param name="filters">The set of filters associated with this handler</param>
             <param name="instanceFactory">Factory for creating handler instances</param>
+            <param name="precompiledAttributes">Precompiled attributes</param>
             <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="instanceFactory"/> is null</exception>
         </member>
-        <member name="M:Telegrator.Core.Descriptors.HandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegram.Bot.Types.Enums.UpdateType,Telegrator.Core.Descriptors.DescriptorIndexer,Telegrator.Core.Descriptors.DescriptorFiltersSet,System.Object,System.Func{Telegrator.Core.Handlers.UpdateHandlerBase})">
+        <member name="M:Telegrator.Core.Descriptors.HandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegram.Bot.Types.Enums.UpdateType,Telegrator.Core.Descriptors.DescriptorIndexer,Telegrator.Core.Descriptors.DescriptorFiltersSet,System.Object,System.Func{Telegrator.Core.Handlers.UpdateHandlerBase},System.Attribute[])">
             <summary>
             Initializes a new instance of the <see cref="T:Telegrator.Core.Descriptors.HandlerDescriptor"/> class with service key and instance factory support.
             </summary>
@@ -1601,9 +1606,10 @@
             <param name="filters">The set of filters associated with this handler</param>
             <param name="serviceKey">The service key for dependency injection</param>
             <param name="instanceFactory">Factory for creating handler instances</param>
+            <param name="precompiledAttributes">Precompiled attributes</param>
             <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="serviceKey"/> or <paramref name="instanceFactory"/> is null</exception>
         </member>
-        <member name="M:Telegrator.Core.Descriptors.HandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegrator.Core.Attributes.UpdateHandlerAttributeBase,Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update}[],Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update})">
+        <member name="M:Telegrator.Core.Descriptors.HandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegrator.Core.Attributes.UpdateHandlerAttributeBase,Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update}[],Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},System.Attribute[])">
             <summary>
             Initializes a new instance of the <see cref="T:Telegrator.Core.Descriptors.HandlerDescriptor"/> class with polling handler attribute and filters.
             </summary>
@@ -1612,8 +1618,9 @@
             <param name="pollingHandlerAttribute">The polling handler attribute containing configuration</param>
             <param name="filters">Optional array of filters to apply</param>
             <param name="stateKeepFilter">Optional state keeping filter</param>
+            <param name="precompiledAttributes">Precompiled attributes</param>
         </member>
-        <member name="M:Telegrator.Core.Descriptors.HandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegrator.Core.Attributes.UpdateHandlerAttributeBase,Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update}[],Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},System.Object,Telegrator.Core.Handlers.UpdateHandlerBase)">
+        <member name="M:Telegrator.Core.Descriptors.HandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegrator.Core.Attributes.UpdateHandlerAttributeBase,Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update}[],Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},System.Object,Telegrator.Core.Handlers.UpdateHandlerBase,System.Attribute[])">
             <summary>
             Initializes a new instance of the <see cref="T:Telegrator.Core.Descriptors.HandlerDescriptor"/> class with polling handler attribute, filters, and singleton instance.
             </summary>
@@ -1624,9 +1631,10 @@
             <param name="stateKeepFilter">Optional state keeping filter</param>
             <param name="serviceKey">The service key for dependency injection</param>
             <param name="singletonInstance">The singleton instance of the handler</param>
+            <param name="precompiledAttributes">Precompiled attributes</param>
             <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="serviceKey"/> or <paramref name="singletonInstance"/> is null</exception>
         </member>
-        <member name="M:Telegrator.Core.Descriptors.HandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegrator.Core.Attributes.UpdateHandlerAttributeBase,Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update}[],Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},System.Func{Telegrator.Core.Handlers.UpdateHandlerBase})">
+        <member name="M:Telegrator.Core.Descriptors.HandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegrator.Core.Attributes.UpdateHandlerAttributeBase,Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update}[],Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},System.Func{Telegrator.Core.Handlers.UpdateHandlerBase},System.Attribute[])">
             <summary>
             Initializes a new instance of the <see cref="T:Telegrator.Core.Descriptors.HandlerDescriptor"/> class with polling handler attribute, filters, and instance factory.
             </summary>
@@ -1636,9 +1644,10 @@
             <param name="filters">Optional array of filters to apply</param>
             <param name="stateKeepFilter">Optional state keeping filter</param>
             <param name="instanceFactory">Factory for creating handler instances</param>
+            <param name="precompiledAttributes">Precompiled attributes</param>
             <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="instanceFactory"/> is null</exception>
         </member>
-        <member name="M:Telegrator.Core.Descriptors.HandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegrator.Core.Attributes.UpdateHandlerAttributeBase,Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update}[],Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},System.Object,System.Func{Telegrator.Core.Handlers.UpdateHandlerBase})">
+        <member name="M:Telegrator.Core.Descriptors.HandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegrator.Core.Attributes.UpdateHandlerAttributeBase,Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update}[],Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},System.Object,System.Func{Telegrator.Core.Handlers.UpdateHandlerBase},System.Attribute[])">
             <summary>
             Initializes a new instance of the <see cref="T:Telegrator.Core.Descriptors.HandlerDescriptor"/> class with polling handler attribute, filters, service key, and instance factory.
             </summary>
@@ -1649,9 +1658,10 @@
             <param name="stateKeepFilter">Optional state keeping filter</param>
             <param name="serviceKey">The service key for dependency injection</param>
             <param name="instanceFactory">Factory for creating handler instances</param>
+            <param name="precompiledAttributes">Precompiled attributes</param>
             <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="serviceKey"/> or <paramref name="instanceFactory"/> is null</exception>
         </member>
-        <member name="M:Telegrator.Core.Descriptors.HandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegram.Bot.Types.Enums.UpdateType,Telegrator.Core.Descriptors.DescriptorIndexer,Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update}[],Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update})">
+        <member name="M:Telegrator.Core.Descriptors.HandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegram.Bot.Types.Enums.UpdateType,Telegrator.Core.Descriptors.DescriptorIndexer,Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update}[],Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},System.Attribute[])">
             <summary>
             Initializes a new instance of the <see cref="T:Telegrator.Core.Descriptors.HandlerDescriptor"/> class with validation filter support.
             </summary>
@@ -1662,8 +1672,9 @@
             <param name="validateFilter">Optional validation filter</param>
             <param name="filters">Optional array of filters to apply</param>
             <param name="stateKeepFilter">Optional state keeping filter</param>
+            <param name="precompiledAttributes">Precompiled attributes</param>
         </member>
-        <member name="M:Telegrator.Core.Descriptors.HandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegram.Bot.Types.Enums.UpdateType,Telegrator.Core.Descriptors.DescriptorIndexer,Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update}[],Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},System.Object,Telegrator.Core.Handlers.UpdateHandlerBase)">
+        <member name="M:Telegrator.Core.Descriptors.HandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegram.Bot.Types.Enums.UpdateType,Telegrator.Core.Descriptors.DescriptorIndexer,Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update}[],Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},System.Object,Telegrator.Core.Handlers.UpdateHandlerBase,System.Attribute[])">
             <summary>
             Initializes a new instance of the <see cref="T:Telegrator.Core.Descriptors.HandlerDescriptor"/> class with validation filter and singleton instance support.
             </summary>
@@ -1676,9 +1687,10 @@
             <param name="stateKeepFilter">Optional state keeping filter</param>
             <param name="serviceKey">The service key for dependency injection</param>
             <param name="singletonInstance">The singleton instance of the handler</param>
+            <param name="precompiledAttributes">Precompiled attributes</param>
             <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="serviceKey"/> or <paramref name="singletonInstance"/> is null</exception>
         </member>
-        <member name="M:Telegrator.Core.Descriptors.HandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegram.Bot.Types.Enums.UpdateType,Telegrator.Core.Descriptors.DescriptorIndexer,Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update}[],Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},System.Func{Telegrator.Core.Handlers.UpdateHandlerBase})">
+        <member name="M:Telegrator.Core.Descriptors.HandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegram.Bot.Types.Enums.UpdateType,Telegrator.Core.Descriptors.DescriptorIndexer,Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update}[],Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},System.Func{Telegrator.Core.Handlers.UpdateHandlerBase},System.Attribute[])">
             <summary>
             Initializes a new instance of the <see cref="T:Telegrator.Core.Descriptors.HandlerDescriptor"/> class with validation filter and instance factory support.
             </summary>
@@ -1690,9 +1702,10 @@
             <param name="filters">Optional array of filters to apply</param>
             <param name="stateKeepFilter">Optional state keeping filter</param>
             <param name="instanceFactory">Factory for creating handler instances</param>
+            <param name="precompiledAttributes">Precompiled attributes</param>
             <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="instanceFactory"/> is null</exception>
         </member>
-        <member name="M:Telegrator.Core.Descriptors.HandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegram.Bot.Types.Enums.UpdateType,Telegrator.Core.Descriptors.DescriptorIndexer,Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update}[],Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},System.Object,System.Func{Telegrator.Core.Handlers.UpdateHandlerBase})">
+        <member name="M:Telegrator.Core.Descriptors.HandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegram.Bot.Types.Enums.UpdateType,Telegrator.Core.Descriptors.DescriptorIndexer,Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update}[],Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},System.Object,System.Func{Telegrator.Core.Handlers.UpdateHandlerBase},System.Attribute[])">
             <summary>
             Initializes a new instance of the <see cref="T:Telegrator.Core.Descriptors.HandlerDescriptor"/> class with validation filter, service key, and instance factory support.
             </summary>
@@ -1705,6 +1718,7 @@
             <param name="stateKeepFilter">Optional state keeping filter</param>
             <param name="serviceKey">The service key for dependency injection</param>
             <param name="instanceFactory">Factory for creating handler instances</param>
+            <param name="precompiledAttributes">Precompiled attributes</param>
             <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="serviceKey"/> or <paramref name="instanceFactory"/> is null</exception>
         </member>
         <member name="M:Telegrator.Core.Descriptors.HandlerDescriptor.SetInstance(Telegrator.Core.Handlers.UpdateHandlerBase)">
@@ -1814,41 +1828,46 @@
             Provides methods for inspecting handler types and retrieving their attributes and filters.
             </summary>
         </member>
-        <member name="M:Telegrator.Core.Descriptors.HandlerInspector.GetDisplayName(System.Reflection.MemberInfo)">
+        <member name="M:Telegrator.Core.Descriptors.HandlerInspector.GetDisplayName(System.Reflection.MemberInfo,System.Attribute[])">
             <summary>
             Gets handler's display name
             </summary>
             <param name="handlerType"></param>
+            <param name="precompiledAttributes">Precompiled attributes if available.</param>
             <returns></returns>
         </member>
-        <member name="M:Telegrator.Core.Descriptors.HandlerInspector.GetHandlerAttribute(System.Reflection.MemberInfo)">
+        <member name="M:Telegrator.Core.Descriptors.HandlerInspector.GetHandlerAttribute(System.Reflection.MemberInfo,System.Attribute[])">
             <summary>
             Gets the handler attribute from the specified member info.
             </summary>
             <param name="handlerType">The member info representing the handler type.</param>
+            <param name="precompiledAttributes">Precompiled attributes if available</param>
             <returns>The handler attribute.</returns>
         </member>
-        <member name="M:Telegrator.Core.Descriptors.HandlerInspector.GetStateKeeperAttribute(System.Reflection.MemberInfo)">
+        <member name="M:Telegrator.Core.Descriptors.HandlerInspector.GetStateKeeperAttribute(System.Reflection.MemberInfo,System.Attribute[])">
             <summary>
             Gets the state keeper attribute from the specified member info, if present.
             </summary>
             <param name="handlerType">The member info representing the handler type.</param>
+            <param name="precompiledAttributes">Precompiled attributes if available</param>
             <returns>The state keeper attribute, or null if not present.</returns>
         </member>
-        <member name="M:Telegrator.Core.Descriptors.HandlerInspector.GetFilterAttributes(System.Reflection.MemberInfo,Telegram.Bot.Types.Enums.UpdateType)">
+        <member name="M:Telegrator.Core.Descriptors.HandlerInspector.GetFilterAttributes(System.Reflection.MemberInfo,Telegram.Bot.Types.Enums.UpdateType,System.Attribute[])">
             <summary>
             Gets all filter attributes for the specified handler type and update type.
             </summary>
             <param name="handlerType">The member info representing the handler type.</param>
             <param name="validUpdType">The valid update type.</param>
+            <param name="precompiledAttributes">Precompiled attributes if available</param>
             <returns>An enumerable of filter attributes.</returns>
         </member>
-        <member name="M:Telegrator.Core.Descriptors.HandlerInspector.GetAspects(System.Type)">
+        <member name="M:Telegrator.Core.Descriptors.HandlerInspector.GetAspects(System.Type,System.Attribute[])">
             <summary>
             Gets the aspects configuration for the specified handler type.
             Inspects the handler for both self-processing (implements interfaces) and typed processing (uses attributes).
             </summary>
             <param name="handlerType">The type of the handler to inspect.</param>
+            <param name="precompiledAttributes">Precompiled attributes if available</param>
             <returns>A <see cref="T:Telegrator.Core.Descriptors.DescriptorAspectsSet"/> containing the aspects configuration.</returns>
         </member>
         <member name="T:Telegrator.Core.Descriptors.ImplicitHandlerDescriptor">
@@ -1856,7 +1875,7 @@
             Descriptor for creating implicit handlers (e.g. from handler builder)
             </summary>
         </member>
-        <member name="M:Telegrator.Core.Descriptors.ImplicitHandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegram.Bot.Types.Enums.UpdateType,Telegrator.Core.Descriptors.DescriptorIndexer,Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update}[],Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},System.Object,Telegrator.Core.Handlers.UpdateHandlerBase)">
+        <member name="M:Telegrator.Core.Descriptors.ImplicitHandlerDescriptor.#ctor(Telegrator.Core.Descriptors.DescriptorType,System.Type,Telegram.Bot.Types.Enums.UpdateType,Telegrator.Core.Descriptors.DescriptorIndexer,Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update}[],Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Update},System.Object,Telegrator.Core.Handlers.UpdateHandlerBase,System.Attribute[])">
             <summary>
             Initializes a new instance of the <see cref="T:Telegrator.Core.Descriptors.ImplicitHandlerDescriptor"/> class.
             </summary>
@@ -2852,11 +2871,12 @@
             <param name="list"></param>
             <returns></returns>
         </member>
-        <member name="M:Telegrator.Core.IHandlersCollection.CreateClassDescriptor(System.Type)">
+        <member name="M:Telegrator.Core.IHandlersCollection.CreateClassDescriptor(System.Type,System.Attribute[])">
             <summary>
             Creates a class handler descriptor for the specified handler type.
             </summary>
             <param name="handlerType">The type of the handler.</param>
+            <param name="precompiledAttributes">Precompiled attributes</param>
             <returns>A new <see cref="T:Telegrator.Core.Descriptors.HandlerDescriptor"/>.</returns>
         </member>
         <member name="M:Telegrator.Core.IHandlersCollection.AddDescriptor(Telegrator.Core.Descriptors.HandlerDescriptor)">
@@ -6748,7 +6768,7 @@
             Configuration options for handler collecting.
             </summary>
         </member>
-        <member name="M:Telegrator.Providers.HandlersCollection.CreateClassDescriptor(System.Type)">
+        <member name="M:Telegrator.Providers.HandlersCollection.CreateClassDescriptor(System.Type,System.Attribute[])">
             <inheritdoc/>
         </member>
         <member name="F:Telegrator.Providers.HandlersCollection.CommandAliasses">
@@ -6864,7 +6884,7 @@
         <member name="M:Telegrator.Providers.HandlersManagerBase.TryGetDescriptorList(Telegram.Bot.Types.Enums.UpdateType,Telegrator.Core.Descriptors.HandlerDescriptorList@)">
             <inheritdoc/>
         </member>
-        <member name="M:Telegrator.Providers.HandlersManagerBase.CreateClassDescriptor(System.Type)">
+        <member name="M:Telegrator.Providers.HandlersManagerBase.CreateClassDescriptor(System.Type,System.Attribute[])">
             <inheritdoc/>
         </member>
         <member name="M:Telegrator.Providers.HandlersManagerBase.IsEmpty">

@@ -7,7 +7,7 @@
 	<LangVersion>latest</LangVersion>
 	<BaseOutputPath>..\..\bin</BaseOutputPath>
 	<DocumentationFile>..\..\docs\$(AssemblyName).xml</DocumentationFile>
-	<IsAotCompatible>True</IsAotCompatible>
+	<!--IsAotCompatible>True</IsAotCompatible-->
 	  
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>

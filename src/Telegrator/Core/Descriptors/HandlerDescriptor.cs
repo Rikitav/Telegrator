@@ -160,29 +160,31 @@ public abstract class HandlerDescriptor
     /// <param name="descriptorType">The type of the descriptor</param>
     /// <param name="handlerType">The type of the handler to describe</param>
     /// <param name="dontInspect"></param>
+    /// <param name="precompiledAttributes">Precompiled attributes if available.</param>
     /// <exception cref="ArgumentException">Thrown when the handler type is not compatible with the expected handler type</exception>
-    protected HandlerDescriptor(DescriptorType descriptorType, Type handlerType, bool dontInspect = false)
+    protected HandlerDescriptor(DescriptorType descriptorType, Type handlerType, bool dontInspect = false, Attribute[]? precompiledAttributes = null)
     {
         Type = descriptorType;
         HandlerType = handlerType;
         Filters = new DescriptorFiltersSet(null, null, null);
+        PrecompiledAttributes = precompiledAttributes;
 
         if (dontInspect)
             return;
 
-        UpdateHandlerAttributeBase handlerAttribute = HandlerInspector.GetHandlerAttribute(handlerType);
+        UpdateHandlerAttributeBase handlerAttribute = HandlerInspector.GetHandlerAttribute(handlerType, precompiledAttributes);
         if (handlerAttribute.ExpectingHandlerType?.Contains(handlerType.BaseType) == false)
             throw new ArgumentException(string.Format("This handler attribute cannot be attached to this class. Attribute can be attached on next handlers : {0}", string.Join(", ", handlerAttribute.ExpectingHandlerType.AsEnumerable())));
 
-        IFilter<Update>? stateKeeperAttribute = HandlerInspector.GetStateKeeperAttribute(handlerType);
-        IFilter<Update>[] filters = HandlerInspector.GetFilterAttributes(handlerType, handlerAttribute.Type).ToArray();
+        IFilter<Update>? stateKeeperAttribute = HandlerInspector.GetStateKeeperAttribute(handlerType, precompiledAttributes);
+        IFilter<Update>[] filters = HandlerInspector.GetFilterAttributes(handlerType, handlerAttribute.Type, precompiledAttributes).ToArray();
 
         UpdateType = handlerAttribute.Type;
         Indexer = handlerAttribute.GetIndexer();
         FormReport = handlerAttribute.FormReport;
         Filters = new DescriptorFiltersSet(handlerAttribute, stateKeeperAttribute, filters);
-        Aspects = HandlerInspector.GetAspects(handlerType);
-        DisplayString = HandlerInspector.GetDisplayName(handlerType);
+        Aspects = HandlerInspector.GetAspects(handlerType, precompiledAttributes);
+        DisplayString = HandlerInspector.GetDisplayName(handlerType, precompiledAttributes);
     }
 
     /// <summary>
@@ -190,8 +192,9 @@ public abstract class HandlerDescriptor
     /// </summary>
     /// <param name="handlerType">The type of the handler to describe</param>
     /// <param name="serviceKey">The service key for dependency injection</param>
+    /// <param name="precompiledAttributes">Precompiled attributes</param>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="serviceKey"/> is null</exception>
-    protected HandlerDescriptor(Type handlerType, object serviceKey) : this(DescriptorType.Keyed, handlerType)
+    protected HandlerDescriptor(Type handlerType, object serviceKey, Attribute[]? precompiledAttributes = null) : this(DescriptorType.Keyed, handlerType, false, precompiledAttributes)
     {
         ServiceKey = serviceKey ?? throw new ArgumentNullException(nameof(serviceKey));
     }
@@ -204,13 +207,15 @@ public abstract class HandlerDescriptor
     /// <param name="updateType">The type of update this handler processes</param>
     /// <param name="indexer">The indexer for handler concurrency and priority</param>
     /// <param name="filters">The set of filters associated with this handler</param>
-    protected HandlerDescriptor(DescriptorType type, Type handlerType, UpdateType updateType, DescriptorIndexer indexer, DescriptorFiltersSet filters)
+    /// <param name="precompiledAttributes">Precompiled attributes</param>
+    protected HandlerDescriptor(DescriptorType type, Type handlerType, UpdateType updateType, DescriptorIndexer indexer, DescriptorFiltersSet filters, Attribute[]? precompiledAttributes = null)
     {
         Type = type;
         HandlerType = handlerType;
         UpdateType = updateType;
         Indexer = indexer;
         Filters = filters;
+        PrecompiledAttributes = precompiledAttributes;
     }
 
     /// <summary>
@@ -223,8 +228,9 @@ public abstract class HandlerDescriptor
     /// <param name="filters">The set of filters associated with this handler</param>
     /// <param name="serviceKey">The service key for dependency injection</param>
     /// <param name="singletonInstance">The singleton instance of the handler</param>
+    /// <param name="precompiledAttributes">Precompiled attributes</param>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="serviceKey"/> or <paramref name="singletonInstance"/> is null</exception>
-    protected HandlerDescriptor(DescriptorType type, Type handlerType, UpdateType updateType, DescriptorIndexer indexer, DescriptorFiltersSet filters, object serviceKey, UpdateHandlerBase singletonInstance)
+    protected HandlerDescriptor(DescriptorType type, Type handlerType, UpdateType updateType, DescriptorIndexer indexer, DescriptorFiltersSet filters, object serviceKey, UpdateHandlerBase singletonInstance, Attribute[]? precompiledAttributes = null)
     {
         Type = type;
         HandlerType = handlerType;
@@ -233,6 +239,7 @@ public abstract class HandlerDescriptor
         Filters = filters;
         ServiceKey = serviceKey ?? throw new ArgumentNullException(nameof(serviceKey));
         SingletonInstance = singletonInstance ?? throw new ArgumentNullException(nameof(singletonInstance));
+        PrecompiledAttributes = precompiledAttributes;
     }
 
     /// <summary>
@@ -244,8 +251,9 @@ public abstract class HandlerDescriptor
     /// <param name="indexer">The indexer for handler concurrency and priority</param>
     /// <param name="filters">The set of filters associated with this handler</param>
     /// <param name="instanceFactory">Factory for creating handler instances</param>
+    /// <param name="precompiledAttributes">Precompiled attributes</param>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="instanceFactory"/> is null</exception>
-    protected HandlerDescriptor(DescriptorType type, Type handlerType, UpdateType updateType, DescriptorIndexer indexer, DescriptorFiltersSet filters, Func<UpdateHandlerBase> instanceFactory)
+    protected HandlerDescriptor(DescriptorType type, Type handlerType, UpdateType updateType, DescriptorIndexer indexer, DescriptorFiltersSet filters, Func<UpdateHandlerBase> instanceFactory, Attribute[]? precompiledAttributes = null)
     {
         Type = type;
         HandlerType = handlerType;
@@ -253,6 +261,7 @@ public abstract class HandlerDescriptor
         Indexer = indexer;
         Filters = filters;
         InstanceFactory = instanceFactory ?? throw new ArgumentNullException(nameof(instanceFactory));
+        PrecompiledAttributes = precompiledAttributes;
     }
 
     /// <summary>
@@ -265,8 +274,9 @@ public abstract class HandlerDescriptor
     /// <param name="filters">The set of filters associated with this handler</param>
     /// <param name="serviceKey">The service key for dependency injection</param>
     /// <param name="instanceFactory">Factory for creating handler instances</param>
+    /// <param name="precompiledAttributes">Precompiled attributes</param>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="serviceKey"/> or <paramref name="instanceFactory"/> is null</exception>
-    protected HandlerDescriptor(DescriptorType type, Type handlerType, UpdateType updateType, DescriptorIndexer indexer, DescriptorFiltersSet filters, object serviceKey, Func<UpdateHandlerBase> instanceFactory)
+    protected HandlerDescriptor(DescriptorType type, Type handlerType, UpdateType updateType, DescriptorIndexer indexer, DescriptorFiltersSet filters, object serviceKey, Func<UpdateHandlerBase> instanceFactory, Attribute[]? precompiledAttributes = null)
     {
         Type = type;
         HandlerType = handlerType;
@@ -275,6 +285,7 @@ public abstract class HandlerDescriptor
         Filters = filters;
         ServiceKey = serviceKey ?? throw new ArgumentNullException(nameof(serviceKey));
         InstanceFactory = instanceFactory ?? throw new ArgumentNullException(nameof(instanceFactory));
+        PrecompiledAttributes = precompiledAttributes;
     }
 
     /// <summary>
@@ -285,13 +296,15 @@ public abstract class HandlerDescriptor
     /// <param name="pollingHandlerAttribute">The polling handler attribute containing configuration</param>
     /// <param name="filters">Optional array of filters to apply</param>
     /// <param name="stateKeepFilter">Optional state keeping filter</param>
-    protected HandlerDescriptor(DescriptorType type, Type handlerType, UpdateHandlerAttributeBase pollingHandlerAttribute, IFilter<Update>[]? filters, IFilter<Update>? stateKeepFilter)
+    /// <param name="precompiledAttributes">Precompiled attributes</param>
+    protected HandlerDescriptor(DescriptorType type, Type handlerType, UpdateHandlerAttributeBase pollingHandlerAttribute, IFilter<Update>[]? filters, IFilter<Update>? stateKeepFilter, Attribute[]? precompiledAttributes = null)
     {
         Type = type;
         HandlerType = handlerType;
         UpdateType = pollingHandlerAttribute.Type;
         Indexer = pollingHandlerAttribute.GetIndexer();
         Filters = new DescriptorFiltersSet(pollingHandlerAttribute, stateKeepFilter, filters);
+        PrecompiledAttributes = precompiledAttributes;
     }
 
     /// <summary>
@@ -304,8 +317,9 @@ public abstract class HandlerDescriptor
     /// <param name="stateKeepFilter">Optional state keeping filter</param>
     /// <param name="serviceKey">The service key for dependency injection</param>
     /// <param name="singletonInstance">The singleton instance of the handler</param>
+    /// <param name="precompiledAttributes">Precompiled attributes</param>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="serviceKey"/> or <paramref name="singletonInstance"/> is null</exception>
-    protected HandlerDescriptor(DescriptorType type, Type handlerType, UpdateHandlerAttributeBase pollingHandlerAttribute, IFilter<Update>[]? filters, IFilter<Update>? stateKeepFilter, object serviceKey, UpdateHandlerBase singletonInstance)
+    protected HandlerDescriptor(DescriptorType type, Type handlerType, UpdateHandlerAttributeBase pollingHandlerAttribute, IFilter<Update>[]? filters, IFilter<Update>? stateKeepFilter, object serviceKey, UpdateHandlerBase singletonInstance, Attribute[]? precompiledAttributes = null)
     {
         Type = type;
         HandlerType = handlerType;
@@ -314,6 +328,7 @@ public abstract class HandlerDescriptor
         Filters = new DescriptorFiltersSet(pollingHandlerAttribute, stateKeepFilter, filters);
         ServiceKey = serviceKey ?? throw new ArgumentNullException(nameof(serviceKey));
         SingletonInstance = singletonInstance ?? throw new ArgumentNullException(nameof(singletonInstance));
+        PrecompiledAttributes = precompiledAttributes;
     }
 
     /// <summary>
@@ -325,8 +340,9 @@ public abstract class HandlerDescriptor
     /// <param name="filters">Optional array of filters to apply</param>
     /// <param name="stateKeepFilter">Optional state keeping filter</param>
     /// <param name="instanceFactory">Factory for creating handler instances</param>
+    /// <param name="precompiledAttributes">Precompiled attributes</param>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="instanceFactory"/> is null</exception>
-    protected HandlerDescriptor(DescriptorType type, Type handlerType, UpdateHandlerAttributeBase pollingHandlerAttribute, IFilter<Update>[]? filters, IFilter<Update>? stateKeepFilter, Func<UpdateHandlerBase> instanceFactory)
+    protected HandlerDescriptor(DescriptorType type, Type handlerType, UpdateHandlerAttributeBase pollingHandlerAttribute, IFilter<Update>[]? filters, IFilter<Update>? stateKeepFilter, Func<UpdateHandlerBase> instanceFactory, Attribute[]? precompiledAttributes = null)
     {
         Type = type;
         HandlerType = handlerType;
@@ -334,6 +350,7 @@ public abstract class HandlerDescriptor
         Indexer = pollingHandlerAttribute.GetIndexer();
         Filters = new DescriptorFiltersSet(pollingHandlerAttribute, stateKeepFilter, filters);
         InstanceFactory = instanceFactory ?? throw new ArgumentNullException(nameof(instanceFactory));
+        PrecompiledAttributes = precompiledAttributes;
     }
 
     /// <summary>
@@ -346,8 +363,9 @@ public abstract class HandlerDescriptor
     /// <param name="stateKeepFilter">Optional state keeping filter</param>
     /// <param name="serviceKey">The service key for dependency injection</param>
     /// <param name="instanceFactory">Factory for creating handler instances</param>
+    /// <param name="precompiledAttributes">Precompiled attributes</param>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="serviceKey"/> or <paramref name="instanceFactory"/> is null</exception>
-    protected HandlerDescriptor(DescriptorType type, Type handlerType, UpdateHandlerAttributeBase pollingHandlerAttribute, IFilter<Update>[]? filters, IFilter<Update>? stateKeepFilter, object serviceKey, Func<UpdateHandlerBase> instanceFactory)
+    protected HandlerDescriptor(DescriptorType type, Type handlerType, UpdateHandlerAttributeBase pollingHandlerAttribute, IFilter<Update>[]? filters, IFilter<Update>? stateKeepFilter, object serviceKey, Func<UpdateHandlerBase> instanceFactory, Attribute[]? precompiledAttributes = null)
     {
         Type = type;
         HandlerType = handlerType;
@@ -356,6 +374,7 @@ public abstract class HandlerDescriptor
         Filters = new DescriptorFiltersSet(pollingHandlerAttribute, stateKeepFilter, filters);
         ServiceKey = serviceKey ?? throw new ArgumentNullException(nameof(serviceKey));
         InstanceFactory = instanceFactory ?? throw new ArgumentNullException(nameof(instanceFactory));
+        PrecompiledAttributes = precompiledAttributes;
     }
 
     /// <summary>
@@ -368,13 +387,15 @@ public abstract class HandlerDescriptor
     /// <param name="validateFilter">Optional validation filter</param>
     /// <param name="filters">Optional array of filters to apply</param>
     /// <param name="stateKeepFilter">Optional state keeping filter</param>
-    protected HandlerDescriptor(DescriptorType type, Type handlerType, UpdateType updateType, DescriptorIndexer indexer, IFilter<Update>? validateFilter, IFilter<Update>[]? filters, IFilter<Update>? stateKeepFilter)
+    /// <param name="precompiledAttributes">Precompiled attributes</param>
+    protected HandlerDescriptor(DescriptorType type, Type handlerType, UpdateType updateType, DescriptorIndexer indexer, IFilter<Update>? validateFilter, IFilter<Update>[]? filters, IFilter<Update>? stateKeepFilter, Attribute[]? precompiledAttributes = null)
     {
         Type = type;
         HandlerType = handlerType;
         UpdateType = updateType;
         Indexer = indexer;
         Filters = new DescriptorFiltersSet(validateFilter, stateKeepFilter, filters);
+        PrecompiledAttributes = precompiledAttributes;
     }
 
     /// <summary>
@@ -389,8 +410,9 @@ public abstract class HandlerDescriptor
     /// <param name="stateKeepFilter">Optional state keeping filter</param>
     /// <param name="serviceKey">The service key for dependency injection</param>
     /// <param name="singletonInstance">The singleton instance of the handler</param>
+    /// <param name="precompiledAttributes">Precompiled attributes</param>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="serviceKey"/> or <paramref name="singletonInstance"/> is null</exception>
-    protected HandlerDescriptor(DescriptorType type, Type handlerType, UpdateType updateType, DescriptorIndexer indexer, IFilter<Update>? validateFilter, IFilter<Update>[]? filters, IFilter<Update>? stateKeepFilter, object serviceKey, UpdateHandlerBase singletonInstance)
+    protected HandlerDescriptor(DescriptorType type, Type handlerType, UpdateType updateType, DescriptorIndexer indexer, IFilter<Update>? validateFilter, IFilter<Update>[]? filters, IFilter<Update>? stateKeepFilter, object serviceKey, UpdateHandlerBase singletonInstance, Attribute[]? precompiledAttributes = null)
     {
         Type = type;
         HandlerType = handlerType;
@@ -399,6 +421,7 @@ public abstract class HandlerDescriptor
         Filters = new DescriptorFiltersSet(validateFilter, stateKeepFilter, filters);
         ServiceKey = serviceKey ?? throw new ArgumentNullException(nameof(serviceKey));
         SingletonInstance = singletonInstance ?? throw new ArgumentNullException(nameof(singletonInstance));
+        PrecompiledAttributes = precompiledAttributes;
     }
 
     /// <summary>
@@ -412,8 +435,9 @@ public abstract class HandlerDescriptor
     /// <param name="filters">Optional array of filters to apply</param>
     /// <param name="stateKeepFilter">Optional state keeping filter</param>
     /// <param name="instanceFactory">Factory for creating handler instances</param>
+    /// <param name="precompiledAttributes">Precompiled attributes</param>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="instanceFactory"/> is null</exception>
-    protected HandlerDescriptor(DescriptorType type, Type handlerType, UpdateType updateType, DescriptorIndexer indexer, IFilter<Update>? validateFilter, IFilter<Update>[]? filters, IFilter<Update>? stateKeepFilter, Func<UpdateHandlerBase> instanceFactory)
+    protected HandlerDescriptor(DescriptorType type, Type handlerType, UpdateType updateType, DescriptorIndexer indexer, IFilter<Update>? validateFilter, IFilter<Update>[]? filters, IFilter<Update>? stateKeepFilter, Func<UpdateHandlerBase> instanceFactory, Attribute[]? precompiledAttributes = null)
     {
         Type = type;
         HandlerType = handlerType;
@@ -421,6 +445,7 @@ public abstract class HandlerDescriptor
         Indexer = indexer;
         Filters = new DescriptorFiltersSet(validateFilter, stateKeepFilter, filters);
         InstanceFactory = instanceFactory ?? throw new ArgumentNullException(nameof(instanceFactory));
+        PrecompiledAttributes = precompiledAttributes;
     }
 
     /// <summary>
@@ -435,8 +460,9 @@ public abstract class HandlerDescriptor
     /// <param name="stateKeepFilter">Optional state keeping filter</param>
     /// <param name="serviceKey">The service key for dependency injection</param>
     /// <param name="instanceFactory">Factory for creating handler instances</param>
+    /// <param name="precompiledAttributes">Precompiled attributes</param>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="serviceKey"/> or <paramref name="instanceFactory"/> is null</exception>
-    protected HandlerDescriptor(DescriptorType type, Type handlerType, UpdateType updateType, DescriptorIndexer indexer, IFilter<Update>? validateFilter, IFilter<Update>[]? filters, IFilter<Update>? stateKeepFilter, object serviceKey, Func<UpdateHandlerBase> instanceFactory)
+    protected HandlerDescriptor(DescriptorType type, Type handlerType, UpdateType updateType, DescriptorIndexer indexer, IFilter<Update>? validateFilter, IFilter<Update>[]? filters, IFilter<Update>? stateKeepFilter, object serviceKey, Func<UpdateHandlerBase> instanceFactory, Attribute[]? precompiledAttributes = null)
     {
         Type = type;
         HandlerType = handlerType;
@@ -445,6 +471,7 @@ public abstract class HandlerDescriptor
         Filters = new DescriptorFiltersSet(validateFilter, stateKeepFilter, filters);
         ServiceKey = serviceKey ?? throw new ArgumentNullException(nameof(serviceKey));
         InstanceFactory = instanceFactory ?? throw new ArgumentNullException(nameof(instanceFactory));
+        PrecompiledAttributes = precompiledAttributes;
     }
 
     /// <summary>

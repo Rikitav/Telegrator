@@ -21,12 +21,18 @@ public static class HandlerInspector
     /// Gets handler's display name
     /// </summary>
     /// <param name="handlerType"></param>
+    /// <param name="precompiledAttributes">Precompiled attributes if available.</param>
     /// <returns></returns>
-    public static string? GetDisplayName(MemberInfo handlerType)
+    public static string? GetDisplayName(MemberInfo handlerType, Attribute[]? precompiledAttributes = null)
     {
         if (handlerType == null)
         {
             throw new ArgumentNullException(nameof(handlerType));
+        }
+
+        if (precompiledAttributes != null)
+        {
+            return precompiledAttributes.OfType<DisplayNameAttribute>().FirstOrDefault()?.DisplayName;
         }
 
         return handlerType.GetCustomAttribute<DisplayNameAttribute>()?.DisplayName;
@@ -36,15 +42,18 @@ public static class HandlerInspector
     /// Gets the handler attribute from the specified member info.
     /// </summary>
     /// <param name="handlerType">The member info representing the handler type.</param>
+    /// <param name="precompiledAttributes">Precompiled attributes if available</param>
     /// <returns>The handler attribute.</returns>
-    public static UpdateHandlerAttributeBase GetHandlerAttribute(MemberInfo handlerType)
+    public static UpdateHandlerAttributeBase GetHandlerAttribute(MemberInfo handlerType, Attribute[]? precompiledAttributes = null)
     {
         if (handlerType == null)
         {
             throw new ArgumentNullException(nameof(handlerType));
         }
 
-        List<UpdateHandlerAttributeBase> handlerAttrs = handlerType.GetCustomAttributes<UpdateHandlerAttributeBase>().ToList();
+        List<UpdateHandlerAttributeBase> handlerAttrs = precompiledAttributes != null
+            ? precompiledAttributes.OfType<UpdateHandlerAttributeBase>().ToList()
+            : handlerType.GetCustomAttributes<UpdateHandlerAttributeBase>().ToList();
 
         if (handlerAttrs.Count == 0)
         {
@@ -65,18 +74,20 @@ public static class HandlerInspector
     /// Gets the state keeper attribute from the specified member info, if present.
     /// </summary>
     /// <param name="handlerType">The member info representing the handler type.</param>
+    /// <param name="precompiledAttributes">Precompiled attributes if available</param>
     /// <returns>The state keeper attribute, or null if not present.</returns>
-    public static IFilter<Update>? GetStateKeeperAttribute(MemberInfo handlerType)
+    public static IFilter<Update>? GetStateKeeperAttribute(MemberInfo handlerType, Attribute[]? precompiledAttributes = null)
     {
         if (handlerType == null)
             throw new ArgumentNullException(nameof(handlerType));
 
-        Attribute? stateAttr = handlerType.GetCustomAttributes()
-            .FirstOrDefault(attr =>
-            {
-                Type type = attr.GetType();
-                return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(StateAttribute<,>);
-            });
+        IEnumerable<Attribute> attrs = precompiledAttributes != null ? precompiledAttributes : handlerType.GetCustomAttributes();
+
+        Attribute? stateAttr = attrs.FirstOrDefault(attr =>
+        {
+            Type type = attr.GetType();
+            return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(StateAttribute<,>);
+        });
 
         return stateAttr as IFilter<Update>;
     }
@@ -86,13 +97,16 @@ public static class HandlerInspector
     /// </summary>
     /// <param name="handlerType">The member info representing the handler type.</param>
     /// <param name="validUpdType">The valid update type.</param>
+    /// <param name="precompiledAttributes">Precompiled attributes if available</param>
     /// <returns>An enumerable of filter attributes.</returns>
-    public static IEnumerable<IFilter<Update>> GetFilterAttributes(MemberInfo handlerType, UpdateType validUpdType)
+    public static IEnumerable<IFilter<Update>> GetFilterAttributes(MemberInfo handlerType, UpdateType validUpdType, Attribute[]? precompiledAttributes = null)
     {
         if (handlerType == null)
             throw new ArgumentNullException(nameof(handlerType));
 
-        List<UpdateFilterAttributeBase> filters = handlerType.GetCustomAttributes<UpdateFilterAttributeBase>().ToList();
+        List<UpdateFilterAttributeBase> filters = precompiledAttributes != null
+            ? precompiledAttributes.OfType<UpdateFilterAttributeBase>().ToList()
+            : handlerType.GetCustomAttributes<UpdateFilterAttributeBase>().ToList();
 
         UpdateFilterAttributeBase? invalidFilter = filters.FirstOrDefault(f => !f.AllowedTypes.Contains(validUpdType));
         if (invalidFilter != null)
@@ -123,26 +137,28 @@ public static class HandlerInspector
     /// Inspects the handler for both self-processing (implements interfaces) and typed processing (uses attributes).
     /// </summary>
     /// <param name="handlerType">The type of the handler to inspect.</param>
+    /// <param name="precompiledAttributes">Precompiled attributes if available</param>
     /// <returns>A <see cref="DescriptorAspectsSet"/> containing the aspects configuration.</returns>
-    public static DescriptorAspectsSet GetAspects(Type handlerType)
+    public static DescriptorAspectsSet GetAspects(Type handlerType, Attribute[]? precompiledAttributes = null)
     {
         if (handlerType == null)
             throw new ArgumentNullException(nameof(handlerType));
 
-        Type? typedPre = GetGenericArgumentFromOpenGenericAttribute(handlerType, typeof(BeforeExecutionAttribute<>));
-        Type? typedPost = GetGenericArgumentFromOpenGenericAttribute(handlerType, typeof(AfterExecutionAttribute<>));
+        Type? typedPre = GetGenericArgumentFromOpenGenericAttribute(handlerType, typeof(BeforeExecutionAttribute<>), precompiledAttributes);
+        Type? typedPost = GetGenericArgumentFromOpenGenericAttribute(handlerType, typeof(AfterExecutionAttribute<>), precompiledAttributes);
 
         return new DescriptorAspectsSet(typedPre, typedPost);
     }
 
-    private static Type? GetGenericArgumentFromOpenGenericAttribute(Type handlerType, Type openGenericAttributeType)
+    private static Type? GetGenericArgumentFromOpenGenericAttribute(Type handlerType, Type openGenericAttributeType, Attribute[]? precompiledAttributes = null)
     {
-        Attribute? attribute = handlerType.GetCustomAttributes()
-            .FirstOrDefault(attr =>
-            {
-                Type type = attr.GetType();
-                return type.IsGenericType && type.GetGenericTypeDefinition() == openGenericAttributeType;
-            });
+        IEnumerable<Attribute> attrs = precompiledAttributes != null ? precompiledAttributes : handlerType.GetCustomAttributes();
+
+        Attribute? attribute = attrs.FirstOrDefault(attr =>
+        {
+            Type type = attr.GetType();
+            return type.IsGenericType && type.GetGenericTypeDefinition() == openGenericAttributeType;
+        });
 
         return attribute?.GetType().GetGenericArguments().FirstOrDefault();
     }

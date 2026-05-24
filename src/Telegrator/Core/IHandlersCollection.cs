@@ -44,8 +44,9 @@ public interface IHandlersCollection
     /// Creates a class handler descriptor for the specified handler type.
     /// </summary>
     /// <param name="handlerType">The type of the handler.</param>
+    /// <param name="precompiledAttributes">Precompiled attributes</param>
     /// <returns>A new <see cref="HandlerDescriptor"/>.</returns>
-    public HandlerDescriptor CreateClassDescriptor(Type handlerType);
+    public HandlerDescriptor CreateClassDescriptor(Type handlerType, Attribute[]? precompiledAttributes = null);
 
     /// <summary>
     /// Adds a <see cref="HandlerDescriptor"/> to the collection and returns the updated collection.

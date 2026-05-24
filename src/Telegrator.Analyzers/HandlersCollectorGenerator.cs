@@ -10,7 +10,7 @@ namespace Telegrator.Analyzers;
 [Generator(LanguageNames.CSharp)]
 public class HandlersCollectorGenerator : IIncrementalGenerator
 {
-    internal record class HandlerRegistrationModel(string FullClassName, bool IsValid);
+    internal record class HandlerRegistrationModel(string FullClassName, ImmutableArray<string> Attributes, bool IsValid);
 
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
@@ -52,11 +52,22 @@ public class HandlersCollectorGenerator : IIncrementalGenerator
         if (symbol == null)
             return null!;
 
-        if (symbol.DeclaredAccessibility == Accessibility.Private)
-            return null!;
-
         string fullTypeName = symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-        return new HandlerRegistrationModel(fullTypeName, isValid);
+
+        var attributesList = new List<string>();
+        foreach (var attr in symbol.GetAttributes())
+        {
+            if (attr.AttributeClass == null)
+                continue;
+
+            string attrType = attr.AttributeClass.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+            string args = string.Join(", ", attr.ConstructorArguments.Select(a => a.ToCSharpString()));
+            string named = string.Join(", ", attr.NamedArguments.Select(n => $"{n.Key} = {n.Value.ToCSharpString()}"));
+            string initString = $"new {attrType}({args})" + (string.IsNullOrEmpty(named) ? "" : $" {{ {named} }}");
+            attributesList.Add(initString);
+        }
+
+        return new HandlerRegistrationModel(fullTypeName, attributesList.ToImmutableArray(), isValid);
     }
 
     private static void Execute(SourceProductionContext context, ImmutableArray<HandlerRegistrationModel> handlers)
@@ -65,21 +76,17 @@ public class HandlersCollectorGenerator : IIncrementalGenerator
             return;
 
         List<StatementSyntax> statements = [];
+        List<string> foundHandlersNames = [];
         foreach (HandlerRegistrationModel handler in handlers.Distinct())
         {
             context.CancellationToken.ThrowIfCancellationRequested();
 
-            TypeSyntax typeArg = SyntaxFactory.ParseTypeName(handler.FullClassName);
-            GenericNameSyntax addHandlerMethod = SyntaxFactory.GenericName(SyntaxFactory.Identifier("AddHandler"))
-                .WithTypeArgumentList(SyntaxFactory.TypeArgumentList(SyntaxFactory.SingletonSeparatedList(typeArg)));
+            foundHandlersNames.Add(handler.FullClassName);
 
-            MemberAccessExpressionSyntax memberAccess = SyntaxFactory.MemberAccessExpression(
-                SyntaxKind.SimpleMemberAccessExpression,
-                SyntaxFactory.IdentifierName("handlers"),
-                addHandlerMethod);
+            string attrsArr = "new System.Attribute[] { " + string.Join(", ", handler.Attributes) + " }";
 
-            InvocationExpressionSyntax invocation = SyntaxFactory.InvocationExpression(memberAccess);
-            statements.Add(SyntaxFactory.ExpressionStatement(invocation));
+            string code = $"handlers.AddDescriptor(handlers.CreateClassDescriptor(typeof({handler.FullClassName}), {attrsArr}));";
+            statements.Add(SyntaxFactory.ParseStatement(code));
         }
 
         statements.Add(SyntaxFactory.ReturnStatement(SyntaxFactory.IdentifierName("handlers")));
@@ -87,10 +94,22 @@ public class HandlersCollectorGenerator : IIncrementalGenerator
             .WithModifiers(SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.ThisKeyword)))
             .WithType(SyntaxFactory.ParseTypeName("IHandlersCollection"));
 
-        SyntaxTriviaList methodTrivia = SyntaxFactory.ParseLeadingTrivia(
-            "/// <summary>\n" +
-            "/// Collects all generated Telegrator handlers statically to support Native AOT compilation.\n" +
-            "/// </summary>\n");
+        StringBuilder summaryBuilder = new StringBuilder();
+        summaryBuilder.AppendLine("/// <summary>");
+        summaryBuilder.AppendLine("/// Collects all generated Telegrator handlers statically to support Native AOT compilation.");
+        summaryBuilder.AppendLine("/// <br/>");
+        summaryBuilder.AppendLine("/// Found handlers:");
+        summaryBuilder.AppendLine("/// <list type=\"bullet\">");
+        foreach (string name in foundHandlersNames)
+        {
+            // remove global:: if present to make see cref work nicer
+            string docName = name.StartsWith("global::") ? name.Substring(8) : name;
+            summaryBuilder.AppendLine($"/// <item><description><see cref=\"{docName}\"/></description></item>");
+        }
+        summaryBuilder.AppendLine("/// </list>");
+        summaryBuilder.AppendLine("/// </summary>");
+
+        SyntaxTriviaList methodTrivia = SyntaxFactory.ParseLeadingTrivia(summaryBuilder.ToString());
 
         MethodDeclarationSyntax methodDeclaration = SyntaxFactory.MethodDeclaration(SyntaxFactory.ParseTypeName("IHandlersCollection"), "CollectHandlers")
             .WithModifiers(SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.PublicKeyword), SyntaxFactory.Token(SyntaxKind.StaticKeyword)))

@@ -10,8 +10,8 @@ namespace Telegrator.Tests;
 
 internal static class Program
 {
-    [AnyUpdateHandler]
-    private sealed class DummyUpdateHandler : AnyUpdateHandler
+    [AnyUpdateHandler(Priority = 100)]
+    public sealed class DummyUpdateHandler : AnyUpdateHandler
     {
         public override Task<Result> Execute(IHandlerContainer<Update> container, CancellationToken cancellation)
             => throw new NotImplementedException();
