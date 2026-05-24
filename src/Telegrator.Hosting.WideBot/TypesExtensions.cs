@@ -91,68 +91,25 @@ public static class HandlersExtensions
 public static class WideHostBuilderExtensions
 {
     /// <summary>
-    /// Replaces TelegramBotHostBuilder. Configures DI, options, and handlers.
+    /// Registers Telegrator and configures it to receive updates via long-polling using WTelegramBotClient.
     /// </summary>
-    public static IHostApplicationBuilder AddWideTelegrator(this IHostApplicationBuilder builder, Func<IServiceProvider, DbConnection> dbConnectionFactory, Action<ITelegramBotHostBuilder>? action = null, TelegratorOptions? options = null, IHandlersCollection? handlers = null)
+    public static ITelegramBotHostBuilder WithWide(this ITelegramBotHostBuilder builder, Func<IServiceProvider, DbConnection> dbConnectionFactory)
     {
-        AddWideTelegratorInternal(builder.Services, builder.Configuration, builder.Properties, dbConnectionFactory, ref handlers, options);
-        action?.Invoke(new TelegramBotHostBuilder(builder, handlers));
-        return builder;
-    }
+        if (builder.Services.Any(srvc => srvc.ServiceType == typeof(HostedUpdateReceiver)))
+            throw new InvalidOperationException("`HostedUpdateReceiver` found in services. WideHost extension is not compatible with default long-polling receiver. Please, remove `WithPolling` invocation from your Host configuration.");
 
-    /// <summary>
-    /// Replaces TelegramBotHostBuilder. Configures DI, options, and handlers.
-    /// </summary>
-    public static IHostApplicationBuilder AddWideTelegrator(this IHostApplicationBuilder builder, Func<IServiceProvider, DbConnection> dbConnectionFactory, TelegratorOptions? options = null, IHandlersCollection? handlers = null)
-    {
-        AddWideTelegratorInternal(builder.Services, builder.Configuration, builder.Properties, dbConnectionFactory, ref handlers, options);
-        return builder;
-    }
+        if (builder.Services.Any(srvc => srvc.ServiceType.Name == "HostedUpdateWebhooker"))
+            throw new InvalidOperationException("`HostedUpdateWebhooker` found in services. WideHost extension is not compatible with webhooking yet. Please, remove `WithWeb` invocation from your Host configuration.");
 
-    /// <summary>
-    /// Replaces TelegramBotHostBuilder. Configures DI, options, and handlers.
-    /// </summary>
-    internal static void AddWideTelegratorInternal(IServiceCollection services, IConfiguration configuration, IDictionary<object, object> properties, Func<IServiceProvider, DbConnection> dbConnectionFactory, [NotNull] ref IHandlersCollection? handlers, TelegratorOptions? options = null)
-    {
-        if (services.Any(srvc => srvc.ServiceType == typeof(HostedUpdateReceiver)))
-            throw new InvalidOperationException("`HostedUpdateReceiver` found in services. WideHost extension is not compatible with default long-polling receiver. Please, remove `AddTelegrator` invocation from your Host configuration.");
-
-        if (services.Any(srvc => srvc.ServiceType.Name == "HostedUpdateWebhooker"))
-            throw new InvalidOperationException("`HostedUpdateWebhooker` found in services. WideHost extension is not compatible with webhooking yet. Please, remove `AddWebTelegrator` invocation from your Host configuration.");
-
-        if (options == null)
+        if (!builder.Services.Any(srvc => srvc.ServiceType == typeof(IOptions<WTelegramBotClientOptions>)))
         {
-            options = configuration.GetSection(nameof(TelegratorOptions)).Get<TelegratorOptions>();
-            if (options == null)
-                throw new MissingMemberException("Auto configuration disabled, yet no options of type 'TelegratorOptions' was registered. This configuration is runtime required!");
-        }
-
-        CancellationTokenSource globallCancell = new CancellationTokenSource();
-        options.GlobalCancellationToken = globallCancell.Token;
-        services.AddSingleton(Options.Create(options));
-        services.AddKeyedSingleton("cancell", globallCancell);
-
-        if (handlers != null)
-        {
-            if (handlers is IHandlersManager manager)
-            {
-                ServiceDescriptor descriptor = new ServiceDescriptor(typeof(IHandlersProvider), manager);
-                services.Replace(descriptor);
-                services.AddSingleton(manager);
-            }
-        }
-
-        handlers ??= new HostHandlersCollection(services, options);
-        services.AddSingleton(handlers);
-        properties.Add(HostBuilderExtensions.HandlersCollectionPropertyKey, handlers);
-
-        if (!services.Any(srvc => srvc.ServiceType == typeof(IOptions<WTelegramBotClientOptions>)))
-        {
-            WideBotOptions? wideBotOptions = configuration.GetSection(nameof(WideBotOptions)).Get<WideBotOptions>();
+            WideBotOptions? wideBotOptions = builder.Configuration.GetSection(nameof(WideBotOptions)).Get<WideBotOptions>();
             if (wideBotOptions == null)
                 throw new MissingMemberException("Auto configuration disabled, yet no options of type 'WideBotOptions' was registered. This configuration is runtime required!");
 
-            services.AddSingleton(provider =>
+            TelegratorOptions options = builder.Services.BuildServiceProvider().GetRequiredService<IOptions<TelegratorOptions>>().Value;
+
+            builder.Services.AddSingleton(provider =>
             {
                 IHostApplicationLifetime lifetime = provider.GetRequiredService<IHostApplicationLifetime>();
 
@@ -176,8 +133,8 @@ public static class WideHostBuilderExtensions
             });
         }
 
-        services.AddTelegramBotHostDefaults();
-        services.AddMTProtoUpdateReceiver();
+        builder.Services.AddMTProtoUpdateReceiver();
+        return builder;
     }
 }
 
@@ -214,7 +171,7 @@ public static class WideBotServiceCollectionExtensions
     }
 
     /// <summary>
-    /// Adds WTelegramBotClient 
+    /// Adds WTelegramBotClient
     /// </summary>
     /// <param name="services"></param>
     /// <param name="useHttp"></param>
@@ -265,7 +222,7 @@ public static class WideBotServiceCollectionExtensions
 public static class WideTelegramBotHostExtensions
 {
     /// <summary>
-    /// Replaces the initialization logic from TelegramBotWebHost constructor. 
+    /// Replaces the initialization logic from TelegramBotWebHost constructor.
     /// Initializes the bot and logs handlers on application startup.
     /// </summary>
     public static IHost UseWideTelegrator(this IHost botHost)

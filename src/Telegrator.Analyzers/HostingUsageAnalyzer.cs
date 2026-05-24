@@ -19,19 +19,19 @@ public class HostingUsageAnalyzer : DiagnosticAnalyzer
         isEnabledByDefault: true,
         customTags: new[] { WellKnownDiagnosticTags.CompilationEnd });
 
-    private static readonly DiagnosticDescriptor MissingUseTelegratorWebWarning = new(
+    private static readonly DiagnosticDescriptor MissingReceivingModeWarning = new(
         id: "TLG105",
-        title: "Missing UseTelegratorWeb call",
-        messageFormat: "AddTelegratorWeb was called but UseTelegratorWeb is missing. Ensure you call UseTelegratorWeb() on your built web host.",
+        title: "Missing receiving mode configuration",
+        messageFormat: "AddTelegrator was called but no receiving mode was configured. Ensure you call WithPolling(), WithWeb(), or WithWide().",
         category: "Telegrator.Hosting",
         defaultSeverity: DiagnosticSeverity.Warning,
         isEnabledByDefault: true,
         customTags: new[] { WellKnownDiagnosticTags.CompilationEnd });
 
-    private static readonly DiagnosticDescriptor MismatchedHostingMethodsWarning = new(
+    private static readonly DiagnosticDescriptor MismatchedReceivingModesWarning = new(
         id: "TLG106",
-        title: "Mismatched Telegrator hosting methods",
-        messageFormat: "Do not mix {0} and {1}. Use matching Add and Use methods (e.g. AddTelegrator with UseTelegrator, or AddTelegratorWeb with UseTelegratorWeb).",
+        title: "Mismatched Telegrator receiving modes",
+        messageFormat: "Do not mix {0} and {1}. Choose only one receiving mode for the bot.",
         category: "Telegrator.Hosting",
         defaultSeverity: DiagnosticSeverity.Warning,
         isEnabledByDefault: true,
@@ -46,46 +46,16 @@ public class HostingUsageAnalyzer : DiagnosticAnalyzer
         isEnabledByDefault: true,
         customTags: new[] { WellKnownDiagnosticTags.CompilationEnd });
 
-    private static readonly DiagnosticDescriptor MissingAddTelegratorWebWarning = new(
-        id: "TLG108",
-        title: "Missing AddTelegratorWeb call",
-        messageFormat: "UseTelegratorWeb was called but AddTelegratorWeb is missing. Ensure you call AddTelegratorWeb() when configuring services.",
-        category: "Telegrator.Hosting",
-        defaultSeverity: DiagnosticSeverity.Warning,
-        isEnabledByDefault: true,
-        customTags: new[] { WellKnownDiagnosticTags.CompilationEnd });
-
-    private static readonly DiagnosticDescriptor MissingUseTelegratorWideWarning = new(
-        id: "TLG109",
-        title: "Missing UseWideTelegrator call",
-        messageFormat: "AddWideTelegrator was called but UseWideTelegrator is missing. Ensure you call UseWideTelegrator() on your built wide host.",
-        category: "Telegrator.Hosting",
-        defaultSeverity: DiagnosticSeverity.Warning,
-        isEnabledByDefault: true,
-        customTags: new[] { WellKnownDiagnosticTags.CompilationEnd });
-
-    private static readonly DiagnosticDescriptor MissingAddTelegratorWideWarning = new(
-        id: "TLG110",
-        title: "Missing AddWideTelegrator call",
-        messageFormat: "UseWideTelegrator was called but AddWideTelegrator is missing. Ensure you call AddWideTelegrator() when configuring services.",
-        category: "Telegrator.Hosting",
-        defaultSeverity: DiagnosticSeverity.Warning,
-        isEnabledByDefault: true,
-        customTags: new[] { WellKnownDiagnosticTags.CompilationEnd });
-
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
-        ImmutableArray.Create(MissingUseTelegratorWarning, MissingUseTelegratorWebWarning, MissingUseTelegratorWideWarning,
-                              MismatchedHostingMethodsWarning,
-                              MissingAddTelegratorWarning, MissingAddTelegratorWebWarning, MissingAddTelegratorWideWarning);
+        ImmutableArray.Create(MissingUseTelegratorWarning, MissingReceivingModeWarning, MismatchedReceivingModesWarning, MissingAddTelegratorWarning);
 
     private enum CallKind
     {
         Add,
-        AddWeb,
-        AddWide,
         Use,
-        UseWeb,
-        UseWide
+        WithPolling,
+        WithWeb,
+        WithWide
     }
 
     public override void Initialize(AnalysisContext context)
@@ -106,11 +76,10 @@ public class HostingUsageAnalyzer : DiagnosticAnalyzer
                 CallKind? kind = methodName switch
                 {
                     "AddTelegrator" => CallKind.Add,
-                    "AddTelegratorWeb" => CallKind.AddWeb,
-                    "AddWideTelegrator" => CallKind.AddWide,
                     "UseTelegrator" => CallKind.Use,
-                    "UseTelegratorWeb" => CallKind.UseWeb,
-                    "UseWideTelegrator" => CallKind.UseWide,
+                    "WithPolling" => CallKind.WithPolling,
+                    "WithWeb" => CallKind.WithWeb,
+                    "WithWide" => CallKind.WithWide,
                     _ => null
                 };
 
@@ -126,14 +95,11 @@ public class HostingUsageAnalyzer : DiagnosticAnalyzer
                 if (allInvocations.Count == 0)
                     return;
 
-                // 1. Глобальная проверка: убеждаемся, что для каждого типа Add существует парный тип Use в проекте
                 bool globalAdd = allInvocations.Any(x => x.Kind == CallKind.Add);
-                bool globalAddWeb = allInvocations.Any(x => x.Kind == CallKind.AddWeb);
-                bool globalAddWide = allInvocations.Any(x => x.Kind == CallKind.AddWide);
-
                 bool globalUse = allInvocations.Any(x => x.Kind == CallKind.Use);
-                bool globalUseWeb = allInvocations.Any(x => x.Kind == CallKind.UseWeb);
-                bool globalUseWide = allInvocations.Any(x => x.Kind == CallKind.UseWide);
+                bool globalWithPolling = allInvocations.Any(x => x.Kind == CallKind.WithPolling);
+                bool globalWithWeb = allInvocations.Any(x => x.Kind == CallKind.WithWeb);
+                bool globalWithWide = allInvocations.Any(x => x.Kind == CallKind.WithWide);
 
                 if (globalAdd && !globalUse)
                     ReportMissing(endContext, allInvocations, CallKind.Add, MissingUseTelegratorWarning);
@@ -141,17 +107,8 @@ public class HostingUsageAnalyzer : DiagnosticAnalyzer
                 if (globalUse && !globalAdd)
                     ReportMissing(endContext, allInvocations, CallKind.Use, MissingAddTelegratorWarning);
 
-                if (globalAddWeb && !globalUseWeb)
-                    ReportMissing(endContext, allInvocations, CallKind.AddWeb, MissingUseTelegratorWebWarning);
-
-                if (globalUseWeb && !globalAddWeb)
-                    ReportMissing(endContext, allInvocations, CallKind.UseWeb, MissingAddTelegratorWebWarning);
-
-                if (globalAddWide && !globalUseWide)
-                    ReportMissing(endContext, allInvocations, CallKind.AddWide, MissingUseTelegratorWideWarning);
-
-                if (globalUseWide && !globalAddWide)
-                    ReportMissing(endContext, allInvocations, CallKind.UseWide, MissingAddTelegratorWideWarning);
+                if (globalAdd && !globalWithPolling && !globalWithWeb && !globalWithWide)
+                    ReportMissing(endContext, allInvocations, CallKind.Add, MissingReceivingModeWarning);
 
                 var methodGroups = allInvocations.GroupBy(x => x.Method, SymbolEqualityComparer.Default);
 
@@ -159,31 +116,18 @@ public class HostingUsageAnalyzer : DiagnosticAnalyzer
                 {
                     var localKinds = group.Select(x => x.Kind).ToImmutableHashSet();
 
-                    bool hasAdd = localKinds.Contains(CallKind.Add);
-                    bool hasAddWeb = localKinds.Contains(CallKind.AddWeb);
-                    bool hasAddWide = localKinds.Contains(CallKind.AddWide);
+                    bool hasWithPolling = localKinds.Contains(CallKind.WithPolling);
+                    bool hasWithWeb = localKinds.Contains(CallKind.WithWeb);
+                    bool hasWithWide = localKinds.Contains(CallKind.WithWide);
 
-                    bool hasUse = localKinds.Contains(CallKind.Use);
-                    bool hasUseWeb = localKinds.Contains(CallKind.UseWeb);
-                    bool hasUseWide = localKinds.Contains(CallKind.UseWide);
+                    if (hasWithPolling && hasWithWeb)
+                        ReportMismatch(endContext, group, CallKind.WithPolling, CallKind.WithWeb, "WithPolling", "WithWeb");
 
-                    if (hasAdd && hasUseWeb)
-                        ReportMismatch(endContext, group, CallKind.Add, CallKind.UseWeb, "AddTelegrator", "UseTelegratorWeb");
-                    
-                    if (hasAdd && hasUseWide)
-                        ReportMismatch(endContext, group, CallKind.Add, CallKind.UseWide, "AddTelegrator", "UseWideTelegrator");
+                    if (hasWithPolling && hasWithWide)
+                        ReportMismatch(endContext, group, CallKind.WithPolling, CallKind.WithWide, "WithPolling", "WithWide");
 
-                    if (hasAddWeb && hasUse)
-                        ReportMismatch(endContext, group, CallKind.AddWeb, CallKind.Use, "AddTelegratorWeb", "UseTelegrator");
-                    
-                    if (hasAddWeb && hasUseWide)
-                        ReportMismatch(endContext, group, CallKind.AddWeb, CallKind.UseWide, "AddTelegratorWeb", "UseWideTelegrator");
-
-                    if (hasAddWide && hasUse)
-                        ReportMismatch(endContext, group, CallKind.AddWide, CallKind.Use, "AddWideTelegrator", "UseTelegrator");
-                    
-                    if (hasAddWide && hasUseWeb)
-                        ReportMismatch(endContext, group, CallKind.AddWide, CallKind.UseWeb, "AddWideTelegrator", "UseTelegratorWeb");
+                    if (hasWithWeb && hasWithWide)
+                        ReportMismatch(endContext, group, CallKind.WithWeb, CallKind.WithWide, "WithWeb", "WithWide");
                 }
             });
         });
@@ -201,7 +145,7 @@ public class HostingUsageAnalyzer : DiagnosticAnalyzer
     {
         foreach (var item in group.Where(x => x.Kind == kind1 || x.Kind == kind2))
         {
-            context.ReportDiagnostic(Diagnostic.Create(MismatchedHostingMethodsWarning, item.Loc, name1, name2));
+            context.ReportDiagnostic(Diagnostic.Create(MismatchedReceivingModesWarning, item.Loc, name1, name2));
         }
     }
 }

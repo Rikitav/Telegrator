@@ -33,8 +33,7 @@ internal static class Program
             Limit = 100
         });
 
-        builder.AddTelegrator(action: builder => builder.Handlers
-            .CollectHandlers());
+        builder.AddTelegrator().WithPolling();
 
         builder.Build()
             .UseTelegrator()
@@ -56,12 +55,12 @@ internal static class Program
             DropPendingUpdates = true,
         });
 
-        builder.AddWideTelegrator(
-            dbConnectionFactory: provider => new SqliteConnection($"Data Source={Environment.ExpandEnvironmentVariables("%AppData%\\Telegrator\\%wtgb.db")}"),
-            action: builder => builder.Handlers.CollectHandlers());
+        builder.AddTelegrator()
+            .WithWide(
+                dbConnectionFactory: provider => new SqliteConnection($"Data Source={Environment.ExpandEnvironmentVariables("%AppData%\\Telegrator\\%wtgb.db")}"));
 
         builder.Build()
-            .UseWideTelegrator()
+            .UseTelegrator()
             .Run();
     }
 
@@ -80,12 +79,11 @@ internal static class Program
             SecretToken = "MEDIC_GAMING"
         });
 
-        builder.AddTelegratorWeb(action: builder => builder.Handlers
-            .CollectHandlers());
-        
-        builder.Build()
-            .UseTelegratorWeb(dontMap: true)
-            .RemapWebhook("https://amazing-butt-sex.cloudpub.ru/")
-            .Run();
+        builder.AddTelegrator().WithWeb();
+
+        var app = builder.Build();
+        app.UseTelegrator();
+        app.RemapWebhook("https://amazing-butt-sex.cloudpub.ru/");
+        app.Run();
     }
 }

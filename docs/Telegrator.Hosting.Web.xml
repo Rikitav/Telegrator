@@ -45,19 +45,9 @@
             Provides extension methods for <see cref="T:Microsoft.Extensions.Hosting.IHostApplicationBuilder"/> to configure Telegrator.
             </summary>
         </member>
-        <member name="M:Telegrator.WebHostBuilderExtensions.AddTelegratorWeb(Microsoft.Extensions.Hosting.IHostApplicationBuilder,Telegrator.TelegratorOptions,Telegrator.Core.IHandlersCollection)">
+        <member name="M:Telegrator.WebHostBuilderExtensions.WithWeb(Telegrator.Hosting.ITelegramBotHostBuilder)">
             <summary>
-            Replaces TelegramBotWebHostBuilder. Configures DI, options, and handlers.
-            </summary>
-        </member>
-        <member name="M:Telegrator.WebHostBuilderExtensions.AddTelegratorWeb(Microsoft.Extensions.Hosting.IHostApplicationBuilder,Telegrator.TelegratorOptions,Telegrator.Core.IHandlersCollection,System.Action{Telegrator.Hosting.ITelegramBotHostBuilder})">
-            <summary>
-            Replaces TelegramBotWebHostBuilder. Configures DI, options, and handlers.
-            </summary>
-        </member>
-        <member name="M:Telegrator.WebHostBuilderExtensions.AddTelegratorWebInternal(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration,System.Collections.Generic.IDictionary{System.Object,System.Object},Telegrator.Core.IHandlersCollection@,Telegrator.TelegratorOptions)">
-            <summary>
-            Replaces TelegramBotWebHostBuilder. Configures DI, options, and handlers.
+            Registers Telegrator to receive updates via WebHooks.
             </summary>
         </member>
         <member name="T:Telegrator.WebServicesCollectionExtensions">
@@ -89,7 +79,7 @@
         </member>
         <member name="M:Telegrator.WebTelegramBotHostExtensions.UseTelegratorWeb``1(``0,System.Boolean)">
             <summary>
-            Replaces the initialization logic from TelegramBotWebHost constructor. 
+            Replaces the initialization logic from TelegramBotWebHost constructor.
             Initializes the bot and logs handlers on application startup.
             </summary>
         </member>

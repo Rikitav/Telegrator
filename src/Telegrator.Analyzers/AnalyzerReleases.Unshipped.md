@@ -19,6 +19,3 @@ TLG104 | Telegrator.Hosting | Warning | HostingUsageAnalyzer
 TLG105 | Telegrator.Hosting | Warning | HostingUsageAnalyzer
 TLG106 | Telegrator.Hosting | Warning | HostingUsageAnalyzer
 TLG107 | Telegrator.Hosting | Warning | HostingUsageAnalyzer
-TLG108 | Telegrator.Hosting | Warning | HostingUsageAnalyzer
-TLG109 | Telegrator.Hosting | Warning | HostingUsageAnalyzer
-TLG110 | Telegrator.Hosting | Warning | HostingUsageAnalyzer

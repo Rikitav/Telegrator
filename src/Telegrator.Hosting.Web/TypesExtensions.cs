@@ -20,75 +20,24 @@ namespace Telegrator;
 public static class WebHostBuilderExtensions
 {
     /// <summary>
-    /// Replaces TelegramBotWebHostBuilder. Configures DI, options, and handlers.
+    /// Registers Telegrator to receive updates via WebHooks.
     /// </summary>
-    public static IHostApplicationBuilder AddTelegratorWeb(this IHostApplicationBuilder builder, TelegratorOptions? options = null, IHandlersCollection? handlers = null)
+    public static ITelegramBotHostBuilder WithWeb(this ITelegramBotHostBuilder builder)
     {
-        AddTelegratorWebInternal(builder.Services, builder.Configuration, builder.Properties, ref handlers, options);
-        return builder;
-    }
+        if (builder.Services.Any(srvc => srvc.ServiceType == typeof(HostedUpdateReceiver)))
+            throw new InvalidOperationException("`HostedUpdateReceiver` found in services. WebHost extension is not compatible with long-polling receiving. Please, remove `WithPolling` invocation from your WebApp configuration.");
 
-    /// <summary>
-    /// Replaces TelegramBotWebHostBuilder. Configures DI, options, and handlers.
-    /// </summary>
-    public static IHostApplicationBuilder AddTelegratorWeb(this IHostApplicationBuilder builder, TelegratorOptions? options = null, IHandlersCollection? handlers = null, Action<ITelegramBotHostBuilder>? action = null)
-    {
-        AddTelegratorWebInternal(builder.Services, builder.Configuration, builder.Properties, ref handlers, options);
-        action?.Invoke(new TelegramBotHostBuilder(builder, handlers));
-        return builder;
-    }
-
-    /// <summary>
-    /// Replaces TelegramBotWebHostBuilder. Configures DI, options, and handlers.
-    /// </summary>
-    internal static void AddTelegratorWebInternal(IServiceCollection services, IConfiguration configuration, IDictionary<object, object> properties, [NotNull] ref IHandlersCollection? handlers, TelegratorOptions? options = null)
-    {
-        if (services.Any(srvc => srvc.ServiceType == typeof(HostedUpdateReceiver)))
-            throw new InvalidOperationException("`HostedUpdateReceiver` found in services. WebHost extension is not compatible with long-polling receiving. Please, remove `AddTelegrator` invocation from your WebApp configuration.");
-
-        if (options is null)
+        if (!builder.Services.Any(srvc => srvc.ServiceType == typeof(IOptions<WebhookerOptions>)))
         {
-            options = configuration.GetSection(nameof(TelegratorOptions)).Get<TelegratorOptions>();
-            if (options is null)
-                throw new MissingMemberException("Auto configuration disabled, yet no options of type 'TelegratorOptions' was registered. This configuration is runtime required!");
-        }
-
-        CancellationTokenSource globallCancell = new CancellationTokenSource();
-        options.GlobalCancellationToken = globallCancell.Token;
-        services.AddSingleton(Options.Create(options));
-        services.AddKeyedSingleton("cancell", globallCancell);
-
-        if (handlers is not null && handlers is IHandlersManager manager)
-        {
-            ServiceDescriptor descriptor = new ServiceDescriptor(typeof(IHandlersProvider), manager);
-            services.Replace(descriptor);
-            services.AddSingleton(manager);
-        }
-
-        handlers ??= new HostHandlersCollection(services, options);
-        services.AddSingleton(handlers);
-        properties.Add(HostBuilderExtensions.HandlersCollectionPropertyKey, handlers);
-
-        if (!services.Any(srvc => srvc.ServiceType == typeof(IOptions<WebhookerOptions>)))
-        {
-            WebhookerOptions? webhookerOptions = configuration.GetSection(nameof(WebhookerOptions)).Get<WebhookerOptions>();
+            WebhookerOptions? webhookerOptions = builder.Configuration.GetSection(nameof(WebhookerOptions)).Get<WebhookerOptions>();
             if (webhookerOptions == null)
                 throw new MissingMemberException("Auto configuration disabled, yet no options of type 'WebhookerOptions' was registered. This configuration is runtime required!");
 
-            services.AddSingleton(Options.Create(webhookerOptions));
+            builder.Services.AddSingleton(Options.Create(webhookerOptions));
         }
 
-        if (!services.Any(srvc => srvc.ImplementationType == typeof(IOptions<TelegramBotClientOptions>)))
-        {
-            services.AddSingleton(Options.Create(new TelegramBotClientOptions(options.Token, options.BaseUrl, options.UseTestEnvironment)
-            {
-                RetryCount = options.RetryCount,
-                RetryThreshold = options.RetryThreshold
-            }));
-        }
-
-        services.AddTelegramBotHostDefaults();
-        services.AddTelegramWebhook();
+        builder.Services.AddTelegramWebhook();
+        return builder;
     }
 }
 
@@ -130,7 +79,7 @@ public static class WebServicesCollectionExtensions
 public static class WebTelegramBotHostExtensions
 {
     /// <summary>
-    /// Replaces the initialization logic from TelegramBotWebHost constructor. 
+    /// Replaces the initialization logic from TelegramBotWebHost constructor.
     /// Initializes the bot and logs handlers on application startup.
     /// </summary>
     public static T UseTelegratorWeb<T>(this T botHost, bool dontMap = false) where T : IEndpointRouteBuilder, IHost
