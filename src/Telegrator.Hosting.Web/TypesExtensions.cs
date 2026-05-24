@@ -10,7 +10,6 @@ using Telegram.Bot;
 using Telegrator.Core;
 using Telegrator.Hosting;
 using Telegrator.Mediation;
-using Telegrator.Providers;
 
 namespace Telegrator;
 
@@ -19,6 +18,16 @@ namespace Telegrator;
 /// </summary>
 public static class WebHostBuilderExtensions
 {
+    private static WebhookerOptions ParseWebhookerOptions(IConfiguration configuration)
+    {
+        return new WebhookerOptions
+        {
+            WebhookUri = configuration["WebhookUri"],
+            DropPendingUpdates = bool.TryParse(configuration["DropPendingUpdates"], out bool dropPendingUpdates) && dropPendingUpdates,
+            SecretToken = configuration["SecretToken"]
+        };
+    }
+
     /// <summary>
     /// Registers Telegrator to receive updates via WebHooks.
     /// </summary>
@@ -29,10 +38,14 @@ public static class WebHostBuilderExtensions
 
         if (!builder.Services.Any(srvc => srvc.ServiceType == typeof(IOptions<WebhookerOptions>)))
         {
-            WebhookerOptions? webhookerOptions = builder.Configuration.GetSection(nameof(WebhookerOptions)).Get<WebhookerOptions>();
-            if (webhookerOptions == null)
-                throw new MissingMemberException("Auto configuration disabled, yet no options of type 'WebhookerOptions' was registered. This configuration is runtime required!");
+            IConfigurationSection section = builder.Configuration.GetSection(nameof(WebhookerOptions));
+            if (!section.Exists())
+                section = builder.Configuration.GetSection("Webhooker");
 
+            if (!section.Exists())
+                throw new MissingMemberException("Auto configuration enabled, yet no options of type 'WebhookerOptions' was registered. This configuration is runtime required!");
+
+            WebhookerOptions webhookerOptions = ParseWebhookerOptions(section);
             builder.Services.AddSingleton(Options.Create(webhookerOptions));
         }
 

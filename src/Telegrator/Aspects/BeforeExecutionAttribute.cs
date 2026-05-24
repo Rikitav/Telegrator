@@ -1,4 +1,6 @@
-﻿namespace Telegrator.Aspects;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Telegrator.Aspects;
 
 /// <summary>
 /// Attribute that specifies a pre-execution processor to be executed before the handler.
@@ -11,5 +13,6 @@ public class BeforeExecutionAttribute<T> : Attribute where T : IPreProcessor
     /// <summary>
     /// Gets the type of the pre-processor.
     /// </summary>
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicMethods)]
     public Type ProcessorType => typeof(T);
 }

@@ -30,7 +30,7 @@ public class HandlersCollection(TelegratorOptions? options) : IHandlersCollectio
     protected readonly TelegratorOptions? Options = options;
 
     /// <inheritdoc/>
-    public virtual HandlerDescriptor CreateClassDescriptor(Type handlerType, Attribute[]? precompiledAttributes = null)
+    public virtual HandlerDescriptor CreateClassDescriptor([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicMethods)] Type handlerType, Attribute[]? precompiledAttributes = null)
     {
         return new ClassHandlerDescriptor(DescriptorType.General, handlerType, dontInspect: false, precompiledAttributes);
     }

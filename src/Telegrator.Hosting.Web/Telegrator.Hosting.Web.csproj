@@ -8,6 +8,7 @@
 	<RootNamespace>Telegrator</RootNamespace>
 	<BaseOutputPath>..\..\bin</BaseOutputPath>
 	<DocumentationFile>..\..\docs\$(AssemblyName).xml</DocumentationFile>
+	<IsAotCompatible>True</IsAotCompatible>
 	  
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>

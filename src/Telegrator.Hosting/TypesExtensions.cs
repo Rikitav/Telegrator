@@ -18,6 +18,7 @@ using Telegrator.Logging;
 using Telegrator.Mediation;
 using Telegrator.Providers;
 using Telegrator.States;
+using static System.Collections.Specialized.BitVector32;
 
 namespace Telegrator;
 
@@ -38,10 +39,14 @@ public static class HostBuilderExtensions
     {
         if (!builder.Services.Any(srvc => srvc.ServiceType == typeof(IOptions<ReceiverOptions>)))
         {
-            ReceiverOptions? receiverOptions = builder.Configuration.GetSection(nameof(ReceiverOptions)).Get<ReceiverOptions>();
-            if (receiverOptions == null)
-                throw new MissingMemberException("Auto configuration disabled, yet no options of type 'ReceiverOptions' was registered. This configuration is runtime required!");
+            IConfigurationSection section = builder.Configuration.GetSection("Receiver");
+            if (!section.Exists())
+                section = builder.Configuration.GetSection(nameof(ReceiverOptions));
 
+            if (!section.Exists())
+                throw new MissingMemberException("Auto configuration enabled, yet no options of type 'ReceiverOptions' was registered. This configuration is runtime required!");
+
+            ReceiverOptions receiverOptions = ParseReceiverOptions(section);
             builder.Services.AddSingleton(Options.Create(receiverOptions));
         }
 
@@ -58,7 +63,49 @@ public static class HostBuilderExtensions
         return new TelegramBotHostBuilder(builder, handlers);
     }
 
+    private static TelegratorOptions ParseTelegratorOptions(IConfiguration configuration)
+    {
+        return new TelegratorOptions
+        {
+            Token = configuration[nameof(TelegratorOptions.Token)] ?? throw new MissingMemberException("Token is required."),
+            BaseUrl = configuration[nameof(TelegratorOptions.BaseUrl)],
+            UseTestEnvironment = bool.TryParse(configuration[nameof(TelegratorOptions.UseTestEnvironment)], out bool useTestEnvironment) ? useTestEnvironment : default(bool),
+            RetryThreshold = int.TryParse(configuration[nameof(TelegratorOptions.RetryThreshold)], out int retryThreshold) ? retryThreshold : default(int),
+            RetryCount = int.TryParse(configuration[nameof(TelegratorOptions.RetryCount)], out int retryCount) ? retryCount : default(int),
+            MaximumParallelWorkingHandlers = int.TryParse(configuration[nameof(TelegratorOptions.MaximumParallelWorkingHandlers)], out int maximumParallelWorkingHandlers) ? maximumParallelWorkingHandlers : default(int),
+            ExclusiveAwaitingHandlerRouting = bool.TryParse(configuration[nameof(TelegratorOptions.ExclusiveAwaitingHandlerRouting)], out bool exclusiveAwaitingHandlerRouting) ? exclusiveAwaitingHandlerRouting : default(bool),
+            ExceptIntersectingCommandAliases = bool.TryParse(configuration[nameof(TelegratorOptions.ExceptIntersectingCommandAliases)], out bool exceptIntersectingCommandAliases) ? exceptIntersectingCommandAliases : default(bool),
+        };
+    }
 
+    private static ReceiverOptions ParseReceiverOptions(IConfiguration configuration)
+    {
+        ReceiverOptions options = new ReceiverOptions();
+        if (int.TryParse(configuration["Offset"], out int offset))
+            options.Offset = offset;
+
+        if (int.TryParse(configuration["Limit"], out int limit))
+            options.Limit = limit;
+
+        if (bool.TryParse(configuration["DropPendingUpdates"], out bool dropPending))
+            options.DropPendingUpdates = dropPending;
+
+        IConfigurationSection allowedUpdatesSection = configuration.GetSection("AllowedUpdates");
+        if (allowedUpdatesSection.Exists())
+        {
+            List<UpdateType> updatesList = [];
+            foreach (IConfigurationSection child in allowedUpdatesSection.GetChildren())
+            {
+                if (Enum.TryParse<UpdateType>(child.Value, ignoreCase: true, out var updateType))
+                    updatesList.Add(updateType);
+            }
+
+            if (updatesList.Count > 0)
+                options.AllowedUpdates = updatesList.ToArray();
+        }
+
+        return options;
+    }
 
     /// <summary>
     /// Replaces TelegramBotHostBuilder. Configures DI, options, and handlers.
@@ -67,9 +114,14 @@ public static class HostBuilderExtensions
     {
         if (options == null)
         {
-            options = configuration.GetSection(nameof(TelegratorOptions)).Get<TelegratorOptions>();
-            if (options == null)
+            IConfigurationSection section = configuration.GetSection("Telegrator");
+            if (!section.Exists())
+                section = configuration.GetSection(nameof(TelegratorOptions));
+
+            if (!section.Exists())
                 throw new MissingMemberException("Auto configuration disabled, yet no options of type 'TelegratorOptions' was registered. This configuration is runtime required!");
+
+            options = ParseTelegratorOptions(section);
         }
 
         CancellationTokenSource globallCancell = new CancellationTokenSource();
@@ -93,10 +145,14 @@ public static class HostBuilderExtensions
 
         if (!services.Any(srvc => srvc.ServiceType == typeof(IOptions<ReceiverOptions>)))
         {
-            ReceiverOptions? receiverOptions = configuration.GetSection(nameof(ReceiverOptions)).Get<ReceiverOptions>();
-            if (receiverOptions == null)
-                throw new MissingMemberException("Auto configuration disabled, yet no options of type 'ReceiverOptions' was registered. This configuration is runtime required!");
+            IConfigurationSection section = configuration.GetSection("Receiver");
+            if (!section.Exists())
+                section = configuration.GetSection(nameof(ReceiverOptions));
+            
+            if (!section.Exists())
+                throw new MissingMemberException("Auto configuration enabled, yet no options of type 'ReceiverOptions' was registered. This configuration is runtime required!");
 
+            ReceiverOptions receiverOptions = ParseReceiverOptions(section);
             services.AddSingleton(Options.Create(receiverOptions));
         }
 
@@ -151,7 +207,7 @@ public static class HostServicesCollectionExtensions
     /// <typeparam name="TStorage"></typeparam>
     /// <param name="services"></param>
     /// <returns></returns>
-    public static IServiceCollection AddStateStorage<TStorage>(this IServiceCollection services) where TStorage : IStateStorage
+    public static IServiceCollection AddStateStorage<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TStorage>(this IServiceCollection services) where TStorage : IStateStorage
     {
         services.Replace(new ServiceDescriptor(typeof(IStateStorage), typeof(TStorage), ServiceLifetime.Singleton));
         return services;

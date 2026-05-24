@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using Telegram.Bot.Types.Enums;
 using Telegrator.Annotations;
 using Telegrator.Core;
@@ -109,13 +110,13 @@ public abstract class HandlersManagerBase(TelegratorOptions options) : IHandlers
     }
 
     /// <inheritdoc/>
-    public bool TryGetDescriptorList(UpdateType updateType, out HandlerDescriptorList? list)
+    public bool TryGetDescriptorList(UpdateType updateType, [NotNullWhen(true)] out HandlerDescriptorList? list)
     {
         return _handlersDictionary.TryGetValue(updateType, out list);
     }
 
     /// <inheritdoc/>
-    public virtual HandlerDescriptor CreateClassDescriptor(Type handlerType, Attribute[]? precompiledAttributes = null)
+    public virtual HandlerDescriptor CreateClassDescriptor([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicMethods)] Type handlerType, Attribute[]? precompiledAttributes = null)
     {
         return new ClassHandlerDescriptor(DescriptorType.General, handlerType, dontInspect: false, precompiledAttributes);
     }

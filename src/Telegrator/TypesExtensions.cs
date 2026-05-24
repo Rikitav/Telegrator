@@ -432,29 +432,6 @@ public static partial class HandlersCollectionExtensions
         "Ocelot", "BouncyCastle", "IdentityModel", "Telegrator"
     ];
 
-    /*
-    /// <summary>
-    /// Collects all handlers from current app domain.
-    /// Scans for handlers exported by analyzer into class `Telegrator.Analyzers.AnalyzerExport` in each assembly and registers them to the collection.
-    /// </summary>
-    /// <param name="handlers"></param>
-    /// <returns></returns>
-    [Obsolete("This method uses reflection and would not work in AOT scenarios. Use `CollectHandlers` instead.")]
-    public static IHandlersCollection CollectHandlers(this IHandlersCollection handlers)
-    {
-        const string exportClassName = "Telegrator.Analyzers.AnalyzerExport";
-        AppDomain.CurrentDomain.GetAssemblies()
-            .Select(ass => ass.GetType(exportClassName))
-            .Squeeze()
-            .SelectMany(t => t.GetFields())
-            .Select(f => f.GetValue(null) as Type)
-            .Squeeze()
-            .ForEach(v => handlers.AddHandler(v));
-
-        return handlers;
-    }
-    */
-
     /// <summary>
     /// Collects all public handlers from the current app domain.
     /// Scans for types that implement handlers and adds them to the collection.
@@ -541,7 +518,7 @@ public static partial class HandlersCollectionExtensions
     /// <param name="handlerType">The type of handler to add.</param>
     /// <returns>This collection instance for method chaining.</returns>
     /// <exception cref="Exception">Thrown when the type is not a valid handler implementation.</exception>
-    public static IHandlersCollection AddHandler(this IHandlersCollection handlers, Type handlerType)
+    public static IHandlersCollection AddHandler(this IHandlersCollection handlers, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicMethods)] Type handlerType)
     {
         if (!handlerType.IsHandlerImplementation())
             throw new ArgumentException($"Type {handlerType.FullName} is not a valid handler implementation.");

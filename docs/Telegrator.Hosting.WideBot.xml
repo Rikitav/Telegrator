@@ -80,6 +80,15 @@
             Provides extensions memebrs for <see cref="T:Telegrator.Core.Handlers.UpdateHandlerBase"/> for easy access to Wider bot functions and update
             </summary>
         </member>
+        <member name="M:Telegrator.HandlersExtensions.GetFieldValue``1(``0,System.String)">
+            <summary>
+            Gets the value of a field with the specified name from the given object using reflection.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="obj"></param>
+            <param name="fieldName"></param>
+            <returns></returns>
+        </member>
         <member name="M:Telegrator.HandlersExtensions.get_WClient``1(Telegrator.Core.Handlers.AbstractUpdateHandler{``0})">
             <inheritdoc cref="P:Telegrator.HandlersExtensions.&lt;G&gt;$F89AF16C011F73161937A1614DCDDD7A`1.WClient"/>
         </member>

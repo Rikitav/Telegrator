@@ -12,7 +12,7 @@ public class WebhookerOptions
     /// Gets or sets HTTPS URL to send updates to. Use an empty string to remove webhook integration
     /// </summary>
     [StringSyntax(StringSyntaxAttribute.Uri)]
-    public string WebhookUri { get; set; } = string.Empty;
+    public string? WebhookUri { get; set; } = null;
 
     /// <summary>
     /// A secret token to be sent in a header “X-Telegram-Bot-Api-Secret-Token” in every webhook request, 1-256 characters.

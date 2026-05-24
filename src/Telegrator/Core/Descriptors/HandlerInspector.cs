@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using Telegram.Bot.Types;
@@ -139,7 +140,7 @@ public static class HandlerInspector
     /// <param name="handlerType">The type of the handler to inspect.</param>
     /// <param name="precompiledAttributes">Precompiled attributes if available</param>
     /// <returns>A <see cref="DescriptorAspectsSet"/> containing the aspects configuration.</returns>
-    public static DescriptorAspectsSet GetAspects(Type handlerType, Attribute[]? precompiledAttributes = null)
+    public static DescriptorAspectsSet GetAspects([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicMethods)] Type handlerType, Attribute[]? precompiledAttributes = null)
     {
         if (handlerType == null)
             throw new ArgumentNullException(nameof(handlerType));
@@ -150,7 +151,7 @@ public static class HandlerInspector
         return new DescriptorAspectsSet(typedPre, typedPost);
     }
 
-    private static Type? GetGenericArgumentFromOpenGenericAttribute(Type handlerType, Type openGenericAttributeType, Attribute[]? precompiledAttributes = null)
+    private static Type? GetGenericArgumentFromOpenGenericAttribute([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicMethods)] Type handlerType, Type openGenericAttributeType, Attribute[]? precompiledAttributes = null)
     {
         IEnumerable<Attribute> attrs = precompiledAttributes != null ? precompiledAttributes : handlerType.GetCustomAttributes();
 

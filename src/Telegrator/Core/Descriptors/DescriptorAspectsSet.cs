@@ -1,4 +1,5 @@
-﻿using Telegrator.Aspects;
+﻿using System.Diagnostics.CodeAnalysis;
+using Telegrator.Aspects;
 using Telegrator.Core.Handlers;
 
 namespace Telegrator.Core.Descriptors;
@@ -13,11 +14,13 @@ public sealed class DescriptorAspectsSet
     /// <summary>
     /// Gets the type of the external pre-processor, if specified via <see cref="BeforeExecutionAttribute{T}"/>.
     /// </summary>
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicMethods)]
     public Type? TypedPre { get; private set; }
 
     /// <summary>
     /// Gets the type of the external post-processor, if specified via <see cref="AfterExecutionAttribute{T}"/>.
     /// </summary>
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicMethods)]
     public Type? TypedPost { get; private set; }
 
     /// <summary>
@@ -25,7 +28,9 @@ public sealed class DescriptorAspectsSet
     /// </summary>
     /// <param name="typedPre">The type of external pre-processor, if any.</param>
     /// <param name="typedPost">The type of external post-processor, if any.</param>
-    public DescriptorAspectsSet(Type? typedPre, Type? typedPost)
+    public DescriptorAspectsSet(
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicMethods)] Type? typedPre,
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicMethods)] Type? typedPost)
     {
         TypedPre = typedPre;
         TypedPost = typedPost;

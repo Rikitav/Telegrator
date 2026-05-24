@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Telegrator.Core;
 using Telegrator.Core.Filters;
@@ -179,7 +180,7 @@ public static partial class ReflectionExtensions
     /// </summary>
     /// <param name="type">The type to check.</param>
     /// <returns>True if the type implements ICustomDescriptorsProvider; otherwise, false.</returns>
-    public static bool IsCustomDescriptorsProvider(this Type type)
+    public static bool IsCustomDescriptorsProvider([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] this Type type)
         => type.GetInterface(nameof(ICustomDescriptorsProvider)) != null;
 
     /// <summary>
@@ -187,7 +188,7 @@ public static partial class ReflectionExtensions
     /// </summary>
     /// <param name="type"></param>
     /// <returns></returns>
-    public static bool IsFilterType(this Type type)
+    public static bool IsFilterType([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] this Type type)
         => type.IsAssignableToGenericType(typeof(IFilter<>));
 
     /// <summary>
@@ -211,16 +212,16 @@ public static partial class ReflectionExtensions
     /// </summary>
     /// <param name="type"></param>
     /// <returns></returns>
-    public static bool HasParameterlessCtor(this Type type)
-        => type.GetConstructors().Any(ctor => ctor.GetParameters().Length == 0);
+    public static bool HasParameterlessCtor([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] this Type type)
+        => type.GetConstructor(Type.EmptyTypes) != null;
 
     /// <summary>
     /// Checks is <paramref name="type"/> has public properties
     /// </summary>
     /// <param name="type"></param>
     /// <returns></returns>
-    public static bool HasPublicProperties(this Type type)
-        => type.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).Any(prop => prop.Name != "IsCollectible");
+    public static bool HasPublicProperties([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)] this Type type)
+        => type.GetProperties(BindingFlags.Instance | BindingFlags.Public).Any(prop => prop.Name != "IsCollectible");
 
     /// <summary>
     /// Determines whether an instance of a specified type can be assigned to an instance of the current type
@@ -228,7 +229,8 @@ public static partial class ReflectionExtensions
     /// <param name="givenType"></param>
     /// <param name="genericType"></param>
     /// <returns></returns>
-    public static bool IsAssignableToGenericType(this Type givenType, Type genericType)
+    public static bool IsAssignableToGenericType(
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.Interfaces)] this Type givenType, Type genericType)
     {
         if (givenType.GetInterfaces().Any(inter => inter.IsGenericType && inter.GetGenericTypeDefinition() == genericType))
             return true;

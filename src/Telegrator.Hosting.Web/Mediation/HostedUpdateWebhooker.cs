@@ -77,8 +77,11 @@ public class HostedUpdateWebhooker : IHostedService
     /// <param name="routeBuilder"></param>
     internal void MapWebhook(IEndpointRouteBuilder routeBuilder)
     {
+        if (string.IsNullOrEmpty(_options.WebhookUri))
+            return;
+
         string pattern = new UriBuilder(_options.WebhookUri).Path;
-        routeBuilder.MapPost(pattern, (Delegate)ReceiveUpdate);
+        routeBuilder.MapPost(pattern, (RequestDelegate)ReceiveUpdate);
     }
 
     private async void StartInternal(CancellationToken cancellationToken)
@@ -88,6 +91,9 @@ public class HostedUpdateWebhooker : IHostedService
 
     private async Task SetWebhook(CancellationToken cancellationToken)
     {
+        if (string.IsNullOrEmpty(_options.WebhookUri))
+            return;
+
         await _botClient.SetWebhook(
             url: _options.WebhookUri,
             maxConnections: _options.MaxConnections,
@@ -97,26 +103,27 @@ public class HostedUpdateWebhooker : IHostedService
             cancellationToken: cancellationToken);
     }
 
-    private async Task<IResult> ReceiveUpdate(HttpContext ctx)
+    private Task ReceiveUpdate(HttpContext ctx)
     {
         if (_options.SecretToken != null)
         {
             if (!ctx.Request.Headers.TryGetValue(SecretTokenHeader, out StringValues strings))
-                return Results.BadRequest();
+                return Task.FromResult(Results.BadRequest());
 
             string? secret = strings.SingleOrDefault();
             if (secret == null)
-                return Results.BadRequest();
+                return Task.FromResult(Results.BadRequest());
 
             if (_options.SecretToken != secret)
-                return Results.StatusCode(401);
+                return Task.FromResult(Results.StatusCode(401));
         }
 
-        Update? update = await JsonSerializer.DeserializeAsync<Update>(ctx.Request.Body, JsonBotAPI.Options, ctx.RequestAborted);
+        ValueTask<Update?> updateTask = JsonSerializer.DeserializeAsync(ctx.Request.Body, JsonBotSerializerContext.Default.Update, ctx.RequestAborted);
+        Update? update = updateTask.ConfigureAwait(false).GetAwaiter().GetResult();
         if (update is not { Id: > 0 })
-            return Results.BadRequest();
+            return Task.FromResult(Results.BadRequest());
 
-        await _updateRouter.HandleUpdateAsync(_botClient, update, ctx.RequestAborted);
-        return Results.Ok();
+        _updateRouter.HandleUpdateAsync(_botClient, update, ctx.RequestAborted).ConfigureAwait(false).GetAwaiter().GetResult();
+        return Task.FromResult(Results.Ok());
     }
 }

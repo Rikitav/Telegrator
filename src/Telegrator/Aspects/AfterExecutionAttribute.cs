@@ -1,4 +1,6 @@
-﻿namespace Telegrator.Aspects;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Telegrator.Aspects;
 
 /// <summary>
 /// Attribute that specifies a post-execution processor to be executed after the handler.
@@ -11,5 +13,6 @@ public class AfterExecutionAttribute<T> : Attribute where T : IPostProcessor
     /// <summary>
     /// Gets the type of the post-processor.
     /// </summary>
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicMethods)]
     public Type ProcessorType => typeof(T);
 }

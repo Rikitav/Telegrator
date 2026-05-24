@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using System.Diagnostics.CodeAnalysis;
 using Telegrator.Core;
 using Telegrator.Core.Descriptors;
 
@@ -10,7 +11,9 @@ public class HostHandlersCollection(IServiceCollection hostServiceColletion, Tel
     private readonly IServiceCollection Services = hostServiceColletion;
 
     /// <inheritdoc/>
-    public override HandlerDescriptor CreateClassDescriptor(Type handlerType, Attribute[]? precompiledAttributes = null)
+    public override HandlerDescriptor CreateClassDescriptor(
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicMethods)] Type handlerType,
+        Attribute[]? precompiledAttributes = null)
     {
         return new HostClassHandlerDescriptor(DescriptorType.General, handlerType, dontInspect: false, precompiledAttributes);
     }

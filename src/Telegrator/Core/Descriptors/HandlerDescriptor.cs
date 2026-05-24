@@ -3,6 +3,7 @@ using Telegram.Bot.Types.Enums;
 using Telegrator.Core.Attributes;
 using Telegrator.Core.Filters;
 using Telegrator.Core.Handlers;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Telegrator.Core.Descriptors;
 
@@ -48,6 +49,7 @@ public abstract class HandlerDescriptor
     /// <summary>
     /// The type of the handler.
     /// </summary>
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicMethods)]
     public Type HandlerType
     {
         get;
@@ -162,7 +164,7 @@ public abstract class HandlerDescriptor
     /// <param name="dontInspect"></param>
     /// <param name="precompiledAttributes">Precompiled attributes if available.</param>
     /// <exception cref="ArgumentException">Thrown when the handler type is not compatible with the expected handler type</exception>
-    protected HandlerDescriptor(DescriptorType descriptorType, Type handlerType, bool dontInspect = false, Attribute[]? precompiledAttributes = null)
+    protected HandlerDescriptor(DescriptorType descriptorType, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicMethods)] Type handlerType, bool dontInspect = false, Attribute[]? precompiledAttributes = null)
     {
         Type = descriptorType;
         HandlerType = handlerType;
@@ -194,7 +196,7 @@ public abstract class HandlerDescriptor
     /// <param name="serviceKey">The service key for dependency injection</param>
     /// <param name="precompiledAttributes">Precompiled attributes</param>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="serviceKey"/> is null</exception>
-    protected HandlerDescriptor(Type handlerType, object serviceKey, Attribute[]? precompiledAttributes = null) : this(DescriptorType.Keyed, handlerType, false, precompiledAttributes)
+    protected HandlerDescriptor([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicMethods)] Type handlerType, object serviceKey, Attribute[]? precompiledAttributes = null) : this(DescriptorType.Keyed, handlerType, false, precompiledAttributes)
     {
         ServiceKey = serviceKey ?? throw new ArgumentNullException(nameof(serviceKey));
     }
@@ -208,7 +210,7 @@ public abstract class HandlerDescriptor
     /// <param name="indexer">The indexer for handler concurrency and priority</param>
     /// <param name="filters">The set of filters associated with this handler</param>
     /// <param name="precompiledAttributes">Precompiled attributes</param>
-    protected HandlerDescriptor(DescriptorType type, Type handlerType, UpdateType updateType, DescriptorIndexer indexer, DescriptorFiltersSet filters, Attribute[]? precompiledAttributes = null)
+    protected HandlerDescriptor(DescriptorType type, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicMethods)] Type handlerType, UpdateType updateType, DescriptorIndexer indexer, DescriptorFiltersSet filters, Attribute[]? precompiledAttributes = null)
     {
         Type = type;
         HandlerType = handlerType;
@@ -230,7 +232,7 @@ public abstract class HandlerDescriptor
     /// <param name="singletonInstance">The singleton instance of the handler</param>
     /// <param name="precompiledAttributes">Precompiled attributes</param>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="serviceKey"/> or <paramref name="singletonInstance"/> is null</exception>
-    protected HandlerDescriptor(DescriptorType type, Type handlerType, UpdateType updateType, DescriptorIndexer indexer, DescriptorFiltersSet filters, object serviceKey, UpdateHandlerBase singletonInstance, Attribute[]? precompiledAttributes = null)
+    protected HandlerDescriptor(DescriptorType type, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicMethods)] Type handlerType, UpdateType updateType, DescriptorIndexer indexer, DescriptorFiltersSet filters, object serviceKey, UpdateHandlerBase singletonInstance, Attribute[]? precompiledAttributes = null)
     {
         Type = type;
         HandlerType = handlerType;
@@ -253,7 +255,7 @@ public abstract class HandlerDescriptor
     /// <param name="instanceFactory">Factory for creating handler instances</param>
     /// <param name="precompiledAttributes">Precompiled attributes</param>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="instanceFactory"/> is null</exception>
-    protected HandlerDescriptor(DescriptorType type, Type handlerType, UpdateType updateType, DescriptorIndexer indexer, DescriptorFiltersSet filters, Func<UpdateHandlerBase> instanceFactory, Attribute[]? precompiledAttributes = null)
+    protected HandlerDescriptor(DescriptorType type, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicMethods)] Type handlerType, UpdateType updateType, DescriptorIndexer indexer, DescriptorFiltersSet filters, Func<UpdateHandlerBase> instanceFactory, Attribute[]? precompiledAttributes = null)
     {
         Type = type;
         HandlerType = handlerType;
@@ -276,7 +278,7 @@ public abstract class HandlerDescriptor
     /// <param name="instanceFactory">Factory for creating handler instances</param>
     /// <param name="precompiledAttributes">Precompiled attributes</param>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="serviceKey"/> or <paramref name="instanceFactory"/> is null</exception>
-    protected HandlerDescriptor(DescriptorType type, Type handlerType, UpdateType updateType, DescriptorIndexer indexer, DescriptorFiltersSet filters, object serviceKey, Func<UpdateHandlerBase> instanceFactory, Attribute[]? precompiledAttributes = null)
+    protected HandlerDescriptor(DescriptorType type, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicMethods)] Type handlerType, UpdateType updateType, DescriptorIndexer indexer, DescriptorFiltersSet filters, object serviceKey, Func<UpdateHandlerBase> instanceFactory, Attribute[]? precompiledAttributes = null)
     {
         Type = type;
         HandlerType = handlerType;
@@ -297,7 +299,7 @@ public abstract class HandlerDescriptor
     /// <param name="filters">Optional array of filters to apply</param>
     /// <param name="stateKeepFilter">Optional state keeping filter</param>
     /// <param name="precompiledAttributes">Precompiled attributes</param>
-    protected HandlerDescriptor(DescriptorType type, Type handlerType, UpdateHandlerAttributeBase pollingHandlerAttribute, IFilter<Update>[]? filters, IFilter<Update>? stateKeepFilter, Attribute[]? precompiledAttributes = null)
+    protected HandlerDescriptor(DescriptorType type, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicMethods)] Type handlerType, UpdateHandlerAttributeBase pollingHandlerAttribute, IFilter<Update>[]? filters, IFilter<Update>? stateKeepFilter, Attribute[]? precompiledAttributes = null)
     {
         Type = type;
         HandlerType = handlerType;
@@ -319,7 +321,7 @@ public abstract class HandlerDescriptor
     /// <param name="singletonInstance">The singleton instance of the handler</param>
     /// <param name="precompiledAttributes">Precompiled attributes</param>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="serviceKey"/> or <paramref name="singletonInstance"/> is null</exception>
-    protected HandlerDescriptor(DescriptorType type, Type handlerType, UpdateHandlerAttributeBase pollingHandlerAttribute, IFilter<Update>[]? filters, IFilter<Update>? stateKeepFilter, object serviceKey, UpdateHandlerBase singletonInstance, Attribute[]? precompiledAttributes = null)
+    protected HandlerDescriptor(DescriptorType type, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicMethods)] Type handlerType, UpdateHandlerAttributeBase pollingHandlerAttribute, IFilter<Update>[]? filters, IFilter<Update>? stateKeepFilter, object serviceKey, UpdateHandlerBase singletonInstance, Attribute[]? precompiledAttributes = null)
     {
         Type = type;
         HandlerType = handlerType;
@@ -342,7 +344,7 @@ public abstract class HandlerDescriptor
     /// <param name="instanceFactory">Factory for creating handler instances</param>
     /// <param name="precompiledAttributes">Precompiled attributes</param>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="instanceFactory"/> is null</exception>
-    protected HandlerDescriptor(DescriptorType type, Type handlerType, UpdateHandlerAttributeBase pollingHandlerAttribute, IFilter<Update>[]? filters, IFilter<Update>? stateKeepFilter, Func<UpdateHandlerBase> instanceFactory, Attribute[]? precompiledAttributes = null)
+    protected HandlerDescriptor(DescriptorType type, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicMethods)] Type handlerType, UpdateHandlerAttributeBase pollingHandlerAttribute, IFilter<Update>[]? filters, IFilter<Update>? stateKeepFilter, Func<UpdateHandlerBase> instanceFactory, Attribute[]? precompiledAttributes = null)
     {
         Type = type;
         HandlerType = handlerType;
@@ -365,7 +367,7 @@ public abstract class HandlerDescriptor
     /// <param name="instanceFactory">Factory for creating handler instances</param>
     /// <param name="precompiledAttributes">Precompiled attributes</param>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="serviceKey"/> or <paramref name="instanceFactory"/> is null</exception>
-    protected HandlerDescriptor(DescriptorType type, Type handlerType, UpdateHandlerAttributeBase pollingHandlerAttribute, IFilter<Update>[]? filters, IFilter<Update>? stateKeepFilter, object serviceKey, Func<UpdateHandlerBase> instanceFactory, Attribute[]? precompiledAttributes = null)
+    protected HandlerDescriptor(DescriptorType type, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicMethods)] Type handlerType, UpdateHandlerAttributeBase pollingHandlerAttribute, IFilter<Update>[]? filters, IFilter<Update>? stateKeepFilter, object serviceKey, Func<UpdateHandlerBase> instanceFactory, Attribute[]? precompiledAttributes = null)
     {
         Type = type;
         HandlerType = handlerType;
@@ -388,7 +390,7 @@ public abstract class HandlerDescriptor
     /// <param name="filters">Optional array of filters to apply</param>
     /// <param name="stateKeepFilter">Optional state keeping filter</param>
     /// <param name="precompiledAttributes">Precompiled attributes</param>
-    protected HandlerDescriptor(DescriptorType type, Type handlerType, UpdateType updateType, DescriptorIndexer indexer, IFilter<Update>? validateFilter, IFilter<Update>[]? filters, IFilter<Update>? stateKeepFilter, Attribute[]? precompiledAttributes = null)
+    protected HandlerDescriptor(DescriptorType type, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicMethods)] Type handlerType, UpdateType updateType, DescriptorIndexer indexer, IFilter<Update>? validateFilter, IFilter<Update>[]? filters, IFilter<Update>? stateKeepFilter, Attribute[]? precompiledAttributes = null)
     {
         Type = type;
         HandlerType = handlerType;
@@ -412,7 +414,7 @@ public abstract class HandlerDescriptor
     /// <param name="singletonInstance">The singleton instance of the handler</param>
     /// <param name="precompiledAttributes">Precompiled attributes</param>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="serviceKey"/> or <paramref name="singletonInstance"/> is null</exception>
-    protected HandlerDescriptor(DescriptorType type, Type handlerType, UpdateType updateType, DescriptorIndexer indexer, IFilter<Update>? validateFilter, IFilter<Update>[]? filters, IFilter<Update>? stateKeepFilter, object serviceKey, UpdateHandlerBase singletonInstance, Attribute[]? precompiledAttributes = null)
+    protected HandlerDescriptor(DescriptorType type, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicMethods)] Type handlerType, UpdateType updateType, DescriptorIndexer indexer, IFilter<Update>? validateFilter, IFilter<Update>[]? filters, IFilter<Update>? stateKeepFilter, object serviceKey, UpdateHandlerBase singletonInstance, Attribute[]? precompiledAttributes = null)
     {
         Type = type;
         HandlerType = handlerType;
@@ -437,7 +439,7 @@ public abstract class HandlerDescriptor
     /// <param name="instanceFactory">Factory for creating handler instances</param>
     /// <param name="precompiledAttributes">Precompiled attributes</param>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="instanceFactory"/> is null</exception>
-    protected HandlerDescriptor(DescriptorType type, Type handlerType, UpdateType updateType, DescriptorIndexer indexer, IFilter<Update>? validateFilter, IFilter<Update>[]? filters, IFilter<Update>? stateKeepFilter, Func<UpdateHandlerBase> instanceFactory, Attribute[]? precompiledAttributes = null)
+    protected HandlerDescriptor(DescriptorType type, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicMethods)] Type handlerType, UpdateType updateType, DescriptorIndexer indexer, IFilter<Update>? validateFilter, IFilter<Update>[]? filters, IFilter<Update>? stateKeepFilter, Func<UpdateHandlerBase> instanceFactory, Attribute[]? precompiledAttributes = null)
     {
         Type = type;
         HandlerType = handlerType;
@@ -462,7 +464,7 @@ public abstract class HandlerDescriptor
     /// <param name="instanceFactory">Factory for creating handler instances</param>
     /// <param name="precompiledAttributes">Precompiled attributes</param>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="serviceKey"/> or <paramref name="instanceFactory"/> is null</exception>
-    protected HandlerDescriptor(DescriptorType type, Type handlerType, UpdateType updateType, DescriptorIndexer indexer, IFilter<Update>? validateFilter, IFilter<Update>[]? filters, IFilter<Update>? stateKeepFilter, object serviceKey, Func<UpdateHandlerBase> instanceFactory, Attribute[]? precompiledAttributes = null)
+    protected HandlerDescriptor(DescriptorType type, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicMethods)] Type handlerType, UpdateType updateType, DescriptorIndexer indexer, IFilter<Update>? validateFilter, IFilter<Update>[]? filters, IFilter<Update>? stateKeepFilter, object serviceKey, Func<UpdateHandlerBase> instanceFactory, Attribute[]? precompiledAttributes = null)
     {
         Type = type;
         HandlerType = handlerType;
