@@ -1,7 +1,7 @@
 using System.Globalization;
 using Telegrator.Core.Handlers;
 
-namespace Telegrator;
+namespace Telegrator.Localized;
 
 /// <summary>
 /// A default implementation of <see cref="ICultureResolver"/> that uses the standard language code from the user info.

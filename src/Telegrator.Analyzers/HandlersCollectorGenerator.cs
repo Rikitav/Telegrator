@@ -60,14 +60,37 @@ public class HandlersCollectorGenerator : IIncrementalGenerator
             if (attr.AttributeClass == null)
                 continue;
 
+            // Пропускаем системные атрибуты компилятора, чтобы не засорять генерацию
+            string ns = attr.AttributeClass.ContainingNamespace.ToDisplayString();
+            if (ns.StartsWith("System.Runtime") || ns.StartsWith("System.Diagnostics"))
+                continue;
+
             string attrType = attr.AttributeClass.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-            string args = string.Join(", ", attr.ConstructorArguments.Select(a => a.ToCSharpString()));
-            string named = string.Join(", ", attr.NamedArguments.Select(n => $"{n.Key} = {n.Value.ToCSharpString()}"));
+
+            // ИСПОЛЬЗУЕМ НОВЫЙ МЕТОД FormatTypedConstant вместо ToCSharpString()
+            string args = string.Join(", ", attr.ConstructorArguments.Select(FormatTypedConstant));
+            string named = string.Join(", ", attr.NamedArguments.Select(n => $"{n.Key} = {FormatTypedConstant(n.Value)}"));
+
             string initString = $"new {attrType}({args})" + (string.IsNullOrEmpty(named) ? "" : $" {{ {named} }}");
             attributesList.Add(initString);
         }
 
         return new HandlerRegistrationModel(fullTypeName, attributesList.ToImmutableArray(), isValid);
+    }
+
+    private static string FormatTypedConstant(TypedConstant arg)
+    {
+        if (arg.Kind == TypedConstantKind.Array)
+        {
+            var values = arg.Values.Select(FormatTypedConstant);
+            string typeName = arg.Type is IArrayTypeSymbol arrayType
+                ? arrayType.ElementType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)
+                : "object";
+
+            return $"new {typeName}[] {{ {string.Join(", ", values)} }}";
+        }
+
+        return arg.ToCSharpString();
     }
 
     private static void Execute(SourceProductionContext context, ImmutableArray<HandlerRegistrationModel> handlers)
@@ -83,7 +106,9 @@ public class HandlersCollectorGenerator : IIncrementalGenerator
 
             foundHandlersNames.Add(handler.FullClassName);
 
-            string attrsArr = "new System.Attribute[] { " + string.Join(", ", handler.Attributes) + " }";
+            string attrsArr = handler.Attributes.Length > 0
+                ? "new System.Attribute[] { " + string.Join(", ", handler.Attributes) + " }"
+                : "null";
 
             string code = $"handlers.AddDescriptor(handlers.CreateClassDescriptor(typeof({handler.FullClassName}), {attrsArr}));";
             statements.Add(SyntaxFactory.ParseStatement(code));
@@ -106,6 +131,7 @@ public class HandlersCollectorGenerator : IIncrementalGenerator
             string docName = name.StartsWith("global::") ? name.Substring(8) : name;
             summaryBuilder.AppendLine($"/// <item><description><see cref=\"{docName}\"/></description></item>");
         }
+
         summaryBuilder.AppendLine("/// </list>");
         summaryBuilder.AppendLine("/// </summary>");
 
