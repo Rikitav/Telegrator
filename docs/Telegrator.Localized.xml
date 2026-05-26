@@ -4,14 +4,6 @@
         <name>Telegrator.Localized</name>
     </assembly>
     <members>
-        <member name="T:Telegrator.DefaultCultureResolver">
-            <summary>
-            A default implementation of <see cref="T:Telegrator.ICultureResolver"/> that uses the standard language code from the user info.
-            </summary>
-        </member>
-        <member name="M:Telegrator.DefaultCultureResolver.ResolveAsync(Telegrator.Core.Handlers.IHandlerContainer)">
-            <inheritdoc/>
-        </member>
         <member name="T:Telegrator.ICultureResolver">
             <summary>
             Service responsible for resolving the culture to use for localization based on the context of an incoming update.
@@ -74,6 +66,14 @@
             <summary>
             Gets the localized string for a specific key.
             </summary>
+        </member>
+        <member name="T:Telegrator.Localized.DefaultCultureResolver">
+            <summary>
+            A default implementation of <see cref="T:Telegrator.ICultureResolver"/> that uses the standard language code from the user info.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Localized.DefaultCultureResolver.ResolveAsync(Telegrator.Core.Handlers.IHandlerContainer)">
+            <inheritdoc/>
         </member>
     </members>
 </doc>

@@ -124,3 +124,11 @@ public abstract class CallbackQueryHandler() : AbstractUpdateHandler<CallbackQue
         => await Container.AnswerCallbackQuery(
             text, showAlert, url, cacheTime, cancellationToken);
 }
+
+/// <summary>
+/// Abstract base class for branching handlers that process CallbackQueryHandler updates.
+/// </summary>
+public abstract class BranchingCallbackQueryHandler() : BranchingUpdateHandler<CallbackQuery>(UpdateType.CallbackQuery)
+{
+}
+

@@ -4,6 +4,54 @@
         <name>Telegrator</name>
     </assembly>
     <members>
+        <member name="T:Telegrator.Annotations.BusinessConnectionFilterAttribute">
+            <summary>
+            Abstract base attribute for filtering BusinessConnection updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Annotations.BusinessConnectionFilterAttribute.#ctor(Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.BusinessConnection}[])">
+            <summary>
+            Abstract base attribute for filtering BusinessConnection updates.
+            </summary>
+        </member>
+        <member name="P:Telegrator.Annotations.BusinessConnectionFilterAttribute.AllowedTypes">
+            <inheritdoc/>
+        </member>
+        <member name="M:Telegrator.Annotations.BusinessConnectionFilterAttribute.GetFilterringTarget(Telegram.Bot.Types.Update)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Annotations.BusinessMessageFilterAttribute">
+            <summary>
+            Abstract base attribute for filtering BusinessMessage updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Annotations.BusinessMessageFilterAttribute.#ctor(Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Message}[])">
+            <summary>
+            Abstract base attribute for filtering BusinessMessage updates.
+            </summary>
+        </member>
+        <member name="P:Telegrator.Annotations.BusinessMessageFilterAttribute.AllowedTypes">
+            <inheritdoc/>
+        </member>
+        <member name="M:Telegrator.Annotations.BusinessMessageFilterAttribute.GetFilterringTarget(Telegram.Bot.Types.Update)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Annotations.BusinessMessagesDeletedFilterAttribute">
+            <summary>
+            Abstract base attribute for filtering BusinessMessagesDeleted updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Annotations.BusinessMessagesDeletedFilterAttribute.#ctor(Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.BusinessMessagesDeleted}[])">
+            <summary>
+            Abstract base attribute for filtering BusinessMessagesDeleted updates.
+            </summary>
+        </member>
+        <member name="P:Telegrator.Annotations.BusinessMessagesDeletedFilterAttribute.AllowedTypes">
+            <inheritdoc/>
+        </member>
+        <member name="M:Telegrator.Annotations.BusinessMessagesDeletedFilterAttribute.GetFilterringTarget(Telegram.Bot.Types.Update)">
+            <inheritdoc/>
+        </member>
         <member name="T:Telegrator.Annotations.CallbackQueryAttribute">
             <summary>
             Abstract base attribute for filtering callback-based updates.
@@ -42,6 +90,46 @@
             </summary>
             <param name="data"></param>
         </member>
+        <member name="T:Telegrator.Annotations.CallbackDataContainsAttribute">
+            <summary>
+            Attribute for filtering <see cref="T:Telegram.Bot.Types.CallbackQuery"/>'s data that contains specific string
+            </summary>
+        </member>
+        <member name="M:Telegrator.Annotations.CallbackDataContainsAttribute.#ctor(System.String)">
+            <summary>
+            Attribute for filtering <see cref="T:Telegram.Bot.Types.CallbackQuery"/>'s data that contains specific string
+            </summary>
+        </member>
+        <member name="T:Telegrator.Annotations.CallbackDataStartsWithAttribute">
+            <summary>
+            Attribute for filtering <see cref="T:Telegram.Bot.Types.CallbackQuery"/>'s data that starts with specific string
+            </summary>
+        </member>
+        <member name="M:Telegrator.Annotations.CallbackDataStartsWithAttribute.#ctor(System.String)">
+            <summary>
+            Attribute for filtering <see cref="T:Telegram.Bot.Types.CallbackQuery"/>'s data that starts with specific string
+            </summary>
+        </member>
+        <member name="T:Telegrator.Annotations.CallbackDataEndsWithAttribute">
+            <summary>
+            Attribute for filtering <see cref="T:Telegram.Bot.Types.CallbackQuery"/>'s data that ends with specific string
+            </summary>
+        </member>
+        <member name="M:Telegrator.Annotations.CallbackDataEndsWithAttribute.#ctor(System.String)">
+            <summary>
+            Attribute for filtering <see cref="T:Telegram.Bot.Types.CallbackQuery"/>'s data that ends with specific string
+            </summary>
+        </member>
+        <member name="T:Telegrator.Annotations.CallbackDataRegexAttribute">
+            <summary>
+            Attribute for filtering <see cref="T:Telegram.Bot.Types.CallbackQuery"/>'s data with Regex
+            </summary>
+        </member>
+        <member name="M:Telegrator.Annotations.CallbackDataRegexAttribute.#ctor(System.String)">
+            <summary>
+            Attribute for filtering <see cref="T:Telegram.Bot.Types.CallbackQuery"/>'s data with Regex
+            </summary>
+        </member>
         <member name="T:Telegrator.Annotations.CallbackInlineIdAttribute">
             <summary>
             Attribute to check if <see cref="T:Telegram.Bot.Types.CallbackQuery"/> belongs to a specific message by its ID
@@ -50,6 +138,116 @@
         <member name="M:Telegrator.Annotations.CallbackInlineIdAttribute.#ctor(System.String)">
             <summary>
             Attribute to check if <see cref="T:Telegram.Bot.Types.CallbackQuery"/> belongs to a specific message by its ID
+            </summary>
+        </member>
+        <member name="T:Telegrator.Annotations.ChannelPostFilterAttribute">
+            <summary>
+            Abstract base attribute for filtering ChannelPost updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Annotations.ChannelPostFilterAttribute.#ctor(Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Message}[])">
+            <summary>
+            Abstract base attribute for filtering ChannelPost updates.
+            </summary>
+        </member>
+        <member name="P:Telegrator.Annotations.ChannelPostFilterAttribute.AllowedTypes">
+            <inheritdoc/>
+        </member>
+        <member name="M:Telegrator.Annotations.ChannelPostFilterAttribute.GetFilterringTarget(Telegram.Bot.Types.Update)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Annotations.ChatBoostFilterAttribute">
+            <summary>
+            Abstract base attribute for filtering ChatBoost updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Annotations.ChatBoostFilterAttribute.#ctor(Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.ChatBoostUpdated}[])">
+            <summary>
+            Abstract base attribute for filtering ChatBoost updates.
+            </summary>
+        </member>
+        <member name="P:Telegrator.Annotations.ChatBoostFilterAttribute.AllowedTypes">
+            <inheritdoc/>
+        </member>
+        <member name="M:Telegrator.Annotations.ChatBoostFilterAttribute.GetFilterringTarget(Telegram.Bot.Types.Update)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Annotations.ChatJoinRequestFilterAttribute">
+            <summary>
+            Abstract base attribute for filtering ChatJoinRequest updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Annotations.ChatJoinRequestFilterAttribute.#ctor(Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.ChatJoinRequest}[])">
+            <summary>
+            Abstract base attribute for filtering ChatJoinRequest updates.
+            </summary>
+        </member>
+        <member name="P:Telegrator.Annotations.ChatJoinRequestFilterAttribute.AllowedTypes">
+            <inheritdoc/>
+        </member>
+        <member name="M:Telegrator.Annotations.ChatJoinRequestFilterAttribute.GetFilterringTarget(Telegram.Bot.Types.Update)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Annotations.ChatJoinRequestInviteLinkAttribute">
+            <summary>
+            Attribute for filtering <see cref="T:Telegram.Bot.Types.ChatJoinRequest"/> by invite link used
+            </summary>
+        </member>
+        <member name="M:Telegrator.Annotations.ChatJoinRequestInviteLinkAttribute.#ctor(System.String)">
+            <summary>
+            Attribute for filtering <see cref="T:Telegram.Bot.Types.ChatJoinRequest"/> by invite link used
+            </summary>
+        </member>
+        <member name="T:Telegrator.Annotations.ChatMemberFilterAttribute">
+            <summary>
+            Abstract base attribute for filtering ChatMember updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Annotations.ChatMemberFilterAttribute.#ctor(Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.ChatMemberUpdated}[])">
+            <summary>
+            Abstract base attribute for filtering ChatMember updates.
+            </summary>
+        </member>
+        <member name="P:Telegrator.Annotations.ChatMemberFilterAttribute.AllowedTypes">
+            <inheritdoc/>
+        </member>
+        <member name="M:Telegrator.Annotations.ChatMemberFilterAttribute.GetFilterringTarget(Telegram.Bot.Types.Update)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Annotations.ChosenInlineResultFilterAttribute">
+            <summary>
+            Abstract base attribute for filtering ChosenInlineResult updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Annotations.ChosenInlineResultFilterAttribute.#ctor(Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.ChosenInlineResult}[])">
+            <summary>
+            Abstract base attribute for filtering ChosenInlineResult updates.
+            </summary>
+        </member>
+        <member name="P:Telegrator.Annotations.ChosenInlineResultFilterAttribute.AllowedTypes">
+            <inheritdoc/>
+        </member>
+        <member name="M:Telegrator.Annotations.ChosenInlineResultFilterAttribute.GetFilterringTarget(Telegram.Bot.Types.Update)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Annotations.ChosenInlineResultIdAttribute">
+            <summary>
+            Attribute for filtering <see cref="T:Telegram.Bot.Types.ChosenInlineResult"/>'s ID
+            </summary>
+        </member>
+        <member name="M:Telegrator.Annotations.ChosenInlineResultIdAttribute.#ctor(System.String)">
+            <summary>
+            Attribute for filtering <see cref="T:Telegram.Bot.Types.ChosenInlineResult"/>'s ID
+            </summary>
+        </member>
+        <member name="T:Telegrator.Annotations.ChosenInlineResultQueryAttribute">
+            <summary>
+            Attribute for filtering <see cref="T:Telegram.Bot.Types.ChosenInlineResult"/>'s original query
+            </summary>
+        </member>
+        <member name="M:Telegrator.Annotations.ChosenInlineResultQueryAttribute.#ctor(System.String)">
+            <summary>
+            Attribute for filtering <see cref="T:Telegram.Bot.Types.ChosenInlineResult"/>'s original query
             </summary>
         </member>
         <member name="T:Telegrator.Annotations.CommandAlliasAttribute">
@@ -191,6 +389,54 @@
             When applied to a class, it will be excluded from domain-wide handler collection operations.
             </summary>
         </member>
+        <member name="T:Telegrator.Annotations.EditedBusinessMessageFilterAttribute">
+            <summary>
+            Abstract base attribute for filtering EditedBusinessMessage updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Annotations.EditedBusinessMessageFilterAttribute.#ctor(Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Message}[])">
+            <summary>
+            Abstract base attribute for filtering EditedBusinessMessage updates.
+            </summary>
+        </member>
+        <member name="P:Telegrator.Annotations.EditedBusinessMessageFilterAttribute.AllowedTypes">
+            <inheritdoc/>
+        </member>
+        <member name="M:Telegrator.Annotations.EditedBusinessMessageFilterAttribute.GetFilterringTarget(Telegram.Bot.Types.Update)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Annotations.EditedChannelPostFilterAttribute">
+            <summary>
+            Abstract base attribute for filtering EditedChannelPost updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Annotations.EditedChannelPostFilterAttribute.#ctor(Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Message}[])">
+            <summary>
+            Abstract base attribute for filtering EditedChannelPost updates.
+            </summary>
+        </member>
+        <member name="P:Telegrator.Annotations.EditedChannelPostFilterAttribute.AllowedTypes">
+            <inheritdoc/>
+        </member>
+        <member name="M:Telegrator.Annotations.EditedChannelPostFilterAttribute.GetFilterringTarget(Telegram.Bot.Types.Update)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Annotations.EditedMessageFilterAttribute">
+            <summary>
+            Abstract base attribute for filtering EditedMessage updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Annotations.EditedMessageFilterAttribute.#ctor(Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Message}[])">
+            <summary>
+            Abstract base attribute for filtering EditedMessage updates.
+            </summary>
+        </member>
+        <member name="P:Telegrator.Annotations.EditedMessageFilterAttribute.AllowedTypes">
+            <inheritdoc/>
+        </member>
+        <member name="M:Telegrator.Annotations.EditedMessageFilterAttribute.GetFilterringTarget(Telegram.Bot.Types.Update)">
+            <inheritdoc/>
+        </member>
         <member name="T:Telegrator.Annotations.EnvironmentFilterAttribute">
             <summary>
             Abstract base attribute for filtering updates based on environment conditions.
@@ -275,6 +521,72 @@
             </summary>
             <param name="variable">The name of the environment variable</param>
             <param name="comparison">The string comparison method</param>
+        </member>
+        <member name="T:Telegrator.Annotations.InlineQueryFilterAttribute">
+            <summary>
+            Abstract base attribute for filtering InlineQuery updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Annotations.InlineQueryFilterAttribute.#ctor(Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.InlineQuery}[])">
+            <summary>
+            Abstract base attribute for filtering InlineQuery updates.
+            </summary>
+        </member>
+        <member name="P:Telegrator.Annotations.InlineQueryFilterAttribute.AllowedTypes">
+            <inheritdoc/>
+        </member>
+        <member name="M:Telegrator.Annotations.InlineQueryFilterAttribute.GetFilterringTarget(Telegram.Bot.Types.Update)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Annotations.InlineQueryTextAttribute">
+            <summary>
+            Attribute for filtering <see cref="T:Telegram.Bot.Types.InlineQuery"/>'s text
+            </summary>
+        </member>
+        <member name="M:Telegrator.Annotations.InlineQueryTextAttribute.#ctor(System.String)">
+            <summary>
+            Attribute for filtering <see cref="T:Telegram.Bot.Types.InlineQuery"/>'s text
+            </summary>
+        </member>
+        <member name="T:Telegrator.Annotations.InlineQueryContainsAttribute">
+            <summary>
+            Attribute for filtering <see cref="T:Telegram.Bot.Types.InlineQuery"/>'s text that contains specific string
+            </summary>
+        </member>
+        <member name="M:Telegrator.Annotations.InlineQueryContainsAttribute.#ctor(System.String)">
+            <summary>
+            Attribute for filtering <see cref="T:Telegram.Bot.Types.InlineQuery"/>'s text that contains specific string
+            </summary>
+        </member>
+        <member name="T:Telegrator.Annotations.InlineQueryStartsWithAttribute">
+            <summary>
+            Attribute for filtering <see cref="T:Telegram.Bot.Types.InlineQuery"/>'s text that starts with specific string
+            </summary>
+        </member>
+        <member name="M:Telegrator.Annotations.InlineQueryStartsWithAttribute.#ctor(System.String)">
+            <summary>
+            Attribute for filtering <see cref="T:Telegram.Bot.Types.InlineQuery"/>'s text that starts with specific string
+            </summary>
+        </member>
+        <member name="T:Telegrator.Annotations.InlineQueryEndsWithAttribute">
+            <summary>
+            Attribute for filtering <see cref="T:Telegram.Bot.Types.InlineQuery"/>'s text that ends with specific string
+            </summary>
+        </member>
+        <member name="M:Telegrator.Annotations.InlineQueryEndsWithAttribute.#ctor(System.String)">
+            <summary>
+            Attribute for filtering <see cref="T:Telegram.Bot.Types.InlineQuery"/>'s text that ends with specific string
+            </summary>
+        </member>
+        <member name="T:Telegrator.Annotations.InlineQueryRegexAttribute">
+            <summary>
+            Attribute for filtering <see cref="T:Telegram.Bot.Types.InlineQuery"/>'s text with Regex
+            </summary>
+        </member>
+        <member name="M:Telegrator.Annotations.InlineQueryRegexAttribute.#ctor(System.String)">
+            <summary>
+            Attribute for filtering <see cref="T:Telegram.Bot.Types.InlineQuery"/>'s text with Regex
+            </summary>
         </member>
         <member name="T:Telegrator.Annotations.MentionedAttribute">
             <summary>
@@ -540,6 +852,38 @@
             <param name="content">The content that the entity should contain</param>
             <param name="stringComparison">The string comparison method</param>
         </member>
+        <member name="T:Telegrator.Annotations.MessageReactionCountFilterAttribute">
+            <summary>
+            Abstract base attribute for filtering MessageReactionCount updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Annotations.MessageReactionCountFilterAttribute.#ctor(Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.MessageReactionCountUpdated}[])">
+            <summary>
+            Abstract base attribute for filtering MessageReactionCount updates.
+            </summary>
+        </member>
+        <member name="P:Telegrator.Annotations.MessageReactionCountFilterAttribute.AllowedTypes">
+            <inheritdoc/>
+        </member>
+        <member name="M:Telegrator.Annotations.MessageReactionCountFilterAttribute.GetFilterringTarget(Telegram.Bot.Types.Update)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Annotations.MessageReactionFilterAttribute">
+            <summary>
+            Abstract base attribute for filtering MessageReaction updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Annotations.MessageReactionFilterAttribute.#ctor(Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.MessageReactionUpdated}[])">
+            <summary>
+            Abstract base attribute for filtering MessageReaction updates.
+            </summary>
+        </member>
+        <member name="P:Telegrator.Annotations.MessageReactionFilterAttribute.AllowedTypes">
+            <inheritdoc/>
+        </member>
+        <member name="M:Telegrator.Annotations.MessageReactionFilterAttribute.GetFilterringTarget(Telegram.Bot.Types.Update)">
+            <inheritdoc/>
+        </member>
         <member name="T:Telegrator.Annotations.MeRepliedAttribute">
             <summary>
             Attribute for filtering messages with reply to messages of this bot.
@@ -768,6 +1112,148 @@
             main ctor of <see cref="T:Telegrator.Annotations.MightAwaitAttribute"/>
             </summary>
             <param name="updateTypes"></param>
+        </member>
+        <member name="T:Telegrator.Annotations.MyChatMemberFilterAttribute">
+            <summary>
+            Abstract base attribute for filtering MyChatMember updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Annotations.MyChatMemberFilterAttribute.#ctor(Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.ChatMemberUpdated}[])">
+            <summary>
+            Abstract base attribute for filtering MyChatMember updates.
+            </summary>
+        </member>
+        <member name="P:Telegrator.Annotations.MyChatMemberFilterAttribute.AllowedTypes">
+            <inheritdoc/>
+        </member>
+        <member name="M:Telegrator.Annotations.MyChatMemberFilterAttribute.GetFilterringTarget(Telegram.Bot.Types.Update)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Annotations.PollAnswerFilterAttribute">
+            <summary>
+            Abstract base attribute for filtering PollAnswer updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Annotations.PollAnswerFilterAttribute.#ctor(Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.PollAnswer}[])">
+            <summary>
+            Abstract base attribute for filtering PollAnswer updates.
+            </summary>
+        </member>
+        <member name="P:Telegrator.Annotations.PollAnswerFilterAttribute.AllowedTypes">
+            <inheritdoc/>
+        </member>
+        <member name="M:Telegrator.Annotations.PollAnswerFilterAttribute.GetFilterringTarget(Telegram.Bot.Types.Update)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Annotations.PollFilterAttribute">
+            <summary>
+            Abstract base attribute for filtering Poll updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Annotations.PollFilterAttribute.#ctor(Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Poll}[])">
+            <summary>
+            Abstract base attribute for filtering Poll updates.
+            </summary>
+        </member>
+        <member name="P:Telegrator.Annotations.PollFilterAttribute.AllowedTypes">
+            <inheritdoc/>
+        </member>
+        <member name="M:Telegrator.Annotations.PollFilterAttribute.GetFilterringTarget(Telegram.Bot.Types.Update)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Annotations.PollTypeAttribute">
+            <summary>
+            Attribute for filtering <see cref="T:Telegram.Bot.Types.Poll"/>'s type
+            </summary>
+        </member>
+        <member name="M:Telegrator.Annotations.PollTypeAttribute.#ctor(Telegram.Bot.Types.Enums.PollType)">
+            <summary>
+            Attribute for filtering <see cref="T:Telegram.Bot.Types.Poll"/>'s type
+            </summary>
+        </member>
+        <member name="T:Telegrator.Annotations.PollIsClosedAttribute">
+            <summary>
+            Attribute for filtering <see cref="T:Telegram.Bot.Types.Poll"/> by closed status
+            </summary>
+        </member>
+        <member name="M:Telegrator.Annotations.PollIsClosedAttribute.#ctor(System.Boolean)">
+            <summary>
+            Attribute for filtering <see cref="T:Telegram.Bot.Types.Poll"/> by closed status
+            </summary>
+        </member>
+        <member name="T:Telegrator.Annotations.PollIsAnonymousAttribute">
+            <summary>
+            Attribute for filtering <see cref="T:Telegram.Bot.Types.Poll"/> by anonymous status
+            </summary>
+        </member>
+        <member name="M:Telegrator.Annotations.PollIsAnonymousAttribute.#ctor(System.Boolean)">
+            <summary>
+            Attribute for filtering <see cref="T:Telegram.Bot.Types.Poll"/> by anonymous status
+            </summary>
+        </member>
+        <member name="T:Telegrator.Annotations.PreCheckoutQueryFilterAttribute">
+            <summary>
+            Abstract base attribute for filtering PreCheckoutQuery updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Annotations.PreCheckoutQueryFilterAttribute.#ctor(Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Payments.PreCheckoutQuery}[])">
+            <summary>
+            Abstract base attribute for filtering PreCheckoutQuery updates.
+            </summary>
+        </member>
+        <member name="P:Telegrator.Annotations.PreCheckoutQueryFilterAttribute.AllowedTypes">
+            <inheritdoc/>
+        </member>
+        <member name="M:Telegrator.Annotations.PreCheckoutQueryFilterAttribute.GetFilterringTarget(Telegram.Bot.Types.Update)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Annotations.PurchasedPaidMediaFilterAttribute">
+            <summary>
+            Abstract base attribute for filtering PurchasedPaidMedia updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Annotations.PurchasedPaidMediaFilterAttribute.#ctor(Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Payments.PaidMediaPurchased}[])">
+            <summary>
+            Abstract base attribute for filtering PurchasedPaidMedia updates.
+            </summary>
+        </member>
+        <member name="P:Telegrator.Annotations.PurchasedPaidMediaFilterAttribute.AllowedTypes">
+            <inheritdoc/>
+        </member>
+        <member name="M:Telegrator.Annotations.PurchasedPaidMediaFilterAttribute.GetFilterringTarget(Telegram.Bot.Types.Update)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Annotations.RemovedChatBoostFilterAttribute">
+            <summary>
+            Abstract base attribute for filtering RemovedChatBoost updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Annotations.RemovedChatBoostFilterAttribute.#ctor(Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.ChatBoostRemoved}[])">
+            <summary>
+            Abstract base attribute for filtering RemovedChatBoost updates.
+            </summary>
+        </member>
+        <member name="P:Telegrator.Annotations.RemovedChatBoostFilterAttribute.AllowedTypes">
+            <inheritdoc/>
+        </member>
+        <member name="M:Telegrator.Annotations.RemovedChatBoostFilterAttribute.GetFilterringTarget(Telegram.Bot.Types.Update)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Annotations.ShippingQueryFilterAttribute">
+            <summary>
+            Abstract base attribute for filtering ShippingQuery updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Annotations.ShippingQueryFilterAttribute.#ctor(Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Payments.ShippingQuery}[])">
+            <summary>
+            Abstract base attribute for filtering ShippingQuery updates.
+            </summary>
+        </member>
+        <member name="P:Telegrator.Annotations.ShippingQueryFilterAttribute.AllowedTypes">
+            <inheritdoc/>
+        </member>
+        <member name="M:Telegrator.Annotations.ShippingQueryFilterAttribute.GetFilterringTarget(Telegram.Bot.Types.Update)">
+            <inheritdoc/>
         </member>
         <member name="T:Telegrator.Annotations.StateAttribute`2">
             <summary>
@@ -3247,6 +3733,45 @@
         <member name="M:Telegrator.Filters.CallbackDataFilter.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.CallbackQuery})">
             <inheritdoc/>
         </member>
+        <member name="T:Telegrator.Filters.CallbackDataContainsFilter">
+            <summary>
+            Filter that checks if <see cref="T:Telegram.Bot.Types.CallbackQuery"/>'s data contains specific string
+            </summary>
+        </member>
+        <member name="M:Telegrator.Filters.CallbackDataContainsFilter.#ctor(System.String,System.StringComparison)">
+            <summary>
+            Initialize new instance of <see cref="T:Telegrator.Filters.CallbackDataContainsFilter"/>
+            </summary>
+        </member>
+        <member name="M:Telegrator.Filters.CallbackDataContainsFilter.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.CallbackQuery})">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Filters.CallbackDataStartsWithFilter">
+            <summary>
+            Filter that checks if <see cref="T:Telegram.Bot.Types.CallbackQuery"/>'s data starts with specific string
+            </summary>
+        </member>
+        <member name="M:Telegrator.Filters.CallbackDataStartsWithFilter.#ctor(System.String,System.StringComparison)">
+            <summary>
+            Initialize new instance of <see cref="T:Telegrator.Filters.CallbackDataStartsWithFilter"/>
+            </summary>
+        </member>
+        <member name="M:Telegrator.Filters.CallbackDataStartsWithFilter.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.CallbackQuery})">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Filters.CallbackDataEndsWithFilter">
+            <summary>
+            Filter that checks if <see cref="T:Telegram.Bot.Types.CallbackQuery"/>'s data ends with specific string
+            </summary>
+        </member>
+        <member name="M:Telegrator.Filters.CallbackDataEndsWithFilter.#ctor(System.String,System.StringComparison)">
+            <summary>
+            Initialize new instance of <see cref="T:Telegrator.Filters.CallbackDataEndsWithFilter"/>
+            </summary>
+        </member>
+        <member name="M:Telegrator.Filters.CallbackDataEndsWithFilter.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.CallbackQuery})">
+            <inheritdoc/>
+        </member>
         <member name="T:Telegrator.Filters.CallbackInlineIdFilter">
             <summary>
             Filter that checks if <see cref="T:Telegram.Bot.Types.CallbackQuery"/> belongs to a specific message
@@ -3278,6 +3803,45 @@
             Initializes a new instance of the <see cref="T:Telegrator.Filters.CallbackRegexFilter"/> class with a regex object.
             </summary>
             <param name="regex">The regex object.</param>
+        </member>
+        <member name="T:Telegrator.Filters.ChatJoinRequestInviteLinkFilter">
+            <summary>
+            Filter that checks if <see cref="T:Telegram.Bot.Types.ChatJoinRequest"/> was created using specific invite link
+            </summary>
+        </member>
+        <member name="M:Telegrator.Filters.ChatJoinRequestInviteLinkFilter.#ctor(System.String)">
+            <summary>
+            Filter that checks if <see cref="T:Telegram.Bot.Types.ChatJoinRequest"/> was created using specific invite link
+            </summary>
+        </member>
+        <member name="M:Telegrator.Filters.ChatJoinRequestInviteLinkFilter.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.ChatJoinRequest})">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Filters.ChosenInlineResultIdFilter">
+            <summary>
+            Filter that checks <see cref="T:Telegram.Bot.Types.ChosenInlineResult"/>'s ID exactly
+            </summary>
+        </member>
+        <member name="M:Telegrator.Filters.ChosenInlineResultIdFilter.#ctor(System.String,System.StringComparison)">
+            <summary>
+            Filter that checks <see cref="T:Telegram.Bot.Types.ChosenInlineResult"/>'s ID exactly
+            </summary>
+        </member>
+        <member name="M:Telegrator.Filters.ChosenInlineResultIdFilter.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.ChosenInlineResult})">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Filters.ChosenInlineResultQueryFilter">
+            <summary>
+            Filter that checks <see cref="T:Telegram.Bot.Types.ChosenInlineResult"/>'s original query exactly
+            </summary>
+        </member>
+        <member name="M:Telegrator.Filters.ChosenInlineResultQueryFilter.#ctor(System.String,System.StringComparison)">
+            <summary>
+            Filter that checks <see cref="T:Telegram.Bot.Types.ChosenInlineResult"/>'s original query exactly
+            </summary>
+        </member>
+        <member name="M:Telegrator.Filters.ChosenInlineResultQueryFilter.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.ChosenInlineResult})">
+            <inheritdoc/>
         </member>
         <member name="T:Telegrator.Filters.CommandAlliasFilter">
             <summary>
@@ -3747,6 +4311,76 @@
         </member>
         <member name="M:Telegrator.Filters.FunctionFilter`1.CanPass(Telegrator.Core.Filters.FilterExecutionContext{`0})">
             <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Filters.InlineQueryTextFilter">
+            <summary>
+            Filter that checks <see cref="T:Telegram.Bot.Types.InlineQuery"/>'s text exactly
+            </summary>
+        </member>
+        <member name="M:Telegrator.Filters.InlineQueryTextFilter.#ctor(System.String,System.StringComparison)">
+            <summary>
+            Filter that checks <see cref="T:Telegram.Bot.Types.InlineQuery"/>'s text exactly
+            </summary>
+        </member>
+        <member name="M:Telegrator.Filters.InlineQueryTextFilter.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.InlineQuery})">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Filters.InlineQueryContainsFilter">
+            <summary>
+            Filter that checks if <see cref="T:Telegram.Bot.Types.InlineQuery"/>'s text contains specific string
+            </summary>
+        </member>
+        <member name="M:Telegrator.Filters.InlineQueryContainsFilter.#ctor(System.String,System.StringComparison)">
+            <summary>
+            Filter that checks if <see cref="T:Telegram.Bot.Types.InlineQuery"/>'s text contains specific string
+            </summary>
+        </member>
+        <member name="M:Telegrator.Filters.InlineQueryContainsFilter.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.InlineQuery})">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Filters.InlineQueryStartsWithFilter">
+            <summary>
+            Filter that checks if <see cref="T:Telegram.Bot.Types.InlineQuery"/>'s text starts with specific string
+            </summary>
+        </member>
+        <member name="M:Telegrator.Filters.InlineQueryStartsWithFilter.#ctor(System.String,System.StringComparison)">
+            <summary>
+            Filter that checks if <see cref="T:Telegram.Bot.Types.InlineQuery"/>'s text starts with specific string
+            </summary>
+        </member>
+        <member name="M:Telegrator.Filters.InlineQueryStartsWithFilter.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.InlineQuery})">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Filters.InlineQueryEndsWithFilter">
+            <summary>
+            Filter that checks if <see cref="T:Telegram.Bot.Types.InlineQuery"/>'s text ends with specific string
+            </summary>
+        </member>
+        <member name="M:Telegrator.Filters.InlineQueryEndsWithFilter.#ctor(System.String,System.StringComparison)">
+            <summary>
+            Filter that checks if <see cref="T:Telegram.Bot.Types.InlineQuery"/>'s text ends with specific string
+            </summary>
+        </member>
+        <member name="M:Telegrator.Filters.InlineQueryEndsWithFilter.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.InlineQuery})">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Filters.InlineQueryRegexFilter">
+            <summary>
+            Filters inline queries by matching their text with a regular expression.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Filters.InlineQueryRegexFilter.#ctor(System.String,System.Text.RegularExpressions.RegexOptions)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Telegrator.Filters.InlineQueryRegexFilter"/> class with a pattern and options.
+            </summary>
+            <param name="pattern">The regex pattern.</param>
+            <param name="regexOptions">The regex options.</param>
+        </member>
+        <member name="M:Telegrator.Filters.InlineQueryRegexFilter.#ctor(System.Text.RegularExpressions.Regex)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Telegrator.Filters.InlineQueryRegexFilter"/> class with a regex object.
+            </summary>
+            <param name="regex">The regex object.</param>
         </member>
         <member name="T:Telegrator.Filters.JoinedFilter`1">
             <summary>
@@ -4553,6 +5187,45 @@
         <member name="M:Telegrator.Filters.TextContainsWordFilter.CanPassNext(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Message})">
             <inheritdoc/>
         </member>
+        <member name="T:Telegrator.Filters.PollTypeFilter">
+            <summary>
+            Filter that checks <see cref="T:Telegram.Bot.Types.Poll"/>'s type
+            </summary>
+        </member>
+        <member name="M:Telegrator.Filters.PollTypeFilter.#ctor(Telegram.Bot.Types.Enums.PollType)">
+            <summary>
+            Filter that checks <see cref="T:Telegram.Bot.Types.Poll"/>'s type
+            </summary>
+        </member>
+        <member name="M:Telegrator.Filters.PollTypeFilter.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Poll})">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Filters.PollIsClosedFilter">
+            <summary>
+            Filter that checks if <see cref="T:Telegram.Bot.Types.Poll"/> is closed
+            </summary>
+        </member>
+        <member name="M:Telegrator.Filters.PollIsClosedFilter.#ctor(System.Boolean)">
+            <summary>
+            Filter that checks if <see cref="T:Telegram.Bot.Types.Poll"/> is closed
+            </summary>
+        </member>
+        <member name="M:Telegrator.Filters.PollIsClosedFilter.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Poll})">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Filters.PollIsAnonymousFilter">
+            <summary>
+            Filter that checks if <see cref="T:Telegram.Bot.Types.Poll"/> is anonymous
+            </summary>
+        </member>
+        <member name="M:Telegrator.Filters.PollIsAnonymousFilter.#ctor(System.Boolean)">
+            <summary>
+            Filter that checks if <see cref="T:Telegram.Bot.Types.Poll"/> is anonymous
+            </summary>
+        </member>
+        <member name="M:Telegrator.Filters.PollIsAnonymousFilter.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Poll})">
+            <inheritdoc/>
+        </member>
         <member name="T:Telegrator.Filters.RegexFilterBase`1">
             <summary>
             Base class for filters that use regular expressions to match text in updates.
@@ -4633,6 +5306,16 @@
             <summary>
             Abstract base class for handlers that can process any type of update.
             Provides a foundation for creating handlers that respond to all incoming updates.
+            </summary>
+        </member>
+        <member name="T:Telegrator.Handlers.BranchingAnyUpdateHandler">
+            <summary>
+            Abstract base class for branching handlers that process AnyUpdateHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.BranchingAnyUpdateHandler.#ctor">
+            <summary>
+            Abstract base class for branching handlers that process AnyUpdateHandler updates.
             </summary>
         </member>
         <member name="T:Telegrator.Handlers.Building.AwaiterHandler">
@@ -4854,6 +5537,16 @@
             Abstract base class for handlers that process BusinessConnectionHandler updates.
             </summary>
         </member>
+        <member name="T:Telegrator.Handlers.BranchingBusinessConnectionHandler">
+            <summary>
+            Abstract base class for branching handlers that process BusinessConnectionHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.BranchingBusinessConnectionHandler.#ctor">
+            <summary>
+            Abstract base class for branching handlers that process BusinessConnectionHandler updates.
+            </summary>
+        </member>
         <member name="T:Telegrator.Handlers.BusinessMessageHandlerAttribute">
             <summary>
             Attribute that marks a handler to process BusinessMessageHandler updates.
@@ -4875,6 +5568,104 @@
         <member name="M:Telegrator.Handlers.BusinessMessageHandler.#ctor">
             <summary>
             Abstract base class for handlers that process BusinessMessageHandler updates.
+            </summary>
+        </member>
+        <member name="T:Telegrator.Handlers.BranchingBusinessMessageHandler">
+            <summary>
+            Abstract base class for branching handlers that process BusinessMessageHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.BranchingBusinessMessageHandler.#ctor">
+            <summary>
+            Abstract base class for branching handlers that process BusinessMessageHandler updates.
+            </summary>
+        </member>
+        <member name="T:Telegrator.Handlers.BusinessMessagesDeletedHandlerAttribute">
+            <summary>
+            Attribute that marks a handler to process BusinessMessagesDeletedHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.BusinessMessagesDeletedHandlerAttribute.#ctor(System.Int32)">
+            <summary>
+            Attribute that marks a handler to process BusinessMessagesDeletedHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.BusinessMessagesDeletedHandlerAttribute.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Update})">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Handlers.BusinessMessagesDeletedHandler">
+            <summary>
+            Abstract base class for handlers that process BusinessMessagesDeletedHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.BusinessMessagesDeletedHandler.#ctor">
+            <summary>
+            Abstract base class for handlers that process BusinessMessagesDeletedHandler updates.
+            </summary>
+        </member>
+        <member name="T:Telegrator.Handlers.BranchingBusinessMessagesDeletedHandler">
+            <summary>
+            Abstract base class for branching handlers that process BusinessMessagesDeletedHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.BranchingBusinessMessagesDeletedHandler.#ctor">
+            <summary>
+            Abstract base class for branching handlers that process BusinessMessagesDeletedHandler updates.
+            </summary>
+        </member>
+        <member name="T:Telegrator.Handlers.CallbackDataHandlerAttribute">
+            <summary>
+            Attribute that marks a handler to process callback queries with specific data format.
+            Similar to CommandHandler, it can extract the main action and its arguments.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.CallbackDataHandlerAttribute.#ctor(System.Int32)">
+            <summary>
+            Attribute that marks a handler to process callback queries with specific data format.
+            Similar to CommandHandler, it can extract the main action and its arguments.
+            </summary>
+        </member>
+        <member name="P:Telegrator.Handlers.CallbackDataHandlerAttribute.Action">
+            <summary>
+            Gets the action string that was extracted from the callback data.
+            </summary>
+        </member>
+        <member name="P:Telegrator.Handlers.CallbackDataHandlerAttribute.Arguments">
+            <summary>
+            Callback data split by a separator (e.g., ':')
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.CallbackDataHandlerAttribute.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Update})">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Handlers.CallbackDataHandler">
+            <summary>
+            Abstract base class for handlers that process structured callback query data.
+            </summary>
+        </member>
+        <member name="P:Telegrator.Handlers.CallbackDataHandler.Action">
+            <summary>
+            Gets the action that was extracted from the callback data.
+            </summary>
+        </member>
+        <member name="P:Telegrator.Handlers.CallbackDataHandler.Arguments">
+            <summary>
+            Gets the callback data arguments as an array of strings.
+            </summary>
+        </member>
+        <member name="T:Telegrator.Handlers.BranchingCallbackDataHandler">
+            <summary>
+            Abstract base class for branching handlers that process structured callback query data.
+            </summary>
+        </member>
+        <member name="P:Telegrator.Handlers.BranchingCallbackDataHandler.Action">
+            <summary>
+            Gets the action that was extracted from the callback data.
+            </summary>
+        </member>
+        <member name="P:Telegrator.Handlers.BranchingCallbackDataHandler.Arguments">
+            <summary>
+            Gets the callback data arguments as an array of strings.
             </summary>
         </member>
         <member name="T:Telegrator.Handlers.CallbackQueryHandlerAttribute">
@@ -4959,6 +5750,16 @@
             <param name="cacheTime">The maximum amount of time in seconds that the result of the callback query may be cached client-side.</param>
             <param name="cancellationToken">The cancellation token.</param>
         </member>
+        <member name="T:Telegrator.Handlers.BranchingCallbackQueryHandler">
+            <summary>
+            Abstract base class for branching handlers that process CallbackQueryHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.BranchingCallbackQueryHandler.#ctor">
+            <summary>
+            Abstract base class for branching handlers that process CallbackQueryHandler updates.
+            </summary>
+        </member>
         <member name="T:Telegrator.Handlers.ChannelPostHandlerAttribute">
             <summary>
             Attribute that marks a handler to process ChannelPostHandler updates.
@@ -4980,6 +5781,16 @@
         <member name="M:Telegrator.Handlers.ChannelPostHandler.#ctor">
             <summary>
             Abstract base class for handlers that process ChannelPostHandler updates.
+            </summary>
+        </member>
+        <member name="T:Telegrator.Handlers.BranchingChannelPostHandler">
+            <summary>
+            Abstract base class for branching handlers that process ChannelPostHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.BranchingChannelPostHandler.#ctor">
+            <summary>
+            Abstract base class for branching handlers that process ChannelPostHandler updates.
             </summary>
         </member>
         <member name="T:Telegrator.Handlers.ChatBoostHandlerAttribute">
@@ -5005,6 +5816,16 @@
             Abstract base class for handlers that process ChatBoostHandler updates.
             </summary>
         </member>
+        <member name="T:Telegrator.Handlers.BranchingChatBoostHandler">
+            <summary>
+            Abstract base class for branching handlers that process ChatBoostHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.BranchingChatBoostHandler.#ctor">
+            <summary>
+            Abstract base class for branching handlers that process ChatBoostHandler updates.
+            </summary>
+        </member>
         <member name="T:Telegrator.Handlers.ChatJoinRequestHandlerAttribute">
             <summary>
             Attribute that marks a handler to process ChatJoinRequestHandler updates.
@@ -5028,6 +5849,16 @@
             Abstract base class for handlers that process ChatJoinRequestHandler updates.
             </summary>
         </member>
+        <member name="T:Telegrator.Handlers.BranchingChatJoinRequestHandler">
+            <summary>
+            Abstract base class for branching handlers that process ChatJoinRequestHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.BranchingChatJoinRequestHandler.#ctor">
+            <summary>
+            Abstract base class for branching handlers that process ChatJoinRequestHandler updates.
+            </summary>
+        </member>
         <member name="T:Telegrator.Handlers.ChatMemberHandlerAttribute">
             <summary>
             Attribute that marks a handler to process ChatMemberHandler updates.
@@ -5049,6 +5880,16 @@
         <member name="M:Telegrator.Handlers.ChatMemberHandler.#ctor">
             <summary>
             Abstract base class for handlers that process ChatMemberHandler updates.
+            </summary>
+        </member>
+        <member name="T:Telegrator.Handlers.BranchingChatMemberHandler">
+            <summary>
+            Abstract base class for branching handlers that process ChatMemberHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.BranchingChatMemberHandler.#ctor">
+            <summary>
+            Abstract base class for branching handlers that process ChatMemberHandler updates.
             </summary>
         </member>
         <member name="T:Telegrator.Handlers.CommandHandlerAttribute">
@@ -5165,29 +6006,6 @@
             Extracts the arguments string from the command message.
             </summary>
             <returns>The arguments string (everything after the command).</returns>
-        </member>
-        <member name="T:Telegrator.Handlers.DeletedBusinessMessagesHandlerAttribute">
-            <summary>
-            Attribute that marks a handler to process DeletedBusinessMessagesHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.DeletedBusinessMessagesHandlerAttribute.#ctor(System.Int32)">
-            <summary>
-            Attribute that marks a handler to process DeletedBusinessMessagesHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.DeletedBusinessMessagesHandlerAttribute.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Update})">
-            <inheritdoc/>
-        </member>
-        <member name="T:Telegrator.Handlers.DeletedBusinessMessagesHandler">
-            <summary>
-            Abstract base class for handlers that process DeletedBusinessMessagesHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.DeletedBusinessMessagesHandler.#ctor">
-            <summary>
-            Abstract base class for handlers that process DeletedBusinessMessagesHandler updates.
-            </summary>
         </member>
         <member name="T:Telegrator.Handlers.Diagnostics.FilterFallbackInfo">
             <summary>
@@ -5342,6 +6160,39 @@
         <member name="M:Telegrator.Handlers.Diagnostics.ReportInspectorExtensions.Except``1(Telegrator.Handlers.Diagnostics.ReportInspector)">
             <inheritdoc cref="M:Telegrator.Handlers.Diagnostics.ReportInspector.Except(System.String)"/>
         </member>
+        <member name="T:Telegrator.Handlers.DocumentMessageHandlerAttribute">
+            <summary>
+            Attribute that marks a handler to process document messages only.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.DocumentMessageHandlerAttribute.#ctor(System.Int32)">
+            <summary>
+            Attribute that marks a handler to process document messages only.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.DocumentMessageHandlerAttribute.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Update})">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Handlers.DocumentMessageHandler">
+            <summary>
+            Abstract base class for handlers that process document messages only.
+            </summary>
+        </member>
+        <member name="P:Telegrator.Handlers.DocumentMessageHandler.Document">
+            <summary>
+            Gets the document attached to the message.
+            </summary>
+        </member>
+        <member name="T:Telegrator.Handlers.BranchingDocumentMessageHandler">
+            <summary>
+            Abstract base class for branching handlers that process document messages only.
+            </summary>
+        </member>
+        <member name="P:Telegrator.Handlers.BranchingDocumentMessageHandler.Document">
+            <summary>
+            Gets the document attached to the message.
+            </summary>
+        </member>
         <member name="T:Telegrator.Handlers.EditedBusinessMessageHandlerAttribute">
             <summary>
             Attribute that marks a handler to process EditedBusinessMessageHandler updates.
@@ -5363,6 +6214,16 @@
         <member name="M:Telegrator.Handlers.EditedBusinessMessageHandler.#ctor">
             <summary>
             Abstract base class for handlers that process EditedBusinessMessageHandler updates.
+            </summary>
+        </member>
+        <member name="T:Telegrator.Handlers.BranchingEditedBusinessMessageHandler">
+            <summary>
+            Abstract base class for branching handlers that process EditedBusinessMessageHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.BranchingEditedBusinessMessageHandler.#ctor">
+            <summary>
+            Abstract base class for branching handlers that process EditedBusinessMessageHandler updates.
             </summary>
         </member>
         <member name="T:Telegrator.Handlers.EditedChannelPostHandlerAttribute">
@@ -5388,6 +6249,16 @@
             Abstract base class for handlers that process EditedChannelPostHandler updates.
             </summary>
         </member>
+        <member name="T:Telegrator.Handlers.BranchingEditedChannelPostHandler">
+            <summary>
+            Abstract base class for branching handlers that process EditedChannelPostHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.BranchingEditedChannelPostHandler.#ctor">
+            <summary>
+            Abstract base class for branching handlers that process EditedChannelPostHandler updates.
+            </summary>
+        </member>
         <member name="T:Telegrator.Handlers.EditedMessageHandlerAttribute">
             <summary>
             Attribute that marks a handler to process EditedMessageHandler updates.
@@ -5409,6 +6280,16 @@
         <member name="M:Telegrator.Handlers.EditedMessageHandler.#ctor">
             <summary>
             Abstract base class for handlers that process EditedMessageHandler updates.
+            </summary>
+        </member>
+        <member name="T:Telegrator.Handlers.BranchingEditedMessageHandler">
+            <summary>
+            Abstract base class for branching handlers that process EditedMessageHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.BranchingEditedMessageHandler.#ctor">
+            <summary>
+            Abstract base class for branching handlers that process EditedMessageHandler updates.
             </summary>
         </member>
         <member name="T:Telegrator.Handlers.HandlerContainer`1">
@@ -5563,6 +6444,16 @@
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
+        <member name="T:Telegrator.Handlers.BranchingInlineQueryHandler">
+            <summary>
+            Abstract base class for branching handlers that process InlineQueryHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.BranchingInlineQueryHandler.#ctor">
+            <summary>
+            Abstract base class for branching handlers that process InlineQueryHandler updates.
+            </summary>
+        </member>
         <member name="T:Telegrator.Handlers.MessageHandlerAttribute">
             <summary>
             Attribute that marks a handler to process message updates.
@@ -5711,6 +6602,16 @@
             Abstract base class for handlers that process MessageReactionCountHandler updates.
             </summary>
         </member>
+        <member name="T:Telegrator.Handlers.BranchingMessageReactionCountHandler">
+            <summary>
+            Abstract base class for branching handlers that process MessageReactionCountHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.BranchingMessageReactionCountHandler.#ctor">
+            <summary>
+            Abstract base class for branching handlers that process MessageReactionCountHandler updates.
+            </summary>
+        </member>
         <member name="T:Telegrator.Handlers.MessageReactionHandlerAttribute">
             <summary>
             Attribute that marks a handler to process MessageReactionHandler updates.
@@ -5732,6 +6633,16 @@
         <member name="M:Telegrator.Handlers.MessageReactionHandler.#ctor">
             <summary>
             Abstract base class for handlers that process MessageReactionHandler updates.
+            </summary>
+        </member>
+        <member name="T:Telegrator.Handlers.BranchingMessageReactionHandler">
+            <summary>
+            Abstract base class for branching handlers that process MessageReactionHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.BranchingMessageReactionHandler.#ctor">
+            <summary>
+            Abstract base class for branching handlers that process MessageReactionHandler updates.
             </summary>
         </member>
         <member name="T:Telegrator.Handlers.MyChatMemberHandlerAttribute">
@@ -5757,6 +6668,59 @@
             Abstract base class for handlers that process MyChatMemberHandler updates.
             </summary>
         </member>
+        <member name="T:Telegrator.Handlers.BranchingMyChatMemberHandler">
+            <summary>
+            Abstract base class for branching handlers that process MyChatMemberHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.BranchingMyChatMemberHandler.#ctor">
+            <summary>
+            Abstract base class for branching handlers that process MyChatMemberHandler updates.
+            </summary>
+        </member>
+        <member name="T:Telegrator.Handlers.PhotoMessageHandlerAttribute">
+            <summary>
+            Attribute that marks a handler to process photo messages only.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.PhotoMessageHandlerAttribute.#ctor(System.Int32)">
+            <summary>
+            Attribute that marks a handler to process photo messages only.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.PhotoMessageHandlerAttribute.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Update})">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Handlers.PhotoMessageHandler">
+            <summary>
+            Abstract base class for handlers that process photo messages only.
+            </summary>
+        </member>
+        <member name="P:Telegrator.Handlers.PhotoMessageHandler.Photos">
+            <summary>
+            Gets the photos attached to the message.
+            </summary>
+        </member>
+        <member name="P:Telegrator.Handlers.PhotoMessageHandler.LargestPhoto">
+            <summary>
+            Gets the largest photo (best quality) attached to the message.
+            </summary>
+        </member>
+        <member name="T:Telegrator.Handlers.BranchingPhotoMessageHandler">
+            <summary>
+            Abstract base class for branching handlers that process photo messages only.
+            </summary>
+        </member>
+        <member name="P:Telegrator.Handlers.BranchingPhotoMessageHandler.Photos">
+            <summary>
+            Gets the photos attached to the message.
+            </summary>
+        </member>
+        <member name="P:Telegrator.Handlers.BranchingPhotoMessageHandler.LargestPhoto">
+            <summary>
+            Gets the largest photo (best quality) attached to the message.
+            </summary>
+        </member>
         <member name="T:Telegrator.Handlers.PollAnswerHandlerAttribute">
             <summary>
             Attribute that marks a handler to process PollAnswerHandler updates.
@@ -5778,6 +6742,16 @@
         <member name="M:Telegrator.Handlers.PollAnswerHandler.#ctor">
             <summary>
             Abstract base class for handlers that process PollAnswerHandler updates.
+            </summary>
+        </member>
+        <member name="T:Telegrator.Handlers.BranchingPollAnswerHandler">
+            <summary>
+            Abstract base class for branching handlers that process PollAnswerHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.BranchingPollAnswerHandler.#ctor">
+            <summary>
+            Abstract base class for branching handlers that process PollAnswerHandler updates.
             </summary>
         </member>
         <member name="T:Telegrator.Handlers.PollHandlerAttribute">
@@ -5803,6 +6777,16 @@
             Abstract base class for handlers that process PollHandler updates.
             </summary>
         </member>
+        <member name="T:Telegrator.Handlers.BranchingPollHandler">
+            <summary>
+            Abstract base class for branching handlers that process PollHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.BranchingPollHandler.#ctor">
+            <summary>
+            Abstract base class for branching handlers that process PollHandler updates.
+            </summary>
+        </member>
         <member name="T:Telegrator.Handlers.PreCheckoutQueryHandlerAttribute">
             <summary>
             Attribute that marks a handler to process PreCheckoutQueryHandler updates.
@@ -5824,6 +6808,16 @@
         <member name="M:Telegrator.Handlers.PreCheckoutQueryHandler.#ctor">
             <summary>
             Abstract base class for handlers that process PreCheckoutQueryHandler updates.
+            </summary>
+        </member>
+        <member name="T:Telegrator.Handlers.BranchingPreCheckoutQueryHandler">
+            <summary>
+            Abstract base class for branching handlers that process PreCheckoutQueryHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.BranchingPreCheckoutQueryHandler.#ctor">
+            <summary>
+            Abstract base class for branching handlers that process PreCheckoutQueryHandler updates.
             </summary>
         </member>
         <member name="T:Telegrator.Handlers.PurchasedPaidMediaHandlerAttribute">
@@ -5849,6 +6843,16 @@
             Abstract base class for handlers that process PurchasedPaidMediaHandler updates.
             </summary>
         </member>
+        <member name="T:Telegrator.Handlers.BranchingPurchasedPaidMediaHandler">
+            <summary>
+            Abstract base class for branching handlers that process PurchasedPaidMediaHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.BranchingPurchasedPaidMediaHandler.#ctor">
+            <summary>
+            Abstract base class for branching handlers that process PurchasedPaidMediaHandler updates.
+            </summary>
+        </member>
         <member name="T:Telegrator.Handlers.RemovedChatBoostHandlerAttribute">
             <summary>
             Attribute that marks a handler to process RemovedChatBoostHandler updates.
@@ -5872,6 +6876,16 @@
             Abstract base class for handlers that process RemovedChatBoostHandler updates.
             </summary>
         </member>
+        <member name="T:Telegrator.Handlers.BranchingRemovedChatBoostHandler">
+            <summary>
+            Abstract base class for branching handlers that process RemovedChatBoostHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.BranchingRemovedChatBoostHandler.#ctor">
+            <summary>
+            Abstract base class for branching handlers that process RemovedChatBoostHandler updates.
+            </summary>
+        </member>
         <member name="T:Telegrator.Handlers.ShippingQueryHandlerAttribute">
             <summary>
             Attribute that marks a handler to process ShippingQueryHandler updates.
@@ -5893,6 +6907,49 @@
         <member name="M:Telegrator.Handlers.ShippingQueryHandler.#ctor">
             <summary>
             Abstract base class for handlers that process ShippingQueryHandler updates.
+            </summary>
+        </member>
+        <member name="T:Telegrator.Handlers.BranchingShippingQueryHandler">
+            <summary>
+            Abstract base class for branching handlers that process ShippingQueryHandler updates.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.BranchingShippingQueryHandler.#ctor">
+            <summary>
+            Abstract base class for branching handlers that process ShippingQueryHandler updates.
+            </summary>
+        </member>
+        <member name="T:Telegrator.Handlers.TextMessageHandlerAttribute">
+            <summary>
+            Attribute that marks a handler to process text messages only.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.TextMessageHandlerAttribute.#ctor(System.Int32)">
+            <summary>
+            Attribute that marks a handler to process text messages only.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Handlers.TextMessageHandlerAttribute.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Update})">
+            <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Handlers.TextMessageHandler">
+            <summary>
+            Abstract base class for handlers that process text messages only.
+            </summary>
+        </member>
+        <member name="P:Telegrator.Handlers.TextMessageHandler.Text">
+            <summary>
+            Gets the text of the message.
+            </summary>
+        </member>
+        <member name="T:Telegrator.Handlers.BranchingTextMessageHandler">
+            <summary>
+            Abstract base class for branching handlers that process text messages only.
+            </summary>
+        </member>
+        <member name="P:Telegrator.Handlers.BranchingTextMessageHandler.Text">
+            <summary>
+            Gets the text of the message.
             </summary>
         </member>
         <member name="T:Telegrator.Handlers.AbstractHandlerContainerExtensions">
@@ -7867,6 +8924,42 @@
             <param name = "data">The data.</param>
             <returns>The same builder instance.</returns>
         </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.CallbackDataContains``1(``0,System.String)">
+            <summary>
+            Adds a CallbackDataContainsAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "data">The data.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.CallbackDataStartsWith``1(``0,System.String)">
+            <summary>
+            Adds a CallbackDataStartsWithAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "data">The data.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.CallbackDataEndsWith``1(``0,System.String)">
+            <summary>
+            Adds a CallbackDataEndsWithAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "data">The data.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.CallbackDataRegex``1(``0,System.String)">
+            <summary>
+            Adds a CallbackDataRegexAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "pattern">The pattern.</param>
+            <returns>The same builder instance.</returns>
+        </member>
         <member name="M:Telegrator.HandlerBuilderExtensions.CallbackInlineId``1(``0,System.String)">
             <summary>
             Adds a CallbackInlineIdAttribute target filter to the handler builder.
@@ -7874,6 +8967,33 @@
             <typeparam name = "TBuilder">The builder type.</typeparam>
             <param name = "builder">The handler builder.</param>
             <param name = "inlineMessageId">The inlineMessageId.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.ChatJoinRequestInviteLink``1(``0,System.String)">
+            <summary>
+            Adds a ChatJoinRequestInviteLinkAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "inviteLink">The inviteLink.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.ChosenInlineResultId``1(``0,System.String)">
+            <summary>
+            Adds a ChosenInlineResultIdAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "resultId">The resultId.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.ChosenInlineResultQuery``1(``0,System.String)">
+            <summary>
+            Adds a ChosenInlineResultQueryAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "query">The query.</param>
             <returns>The same builder instance.</returns>
         </member>
         <member name="M:Telegrator.HandlerBuilderExtensions.CommandAllias``1(``0,System.String[])">
@@ -8003,6 +9123,51 @@
             <param name = "builder">The handler builder.</param>
             <param name = "variable">The variable.</param>
             <param name = "comparison">The comparison.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.InlineQueryText``1(``0,System.String)">
+            <summary>
+            Adds a InlineQueryTextAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "text">The text.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.InlineQueryContains``1(``0,System.String)">
+            <summary>
+            Adds a InlineQueryContainsAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "text">The text.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.InlineQueryStartsWith``1(``0,System.String)">
+            <summary>
+            Adds a InlineQueryStartsWithAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "text">The text.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.InlineQueryEndsWith``1(``0,System.String)">
+            <summary>
+            Adds a InlineQueryEndsWithAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "text">The text.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.InlineQueryRegex``1(``0,System.String)">
+            <summary>
+            Adds a InlineQueryRegexAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "pattern">The pattern.</param>
             <returns>The same builder instance.</returns>
         </member>
         <member name="M:Telegrator.HandlerBuilderExtensions.Mentioned``1(``0)">
@@ -8424,6 +9589,33 @@
             <param name = "word">The word.</param>
             <param name = "comparison">The comparison.</param>
             <param name = "startIndex">The startIndex.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.PollType``1(``0,Telegram.Bot.Types.Enums.PollType)">
+            <summary>
+            Adds a PollTypeAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "pollType">The pollType.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.PollIsClosed``1(``0,System.Boolean)">
+            <summary>
+            Adds a PollIsClosedAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "isClosed">The isClosed.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.HandlerBuilderExtensions.PollIsAnonymous``1(``0,System.Boolean)">
+            <summary>
+            Adds a PollIsAnonymousAttribute target filter to the handler builder.
+            </summary>
+            <typeparam name = "TBuilder">The builder type.</typeparam>
+            <param name = "builder">The handler builder.</param>
+            <param name = "isAnonymous">The isAnonymous.</param>
             <returns>The same builder instance.</returns>
         </member>
         <member name="M:Telegrator.HandlerBuilderExtensions.Welcome``1(``0,System.Boolean)">

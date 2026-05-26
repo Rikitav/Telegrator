@@ -124,7 +124,11 @@ internal static class DeveloperHelperAnalyzerExtensions
         "ChatMemberHandler",
         "ChatJoinRequestHandler",
         "ChatBoostHandler",
-        "RemovedChatBoostHandler"
+        "RemovedChatBoostHandler",
+        "TextMessageHandler",
+        "PhotoMessageHandler",
+        "DocumentMessageHandler",
+        "CallbackDataHandler"
     ];
 
     // Ищет атрибут и возвращает его нормализованное имя (без суффикса Attribute)

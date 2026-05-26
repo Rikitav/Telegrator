@@ -60,16 +60,16 @@ public class HandlersCollectorGenerator : IIncrementalGenerator
             if (attr.AttributeClass == null)
                 continue;
 
-            // Пропускаем системные атрибуты компилятора, чтобы не засорять генерацию
-            string ns = attr.AttributeClass.ContainingNamespace.ToDisplayString();
+            string ns = attr.AttributeClass.ContainingNamespace?.ToDisplayString() ?? string.Empty;
             if (ns.StartsWith("System.Runtime") || ns.StartsWith("System.Diagnostics"))
                 continue;
 
             string attrType = attr.AttributeClass.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+            var ctorArgs = attr.ConstructorArguments.IsDefault ? Enumerable.Empty<TypedConstant>() : attr.ConstructorArguments;
+            var namedArgs = attr.NamedArguments.IsDefault ? Enumerable.Empty<KeyValuePair<string, TypedConstant>>() : attr.NamedArguments;
 
-            // ИСПОЛЬЗУЕМ НОВЫЙ МЕТОД FormatTypedConstant вместо ToCSharpString()
-            string args = string.Join(", ", attr.ConstructorArguments.Select(FormatTypedConstant));
-            string named = string.Join(", ", attr.NamedArguments.Select(n => $"{n.Key} = {FormatTypedConstant(n.Value)}"));
+            string args = string.Join(", ", ctorArgs.Select(FormatTypedConstant));
+            string named = string.Join(", ", namedArgs.Select(n => $"{n.Key} = {FormatTypedConstant(n.Value)}"));
 
             string initString = $"new {attrType}({args})" + (string.IsNullOrEmpty(named) ? "" : $" {{ {named} }}");
             attributesList.Add(initString);
@@ -80,8 +80,14 @@ public class HandlersCollectorGenerator : IIncrementalGenerator
 
     private static string FormatTypedConstant(TypedConstant arg)
     {
+        if (arg.IsNull)
+            return "null";
+
         if (arg.Kind == TypedConstantKind.Array)
         {
+            if (arg.Values.IsDefault)
+                return "null";
+
             var values = arg.Values.Select(FormatTypedConstant);
             string typeName = arg.Type is IArrayTypeSymbol arrayType
                 ? arrayType.ElementType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)

@@ -22,3 +22,11 @@ public abstract class MessageReactionHandler() : AbstractUpdateHandler<MessageRe
 {
 }
 
+
+/// <summary>
+/// Abstract base class for branching handlers that process MessageReactionHandler updates.
+/// </summary>
+public abstract class BranchingMessageReactionHandler() : BranchingUpdateHandler<MessageReactionUpdated>(UpdateType.MessageReaction)
+{
+}
+

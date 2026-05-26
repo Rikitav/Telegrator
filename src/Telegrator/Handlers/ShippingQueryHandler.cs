@@ -23,3 +23,11 @@ public abstract class ShippingQueryHandler() : AbstractUpdateHandler<ShippingQue
 {
 }
 
+
+/// <summary>
+/// Abstract base class for branching handlers that process ShippingQueryHandler updates.
+/// </summary>
+public abstract class BranchingShippingQueryHandler() : BranchingUpdateHandler<ShippingQuery>(UpdateType.ShippingQuery)
+{
+}
+

@@ -23,3 +23,11 @@ public abstract class PreCheckoutQueryHandler() : AbstractUpdateHandler<PreCheck
 {
 }
 
+
+/// <summary>
+/// Abstract base class for branching handlers that process PreCheckoutQueryHandler updates.
+/// </summary>
+public abstract class BranchingPreCheckoutQueryHandler() : BranchingUpdateHandler<PreCheckoutQuery>(UpdateType.PreCheckoutQuery)
+{
+}
+

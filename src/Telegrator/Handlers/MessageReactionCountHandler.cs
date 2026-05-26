@@ -22,3 +22,11 @@ public abstract class MessageReactionCountHandler() : AbstractUpdateHandler<Mess
 {
 }
 
+
+/// <summary>
+/// Abstract base class for branching handlers that process MessageReactionCountHandler updates.
+/// </summary>
+public abstract class BranchingMessageReactionCountHandler() : BranchingUpdateHandler<MessageReactionCountUpdated>(UpdateType.MessageReactionCount)
+{
+}
+

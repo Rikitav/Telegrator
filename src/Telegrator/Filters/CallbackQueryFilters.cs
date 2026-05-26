@@ -28,6 +28,77 @@ public class CallbackDataFilter : Filter<CallbackQuery>
 }
 
 /// <summary>
+/// Filter that checks if <see cref="CallbackQuery"/>'s data contains specific string
+/// </summary>
+public class CallbackDataContainsFilter : Filter<CallbackQuery>
+{
+    private readonly string _data;
+    private readonly StringComparison _comparison;
+
+    /// <summary>
+    /// Initialize new instance of <see cref="CallbackDataContainsFilter"/>
+    /// </summary>
+    public CallbackDataContainsFilter(string data, StringComparison comparison = StringComparison.InvariantCultureIgnoreCase)
+    {
+        _data = data;
+        _comparison = comparison;
+    }
+
+    /// <inheritdoc/>
+    public override bool CanPass(FilterExecutionContext<CallbackQuery> context)
+    {
+        return context.Input.Data?.Contains(_data, _comparison) == true;
+    }
+}
+
+/// <summary>
+/// Filter that checks if <see cref="CallbackQuery"/>'s data starts with specific string
+/// </summary>
+public class CallbackDataStartsWithFilter : Filter<CallbackQuery>
+{
+    private readonly string _data;
+    private readonly StringComparison _comparison;
+
+    /// <summary>
+    /// Initialize new instance of <see cref="CallbackDataStartsWithFilter"/>
+    /// </summary>
+    public CallbackDataStartsWithFilter(string data, StringComparison comparison = StringComparison.InvariantCultureIgnoreCase)
+    {
+        _data = data;
+        _comparison = comparison;
+    }
+
+    /// <inheritdoc/>
+    public override bool CanPass(FilterExecutionContext<CallbackQuery> context)
+    {
+        return context.Input.Data?.StartsWith(_data, _comparison) == true;
+    }
+}
+
+/// <summary>
+/// Filter that checks if <see cref="CallbackQuery"/>'s data ends with specific string
+/// </summary>
+public class CallbackDataEndsWithFilter : Filter<CallbackQuery>
+{
+    private readonly string _data;
+    private readonly StringComparison _comparison;
+
+    /// <summary>
+    /// Initialize new instance of <see cref="CallbackDataEndsWithFilter"/>
+    /// </summary>
+    public CallbackDataEndsWithFilter(string data, StringComparison comparison = StringComparison.InvariantCultureIgnoreCase)
+    {
+        _data = data;
+        _comparison = comparison;
+    }
+
+    /// <inheritdoc/>
+    public override bool CanPass(FilterExecutionContext<CallbackQuery> context)
+    {
+        return context.Input.Data?.EndsWith(_data, _comparison) == true;
+    }
+}
+/// <summary>
 /// Filter that checks if <see cref="CallbackQuery"/> belongs to a specific message
 /// </summary>
 public class CallbackInlineIdFilter : Filter<CallbackQuery>

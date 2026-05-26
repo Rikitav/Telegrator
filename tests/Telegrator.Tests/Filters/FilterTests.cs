@@ -147,7 +147,7 @@ public class FilterTests
         var isCollectible = anyFilter.IsCollectible;
 
         // Assert
-        isCollectible.Should().BeTrue();
+        isCollectible.Should().BeFalse();
     }
 
     /// <summary>

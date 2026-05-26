@@ -36,6 +36,34 @@ public class CallbackDataAttribute(string data)
 { }
 
 /// <summary>
+/// Attribute for filtering <see cref="CallbackQuery"/>'s data that contains specific string
+/// </summary>
+public class CallbackDataContainsAttribute(string data)
+    : CallbackQueryAttribute(new CallbackDataContainsFilter(data))
+{ }
+
+/// <summary>
+/// Attribute for filtering <see cref="CallbackQuery"/>'s data that starts with specific string
+/// </summary>
+public class CallbackDataStartsWithAttribute(string data)
+    : CallbackQueryAttribute(new CallbackDataStartsWithFilter(data))
+{ }
+
+/// <summary>
+/// Attribute for filtering <see cref="CallbackQuery"/>'s data that ends with specific string
+/// </summary>
+public class CallbackDataEndsWithAttribute(string data)
+    : CallbackQueryAttribute(new CallbackDataEndsWithFilter(data))
+{ }
+
+/// <summary>
+/// Attribute for filtering <see cref="CallbackQuery"/>'s data with Regex
+/// </summary>
+public class CallbackDataRegexAttribute(string pattern)
+    : CallbackQueryAttribute(new CallbackRegexFilter(pattern))
+{ }
+
+/// <summary>
 /// Attribute to check if <see cref="CallbackQuery"/> belongs to a specific message by its ID
 /// </summary>
 public class CallbackInlineIdAttribute(string inlineMessageId)

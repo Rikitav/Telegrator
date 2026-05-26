@@ -105,3 +105,11 @@ public abstract class InlineQueryHandler() : AbstractUpdateHandler<Update>(Updat
             isPersonal, nextOffset,
             button, cancellationToken);
 }
+
+/// <summary>
+/// Abstract base class for branching handlers that process InlineQueryHandler updates.
+/// </summary>
+public abstract class BranchingInlineQueryHandler() : BranchingUpdateHandler<Update>(UpdateType.InlineQuery)
+{
+}
+

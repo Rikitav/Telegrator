@@ -22,3 +22,11 @@ public abstract class PollAnswerHandler() : AbstractUpdateHandler<PollAnswer>(Up
 {
 }
 
+
+/// <summary>
+/// Abstract base class for branching handlers that process PollAnswerHandler updates.
+/// </summary>
+public abstract class BranchingPollAnswerHandler() : BranchingUpdateHandler<PollAnswer>(UpdateType.PollAnswer)
+{
+}
+

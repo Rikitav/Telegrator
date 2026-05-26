@@ -13,9 +13,10 @@ public class ImplicitHandlerBuilderExtensionsGenerator : IIncrementalGenerator
     private static readonly string[] DefaultUsings =
     [
         "Telegrator.Handlers.Building",
-        "Telegrator.Core.Handlers.Building"
+        "Telegrator.Core.Handlers.Building",
+        "Telegram.Bot.Types.Payments"
     ];
-     
+
     private static readonly ParameterSyntax ExtensionMethodThisParam = SyntaxFactory.Parameter(SyntaxFactory.Identifier("builder")).WithType(SyntaxFactory.IdentifierName("TBuilder").WithLeadingTrivia(SyntaxFactory.SyntaxTrivia(SyntaxKind.WhitespaceTrivia, " ")).WithTrailingTrivia(WhitespaceTrivia)).WithModifiers([SyntaxFactory.Token(SyntaxKind.ThisKeyword)]);
     private static readonly MemberAccessExpressionSyntax BuilderAdderMethodAccessExpression = SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, SyntaxFactory.IdentifierName("builder"), SyntaxFactory.IdentifierName("AddTargetedFilters"));
     private static readonly IEqualityComparer<UsingDirectiveSyntax> UsingEqualityComparer = new UsingDirectiveEqualityComparer();
@@ -92,7 +93,7 @@ public class ImplicitHandlerBuilderExtensionsGenerator : IIncrementalGenerator
                 debugExport.AppendLine(errorFormat);
             }
         }
-        
+
         List<MethodDeclarationSyntax> extensions = [];
         foreach (ClassDeclarationSyntax classDeclaration in declarations)
         {
@@ -185,7 +186,7 @@ public class ImplicitHandlerBuilderExtensionsGenerator : IIncrementalGenerator
 
     private static MethodDeclarationSyntax GeneratedExtensionsMethod(ClassDeclarationSyntax classDeclaration, ParameterListSyntax methodParameters, ArgumentListSyntax invokerArguments, MethodDeclarationSyntax targetterMethod)
     {
-        ParameterListSyntax parameters = SyntaxFactory.ParameterList([ExtensionMethodThisParam, ..methodParameters.Parameters]);
+        ParameterListSyntax parameters = SyntaxFactory.ParameterList([ExtensionMethodThisParam, .. methodParameters.Parameters]);
         TypeParameterListSyntax typeParameters = SyntaxFactory.TypeParameterList([SyntaxFactory.TypeParameter("TBuilder")]);
 
         InvocationExpressionSyntax invocationExpression = SyntaxFactory.InvocationExpression(BuilderAdderMethodAccessExpression, AddTargeter(invokerArguments, targetterMethod));
@@ -214,7 +215,7 @@ public class ImplicitHandlerBuilderExtensionsGenerator : IIncrementalGenerator
             .WithModifiers(Modifiers(SyntaxKind.PublicKeyword, SyntaxKind.StaticKeyword))
             .WithConstraintClauses([typeParameterConstraint])
             .WithLeadingTrivia(xmlDoc);
-         
+
         return method;
     }
 
@@ -226,7 +227,7 @@ public class ImplicitHandlerBuilderExtensionsGenerator : IIncrementalGenerator
         .Select(name => SyntaxFactory.UsingDirective(name).WithTrailingTrivia(NewLineTrivia));
 
     private static ArgumentListSyntax AddTargeter(ArgumentListSyntax invokerArguments, MethodDeclarationSyntax targetterMethod)
-        => SyntaxFactory.ArgumentList([SyntaxFactory.Argument(SyntaxFactory.IdentifierName(targetterMethod.Identifier)), ..invokerArguments.Arguments]);
+        => SyntaxFactory.ArgumentList([SyntaxFactory.Argument(SyntaxFactory.IdentifierName(targetterMethod.Identifier)), .. invokerArguments.Arguments]);
 
     private static bool IsTargeterMethod(MethodDeclarationSyntax method)
         => method.Identifier.ToString() == "GetFilterringTarget";

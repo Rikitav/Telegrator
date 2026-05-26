@@ -22,3 +22,11 @@ public abstract class ChatJoinRequestHandler() : AbstractUpdateHandler<ChatJoinR
 {
 }
 
+
+/// <summary>
+/// Abstract base class for branching handlers that process ChatJoinRequestHandler updates.
+/// </summary>
+public abstract class BranchingChatJoinRequestHandler() : BranchingUpdateHandler<ChatJoinRequest>(UpdateType.ChatJoinRequest)
+{
+}
+

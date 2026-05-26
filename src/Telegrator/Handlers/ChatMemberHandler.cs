@@ -22,3 +22,11 @@ public abstract class ChatMemberHandler() : AbstractUpdateHandler<ChatMemberUpda
 {
 }
 
+
+/// <summary>
+/// Abstract base class for branching handlers that process ChatMemberHandler updates.
+/// </summary>
+public abstract class BranchingChatMemberHandler() : BranchingUpdateHandler<ChatMemberUpdated>(UpdateType.ChatMember)
+{
+}
+

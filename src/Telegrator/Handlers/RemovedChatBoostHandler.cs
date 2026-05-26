@@ -22,3 +22,11 @@ public abstract class RemovedChatBoostHandler() : AbstractUpdateHandler<ChatBoos
 {
 }
 
+
+/// <summary>
+/// Abstract base class for branching handlers that process RemovedChatBoostHandler updates.
+/// </summary>
+public abstract class BranchingRemovedChatBoostHandler() : BranchingUpdateHandler<ChatBoostRemoved>(UpdateType.RemovedChatBoost)
+{
+}
+

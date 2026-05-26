@@ -23,3 +23,11 @@ public abstract class PurchasedPaidMediaHandler() : AbstractUpdateHandler<PaidMe
 {
 }
 
+
+/// <summary>
+/// Abstract base class for branching handlers that process PurchasedPaidMediaHandler updates.
+/// </summary>
+public abstract class BranchingPurchasedPaidMediaHandler() : BranchingUpdateHandler<PaidMediaPurchased>(UpdateType.PurchasedPaidMedia)
+{
+}
+

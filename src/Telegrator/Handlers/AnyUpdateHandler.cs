@@ -29,3 +29,11 @@ public abstract class AnyUpdateHandler() : AbstractUpdateHandler<Update>(UpdateT
 {
 
 }
+
+/// <summary>
+/// Abstract base class for branching handlers that process AnyUpdateHandler updates.
+/// </summary>
+public abstract class BranchingAnyUpdateHandler() : BranchingUpdateHandler<Update>(UpdateType.Unknown)
+{
+}
+

@@ -22,3 +22,11 @@ public abstract class EditedChannelPostHandler() : AbstractUpdateHandler<Message
 {
 }
 
+
+/// <summary>
+/// Abstract base class for branching handlers that process EditedChannelPostHandler updates.
+/// </summary>
+public abstract class BranchingEditedChannelPostHandler() : BranchingUpdateHandler<Message>(UpdateType.EditedChannelPost)
+{
+}
+

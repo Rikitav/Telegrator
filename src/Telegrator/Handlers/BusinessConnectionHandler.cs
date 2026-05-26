@@ -22,3 +22,11 @@ public abstract class BusinessConnectionHandler() : AbstractUpdateHandler<Busine
 {
 }
 
+
+/// <summary>
+/// Abstract base class for branching handlers that process BusinessConnectionHandler updates.
+/// </summary>
+public abstract class BranchingBusinessConnectionHandler() : BranchingUpdateHandler<BusinessConnection>(UpdateType.BusinessConnection)
+{
+}
+

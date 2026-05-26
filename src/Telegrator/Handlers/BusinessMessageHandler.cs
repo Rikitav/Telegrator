@@ -22,3 +22,11 @@ public abstract class BusinessMessageHandler() : AbstractUpdateHandler<Message>(
 {
 }
 
+
+/// <summary>
+/// Abstract base class for branching handlers that process BusinessMessageHandler updates.
+/// </summary>
+public abstract class BranchingBusinessMessageHandler() : BranchingUpdateHandler<Message>(UpdateType.BusinessMessage)
+{
+}
+
