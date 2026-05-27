@@ -8,7 +8,7 @@ namespace Telegrator;
 /// Indicates that handler utilizes localization
 /// </summary>
 /// <typeparam name="T"></typeparam>
-public interface ILocalizedHandler<T> : IAbstractUpdateHandler<Message> where T : class
+public interface ILocalizedHandler<T> : IAbstractUpdateHandler<T> where T : class
 {
     /// <summary>
     /// Gets the localization provider associated with this handler.

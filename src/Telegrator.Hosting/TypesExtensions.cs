@@ -18,7 +18,6 @@ using Telegrator.Logging;
 using Telegrator.Mediation;
 using Telegrator.Providers;
 using Telegrator.States;
-using static System.Collections.Specialized.BitVector32;
 
 namespace Telegrator;
 
