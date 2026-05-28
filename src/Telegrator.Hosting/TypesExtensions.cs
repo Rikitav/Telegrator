@@ -68,12 +68,12 @@ public static class HostBuilderExtensions
         {
             Token = configuration[nameof(TelegratorOptions.Token)] ?? throw new MissingMemberException("Token is required."),
             BaseUrl = configuration[nameof(TelegratorOptions.BaseUrl)],
-            UseTestEnvironment = bool.TryParse(configuration[nameof(TelegratorOptions.UseTestEnvironment)], out bool useTestEnvironment) ? useTestEnvironment : default(bool),
-            RetryThreshold = int.TryParse(configuration[nameof(TelegratorOptions.RetryThreshold)], out int retryThreshold) ? retryThreshold : default(int),
-            RetryCount = int.TryParse(configuration[nameof(TelegratorOptions.RetryCount)], out int retryCount) ? retryCount : default(int),
-            MaximumParallelWorkingHandlers = int.TryParse(configuration[nameof(TelegratorOptions.MaximumParallelWorkingHandlers)], out int maximumParallelWorkingHandlers) ? maximumParallelWorkingHandlers : default(int),
-            ExclusiveAwaitingHandlerRouting = bool.TryParse(configuration[nameof(TelegratorOptions.ExclusiveAwaitingHandlerRouting)], out bool exclusiveAwaitingHandlerRouting) ? exclusiveAwaitingHandlerRouting : default(bool),
-            ExceptIntersectingCommandAliases = bool.TryParse(configuration[nameof(TelegratorOptions.ExceptIntersectingCommandAliases)], out bool exceptIntersectingCommandAliases) ? exceptIntersectingCommandAliases : default(bool),
+            UseTestEnvironment = bool.TryParse(configuration[nameof(TelegratorOptions.UseTestEnvironment)], out bool useTestEnvironment) ? useTestEnvironment : false,
+            RetryThreshold = int.TryParse(configuration[nameof(TelegratorOptions.RetryThreshold)], out int retryThreshold) ? retryThreshold : 60,
+            RetryCount = int.TryParse(configuration[nameof(TelegratorOptions.RetryCount)], out int retryCount) ? retryCount : 3,
+            MaximumParallelWorkingHandlers = int.TryParse(configuration[nameof(TelegratorOptions.MaximumParallelWorkingHandlers)], out int maximumParallelWorkingHandlers) ? maximumParallelWorkingHandlers : null,
+            ExclusiveAwaitingHandlerRouting = bool.TryParse(configuration[nameof(TelegratorOptions.ExclusiveAwaitingHandlerRouting)], out bool exclusiveAwaitingHandlerRouting) ? exclusiveAwaitingHandlerRouting : false,
+            ExceptIntersectingCommandAliases = bool.TryParse(configuration[nameof(TelegratorOptions.ExceptIntersectingCommandAliases)], out bool exceptIntersectingCommandAliases) ? exceptIntersectingCommandAliases : false,
         };
     }
 
