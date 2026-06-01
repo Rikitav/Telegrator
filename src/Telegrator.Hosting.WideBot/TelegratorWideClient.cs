@@ -78,6 +78,10 @@ public class TelegratorWClient : WTelegramBotClient, ITelegratorBot, ICollecting
                     .StartAsync(cancellationToken)
                     .ConfigureAwait(false);
             }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
             catch (Exception exception)
             {
                 await UpdateRouter

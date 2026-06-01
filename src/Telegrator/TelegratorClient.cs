@@ -117,6 +117,10 @@ public class TelegratorClient : TelegramBotClient, ITelegratorBot, ICollectingPr
                     .ReceiveAsync(UpdateRouter, cancellationToken)
                     .ConfigureAwait(false);
             }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
             catch (Exception exception)
             {
                 await UpdateRouter

@@ -123,7 +123,7 @@ public static class WideHostBuilderExtensions
         if (builder.Services.Any(srvc => srvc.ServiceType == typeof(HostedUpdateReceiver)))
             throw new InvalidOperationException("`HostedUpdateReceiver` found in services. WideHost extension is not compatible with default long-polling receiver. Please, remove `WithPolling` invocation from your Host configuration.");
 
-        if (builder.Services.Any(srvc => srvc.ServiceType.Name == "HostedUpdateWebhooker"))
+        if (builder.Services.Any(srvc => srvc.ServiceType.FullName == "Telegrator.Mediation.HostedUpdateWebhooker"))
             throw new InvalidOperationException("`HostedUpdateWebhooker` found in services. WideHost extension is not compatible with webhooking yet. Please, remove `WithWeb` invocation from your Host configuration.");
 
         if (!builder.Services.Any(srvc => srvc.ServiceType == typeof(IOptions<WTelegramBotClientOptions>)))
@@ -136,10 +136,10 @@ public static class WideHostBuilderExtensions
                 throw new MissingMemberException("Auto configuration enabled, yet no options of type 'WideBotOptions' was registered. This configuration is runtime required!");
 
             WideBotOptions wideBotOptions = ParseWideBotOptions(section);
-            TelegratorOptions options = builder.Services.BuildServiceProvider().GetRequiredService<IOptions<TelegratorOptions>>().Value;
 
             builder.Services.AddSingleton(provider =>
             {
+                TelegratorOptions options = provider.GetRequiredService<IOptions<TelegratorOptions>>().Value;
                 IHostApplicationLifetime lifetime = provider.GetRequiredService<IHostApplicationLifetime>();
 
                 DbConnection dbConnection = dbConnectionFactory.Invoke(provider);

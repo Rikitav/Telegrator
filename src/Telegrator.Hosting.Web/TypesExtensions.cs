@@ -128,13 +128,21 @@ public static class WebTelegramBotHostExtensions
     /// <param name="webhookUri"></param>
     /// <returns></returns>
     /// <exception cref="ArgumentException"></exception>
-    public static T RemapWebhook<T>(this T app, string webhookUri) where T : IEndpointRouteBuilder, IHost
+    public static async Task<T> RemapWebhookAsync<T>(this T app, string webhookUri) where T : IEndpointRouteBuilder, IHost
     {
         if (!app.ServiceProvider.TryFindWebhooker(out HostedUpdateWebhooker? webhooker))
             throw new InvalidOperationException("No service for type 'Telegrator.Mediation.HostedUpdateWebhooker' has been registered.");
 
-        webhooker.RemapWebhook(app, webhookUri, default).GetAwaiter().GetResult();
+        await webhooker.RemapWebhook(app, webhookUri, default).ConfigureAwait(false);
         return app;
+    }
+
+    /// <summary>
+    /// Remaps the webhook endpoint to the specified URI.
+    /// </summary>
+    public static T RemapWebhook<T>(this T app, string webhookUri) where T : IEndpointRouteBuilder, IHost
+    {
+        return RemapWebhookAsync(app, webhookUri).GetAwaiter().GetResult();
     }
 
     /// <summary>
@@ -144,7 +152,7 @@ public static class WebTelegramBotHostExtensions
     /// <returns></returns>
     public static IServiceCollection AddTelegramWebhook(this IServiceCollection services)
     {
-        services.RemoveAll<IOptions<HostedUpdateWebhooker>>();
+        services.RemoveAll<IOptions<WebhookerOptions>>();
         services.RemoveAll<ITelegramBotClient>();
 
         services.AddHttpClient<ITelegramBotClient>("tgwebhook").RemoveAllLoggers().AddTypedClient(TypedTelegramBotClientFactory);

@@ -33,7 +33,8 @@ public class DefaultUpdateReceiver(ITelegramBotClient client, ReceiverOptions? o
     /// <returns>A task representing the asynchronous update receiving operation.</returns>
     public async Task ReceiveAsync(IUpdateHandler updateHandler, CancellationToken cancellationToken)
     {
-        cancellationToken = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken).Token;
+        using CancellationTokenSource cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        cancellationToken = cts.Token;
         GetUpdatesRequest request = new GetUpdatesRequest()
         {
             AllowedUpdates = Options?.AllowedUpdates ?? [],

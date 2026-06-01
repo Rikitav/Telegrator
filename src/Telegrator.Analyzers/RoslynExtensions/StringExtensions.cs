@@ -6,6 +6,9 @@
         {
             char[] chars = target.ToCharArray();
             int index = chars.IndexOf(char.IsLetter);
+            if (index < 0)
+                return target;
+
             chars[index] = char.ToUpper(chars[index]);
             return new string(chars);
         }
@@ -14,6 +17,9 @@
         {
             char[] chars = target.ToCharArray();
             int index = chars.IndexOf(char.IsLetter);
+            if (index < 0)
+                return target;
+
             chars[index] = char.ToLower(chars[index]);
             return new string(chars);
         }

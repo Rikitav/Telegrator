@@ -75,13 +75,13 @@ public class KeyboardMarkupGenerator : IIncrementalGenerator
     };
 
     // Diagnostic descriptors
-    private static readonly DiagnosticDescriptor WrongReturnType = new DiagnosticDescriptor("TLG201", "Wrong return type", string.Empty, "Telegrator.Modelling", DiagnosticSeverity.Error, true);
-    private static readonly DiagnosticDescriptor UnsupportedAttribute = new DiagnosticDescriptor("TLG202", "Unsupported or invalid attribute", string.Empty, "Telegrator.Modelling", DiagnosticSeverity.Error, true);
-    private static readonly DiagnosticDescriptor NotPartialMethod = new DiagnosticDescriptor("TLG203", "Not a partial member", string.Empty, "Telegrator.Modelling", DiagnosticSeverity.Error, true);
-    private static readonly DiagnosticDescriptor UseBodylessMethod = new DiagnosticDescriptor("TLG204", "Use bodyless method", string.Empty, "Telegrator.Modelling", DiagnosticSeverity.Error, true);
-    private static readonly DiagnosticDescriptor UseParametrlessMethod = new DiagnosticDescriptor("TLG205", "Use parametrless method", string.Empty, "Telegrator.Modelling", DiagnosticSeverity.Error, true);
-    private static readonly DiagnosticDescriptor UseGetOnlyProperty = new DiagnosticDescriptor("TLG206", "Use property with only get accessor", string.Empty, "Telegrator.Modelling", DiagnosticSeverity.Error, true);
-    private static readonly DiagnosticDescriptor UseBodylessGetAccessor = new DiagnosticDescriptor("TLG207", "Use bodyless get accessor", string.Empty, "Telegrator.Modelling", DiagnosticSeverity.Error, true);
+    private static readonly DiagnosticDescriptor WrongReturnType = new DiagnosticDescriptor("TLG201", "Wrong return type", "Keyboard markup method must return InlineKeyboardMarkup or ReplyKeyboardMarkup", "Telegrator.Modelling", DiagnosticSeverity.Error, true);
+    private static readonly DiagnosticDescriptor UnsupportedAttribute = new DiagnosticDescriptor("TLG202", "Unsupported or invalid attribute", "The applied attribute is not supported for keyboard markup generation", "Telegrator.Modelling", DiagnosticSeverity.Error, true);
+    private static readonly DiagnosticDescriptor NotPartialMethod = new DiagnosticDescriptor("TLG203", "Not a partial member", "Keyboard markup method must be declared as partial", "Telegrator.Modelling", DiagnosticSeverity.Error, true);
+    private static readonly DiagnosticDescriptor UseBodylessMethod = new DiagnosticDescriptor("TLG204", "Use bodyless method", "Keyboard markup method must not have a body; implementation will be generated", "Telegrator.Modelling", DiagnosticSeverity.Error, true);
+    private static readonly DiagnosticDescriptor UseParametrlessMethod = new DiagnosticDescriptor("TLG205", "Use parametrless method", "Keyboard markup method must not have parameters", "Telegrator.Modelling", DiagnosticSeverity.Error, true);
+    private static readonly DiagnosticDescriptor UseGetOnlyProperty = new DiagnosticDescriptor("TLG206", "Use property with only get accessor", "Keyboard markup property must have a get accessor without a setter, initializer, or expression body", "Telegrator.Modelling", DiagnosticSeverity.Error, true);
+    private static readonly DiagnosticDescriptor UseBodylessGetAccessor = new DiagnosticDescriptor("TLG207", "Use bodyless get accessor", "Keyboard markup property get accessor must not have a body; implementation will be generated", "Telegrator.Modelling", DiagnosticSeverity.Error, true);
 
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {

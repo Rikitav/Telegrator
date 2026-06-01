@@ -175,7 +175,7 @@ public abstract class HandlerDescriptor
             return;
 
         UpdateHandlerAttributeBase handlerAttribute = HandlerInspector.GetHandlerAttribute(handlerType, precompiledAttributes);
-        if (handlerAttribute.ExpectingHandlerType?.Contains(handlerType.BaseType) == false)
+        if (handlerAttribute.ExpectingHandlerType?.Any(expected => expected.IsAssignableFrom(handlerType.BaseType)) == false)
             throw new ArgumentException(string.Format("This handler attribute cannot be attached to this class. Attribute can be attached on next handlers : {0}", string.Join(", ", handlerAttribute.ExpectingHandlerType.AsEnumerable())));
 
         IFilter<Update>? stateKeeperAttribute = HandlerInspector.GetStateKeeperAttribute(handlerType, precompiledAttributes);

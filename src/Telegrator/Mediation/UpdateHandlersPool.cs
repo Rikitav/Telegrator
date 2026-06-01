@@ -112,7 +112,11 @@ public class UpdateHandlersPool : IUpdateHandlersPool
                 if (ExecutionLimiter != null)
                     await ExecutionLimiter.WaitAsync(GlobalCancellationToken);
 
-                _ = ProcessHandler(handlerInfo);
+                _ = ProcessHandler(handlerInfo).ContinueWith(t =>
+                {
+                    if (t.IsFaulted)
+                        TelegratorLogging.LogError("Unhandled exception in handler processing", t.Exception!.GetBaseException());
+                }, CancellationToken.None, TaskContinuationOptions.OnlyOnFaulted, TaskScheduler.Default);
             }
         }
         catch (ChannelClosedException)

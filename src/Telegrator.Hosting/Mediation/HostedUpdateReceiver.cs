@@ -17,7 +17,14 @@ namespace Telegrator.Mediation;
 /// <param name="logger"></param>
 public class HostedUpdateReceiver(ITelegramBotClient botClient, IUpdateRouter updateRouter, IOptions<ReceiverOptions> options, ILogger<HostedUpdateReceiver> logger) : BackgroundService
 {
-    private readonly ReceiverOptions _receiverOptions = options.Value;
+    private readonly ReceiverOptions _receiverOptions = new ReceiverOptions()
+    {
+        AllowedUpdates = options.Value.AllowedUpdates,
+        DropPendingUpdates = options.Value.DropPendingUpdates,
+        Limit = options.Value.Limit,
+        Offset = options.Value.Offset
+    };
+
     private readonly IUpdateRouter _updateRouter = updateRouter;
 
     /// <inheritdoc/>

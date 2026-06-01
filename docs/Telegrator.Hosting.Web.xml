@@ -83,7 +83,7 @@
             Initializes the bot and logs handlers on application startup.
             </summary>
         </member>
-        <member name="M:Telegrator.WebTelegramBotHostExtensions.RemapWebhook``1(``0,System.String)">
+        <member name="M:Telegrator.WebTelegramBotHostExtensions.RemapWebhookAsync``1(``0,System.String)">
             <summary>
             Allows to remap receiving webhook endpoint and map new route to webhost.
             </summary>
@@ -91,6 +91,11 @@
             <param name="webhookUri"></param>
             <returns></returns>
             <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:Telegrator.WebTelegramBotHostExtensions.RemapWebhook``1(``0,System.String)">
+            <summary>
+            Remaps the webhook endpoint to the specified URI.
+            </summary>
         </member>
         <member name="M:Telegrator.WebTelegramBotHostExtensions.AddTelegramWebhook(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
             <summary>
