@@ -1,5 +1,4 @@
 using FluentAssertions;
-using Telegram.Bot.Types.Enums;
 using Telegrator.Core.Descriptors;
 using Telegrator.Core.Filters;
 using Xunit;

@@ -1,7 +1,7 @@
 ﻿using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
-using Telegrator.Filters;
 using Telegrator.Attributes;
+using Telegrator.Filters;
 
 namespace Telegrator.Annotations;
 

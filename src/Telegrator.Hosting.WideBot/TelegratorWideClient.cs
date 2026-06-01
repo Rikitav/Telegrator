@@ -1,8 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using System;
-using System.Net.Http;
-using System.Threading;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
 using Telegrator.Core;

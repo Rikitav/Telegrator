@@ -1,7 +1,4 @@
-﻿using System.Reflection;
-using Telegram.Bot.Types.ReplyMarkups;
-
-namespace Telegrator.Markups;
+﻿namespace Telegrator.Markups;
 
 /*
 internal static class KeyboardMapper

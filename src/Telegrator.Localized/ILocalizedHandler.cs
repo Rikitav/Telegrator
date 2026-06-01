@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Localization;
-using Telegram.Bot.Types;
 using Telegrator.Core.Handlers;
 
 namespace Telegrator;

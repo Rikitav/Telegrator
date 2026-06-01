@@ -1,9 +1,6 @@
 using System.Globalization;
-using System.Threading.Tasks;
-using Telegrator.Core.Descriptors;
 using Telegrator.Aspects;
 using Telegrator.Core.Handlers;
-using Telegram.Bot.Types;
 
 namespace Telegrator;
 

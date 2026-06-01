@@ -1,9 +1,9 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using Telegram.Bot.Types.Enums;
 using Telegrator.Annotations;
 using Telegrator.Core;
 using Telegrator.Core.Descriptors;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Telegrator.Providers;
 

@@ -1,6 +1,4 @@
 ﻿using Microsoft.Extensions.Localization;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Telegram.Bot.Types;
 using Telegrator.Handlers;
 

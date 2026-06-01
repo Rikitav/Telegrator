@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Telegram.Bot;
-using Telegram.Bot.Polling;
 using Telegrator.Core;
 
 namespace Telegrator.Mediation;

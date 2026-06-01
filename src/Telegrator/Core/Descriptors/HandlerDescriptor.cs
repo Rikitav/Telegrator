@@ -1,9 +1,9 @@
-﻿using Telegram.Bot.Types;
+﻿using System.Diagnostics.CodeAnalysis;
+using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegrator.Core.Attributes;
 using Telegrator.Core.Filters;
 using Telegrator.Core.Handlers;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Telegrator.Core.Descriptors;
 

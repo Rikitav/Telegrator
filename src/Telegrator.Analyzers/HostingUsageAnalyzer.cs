@@ -3,7 +3,6 @@ using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Operations;
 using System.Collections.Concurrent;
 using System.Collections.Immutable;
-using System.Linq;
 
 namespace Telegrator.Analyzers;
 
