@@ -23,7 +23,7 @@ public class DefaultStateStorage : IStateStorage
     }
 
     /// <inheritdoc/>
-    public Task<T?> GetAsync<T>(string key, CancellationToken ccancellationTokent = default)
+    public Task<T?> GetAsync<T>(string key, CancellationToken cancellationToken = default)
     {
         if (key is null)
             throw new ArgumentNullException(nameof(key));

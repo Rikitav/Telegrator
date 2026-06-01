@@ -29,7 +29,7 @@ public class TelegratorClient : TelegramBotClient, ITelegratorBot, ICollectingPr
     public IHandlersCollection Handlers { get; }
 
     /// <inheritdoc/>
-    public ITelegramBotInfo BotInfo { get; }
+    public ITelegramBotInfo BotInfo { get; private set; } = null!;
 
     /// <inheritdoc/>
     public IUpdateRouter UpdateRouter => updateRouter ?? throw new InvalidOperationException("Router's not created yet. Invoke `StartReceiving` to initialize this property.");
@@ -63,7 +63,6 @@ public class TelegratorClient : TelegramBotClient, ITelegratorBot, ICollectingPr
     {
         Options = telegratorOptions ?? new TelegratorOptions();
         Handlers = new HandlersCollection(default);
-        BotInfo = new TelegramBotInfo(this.GetMe(cancellationToken).Result);
     }
 
     /// <inheritdoc/>
@@ -71,6 +70,8 @@ public class TelegratorClient : TelegramBotClient, ITelegratorBot, ICollectingPr
     {
         if (Options.GlobalCancellationToken == CancellationToken.None)
             Options.GlobalCancellationToken = cancellationToken;
+
+        BotInfo = new TelegramBotInfo(await this.GetMe(cancellationToken).ConfigureAwait(false));
 
         HandlersProvider handlerProvider = new HandlersProvider(Handlers, Options);
         AwaitingProvider awaitingProvider = new AwaitingProvider(Options);

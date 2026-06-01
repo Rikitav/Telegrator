@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Runtime.CompilerServices;
+using System.Text;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
@@ -23,6 +24,9 @@ public class UpdateRouter : IUpdateRouter
 
     /// <inheritdoc/>
     public TelegratorOptions Options { get; }
+
+    /// <inheritdoc/>
+    public ITelegramBotInfo BotInfo => _botInfo;
 
     /// <inheritdoc/>
     public IHandlersProvider HandlersProvider { get; }
@@ -82,9 +86,9 @@ public class UpdateRouter : IUpdateRouter
     /// <param name="update">The update to handle.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>A task representing the asynchronous update handling operation.</returns>
-    public virtual async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+    public virtual Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
-        _ = HandleUpdateAsyncInternal(botClient, update, cancellationToken);
+        return HandleUpdateAsyncInternal(botClient, update, cancellationToken);
     }
 
     private async Task HandleUpdateAsyncInternal(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
@@ -95,7 +99,7 @@ public class UpdateRouter : IUpdateRouter
         try
         {
             Result? lastResult = null;
-            foreach (DescribedHandlerDescriptor handlerInfo in GetHandlers(AwaitingProvider, botClient, update, cancellationToken))
+            await foreach (DescribedHandlerDescriptor handlerInfo in GetHandlers(AwaitingProvider, botClient, update, cancellationToken).WithCancellation(cancellationToken))
             {
                 if (lastResult?.NextType is not null && lastResult?.NextType != handlerInfo.From.HandlerType)
                     continue;
@@ -122,7 +126,7 @@ public class UpdateRouter : IUpdateRouter
             }
 
             // Queuing reagular handlers for execution
-            foreach (DescribedHandlerDescriptor handlerInfo in GetHandlers(HandlersProvider, botClient, update, cancellationToken))
+            await foreach (DescribedHandlerDescriptor handlerInfo in GetHandlers(HandlersProvider, botClient, update, cancellationToken).WithCancellation(cancellationToken))
             {
                 if (lastResult?.NextType is not null && lastResult?.NextType != handlerInfo.From.HandlerType)
                     continue;
@@ -163,7 +167,7 @@ public class UpdateRouter : IUpdateRouter
     /// <param name="update">The incoming Telegram update to process</param>
     /// <param name="cancellationToken"></param>
     /// <returns>A collection of described handler information for the update</returns>
-    protected virtual IEnumerable<DescribedHandlerDescriptor> GetHandlers(IHandlersProvider provider, ITelegramBotClient client, Update update, CancellationToken cancellationToken = default)
+    protected virtual async IAsyncEnumerable<DescribedHandlerDescriptor> GetHandlers(IHandlersProvider provider, ITelegramBotClient client, Update update, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         TelegratorLogging.LogTrace("Requested handlers for UpdateType.{0}", update.Type);
         if (!provider.TryGetDescriptorList(update.Type, out HandlerDescriptorList? descriptors))
@@ -175,10 +179,13 @@ public class UpdateRouter : IUpdateRouter
         if (descriptors == null || descriptors.Count == 0)
         {
             TelegratorLogging.LogTrace("No handlers provided");
-            return [];
+            yield break;
         }
 
-        return DescribeDescriptors(provider, descriptors, client, update, cancellationToken);
+        await foreach (DescribedHandlerDescriptor descriptor in DescribeDescriptors(provider, descriptors, client, update, cancellationToken).WithCancellation(cancellationToken))
+        {
+            yield return descriptor;
+        }
     }
 
     /// <summary>
@@ -191,13 +198,13 @@ public class UpdateRouter : IUpdateRouter
     /// <param name="update">The incoming Telegram update to process</param>
     /// <param name="cancellationToken"></param>
     /// <returns>A collection of described handler information</returns>
-    protected virtual IEnumerable<DescribedHandlerDescriptor> DescribeDescriptors(IHandlersProvider provider, HandlerDescriptorList descriptors, ITelegramBotClient client, Update update, CancellationToken cancellationToken = default)
+    protected virtual async IAsyncEnumerable<DescribedHandlerDescriptor> DescribeDescriptors(IHandlersProvider provider, HandlerDescriptorList descriptors, ITelegramBotClient client, Update update, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         TelegratorLogging.LogTrace("Describing descriptors of descriptorsList.HandlingType.{0} for Update ({1})", descriptors.HandlingType, update.Id);
         foreach (HandlerDescriptor descriptor in descriptors.Reverse())
         {
             cancellationToken.ThrowIfCancellationRequested();
-            DescribedHandlerDescriptor? describedHandler = DescribeHandler(provider, descriptor, client, update, out bool breakRouting, cancellationToken);
+            var (describedHandler, breakRouting) = await DescribeHandler(provider, descriptor, client, update, cancellationToken).ConfigureAwait(false);
             if (breakRouting)
                 yield break;
 
@@ -218,12 +225,10 @@ public class UpdateRouter : IUpdateRouter
     /// <param name="descriptor">The handler descriptor to process</param>
     /// <param name="client">The Telegram bot client instance</param>
     /// <param name="update">The incoming Telegram update to process</param>
-    /// <param name="breakRouting"></param>
     /// <param name="cancellationToken"></param>
     /// <returns>The described handler info if validation passes; otherwise, null</returns>
-    public virtual DescribedHandlerDescriptor? DescribeHandler(IHandlersProvider provider, HandlerDescriptor descriptor, ITelegramBotClient client, Update update, out bool breakRouting, CancellationToken cancellationToken = default)
+    public virtual async Task<(DescribedHandlerDescriptor? descriptor, bool breakRouting)> DescribeHandler(IHandlersProvider provider, HandlerDescriptor descriptor, ITelegramBotClient client, Update update, CancellationToken cancellationToken = default)
     {
-        breakRouting = false;
         cancellationToken.ThrowIfCancellationRequested();
         Dictionary<string, object> data = new Dictionary<string, object>()
         {
@@ -240,17 +245,16 @@ public class UpdateRouter : IUpdateRouter
 
             if (filtersResult.RouteNext)
             {
-                Result fallbackResult = handlerInstance.FiltersFallback(report, client, cancellationToken).Result;
-                breakRouting = !fallbackResult.RouteNext;
-                return null;
+                Result fallbackResult = await handlerInstance.FiltersFallback(report, client, cancellationToken).ConfigureAwait(false);
+                return (null, !fallbackResult.RouteNext);
             }
             else if (!filtersResult.Success)
             {
-                return null;
+                return (null, false);
             }
         }
 
-        return new DescribedHandlerDescriptor(descriptor, this, AwaitingProvider, StateStorage, client, handlerInstance, filterContext, descriptor.DisplayString);
+        return (new DescribedHandlerDescriptor(descriptor, this, AwaitingProvider, StateStorage, client, handlerInstance, filterContext, descriptor.DisplayString), false);
     }
 
     /// <summary>

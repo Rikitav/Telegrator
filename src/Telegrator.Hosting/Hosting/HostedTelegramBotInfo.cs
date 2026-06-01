@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegrator.Core;
 
@@ -9,13 +8,12 @@ namespace Telegrator.Hosting;
 /// Implementation of <see cref="ITelegramBotInfo"/> that provides bot information.
 /// Contains metadata about the Telegram bot including user details and service provider for wider filterring abilities
 /// </summary>
-/// <param name="client"></param>
 /// <param name="services"></param>
 /// <param name="configuration"></param>
-public class HostedTelegramBotInfo(ITelegramBotClient client, IServiceProvider services, IConfiguration configuration) : ITelegramBotInfo
+public class HostedTelegramBotInfo(IServiceProvider services, IConfiguration configuration) : ITelegramBotInfo
 {
     /// <inheritdoc/>
-    public User User { get; } = client.GetMe().Result;
+    public User User { get; set; } = null!;
 
     /// <summary>
     /// Provides access to services of this Hosted telegram bot

@@ -258,10 +258,10 @@ public static partial class StringExtensions
     /// <returns></returns>
     public static IEnumerable<string> SliceBy(this string source, int length)
     {
-        for (int start = 0; start < source.Length; start += length + 1)
+        for (int start = 0; start < source.Length; start += length)
         {
             int tillEnd = source.Length - start;
-            int toSlice = tillEnd < length + 1 ? tillEnd : length + 1;
+            int toSlice = tillEnd < length ? tillEnd : length;
 
             ReadOnlySpan<char> chunk = source.AsSpan().Slice(start, toSlice);
             yield return chunk.ToString();

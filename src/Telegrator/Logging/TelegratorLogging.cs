@@ -80,8 +80,14 @@ public static class TelegratorLogging
         if (level != LogLevel.Trace & level < MinimalLevel)
             return;
 
-        // Lock only during enumeration to prevent collection modification during iteration
-        foreach (var adapter in _adapters)
+        // Snapshot copy to prevent collection modification during iteration
+        ITelegratorLogger[] adaptersSnapshot;
+        lock (_lock)
+        {
+            adaptersSnapshot = _adapters.ToArray();
+        }
+
+        foreach (var adapter in adaptersSnapshot)
         {
             try
             {

@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
 using Telegrator.Core;
+using Telegrator.Hosting;
 
 namespace Telegrator.Mediation;
 
@@ -23,10 +24,13 @@ public class HostedUpdateReceiver(ITelegramBotClient botClient, IUpdateRouter up
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         logger.LogInformation("Starting receiving updates via long-polling");
+
+        if (_updateRouter.BotInfo is HostedTelegramBotInfo hostedInfo)
+            hostedInfo.User = await botClient.GetMe(stoppingToken).ConfigureAwait(false);
+
         _receiverOptions.AllowedUpdates = _updateRouter.HandlersProvider.AllowedTypes.ToArray();
 
-        botClient.DeleteWebhook(options.Value.DropPendingUpdates, cancellationToken: stoppingToken)
-            .ConfigureAwait(false).GetAwaiter().GetResult();
+        await botClient.DeleteWebhook(options.Value.DropPendingUpdates, cancellationToken: stoppingToken).ConfigureAwait(false);
 
         DefaultUpdateReceiver updateReceiver = new DefaultUpdateReceiver(botClient, _receiverOptions);
         await updateReceiver.ReceiveAsync(_updateRouter, stoppingToken).ConfigureAwait(false);

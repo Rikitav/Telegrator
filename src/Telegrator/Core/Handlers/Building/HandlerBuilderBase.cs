@@ -1,4 +1,5 @@
-﻿using Telegram.Bot.Types;
+﻿using System.Threading;
+using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegrator.Core.Descriptors;
 using Telegrator.Core.Filters;
@@ -74,7 +75,7 @@ public abstract class HandlerBuilderBase(Type buildingHandlerType, UpdateType up
     /// <param name="BuildingHandlerType">The handler type.</param>
     /// <returns>A unique service key string.</returns>
     public static object GetImplicitHandlerServiceKey(Type BuildingHandlerType)
-        => string.Format("ImplicitHandler_{0}+{1}", HandlerServiceKeyIndex++, BuildingHandlerType.Name);
+        => string.Format("ImplicitHandler_{0}+{1}", Interlocked.Increment(ref HandlerServiceKeyIndex), BuildingHandlerType.Name);
 
     /// <summary>
     /// Sets the update validating action for the handler.

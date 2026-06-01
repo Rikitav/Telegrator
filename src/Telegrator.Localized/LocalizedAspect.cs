@@ -5,12 +5,14 @@ using Telegrator.Core.Handlers;
 namespace Telegrator;
 
 /// <summary>
-/// A handler pre-processor that intercepts execution and sets the current culture context
+/// A handler aspect that sets and restores the current culture context
 /// according to the <see cref="ICultureResolver"/>.
 /// </summary>
-public class LocalizedAspect : IPreProcessor
+public class LocalizedAspect : IPreProcessor, IPostProcessor
 {
     private readonly ICultureResolver _cultureResolver;
+    private CultureInfo? _previousCulture;
+    private CultureInfo? _previousUICulture;
 
     /// <summary>
     /// Initializes a new instance of <see cref="LocalizedAspect"/>.
@@ -24,10 +26,8 @@ public class LocalizedAspect : IPreProcessor
     /// <inheritdoc/>
     public async Task<Result> BeforeExecution(IHandlerContainer container, System.Threading.CancellationToken cancellationToken)
     {
-        // Skip for non-localized handlers
-        // To accurately skip, you'd typically need the handler instance from the container or rely on some other marker.
-        // If we inject this processor only on ILocalizedHandler, we might not need this check.
-        // Assuming we always resolve culture if the aspect is applied:
+        _previousCulture = CultureInfo.CurrentCulture;
+        _previousUICulture = CultureInfo.CurrentUICulture;
 
         CultureInfo resolvedCulture = await _cultureResolver.ResolveAsync(container);
 
@@ -35,5 +35,13 @@ public class LocalizedAspect : IPreProcessor
         CultureInfo.CurrentUICulture = resolvedCulture;
 
         return Result.Ok();
+    }
+
+    /// <inheritdoc/>
+    public Task<Result> AfterExecution(IHandlerContainer container, System.Threading.CancellationToken cancellationToken)
+    {
+        CultureInfo.CurrentCulture = _previousCulture ?? CultureInfo.InvariantCulture;
+        CultureInfo.CurrentUICulture = _previousUICulture ?? CultureInfo.InvariantCulture;
+        return Task.FromResult(Result.Ok());
     }
 }

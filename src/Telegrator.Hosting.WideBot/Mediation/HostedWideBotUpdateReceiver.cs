@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Telegram.Bot;
 using Telegrator.Core;
+using Telegrator.Hosting;
 
 namespace Telegrator.Mediation;
 
@@ -19,18 +20,17 @@ public class HostedWideBotUpdateReceiver(ILogger<HostedWideBotUpdateReceiver> lo
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         if (botClient is not WTelegramBotClient wideBotClient)
-            throw new Exception("Registered ITelegramBotClient was not a wide client (WTelegramBotClient)! Please, use `AddWideTelegrator` instead.");
+            throw new InvalidOperationException("Registered ITelegramBotClient was not a wide client (WTelegramBotClient)! Please, use `AddWideTelegrator` instead.");
+
+        if (updateRouter.BotInfo is HostedTelegramBotInfo hostedInfo)
+            hostedInfo.User = await botClient.GetMe(stoppingToken).ConfigureAwait(false);
 
         if (options?.Value.DropPendingUpdates is true)
             await wideBotClient.DropPendingUpdates();
 
         logger.LogInformation("Starting receiving updates via MTProto");
 
-        // UIP (understanding in progress)
-        //_receiverOptions.AllowedUpdates = updateRouter.HandlersProvider.AllowedTypes.ToArray();
-
-        botClient.DeleteWebhook(options?.Value.DropPendingUpdates ?? false, cancellationToken: stoppingToken)
-            .ConfigureAwait(false).GetAwaiter().GetResult();
+        await botClient.DeleteWebhook(options?.Value.DropPendingUpdates ?? false, cancellationToken: stoppingToken).ConfigureAwait(false);
 
         WideUpdateReceiver updateReceiver = new WideUpdateReceiver(wideBotClient);
         await updateReceiver.ReceiveAsync(updateRouter, stoppingToken).ConfigureAwait(false);

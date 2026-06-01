@@ -1,0 +1,104 @@
+[
+  {
+    "category": "Getting Started",
+    "items": [
+      { "title": "Introduction", "id": "introduction", "path": "getting-started/introduction.md" },
+      { "title": "Installation", "id": "installation", "path": "getting-started/installation.md" },
+      { "title": "Quick Start", "id": "quick-start", "path": "getting-started/quick-start.md" }
+    ]
+  },
+  {
+    "category": "Core Concepts",
+    "items": [
+      { "title": "Handler System", "id": "handler-system", "path": "core-concepts/handler-system.md" },
+      { "title": "Filter System", "id": "filter-system", "path": "core-concepts/filter-system.md" },
+      { "title": "State Management", "id": "state-management", "path": "core-concepts/state-management.md" },
+      { "title": "Update Routing", "id": "update-routing", "path": "core-concepts/update-routing.md" }
+    ]
+  },
+  {
+    "category": "Tutorials",
+    "items": [
+      { "title": "Command Filtering", "id": "command-filtering", "path": "tutorials/command-filtering.md" },
+      { "title": "State Wizard", "id": "state-wizard", "path": "tutorials/state-wizard.md" },
+      { "title": "Redis State Storage", "id": "redis-state", "path": "tutorials/redis-state.md" },
+      { "title": "Callback Queries", "id": "callback-queries", "path": "tutorials/callback-queries.md" },
+      { "title": "Implicit Handlers", "id": "implicit-handlers", "path": "tutorials/implicit-handlers.md" }
+    ]
+  },
+  {
+    "category": "Intermediate",
+    "items": [
+      { "title": "Advanced Filters", "id": "advanced-filters", "path": "intermediate/advanced-filters.md" },
+      { "title": "Awaiting Mechanism", "id": "awaiting-mechanism", "path": "intermediate/awaiting-mechanism.md" },
+      { "title": "Branching Handlers", "id": "branching-handlers", "path": "intermediate/branching-handlers.md" },
+      { "title": "Advanced Hosting", "id": "advanced-hosting", "path": "intermediate/advanced-hosting.md" }
+    ]
+  },
+  {
+    "category": "Advanced",
+    "items": [
+      { "title": "Importance & Priority", "id": "importance-and-priority", "path": "advanced/importance-and-priority.md" },
+      { "title": "Dependency Injection", "id": "dependency-injection", "path": "advanced/dependency-injection.md" },
+      { "title": "Aspects (AOP)", "id": "aspects", "path": "advanced/aspects.md" },
+      { "title": "Custom Extensions", "id": "custom-extensions", "path": "advanced/custom-extensions.md" }
+    ]
+  },
+  {
+    "category": "Hosting (Generic Host)",
+    "items": [
+      { "title": "Getting Started", "id": "hosting-start", "path": "hosting/getting-started.md" },
+      { "title": "Dependency Injection", "id": "hosting-di", "path": "hosting/dependency-injection.md" },
+      { "title": "Configuration & Logs", "id": "hosting-config", "path": "hosting/configuration.md" }
+    ]
+  },
+  {
+    "category": "Web Hosting (Webhooks)",
+    "items": [
+      { "title": "Setup & Basics", "id": "web-setup", "path": "web-hosting/setup.md" },
+      { "title": "Security", "id": "web-security", "path": "web-hosting/security.md" },
+      { "title": "Optimization", "id": "web-opt", "path": "web-hosting/optimization.md" }
+    ]
+  },
+  {
+    "category": "WideBot (MTProto)",
+    "items": [
+      { "title": "Introduction", "id": "wide-intro", "path": "wide-bot/introduction.md" },
+      { "title": "Handling Updates", "id": "wide-updates", "path": "wide-bot/handling-updates.md" },
+      { "title": "Advanced Usage", "id": "wide-advanced", "path": "wide-bot/advanced-usage.md" }
+    ]
+  },
+  {
+    "category": "Localization",
+    "items": [
+      { "title": "Setup", "id": "loc-setup", "path": "localization/setup.md" },
+      { "title": "Resolvers", "id": "loc-resolvers", "path": "localization/resolvers.md" },
+      { "title": "Templating", "id": "loc-templating", "path": "localization/templating.md" }
+    ]
+  },
+  {
+    "category": "Redis State Storage",
+    "items": [
+      { "title": "Configuration", "id": "redis-setup", "path": "redis-storage/setup.md" },
+      { "title": "Serialization", "id": "redis-serial", "path": "redis-storage/serialization.md" },
+      { "title": "Concurrency", "id": "redis-concurrency", "path": "redis-storage/concurrency.md" }
+    ]
+  },
+  {
+    "category": "Integration & Deployment",
+    "items": [
+      { "title": "Deployment Options", "id": "deployment", "path": "integration/deployment.md" },
+      { "title": "Configuration", "id": "configuration", "path": "integration/configuration.md" },
+      { "title": "Logging & Errors", "id": "logging-and-errors", "path": "integration/logging-and-errors.md" },
+      { "title": "Performance", "id": "performance", "path": "integration/performance.md" },
+      { "title": "Localization", "id": "localization", "path": "integration/localization.md" }
+    ]
+  },
+  {
+    "category": "Best Practices & FAQ",
+    "items": [
+      { "title": "Organization & Testing", "id": "organization", "path": "best-practices/organization.md" },
+      { "title": "Troubleshooting & FAQ", "id": "troubleshooting", "path": "best-practices/troubleshooting.md" }
+    ]
+  }
+]

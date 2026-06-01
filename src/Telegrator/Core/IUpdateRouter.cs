@@ -16,6 +16,11 @@ public interface IUpdateRouter : IUpdateHandler
     public TelegratorOptions Options { get; }
 
     /// <summary>
+    /// Gets the <see cref="ITelegramBotInfo"/> for the router.
+    /// </summary>
+    public ITelegramBotInfo BotInfo { get; }
+
+    /// <summary>
     /// Gets the <see cref="IUpdateHandlersPool"/> that manages handler execution.
     /// </summary>
     public IUpdateHandlersPool HandlersPool { get; }

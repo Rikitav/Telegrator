@@ -48,13 +48,13 @@ public static class TestServerExtensions
         builder.Services.AddSingleton<TelegratorTestServer>();
 
         // Remove any receivers (long-polling or webhooks) just in case
-        IEnumerable<IHostedService> receivers = builder.Services.Where(x =>
+        var receiverDescriptors = builder.Services.Where(x =>
             x.ServiceType == typeof(IHostedService) &&
             x.ImplementationType != null &&
             x.ImplementationType.Name.Contains("HostedUpdate")).ToList();
 
-        foreach (IHostedService r in receivers)
-            builder.Services.Remove(r);
+        foreach (var descriptor in receiverDescriptors)
+            builder.Services.Remove(descriptor);
 
         return builder;
     }

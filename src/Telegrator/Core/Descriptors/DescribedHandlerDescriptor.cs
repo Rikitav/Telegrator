@@ -11,7 +11,7 @@ namespace Telegrator.Core.Descriptors;
 /// </summary>
 public class DescribedHandlerDescriptor
 {
-    private readonly ManualResetEventSlim ResetEvent = new ManualResetEventSlim(false);
+    private readonly TaskCompletionSource<Result?> _tcs = new TaskCompletionSource<Result?>();
 
     /// <summary>
     /// Descriptor from that handler was described from.
@@ -112,9 +112,8 @@ public class DescribedHandlerDescriptor
     /// <param name="cancellationToken">The cancellation token.</param>
     public async Task AwaitResult(CancellationToken cancellationToken)
     {
-        await Task.Yield();
-        ResetEvent.Reset();
-        ResetEvent.Wait(cancellationToken);
+        using var registration = cancellationToken.Register(() => _tcs.TrySetCanceled(cancellationToken), useSynchronizationContext: false);
+        await _tcs.Task.ConfigureAwait(false);
     }
 
     /// <summary>
@@ -127,7 +126,7 @@ public class DescribedHandlerDescriptor
             throw new InvalidOperationException("Result already reported");
 
         Result = result;
-        ResetEvent.Set();
+        _tcs.TrySetResult(result);
     }
 
     /// <inheritdoc/>

@@ -3497,6 +3497,11 @@
             Gets the <see cref="T:Telegrator.TelegratorOptions"/> for the router.
             </summary>
         </member>
+        <member name="P:Telegrator.Core.IUpdateRouter.BotInfo">
+            <summary>
+            Gets the <see cref="T:Telegrator.Core.ITelegramBotInfo"/> for the router.
+            </summary>
+        </member>
         <member name="P:Telegrator.Core.IUpdateRouter.HandlersPool">
             <summary>
             Gets the <see cref="T:Telegrator.Core.IUpdateHandlersPool"/> that manages handler execution.
@@ -7654,6 +7659,9 @@
         <member name="P:Telegrator.Mediation.UpdateRouter.Options">
             <inheritdoc/>
         </member>
+        <member name="P:Telegrator.Mediation.UpdateRouter.BotInfo">
+            <inheritdoc/>
+        </member>
         <member name="P:Telegrator.Mediation.UpdateRouter.HandlersProvider">
             <inheritdoc/>
         </member>
@@ -7724,7 +7732,7 @@
             <param name="cancellationToken"></param>
             <returns>A collection of described handler information</returns>
         </member>
-        <member name="M:Telegrator.Mediation.UpdateRouter.DescribeHandler(Telegrator.Core.IHandlersProvider,Telegrator.Core.Descriptors.HandlerDescriptor,Telegram.Bot.ITelegramBotClient,Telegram.Bot.Types.Update,System.Boolean@,System.Threading.CancellationToken)">
+        <member name="M:Telegrator.Mediation.UpdateRouter.DescribeHandler(Telegrator.Core.IHandlersProvider,Telegrator.Core.Descriptors.HandlerDescriptor,Telegram.Bot.ITelegramBotClient,Telegram.Bot.Types.Update,System.Threading.CancellationToken)">
             <summary>
             Describes a single handler descriptor for a given update context.
             Validates the handler's filters against the update and creates a handler instance if validation passes.
@@ -7733,7 +7741,6 @@
             <param name="descriptor">The handler descriptor to process</param>
             <param name="client">The Telegram bot client instance</param>
             <param name="update">The incoming Telegram update to process</param>
-            <param name="breakRouting"></param>
             <param name="cancellationToken"></param>
             <returns>The described handler info if validation passes; otherwise, null</returns>
         </member>

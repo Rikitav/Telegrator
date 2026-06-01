@@ -278,7 +278,28 @@ public static class TelegramBotHostExtensions
         }
 
         botHost.AddLoggingAdapter();
+#pragma warning disable CS0618 // Type or member is obsolete
         botHost.SetBotCommands();
+#pragma warning restore CS0618 // Type or member is obsolete
+        return botHost;
+    }
+
+    /// <summary>
+    /// Configures bots available commands depending on what handlers was registered
+    /// </summary>
+    /// <param name="botHost"></param>
+    /// <returns></returns>
+    public static async Task<IHost> SetBotCommandsAsync(this IHost botHost)
+    {
+        ITelegramBotClient client = botHost.Services.GetRequiredService<ITelegramBotClient>();
+        IUpdateRouter router = botHost.Services.GetRequiredService<IUpdateRouter>();
+
+        IEnumerable<BotCommand> aliases = router.HandlersProvider.GetBotCommands();
+        if (aliases.Any())
+        {
+            await client.SetMyCommands(aliases).ConfigureAwait(false);
+        }
+
         return botHost;
     }
 
@@ -289,17 +310,7 @@ public static class TelegramBotHostExtensions
     /// <returns></returns>
     public static IHost SetBotCommands(this IHost botHost)
     {
-        ITelegramBotClient client = botHost.Services.GetRequiredService<ITelegramBotClient>();
-        IUpdateRouter router = botHost.Services.GetRequiredService<IUpdateRouter>();
-
-        IEnumerable<BotCommand> aliases = router.HandlersProvider.GetBotCommands();
-        if (aliases.Any())
-        {
-            client.SetMyCommands(aliases)
-                .ConfigureAwait(false).GetAwaiter().GetResult();
-        }
-
-        return botHost;
+        return SetBotCommandsAsync(botHost).GetAwaiter().GetResult();
     }
 
     /// <summary>

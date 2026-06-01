@@ -29,7 +29,10 @@ public sealed class HandlerDescriptorList : IEnumerable<HandlerDescriptor>
     /// <summary>
     /// Gets count of registered handlers in list
     /// </summary>
-    public int Count => _innerCollection.Count;
+    public int Count
+    {
+        get { lock (_lock) return _innerCollection.Count; }
+    }
 
     /// <summary>
     /// Gets or sets the <see cref="HandlerDescriptor"/> at the specified index.
@@ -38,8 +41,8 @@ public sealed class HandlerDescriptorList : IEnumerable<HandlerDescriptor>
     /// <returns></returns>
     public HandlerDescriptor this[int index]
     {
-        get => _innerCollection.Values[index];
-        set => _innerCollection.Values[index] = value;
+        get { lock (_lock) return _innerCollection.Values[index]; }
+        set { lock (_lock) _innerCollection.Values[index] = value; }
     }
 
     /// <summary>
@@ -91,7 +94,7 @@ public sealed class HandlerDescriptorList : IEnumerable<HandlerDescriptor>
     /// <returns>True if the descriptor exists; otherwise, false.</returns>
     public bool ContainsKey(DescriptorIndexer indexer)
     {
-        return _innerCollection.ContainsKey(indexer);
+        lock (_lock) return _innerCollection.ContainsKey(indexer);
     }
 
     /// <summary>
@@ -103,6 +106,9 @@ public sealed class HandlerDescriptorList : IEnumerable<HandlerDescriptor>
     {
         lock (_lock)
         {
+            if (IsReadOnly)
+                throw new InvalidOperationException("Cannot remove descriptor, collection is read-only.");
+
             return _innerCollection.Remove(indexer);
         }
     }
@@ -116,6 +122,9 @@ public sealed class HandlerDescriptorList : IEnumerable<HandlerDescriptor>
     {
         lock (_lock)
         {
+            if (IsReadOnly)
+                throw new InvalidOperationException("Cannot remove descriptor, collection is read-only.");
+
             int index = _innerCollection.IndexOfValue(descriptor);
             if (index == -1)
                 return false;
@@ -132,7 +141,11 @@ public sealed class HandlerDescriptorList : IEnumerable<HandlerDescriptor>
     {
         lock (_lock)
         {
+            if (IsReadOnly)
+                throw new InvalidOperationException("Cannot clear descriptors, collection is read-only.");
+
             _innerCollection.Clear();
+            count = 0;
         }
     }
 
@@ -147,12 +160,12 @@ public sealed class HandlerDescriptorList : IEnumerable<HandlerDescriptor>
     /// <inheritdoc/>
     public IEnumerator<HandlerDescriptor> GetEnumerator()
     {
-        return _innerCollection.Values.GetEnumerator();
+        lock (_lock) return _innerCollection.Values.ToList().GetEnumerator();
     }
 
     /// <inheritdoc/>
     IEnumerator IEnumerable.GetEnumerator()
     {
-        return _innerCollection.Values.GetEnumerator();
+        lock (_lock) return _innerCollection.Values.ToList().GetEnumerator();
     }
 }

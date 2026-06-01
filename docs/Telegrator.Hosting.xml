@@ -9,16 +9,14 @@
             Implementation of <see cref="T:Telegrator.Core.ITelegramBotInfo"/> that provides bot information.
             Contains metadata about the Telegram bot including user details and service provider for wider filterring abilities
             </summary>
-            <param name="client"></param>
             <param name="services"></param>
             <param name="configuration"></param>
         </member>
-        <member name="M:Telegrator.Hosting.HostedTelegramBotInfo.#ctor(Telegram.Bot.ITelegramBotClient,System.IServiceProvider,Microsoft.Extensions.Configuration.IConfiguration)">
+        <member name="M:Telegrator.Hosting.HostedTelegramBotInfo.#ctor(System.IServiceProvider,Microsoft.Extensions.Configuration.IConfiguration)">
             <summary>
             Implementation of <see cref="T:Telegrator.Core.ITelegramBotInfo"/> that provides bot information.
             Contains metadata about the Telegram bot including user details and service provider for wider filterring abilities
             </summary>
-            <param name="client"></param>
             <param name="services"></param>
             <param name="configuration"></param>
         </member>
@@ -331,6 +329,13 @@
             Replaces the initialization logic from TelegramBotWebHost constructor.
             Initializes the bot and logs handlers on application startup.
             </summary>
+        </member>
+        <member name="M:Telegrator.TelegramBotHostExtensions.SetBotCommandsAsync(Microsoft.Extensions.Hosting.IHost)">
+            <summary>
+            Configures bots available commands depending on what handlers was registered
+            </summary>
+            <param name="botHost"></param>
+            <returns></returns>
         </member>
         <member name="M:Telegrator.TelegramBotHostExtensions.SetBotCommands(Microsoft.Extensions.Hosting.IHost)">
             <summary>

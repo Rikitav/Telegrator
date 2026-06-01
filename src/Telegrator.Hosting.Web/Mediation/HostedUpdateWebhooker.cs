@@ -8,6 +8,7 @@ using System.Text.Json;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegrator.Core;
+using Telegrator.Hosting;
 
 namespace Telegrator.Mediation;
 
@@ -40,17 +41,18 @@ public class HostedUpdateWebhooker : IHostedService
     }
 
     /// <inheritdoc/>
-    public Task StartAsync(CancellationToken cancellationToken)
+    public async Task StartAsync(CancellationToken cancellationToken)
     {
-        StartInternal(cancellationToken);
-        return Task.CompletedTask;
+        if (_updateRouter.BotInfo is HostedTelegramBotInfo hostedInfo)
+            hostedInfo.User = await _botClient.GetMe(cancellationToken).ConfigureAwait(false);
+
+        await StartInternal(cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc/>
-    public Task StopAsync(CancellationToken cancellationToken)
+    public async Task StopAsync(CancellationToken cancellationToken)
     {
-        _botClient.DeleteWebhook(_options.DropPendingUpdates, cancellationToken);
-        return Task.CompletedTask;
+        await _botClient.DeleteWebhook(_options.DropPendingUpdates, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -84,9 +86,9 @@ public class HostedUpdateWebhooker : IHostedService
         routeBuilder.MapPost(pattern, (RequestDelegate)ReceiveUpdate);
     }
 
-    private async void StartInternal(CancellationToken cancellationToken)
+    private async Task StartInternal(CancellationToken cancellationToken)
     {
-        await SetWebhook(cancellationToken);
+        await SetWebhook(cancellationToken).ConfigureAwait(false);
     }
 
     private async Task SetWebhook(CancellationToken cancellationToken)
@@ -103,27 +105,38 @@ public class HostedUpdateWebhooker : IHostedService
             cancellationToken: cancellationToken);
     }
 
-    private Task ReceiveUpdate(HttpContext ctx)
+    private async Task ReceiveUpdate(HttpContext ctx)
     {
         if (_options.SecretToken != null)
         {
             if (!ctx.Request.Headers.TryGetValue(SecretTokenHeader, out StringValues strings))
-                return Task.FromResult(Results.BadRequest());
+            {
+                ctx.Response.StatusCode = StatusCodes.Status400BadRequest;
+                return;
+            }
 
             string? secret = strings.SingleOrDefault();
             if (secret == null)
-                return Task.FromResult(Results.BadRequest());
+            {
+                ctx.Response.StatusCode = StatusCodes.Status400BadRequest;
+                return;
+            }
 
             if (_options.SecretToken != secret)
-                return Task.FromResult(Results.StatusCode(401));
+            {
+                ctx.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                return;
+            }
         }
 
-        ValueTask<Update?> updateTask = JsonSerializer.DeserializeAsync(ctx.Request.Body, JsonBotSerializerContext.Default.Update, ctx.RequestAborted);
-        Update? update = updateTask.ConfigureAwait(false).GetAwaiter().GetResult();
+        Update? update = await JsonSerializer.DeserializeAsync(ctx.Request.Body, JsonBotSerializerContext.Default.Update, ctx.RequestAborted).ConfigureAwait(false);
         if (update is not { Id: > 0 })
-            return Task.FromResult(Results.BadRequest());
+        {
+            ctx.Response.StatusCode = StatusCodes.Status400BadRequest;
+            return;
+        }
 
-        _updateRouter.HandleUpdateAsync(_botClient, update, ctx.RequestAborted).ConfigureAwait(false).GetAwaiter().GetResult();
-        return Task.FromResult(Results.Ok());
+        await _updateRouter.HandleUpdateAsync(_botClient, update, ctx.RequestAborted).ConfigureAwait(false);
+        ctx.Response.StatusCode = StatusCodes.Status200OK;
     }
 }

@@ -53,7 +53,9 @@ public abstract class BranchingUpdateHandler<TUpdate> : AbstractUpdateHandler<TU
         UpdateHandlerAttributeBase updateHandlerAttribute = HandlerInspector.GetHandlerAttribute(thisType);
         IEnumerable<IFilter<Update>> handlerFilters = HandlerInspector.GetFilterAttributes(thisType, HandlingUpdateType);
 
-        MethodInfo[] handlerBranches = thisType.GetMethods().Where(branch => branch.DeclaringType == thisType).ToArray();
+        MethodInfo[] handlerBranches = thisType.GetMethods(BranchesBindingFlags)
+            .Where(branch => !branch.IsSpecialName && AllowedBranchReturnTypes.Any(t => t == branch.ReturnType))
+            .ToArray();
         if (handlerBranches.Length == 0)
             throw new InvalidOperationException("BranchingUpdateHandler must have at least one handler branch.");
 

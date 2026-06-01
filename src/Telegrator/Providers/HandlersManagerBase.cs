@@ -124,7 +124,7 @@ public abstract class HandlersManagerBase(TelegratorOptions options) : IHandlers
     /// <inheritdoc/>
     public bool IsEmpty()
     {
-        return _handlersDictionary.Any(pair => pair.Value.Count != 0);
+        return !_handlersDictionary.Any(pair => pair.Value.Count != 0);
     }
 
     /// <inheritdoc/>

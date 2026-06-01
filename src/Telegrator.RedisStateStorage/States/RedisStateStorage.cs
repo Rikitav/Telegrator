@@ -15,6 +15,7 @@ public class RedisStateStorage(IConnectionMultiplexer redis) : IStateStorage
     /// <inheritdoc/>
     public async Task SetAsync<T>(string key, T state, CancellationToken cancellationToken)
     {
+        cancellationToken.ThrowIfCancellationRequested();
         string json = JsonSerializer.Serialize(state);
         await _db.StringSetAsync(key, json);
     }
@@ -22,6 +23,7 @@ public class RedisStateStorage(IConnectionMultiplexer redis) : IStateStorage
     /// <inheritdoc/>
     public async Task<T?> GetAsync<T>(string key, CancellationToken cancellationToken)
     {
+        cancellationToken.ThrowIfCancellationRequested();
         RedisValue json = await _db.StringGetAsync(key);
         string? jsonStr = json;
 
@@ -34,6 +36,7 @@ public class RedisStateStorage(IConnectionMultiplexer redis) : IStateStorage
     /// <inheritdoc/>
     public async Task DeleteAsync(string key, CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
         await _db.KeyDeleteAsync(key);
     }
 }

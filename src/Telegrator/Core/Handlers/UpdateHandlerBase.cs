@@ -99,12 +99,6 @@ public abstract class UpdateHandlerBase(UpdateType handlingUpdateType) : IUpdate
             // Success
             return Result.Ok();
         }
-        catch (OperationCanceledException)
-        {
-            // Cancelled
-            _ = 0xBAD + 0xC0DE;
-            return Result.Ok();
-        }
         catch (Exception exception)
         {
             try

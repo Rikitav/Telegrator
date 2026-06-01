@@ -28,33 +28,6 @@ dotnet add package Telegrator.Hosting
 
 ---
 
-## Quick Start Example
-
-**Program.cs:**
-```csharp
-using Telegrator.Hosting;
-
-// Creating builder
-TelegramBotHostBuilder builder = TelegramBotHost.CreateBuilder(new HostApplicationBuilderSettings()
-{
-    Args = args,
-    ApplicationName = "TelegramBotHost example",
-});
-
-// Registerring handlers
-builder.Handlers.CollectHandlersAssemblyWide();
-
-// Register your services
-builder.Services.AddSingleton<IMyService, MyService>();
-
-// Building and running application
-TelegramBotHost telegramBot = builder.Build();
-telegramBot.SetBotCommands();
-telegramBot.Run();
-```
-
----
-
 ## Application integration Example
 
 **Program.cs:**
@@ -69,15 +42,13 @@ HostApplicationBuilder builder = Host.CreateApplicationBuilder(new HostApplicati
 });
 
 // Adding Telegrator
-builder.AddTelegrator();
-
-// Registerring handlers (extension)
-builder.Handlers.CollectHandlersAssemblyWide();
+builder.AddTelegrator()
+    .WithPolling()
+    .Handlers.CollectHandlers();
 
 // Building and running application
 builder.Build()
     .UseTelegrator()
-    .SetBotCommands()
     .Run();
 
 ```
@@ -119,4 +90,4 @@ builder.Build()
 ---
 
 ## License
-GPLv3 
+GPLv3

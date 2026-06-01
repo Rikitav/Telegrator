@@ -136,7 +136,6 @@ public class UpdateHandlersPool : IUpdateHandlersPool
             Result lastResult = task.Result;
 
             handlerInfo.ReportResult(lastResult);
-            ExecutionLimiter?.Release(1);
         }
         catch (NotImplementedException)
         {
@@ -152,6 +151,10 @@ public class UpdateHandlersPool : IUpdateHandlersPool
         {
             TelegratorLogging.LogError("Failed to process handler '{0}' (Update {1})", exception: ex, handlerInfo.DisplayString, handlerInfo.HandlingUpdate.Id);
             handlerInfo.ReportResult(null);
+        }
+        finally
+        {
+            ExecutionLimiter?.Release(1);
         }
     }
 

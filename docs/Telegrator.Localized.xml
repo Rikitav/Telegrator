@@ -34,7 +34,7 @@
         </member>
         <member name="T:Telegrator.LocalizedAspect">
             <summary>
-            A handler pre-processor that intercepts execution and sets the current culture context
+            A handler aspect that sets and restores the current culture context
             according to the <see cref="T:Telegrator.ICultureResolver"/>.
             </summary>
         </member>
@@ -45,6 +45,9 @@
             <param name="cultureResolver">The culture resolver used to get user language.</param>
         </member>
         <member name="M:Telegrator.LocalizedAspect.BeforeExecution(Telegrator.Core.Handlers.IHandlerContainer,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Telegrator.LocalizedAspect.AfterExecution(Telegrator.Core.Handlers.IHandlerContainer,System.Threading.CancellationToken)">
             <inheritdoc/>
         </member>
         <member name="T:Telegrator.LocalizedMessageHandlerExtensions">
@@ -74,6 +77,11 @@
         </member>
         <member name="M:Telegrator.Localized.DefaultCultureResolver.ResolveAsync(Telegrator.Core.Handlers.IHandlerContainer)">
             <inheritdoc/>
+        </member>
+        <member name="T:Telegrator.Localized.DefaultStringLocalizer">
+            <summary>
+            Fallback localizer that returns the key itself when a resource is not found.
+            </summary>
         </member>
     </members>
 </doc>

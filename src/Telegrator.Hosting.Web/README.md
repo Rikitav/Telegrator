@@ -30,34 +30,6 @@ dotnet add package Telegrator.Hosting.Web
 
 ---
 
-## Quick Start Example
-
-**Program.cs (ASP.NET Core):**
-```csharp
-using Telegrator.Hosting;
-using Telegrator.Hosting.Web;
-
-// Creating builder
-TelegramBotWebHostBuilder builder = TelegramBotWebHost.CreateBuilder(new WebApplicationOptions()
-{
-    Args = args,
-    ApplicationName = "TelegramBotWebHost example",
-});
-
-// Register handlers
-builder.Handlers.CollectHandlersAssemblyWide();
-
-// Register your services
-builder.Services.AddSingleton<IMyService, MyService>();
-
-// Building and running application
-TelegramBotWebHost telegramBot = builder.Build();
-telegramBot.SetBotCommands();
-telegramBot.Run();
-```
-
----
-
 ## Application integration Example
 
 **Program.cs (ASP.NET Core):**
@@ -73,18 +45,16 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(new WebApplicationO
 });
 
 // Adding Telegrator
-builder.AddTelegratorWeb();
-
-// Register handlers
-builder.Handlers.CollectHandlersAssemblyWide();
+builder.AddTelegrator()
+    .WithWeb()
+    .Handlers.CollectHandlers();
 
 // Register your services
 builder.Services.AddSingleton<IMyService, MyService>();
 
 // Building and running application
 builder.Build()
-    .UseTelegratorWeb()
-    .SetBotCommands();
+    .UseTelegrator()
     .Run();
 ```
 
@@ -117,4 +87,4 @@ builder.Build()
 ---
 
 ## License
-GPLv3 
+GPLv3

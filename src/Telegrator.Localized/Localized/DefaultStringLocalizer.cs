@@ -2,11 +2,14 @@
 
 namespace Telegrator.Localized;
 
+/// <summary>
+/// Fallback localizer that returns the key itself when a resource is not found.
+/// </summary>
 public class DefaultStringLocalizer : IStringLocalizer
 {
-    public LocalizedString this[string name] => throw new NotImplementedException();
+    public LocalizedString this[string name] => new LocalizedString(name, name, resourceNotFound: true);
 
-    public LocalizedString this[string name, params object[] arguments] => throw new NotImplementedException();
+    public LocalizedString this[string name, params object[] arguments] => new LocalizedString(name, string.Format(name, arguments), resourceNotFound: true);
 
-    public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures) => throw new NotImplementedException();
+    public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures) => Enumerable.Empty<LocalizedString>();
 }
