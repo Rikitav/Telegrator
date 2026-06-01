@@ -47,7 +47,7 @@ public class AwaiterHandlerBuilder<TUpdate> : HandlerBuilderBase, IAwaiterHandle
     /// </summary>
     /// <param name="cancellationToken">The cancellation token to cancel the wait operation.</param>
     /// <returns>The awaited update of type TUpdate.</returns>
-    public async Task<TUpdate> Await(CancellationToken cancellationToken = default)
+    public async Task<TUpdate?> Await(CancellationToken cancellationToken = default)
         => await Await(new SenderIdResolver(), cancellationToken);
 
     /// <summary>
@@ -56,12 +56,13 @@ public class AwaiterHandlerBuilder<TUpdate> : HandlerBuilderBase, IAwaiterHandle
     /// <param name="keyResolver">The state key resolver to use for filtering updates.</param>
     /// <param name="cancellationToken">The cancellation token to cancel the wait operation.</param>
     /// <returns>The awaited update of type TUpdate.</returns>
-    public async Task<TUpdate> Await(IStateKeyResolver keyResolver, CancellationToken cancellationToken = default)
+    public async Task<TUpdate?> Await(IStateKeyResolver keyResolver, CancellationToken cancellationToken = default)
     {
         string? handlingKey = keyResolver.ResolveKey(HandlingUpdate);
         if (handlingKey is null)
             throw new InvalidOperationException("Cannot await update with resolved key as NULL");
 
+        Filters.Clear();
         Filters.Add(Filter<Update>.If(ctx =>
         {
             string? key = keyResolver.ResolveKey(ctx.Update);

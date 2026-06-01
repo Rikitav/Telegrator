@@ -170,6 +170,20 @@ public class UpdateHandlersPool : IUpdateHandlersPool
         if (disposed)
             return;
 
+        ExecutionChannel.Writer.TryComplete();
+
+        if (!ChannelReaderTask.IsCompleted)
+        {
+            try
+            {
+                ChannelReaderTask.Wait(TimeSpan.FromSeconds(5));
+            }
+            catch (AggregateException)
+            {
+
+            }
+        }
+
         // do not dispose UpdateRouter
         ExecutionLimiter?.Dispose();
 

@@ -19,7 +19,8 @@ public class HandlersCollectorGenerator : IIncrementalGenerator
             .Where(handler => handler != null && handler.IsValid)
             .Collect();
 
-        context.RegisterSourceOutput(pipeline, Execute);
+        var compilationAndHandlers = context.CompilationProvider.Combine(pipeline);
+        context.RegisterSourceOutput(compilationAndHandlers, (spc, source) => Execute(spc, source.Left, source.Right));
     }
 
     private static bool Provide(SyntaxNode syntaxNode, CancellationToken cancellationToken)
@@ -99,7 +100,7 @@ public class HandlersCollectorGenerator : IIncrementalGenerator
         return arg.ToCSharpString();
     }
 
-    private static void Execute(SourceProductionContext context, ImmutableArray<HandlerRegistrationModel> handlers)
+    private static void Execute(SourceProductionContext context, Compilation compilation, ImmutableArray<HandlerRegistrationModel> handlers)
     {
         if (handlers.IsDefaultOrEmpty)
             return;
@@ -148,6 +149,31 @@ public class HandlersCollectorGenerator : IIncrementalGenerator
             .WithParameterList(SyntaxFactory.ParameterList(SyntaxFactory.SingletonSeparatedList(parameter)))
             .WithBody(SyntaxFactory.Block(statements))
             .WithLeadingTrivia(methodTrivia);
+
+        List<MemberDeclarationSyntax> generatedMembers = [methodDeclaration];
+
+        bool hasHosting = compilation.ReferencedAssemblyNames.Any(a => a.Name == "Telegrator.Hosting")
+            || compilation.AssemblyName == "Telegrator.Hosting";
+
+        if (hasHosting)
+        {
+            string builderType = "global::Telegrator.Hosting.ITelegramBotHostBuilder";
+            if (compilation.GetTypeByMetadataName("Telegrator.Hosting.ITelegratorBuilder") != null)
+                builderType = "global::Telegrator.Hosting.ITelegratorBuilder";
+
+            string hostingMethodCode = $@"
+        /// <summary>
+        /// Collects all generated Telegrator handlers using the Hosting builder statically to support Native AOT compilation.
+        /// </summary>
+        public static {builderType} CollectHandlers(this {builderType} builder, IHandlersCollection handlers)
+        {{
+            CollectHandlers(handlers); // Вызывает базовый метод выше
+            return builder;
+        }}";
+
+            MethodDeclarationSyntax hostingMethod = (MethodDeclarationSyntax)SyntaxFactory.ParseMemberDeclaration(hostingMethodCode)!;
+            generatedMembers.Add(hostingMethod);
+        }
 
         ClassDeclarationSyntax classDeclaration = SyntaxFactory.ClassDeclaration("TelegratorHandlersCollectionExtensions")
             .WithModifiers(SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.PublicKeyword), SyntaxFactory.Token(SyntaxKind.StaticKeyword)))

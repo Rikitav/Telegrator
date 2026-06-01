@@ -13,6 +13,6 @@ public interface IAwaiterHandlerBuilder<TUpdate> : IHandlerBuilder where TUpdate
     /// </summary>
     /// <param name="keyResolver">The <see cref="IStateKeyResolver"/> to resolve the key.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
-    /// <returns>A <see cref="Task{TUpdate}"/> representing the awaited update.</returns>
-    public Task<TUpdate> Await(IStateKeyResolver keyResolver, CancellationToken cancellationToken = default);
+    /// <returns>A <see cref="Task{TUpdate}"/> representing the awaited update, or <see langword="null"/> if the operation does not yield an update.</returns>
+    public Task<TUpdate?> Await(IStateKeyResolver keyResolver, CancellationToken cancellationToken = default);
 }

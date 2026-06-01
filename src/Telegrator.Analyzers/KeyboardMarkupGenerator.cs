@@ -396,38 +396,49 @@ public class KeyboardMarkupGenerator : IIncrementalGenerator
         return SyntaxFactory.Argument(argument.Expression);
     }
 
+    private static TypeDeclarationSyntax CreateTypeDeclaration(TypeDeclarationSyntax original, SyntaxList<MemberDeclarationSyntax> members)
+    {
+        TypeDeclarationSyntax result = original switch
+        {
+            ClassDeclarationSyntax classDecl => SyntaxFactory.ClassDeclaration(classDecl.Identifier)
+                .WithMembers(members)
+                .WithModifiers(classDecl.Modifiers),
+
+            StructDeclarationSyntax structDecl => SyntaxFactory.StructDeclaration(structDecl.Identifier)
+                .WithMembers(members)
+                .WithModifiers(structDecl.Modifiers),
+
+            RecordDeclarationSyntax recordDecl => SyntaxFactory.RecordDeclaration(recordDecl.Keyword, recordDecl.Identifier)
+                .WithMembers(members)
+                .WithModifiers(recordDecl.Modifiers),
+
+            _ => throw new InvalidOperationException("Generated member must be contained within a class, struct, or record.")
+        };
+
+        if (!result.Modifiers.Any(SyntaxKind.PartialKeyword))
+        {
+            result = result.AddModifiers(SyntaxFactory.Token(SyntaxKind.PartialKeyword));
+        }
+
+        return result;
+    }
+
     private static MemberDeclarationSyntax WrapInParentDeclarations(MemberDeclarationSyntax originalMember, List<MemberDeclarationSyntax> generatedMembers)
     {
         SyntaxNode? parentNode = originalMember.Parent;
 
-        if (parentNode is not ClassDeclarationSyntax)
+        if (parentNode is not TypeDeclarationSyntax parentType)
         {
-            throw new InvalidOperationException("Generated member must be contained within a class.");
+            throw new InvalidOperationException("Generated member must be contained within a class, struct, or record.");
         }
 
-        MemberDeclarationSyntax currentDeclaration = SyntaxFactory.ClassDeclaration(((ClassDeclarationSyntax)parentNode).Identifier)
-            .WithMembers(SyntaxFactory.List(generatedMembers))
-            .WithModifiers(((ClassDeclarationSyntax)parentNode).Modifiers);
-
-        if (!currentDeclaration.Modifiers.Any(SyntaxKind.PartialKeyword))
-        {
-            currentDeclaration = ((ClassDeclarationSyntax)currentDeclaration).AddModifiers(SyntaxFactory.Token(SyntaxKind.PartialKeyword));
-        }
+        MemberDeclarationSyntax currentDeclaration = CreateTypeDeclaration(parentType, SyntaxFactory.List(generatedMembers));
 
         parentNode = parentNode.Parent;
 
         while (parentNode is TypeDeclarationSyntax typeDeclaration)
         {
-            ClassDeclarationSyntax wrappingClass = SyntaxFactory.ClassDeclaration(typeDeclaration.Identifier)
-                .WithMembers(SyntaxFactory.SingletonList(currentDeclaration))
-                .WithModifiers(typeDeclaration.Modifiers);
-
-            if (!wrappingClass.Modifiers.Any(SyntaxKind.PartialKeyword))
-            {
-                wrappingClass = wrappingClass.AddModifiers(SyntaxFactory.Token(SyntaxKind.PartialKeyword));
-            }
-
-            currentDeclaration = wrappingClass;
+            currentDeclaration = CreateTypeDeclaration(typeDeclaration, SyntaxFactory.SingletonList(currentDeclaration));
             parentNode = parentNode.Parent;
         }
 

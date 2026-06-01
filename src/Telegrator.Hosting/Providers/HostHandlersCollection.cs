@@ -24,7 +24,7 @@ public class HostHandlersCollection(IServiceCollection hostServiceColletion, Tel
         switch (descriptor.Type)
         {
             default:
-                throw new Exception("Unknown descriptor type");
+                throw new InvalidOperationException("Unknown descriptor type");
 
             case DescriptorType.General:
                 {

@@ -1,10 +1,6 @@
-﻿using Microsoft.Extensions.Localization;
+﻿namespace Telegrator.Localized;
 
-namespace Telegrator.Localized;
-
-/// <summary>
-/// Fallback localizer that returns the key itself when a resource is not found.
-/// </summary>
+/*
 public class DefaultStringLocalizer : IStringLocalizer
 {
     public LocalizedString this[string name] => new LocalizedString(name, name, resourceNotFound: true);
@@ -13,3 +9,4 @@ public class DefaultStringLocalizer : IStringLocalizer
 
     public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures) => Enumerable.Empty<LocalizedString>();
 }
+*/

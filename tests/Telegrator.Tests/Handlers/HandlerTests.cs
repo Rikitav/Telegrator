@@ -44,7 +44,7 @@ namespace Telegrator.Tests.Handlers
                 testHandler,
                 new FilterExecutionContext<Update>(
                     new Mock<IUpdateRouter>().Object,
-                    new TelegramBotInfo(null),
+                    new TelegramBotInfo(null!),
                     new Update { Message = new Message() },
                     new Update { Message = new Message() },
                     new Dictionary<string, object>(),
@@ -69,7 +69,7 @@ namespace Telegrator.Tests.Handlers
                 testHandler,
                 new FilterExecutionContext<Update>(
                     mockRouter.Object,
-                    new TelegramBotInfo(null),
+                    new TelegramBotInfo(null!),
                     new Update { Message = new Message() },
                     new Update { Message = new Message() },
                     new Dictionary<string, object>(),

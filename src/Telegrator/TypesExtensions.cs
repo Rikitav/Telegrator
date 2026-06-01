@@ -220,7 +220,7 @@ public static class AwaiterHandlerBuilderExtensions
     /// <param name="builder"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public static async Task<TUpdate> ByChatId<TUpdate>(this IAwaiterHandlerBuilder<TUpdate> builder, CancellationToken cancellationToken = default) where TUpdate : class
+    public static async Task<TUpdate?> ByChatId<TUpdate>(this IAwaiterHandlerBuilder<TUpdate> builder, CancellationToken cancellationToken = default) where TUpdate : class
         => await builder.Await(new ChatIdResolver(), cancellationToken);
 
     /// <summary>
@@ -230,7 +230,7 @@ public static class AwaiterHandlerBuilderExtensions
     /// <param name="builder"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public static async Task<TUpdate> BySenderId<TUpdate>(this IAwaiterHandlerBuilder<TUpdate> builder, CancellationToken cancellationToken = default) where TUpdate : class
+    public static async Task<TUpdate?> BySenderId<TUpdate>(this IAwaiterHandlerBuilder<TUpdate> builder, CancellationToken cancellationToken = default) where TUpdate : class
         => await builder.Await(new SenderIdResolver(), cancellationToken);
 }
 

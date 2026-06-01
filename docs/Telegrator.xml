@@ -2955,7 +2955,7 @@
             </summary>
             <param name="keyResolver">The <see cref="T:Telegrator.Core.States.IStateKeyResolver"/> to resolve the key.</param>
             <param name="cancellationToken">The cancellation token.</param>
-            <returns>A <see cref="T:System.Threading.Tasks.Task`1"/> representing the awaited update.</returns>
+            <returns>A <see cref="T:System.Threading.Tasks.Task`1"/> representing the awaited update, or <see langword="null"/> if the operation does not yield an update.</returns>
         </member>
         <member name="T:Telegrator.Core.Handlers.Building.IHandlerBuilder">
             <summary>

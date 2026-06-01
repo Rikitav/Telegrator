@@ -10,19 +10,19 @@ namespace Telegrator.Handlers.Building;
 
 internal class AwaiterHandlerDeleter<TUpdate>(UpdateType updateType, Update handlingUpdate, IAwaitingProvider handlerProvider) : IAwaiterHandlerBuilder<TUpdate> where TUpdate : class
 {
-    public Task<TUpdate> Await(IStateKeyResolver keyResolver, CancellationToken cancellationToken = default)
+    public Task<TUpdate?> Await(IStateKeyResolver keyResolver, CancellationToken cancellationToken = default)
     {
         string? handlingKey = keyResolver.ResolveKey(handlingUpdate);
         if (handlingKey is null)
             throw new InvalidOperationException("Cannot await update with resolved key as NULL");
 
         if (!handlerProvider.TryGetDescriptorList(updateType, out HandlerDescriptorList? list) || list == null)
-            return Task.FromResult<TUpdate>(null!);
+            return Task.FromResult<TUpdate?>(null);
 
         foreach (DescriptorIndexer handler in list.Where(x => x.UpdateType == updateType && typeof(IAwaiterHandlerBuilder<>).IsAssignableFrom(x.HandlerType)).Select(x => x.Indexer).ToArray())
             list.Remove(handler);
 
-        return Task.FromResult<TUpdate>(null!);
+        return Task.FromResult<TUpdate?>(null);
     }
 
     public void AddFilter(IFilter<Update> filter) => throw new NotImplementedException();

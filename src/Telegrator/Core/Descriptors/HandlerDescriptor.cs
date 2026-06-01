@@ -38,6 +38,8 @@ public enum DescriptorType
 /// </summary>
 public abstract class HandlerDescriptor
 {
+    private UpdateHandlerBase? _singletonInstance;
+
     /// <summary>
     /// The type of the descriptor.
     /// </summary>
@@ -124,8 +126,8 @@ public abstract class HandlerDescriptor
     /// </summary>
     public UpdateHandlerBase? SingletonInstance
     {
-        get;
-        protected set;
+        get => _singletonInstance;
+        protected set => _singletonInstance = value;
     }
 
     /// <summary>
@@ -484,10 +486,8 @@ public abstract class HandlerDescriptor
     /// <exception cref="Exception"></exception>
     public void SetInstance(UpdateHandlerBase instance)
     {
-        if (SingletonInstance != null)
+        if (Interlocked.CompareExchange(ref _singletonInstance, instance, null) != null)
             throw new InvalidOperationException("SingletonInstance is already set.");
-
-        SingletonInstance = instance;
     }
 
     /// <summary>
@@ -497,11 +497,7 @@ public abstract class HandlerDescriptor
     /// <returns></returns>
     public bool TrySetInstance(UpdateHandlerBase instance)
     {
-        if (SingletonInstance != null)
-            return false;
-
-        SingletonInstance = instance;
-        return true;
+        return Interlocked.CompareExchange(ref _singletonInstance, instance, null) == null;
     }
 
     /// <inheritdoc/>

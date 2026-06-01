@@ -78,10 +78,5 @@
         <member name="M:Telegrator.Localized.DefaultCultureResolver.ResolveAsync(Telegrator.Core.Handlers.IHandlerContainer)">
             <inheritdoc/>
         </member>
-        <member name="T:Telegrator.Localized.DefaultStringLocalizer">
-            <summary>
-            Fallback localizer that returns the key itself when a resource is not found.
-            </summary>
-        </member>
     </members>
 </doc>

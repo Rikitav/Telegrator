@@ -345,7 +345,7 @@ public static class LoggerExtensions
 
         StringBuilder logBuilder = new StringBuilder("Registered handlers : ");
         if (!handlers.Keys.Any())
-            throw new Exception("No update types were registered");
+            throw new InvalidOperationException("No update types were registered");
 
         foreach (UpdateType updateType in handlers.Keys)
         {
