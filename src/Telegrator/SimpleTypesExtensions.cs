@@ -277,7 +277,7 @@ public static partial class StringExtensions
     {
         char[] chars = target.ToCharArray();
         int index = chars.IndexOf(char.IsLetter);
-        
+
         chars[index] = char.ToUpper(chars[index]);
         return new string(chars);
     }

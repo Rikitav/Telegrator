@@ -58,7 +58,7 @@ public static partial class HandlerBuilderExtensions
         handlerBuilder.AddFilters(filters);
         return handlerBuilder;
     }
-    
+
 #pragma warning disable CS1574
     /// <inheritdoc cref="HandlerBuilderBase.SetState{TKey, TValue}(TValue?)"/>
     public static TBuilder SetState<TBuilder, TKey, TValue>(this TBuilder handlerBuilder, TValue? myState)

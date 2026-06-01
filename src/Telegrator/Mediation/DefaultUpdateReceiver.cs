@@ -18,7 +18,7 @@ public class DefaultUpdateReceiver(ITelegramBotClient client, ReceiverOptions? o
     /// Gets the receiver options for configuring update polling behavior.
     /// </summary>
     public readonly ReceiverOptions? Options = options;
-    
+
     /// <summary>
     /// Gets the Telegram bot client for making API requests.
     /// </summary>

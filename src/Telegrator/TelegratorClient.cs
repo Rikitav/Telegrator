@@ -50,7 +50,7 @@ public class TelegratorClient : TelegramBotClient, ITelegratorBot, ICollectingPr
     /// <param name="options">The Telegram bot client options.</param>
     /// <param name="httpClient">Optional HTTP client for making requests.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
-    public TelegratorClient(TelegramBotClientOptions options, HttpClient? httpClient = null, CancellationToken cancellationToken = default) 
+    public TelegratorClient(TelegramBotClientOptions options, HttpClient? httpClient = null, CancellationToken cancellationToken = default)
         : this(options, null, httpClient, cancellationToken) { }
 
     /// <summary>

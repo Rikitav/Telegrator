@@ -79,7 +79,7 @@ public class AnonymousCompiledFilter : Filter<Update>, INamedFilter
             {
                 if (filter is not AnonymousCompiledFilter && filter is not AnonymousTypeFilter)
                     TelegratorLogging.LogDebug("{0} filter of {1} didnt pass! (Compiled anonymous)", filter.GetType().Name, context.Data["handler_name"]);
-            
+
                 return false;
             }
 

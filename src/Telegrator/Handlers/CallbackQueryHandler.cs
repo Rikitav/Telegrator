@@ -106,7 +106,7 @@ public abstract class CallbackQueryHandler() : AbstractUpdateHandler<CallbackQue
         => await Container.EditMessage(
             text, parseMode, replyMarkup,
             entities, linkPreviewOptions, cancellationToken);
-    
+
     /// <summary>
     /// Answers the current callback query with optional alert or message.
     /// </summary>

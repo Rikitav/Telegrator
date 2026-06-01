@@ -43,7 +43,7 @@ public class FromUsernameFilter(string username) : MessageSenderFilter
     /// The username to check for.
     /// </summary>
     private readonly string _username = username;
-    
+
     /// <summary>
     /// The string comparison type to use for username matching.
     /// </summary>
@@ -78,12 +78,12 @@ public class FromUserFilter(string firstName, string? lastName, StringComparison
     /// The first name to check for.
     /// </summary>
     private readonly string _firstName = firstName;
-    
+
     /// <summary>
     /// The last name to check for (optional).
     /// </summary>
     private readonly string? _lastName = lastName;
-    
+
     /// <summary>
     /// The string comparison type to use for name matching.
     /// </summary>

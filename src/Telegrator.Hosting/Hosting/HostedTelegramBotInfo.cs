@@ -16,7 +16,7 @@ public class HostedTelegramBotInfo(ITelegramBotClient client, IServiceProvider s
 {
     /// <inheritdoc/>
     public User User { get; } = client.GetMe().Result;
-    
+
     /// <summary>
     /// Provides access to services of this Hosted telegram bot
     /// </summary>

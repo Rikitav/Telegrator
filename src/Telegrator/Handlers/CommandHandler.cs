@@ -47,7 +47,7 @@ public class CommandHandlerAttribute(int importance = 1) : UpdateHandlerAttribut
             if (!split.ElementAtOrDefault(1).Equals(context.BotInfo.User.Username))
                 return false;
         }
-        
+
         return true;
     }
 }
@@ -62,7 +62,7 @@ public abstract class CommandHandler : MessageHandler
     /// Cached array of command arguments.
     /// </summary>
     private string[]? _cmdArgsSplit;
-    
+
     /// <summary>
     /// Cached string representation of command arguments.
     /// </summary>
@@ -127,7 +127,7 @@ public abstract class BranchingCommandHandler : BranchingMessageHandler
     /// Cached array of command arguments.
     /// </summary>
     private string[]? _cmdArgsSplit;
-    
+
     /// <summary>
     /// Cached string representation of command arguments.
     /// </summary>

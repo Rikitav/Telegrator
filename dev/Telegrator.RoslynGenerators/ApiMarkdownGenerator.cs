@@ -38,7 +38,7 @@ namespace Telegrator.RoslynGenerators
         private string GenerateMarkdown(IReadOnlyList<BaseTypeDeclarationSyntax> typeDecls, Compilation compilation)
         {
             StringBuilder sourceBuilder = new StringBuilder("/*\n");
-            
+
             // Writing caution message
             sourceBuilder.AppendLine("> [!CAUTION]");
             sourceBuilder.AppendLine("> This page was generated using hand-writen compiler's XML-Summaries output parser");
@@ -145,7 +145,7 @@ namespace Telegrator.RoslynGenerators
                 string? summary = field.ExtractSummary();
                 if (!string.IsNullOrWhiteSpace(summary))
                     sourceBuilder.Append(" — ").Append(summary);
-                
+
                 sourceBuilder.AppendLine();
             }
 
@@ -176,7 +176,7 @@ namespace Telegrator.RoslynGenerators
                 string? propSummary = prop.ExtractSummary();
                 if (!string.IsNullOrWhiteSpace(propSummary))
                     sourceBuilder.AppendFormat("   > {0}", propSummary);
-                
+
                 sourceBuilder.AppendLine();
             }
 

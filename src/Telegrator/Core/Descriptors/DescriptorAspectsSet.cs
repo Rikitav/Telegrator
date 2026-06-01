@@ -46,7 +46,7 @@ public sealed class DescriptorAspectsSet
     /// <exception cref="InvalidOperationException">Thrown when handler claims to implement <see cref="IPreProcessor"/> but doesn't.</exception>
     public async Task<Result> ExecutePre(UpdateHandlerBase handler, IHandlerContainer container, CancellationToken cancellationToken)
     {
-        if (handler is  IPreProcessor preProcessor)
+        if (handler is IPreProcessor preProcessor)
         {
             return await preProcessor.BeforeExecution(container, cancellationToken).ConfigureAwait(false);
         }

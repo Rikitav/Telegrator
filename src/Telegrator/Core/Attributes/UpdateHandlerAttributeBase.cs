@@ -56,7 +56,7 @@ public abstract class UpdateHandlerAttributeBase : Attribute, IFilter<Update>
 
         if (expectingHandlerType.Any(type => !type.IsHandlerAbstract()))
             throw new ArgumentException("One of expectingHandlerType is not a handler type", nameof(expectingHandlerType));
-        
+
         if (updateType == UpdateType.Unknown)
             throw new ArgumentException("UpdateHandlerAttributeBase cannot be assigned to UpdateType.Unknown.");
 

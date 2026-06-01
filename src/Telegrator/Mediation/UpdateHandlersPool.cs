@@ -69,7 +69,7 @@ public class UpdateHandlersPool : IUpdateHandlersPool
         UpdateRouter = router;
         Options = options;
         GlobalCancellationToken = globalCancellationToken;
-        
+
         ExecutionChannel = Channel.CreateUnbounded<DescribedHandlerDescriptor>(new UnboundedChannelOptions()
         {
             SingleReader = true,
@@ -165,7 +165,7 @@ public class UpdateHandlersPool : IUpdateHandlersPool
 
         // do not dispose UpdateRouter
         ExecutionLimiter?.Dispose();
-        
+
         GC.SuppressFinalize(this);
         disposed = true;
     }

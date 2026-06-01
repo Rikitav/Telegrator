@@ -9,12 +9,12 @@ namespace Telegrator.Core;
 /// Combines update handling capabilities with polling provider functionality and exception handling.
 /// </summary>
 public interface IUpdateRouter : IUpdateHandler
-{   
+{
     /// <summary>
     /// Gets the <see cref="TelegratorOptions"/> for the router.
     /// </summary>
     public TelegratorOptions Options { get; }
-    
+
     /// <summary>
     /// Gets the <see cref="IUpdateHandlersPool"/> that manages handler execution.
     /// </summary>

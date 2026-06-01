@@ -26,7 +26,7 @@ public class HostedWideBotUpdateReceiver(ILogger<HostedWideBotUpdateReceiver> lo
             await wideBotClient.DropPendingUpdates();
 
         logger.LogInformation("Starting receiving updates via MTProto");
-        
+
         // UIP (understanding in progress)
         //_receiverOptions.AllowedUpdates = updateRouter.HandlersProvider.AllowedTypes.ToArray();
 

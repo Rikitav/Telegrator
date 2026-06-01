@@ -49,7 +49,7 @@ public class TextStartsWithFilter(string content, StringComparison comparison = 
     /// The content to check if the message text starts with.
     /// </summary>
     protected readonly string Content = content;
-    
+
     /// <summary>
     /// The string comparison type to use for the check.
     /// </summary>
@@ -75,7 +75,7 @@ public class TextEndsWithFilter(string content, StringComparison comparison = St
     /// The content to check if the message text ends with.
     /// </summary>
     protected readonly string Content = content;
-    
+
     /// <summary>
     /// The string comparison type to use for the check.
     /// </summary>
@@ -101,7 +101,7 @@ public class TextContainsFilter(string content, StringComparison comparison = St
     /// The content to check if the message text contains.
     /// </summary>
     protected readonly string Content = content;
-    
+
     /// <summary>
     /// The string comparison type to use for the check.
     /// </summary>
@@ -127,7 +127,7 @@ public class TextEqualsFilter(string content, StringComparison comparison = Stri
     /// The content to check if the message text equals.
     /// </summary>
     protected readonly string Content = content;
-    
+
     /// <summary>
     /// The string comparison type to use for the check.
     /// </summary>

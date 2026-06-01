@@ -147,7 +147,7 @@ public static class HostBuilderExtensions
             IConfigurationSection section = configuration.GetSection("Receiver");
             if (!section.Exists())
                 section = configuration.GetSection(nameof(ReceiverOptions));
-            
+
             if (!section.Exists())
                 throw new MissingMemberException("Auto configuration enabled, yet no options of type 'ReceiverOptions' was registered. This configuration is runtime required!");
 

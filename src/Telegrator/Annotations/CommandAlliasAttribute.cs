@@ -15,12 +15,12 @@ public class CommandAlliasAttribute : UpdateFilterAttribute<Message>
     /// Gets the allowed update types for this filter.
     /// </summary>
     public override UpdateType[] AllowedTypes => [UpdateType.Message];
-    
+
     /// <summary>
     /// The description of the command (defaults to "no description provided").
     /// </summary>
     private string _description = "no description provided";
-    
+
     /// <summary>
     /// Gets the array of command aliases that this filter will match.
     /// </summary>

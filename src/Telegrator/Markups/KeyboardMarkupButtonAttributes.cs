@@ -83,7 +83,7 @@ public sealed class UrlRedirectButtonAttribute(string name, string url) : Attrib
     /// </summary>
     public string Url { get; } = url;
 }
- 
+
 /// <inheritdoc cref="InlineKeyboardButton.WithWebApp(string, WebAppInfo)"/>
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
 public sealed class WebAppButtonAttribute(string name, WebAppInfo webApp) : Attribute
@@ -98,7 +98,7 @@ public sealed class WebAppButtonAttribute(string name, WebAppInfo webApp) : Attr
     /// </summary>
     public WebAppInfo AppInfo { get; } = webApp;
 }
- 
+
 /// <inheritdoc cref="InlineKeyboardButton.WithSwitchInlineQuery(string, string)"/>
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
 public sealed class SwitchQueryButtonAttribute(string name, string switchInlineQuery = "") : Attribute

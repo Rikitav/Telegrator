@@ -23,7 +23,7 @@ public interface IUpdateHandlersPool : IDisposable
     /// Occurs when a handler is enqueued.
     /// </summary>
     public event HandlerEnqueued? HandlerEnqueued;
-    
+
     /// <summary>
     /// Occurs when a handler is entering execution.
     /// </summary>

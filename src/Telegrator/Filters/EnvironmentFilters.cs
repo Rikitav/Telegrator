@@ -70,12 +70,12 @@ public class EnvironmentVariableFilter(string variable, string? value, StringCom
     /// The environment variable name to check.
     /// </summary>
     private readonly string _variable = variable;
-    
+
     /// <summary>
     /// The expected value of the environment variable (optional).
     /// </summary>
     private readonly string? _value = value;
-    
+
     /// <summary>
     /// The string comparison type to use for value matching.
     /// </summary>

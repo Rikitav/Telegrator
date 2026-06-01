@@ -10,27 +10,27 @@ public enum DiceType
     /// Standard dice (🎲).
     /// </summary>
     Dice,
-    
+
     /// <summary>
     /// Darts (🎯).
     /// </summary>
     Darts,
-    
+
     /// <summary>
     /// Bowling (🎳).
     /// </summary>
     Bowling,
-    
+
     /// <summary>
     /// Basketball (🏀).
     /// </summary>
     Basketball,
-    
+
     /// <summary>
     /// Football (⚽).
     /// </summary>
     Football,
-    
+
     /// <summary>
     /// Casino slot machine (🎰).
     /// </summary>

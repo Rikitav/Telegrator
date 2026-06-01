@@ -27,7 +27,7 @@ public class DescribedHandlerDescriptor
     /// The awaiting provider to fetch new updates inside handler
     /// </summary>
     public IAwaitingProvider AwaitingProvider { get; }
-    
+
     /// <summary>
     /// The state storage to handling state machines
     /// </summary>

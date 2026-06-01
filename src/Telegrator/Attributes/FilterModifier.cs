@@ -11,12 +11,12 @@ public enum FilterModifier
     /// No modifier applied. Filter is applied as-is.
     /// </summary>
     None = 1,
-    
+
     /// <summary>
     /// OR modifier. This filter or the next filter in the chain should match.
     /// </summary>
     OrNext = 2,
-    
+
     /// <summary>
     /// NOT modifier. The inverse of this filter should match.
     /// </summary>

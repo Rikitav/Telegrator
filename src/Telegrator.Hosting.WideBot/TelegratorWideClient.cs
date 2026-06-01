@@ -66,7 +66,7 @@ public class TelegratorWClient : WTelegramBotClient, ITelegratorBot, ICollecting
     }
 
     /// <inheritdoc/>
-    public async Task StartReceivingAsync(ReceiverOptions? receiverOptions = null,CancellationToken cancellationToken = default)
+    public async Task StartReceivingAsync(ReceiverOptions? receiverOptions = null, CancellationToken cancellationToken = default)
     {
         if (Options.GlobalCancellationToken == CancellationToken.None)
             Options.GlobalCancellationToken = cancellationToken;
@@ -80,7 +80,7 @@ public class TelegratorWClient : WTelegramBotClient, ITelegratorBot, ICollecting
 
         await StartReceivingInternal(Options.GlobalCancellationToken);
     }
-    
+
     private async Task StartReceivingInternal(CancellationToken cancellationToken)
     {
         try

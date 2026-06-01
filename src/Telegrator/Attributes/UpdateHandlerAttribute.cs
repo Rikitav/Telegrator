@@ -32,7 +32,7 @@ public abstract class UpdateHandlerAttribute<T> : UpdateHandlerAttributeBase whe
     /// <param name="types">Additional suported types.</param>
     /// <param name="updateType">The type of update that this handler can process.</param>
     protected UpdateHandlerAttribute(Type[] types, UpdateType updateType)
-        : base([..types, typeof(T)], updateType, 0) { }
+        : base([.. types, typeof(T)], updateType, 0) { }
 
     /// <summary>
     /// Initializes new instance of <see cref="UpdateHandlerAttribute{T}"/>
