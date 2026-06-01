@@ -9,7 +9,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Telegram.Bot;
 using Telegram.Bot.Types;
-using Telegrator.Core;
 using Telegrator.Core.Handlers;
 using Telegrator.Hosting;
 using Telegrator.Mediation;
@@ -243,42 +242,4 @@ public static class WideBotServiceCollectionExtensions
         return client;
     }
 #pragma warning restore CA2254
-}
-
-/// <summary>
-/// Provides useful methods to adjust Telegram bot Host
-/// </summary>
-public static class WideTelegramBotHostExtensions
-{
-    /// <summary>
-    /// Replaces the initialization logic from TelegramBotWebHost constructor.
-    /// Initializes the bot and logs handlers on application startup.
-    /// </summary>
-    public static IHost UseWideTelegrator(this IHost botHost)
-    {
-        if (!botHost.Services.TryFindWTelegramBotClient())
-            throw new InvalidOperationException("No service for type 'Telegram.Bot.WTelegramBotClient' has been registered. Invoke `AddWideTelegrator`");
-
-        ITelegramBotInfo info = botHost.Services.GetRequiredService<ITelegramBotInfo>();
-        IHandlersCollection handlers = botHost.Services.GetRequiredService<IHandlersCollection>();
-        ILoggerFactory loggerFactory = botHost.Services.GetRequiredService<ILoggerFactory>();
-        ILogger logger = loggerFactory.CreateLogger("Telegrator.Hosting.Web.TelegratorHost");
-
-        if (logger.IsEnabled(LogLevel.Information))
-        {
-            logger.LogInformation("Telegrator WIDE Bot Host started (Generic Host)");
-            logger.LogInformation("Receiving mode : MTProto");
-            logger.LogInformation("Telegram Bot : {firstname}, @{usrname}, id:{id},", info.User.FirstName ?? "[NULL]", info.User.Username ?? "[NULL]", info.User.Id);
-            logger.LogHandlers(handlers);
-        }
-
-        botHost.AddLoggingAdapter();
-        botHost.SetBotCommands();
-        return botHost;
-    }
-
-    private static bool TryFindWTelegramBotClient(this IServiceProvider services)
-    {
-        return services.GetServices<IHostedService>().Any(s => s is HostedWideBotUpdateReceiver);
-    }
 }

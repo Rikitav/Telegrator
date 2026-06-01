@@ -9,7 +9,7 @@
             Service for receiving updates for Hosted telegram bots via Webhooks and queuing them to router
             </summary>
         </member>
-        <member name="M:Telegrator.Mediation.HostedUpdateWebhooker.#ctor(Telegram.Bot.ITelegramBotClient,Telegrator.Core.IUpdateRouter,Microsoft.Extensions.Options.IOptions{Telegrator.WebhookerOptions})">
+        <member name="M:Telegrator.Mediation.HostedUpdateWebhooker.#ctor(Microsoft.Extensions.Logging.ILogger{Telegrator.Mediation.HostedUpdateWebhooker},Telegram.Bot.ITelegramBotClient,Telegrator.Core.IUpdateRouter,Microsoft.Extensions.Options.IOptions{Telegrator.WebhookerOptions})">
             <summary>
             Initiallizes new instance of <see cref="T:Telegrator.Mediation.HostedUpdateWebhooker"/>
             </summary>
@@ -75,12 +75,6 @@
         <member name="T:Telegrator.WebTelegramBotHostExtensions">
             <summary>
             Provides useful methods to adjust Telegram bot Host
-            </summary>
-        </member>
-        <member name="M:Telegrator.WebTelegramBotHostExtensions.UseTelegratorWeb``1(``0,System.Boolean)">
-            <summary>
-            Replaces the initialization logic from TelegramBotWebHost constructor.
-            Initializes the bot and logs handlers on application startup.
             </summary>
         </member>
         <member name="M:Telegrator.WebTelegramBotHostExtensions.RemapWebhookAsync``1(``0,System.String)">

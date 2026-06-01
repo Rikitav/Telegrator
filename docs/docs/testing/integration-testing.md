@@ -16,7 +16,7 @@ dotnet add package Telegrator.Testing
 The package ships with two complementary APIs:
 
 | API | Target | Use Case |
-|-----|--------|----------|
+| :--- | :--- | :--- |
 | `TestTelegratorClient` | `netstandard2.0` & `net10.0` | Stand-alone testing without the .NET Generic Host. |
 | `TelegratorTestServer` | `net10.0` only | Integration testing inside the full hosting pipeline (DI, logging, configuration). |
 
@@ -249,7 +249,7 @@ testServer.ClientMock.Verify(
 ## Summary
 
 | Scenario | Recommended API |
-|----------|-----------------|
+| :--- | :--- |
 | Unit-test a single handler | Instantiate handler directly + mock `IHandlerContainer<T>` |
 | Test routing, filters & state without DI | `TestTelegratorClient` |
 | Test full hosting pipeline (DI, logging, scoped services) | `TelegratorTestServer` via `WithTestServer()` |

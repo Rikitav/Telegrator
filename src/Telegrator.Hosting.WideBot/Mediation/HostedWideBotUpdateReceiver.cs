@@ -3,7 +3,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Telegram.Bot;
 using Telegrator.Core;
-using Telegrator.Hosting;
 
 namespace Telegrator.Mediation;
 
@@ -22,13 +21,11 @@ public class HostedWideBotUpdateReceiver(ILogger<HostedWideBotUpdateReceiver> lo
         if (botClient is not WTelegramBotClient wideBotClient)
             throw new InvalidOperationException("Registered ITelegramBotClient was not a wide client (WTelegramBotClient)! Please, use `AddWideTelegrator` instead.");
 
-        if (updateRouter.BotInfo is HostedTelegramBotInfo hostedInfo)
-            hostedInfo.User = await botClient.GetMe(stoppingToken).ConfigureAwait(false);
-
         if (options?.Value.DropPendingUpdates is true)
             await wideBotClient.DropPendingUpdates();
 
-        logger.LogInformation("Starting receiving updates via MTProto");
+        logger.LogInformation("Hosted update receiver starting");
+        logger.LogInformation("Receiving mode : MTProto");
 
         await botClient.DeleteWebhook(options?.Value.DropPendingUpdates ?? false, cancellationToken: stoppingToken).ConfigureAwait(false);
 

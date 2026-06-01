@@ -264,23 +264,27 @@ public static class TelegramBotHostExtensions
     /// </summary>
     public static IHost UseTelegrator(this IHost botHost)
     {
+        ITelegramBotClient botClient = botHost.Services.GetRequiredService<ITelegramBotClient>();
         ITelegramBotInfo info = botHost.Services.GetRequiredService<ITelegramBotInfo>();
         IHandlersCollection handlers = botHost.Services.GetRequiredService<IHandlersCollection>();
         ILoggerFactory loggerFactory = botHost.Services.GetRequiredService<ILoggerFactory>();
         ILogger logger = loggerFactory.CreateLogger("Telegrator.Hosting.Web.TelegratorHost");
 
         if (logger.IsEnabled(Microsoft.Extensions.Logging.LogLevel.Information))
+            logger.LogInformation("Initializing Telegrator Bot Host...");
+
+        if (info is HostedTelegramBotInfo hostedInfo)
+            hostedInfo.User = botClient.GetMe().ConfigureAwait(false).GetAwaiter().GetResult();
+
+        if (logger.IsEnabled(Microsoft.Extensions.Logging.LogLevel.Information))
         {
-            logger.LogInformation("Telegrator Bot Host started (Generic Host)");
-            logger.LogInformation("Receiving mode : LONG-POLLING");
+            logger.LogInformation("Telegrator Bot Host started");
             logger.LogInformation("Telegram Bot : {firstname}, @{usrname}, id:{id},", info.User.FirstName ?? "[NULL]", info.User.Username ?? "[NULL]", info.User.Id);
             logger.LogHandlers(handlers);
         }
 
         botHost.AddLoggingAdapter();
-#pragma warning disable CS0618 // Type or member is obsolete
         botHost.SetBotCommands();
-#pragma warning restore CS0618 // Type or member is obsolete
         return botHost;
     }
 

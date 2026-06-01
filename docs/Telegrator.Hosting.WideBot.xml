@@ -163,17 +163,6 @@
             <param name="useHttp"></param>
             <returns></returns>
         </member>
-        <member name="T:Telegrator.WideTelegramBotHostExtensions">
-            <summary>
-            Provides useful methods to adjust Telegram bot Host
-            </summary>
-        </member>
-        <member name="M:Telegrator.WideTelegramBotHostExtensions.UseWideTelegrator(Microsoft.Extensions.Hosting.IHost)">
-            <summary>
-            Replaces the initialization logic from TelegramBotWebHost constructor.
-            Initializes the bot and logs handlers on application startup.
-            </summary>
-        </member>
         <member name="T:Telegrator.WideBotOptions">
             <summary>
             Represents configuration options for initializing and customizing the behavior of a WideBot instance.

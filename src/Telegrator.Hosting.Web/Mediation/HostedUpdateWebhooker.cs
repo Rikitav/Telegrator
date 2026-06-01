@@ -2,13 +2,13 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using System.Text.Json;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegrator.Core;
-using Telegrator.Hosting;
 
 namespace Telegrator.Mediation;
 
@@ -19,6 +19,7 @@ public class HostedUpdateWebhooker : IHostedService
 {
     private const string SecretTokenHeader = "X-Telegram-Bot-Api-Secret-Token";
 
+    private readonly ILogger<HostedUpdateWebhooker> _logger;
     private readonly ITelegramBotClient _botClient;
     private readonly IUpdateRouter _updateRouter;
     private readonly WebhookerOptions _options;
@@ -26,15 +27,17 @@ public class HostedUpdateWebhooker : IHostedService
     /// <summary>
     /// Initiallizes new instance of <see cref="HostedUpdateWebhooker"/>
     /// </summary>
+    /// <param name="logger"></param>
     /// <param name="botClient"></param>
     /// <param name="updateRouter"></param>
     /// <param name="options"></param>
     /// <exception cref="ArgumentNullException"></exception>
-    public HostedUpdateWebhooker(ITelegramBotClient botClient, IUpdateRouter updateRouter, IOptions<WebhookerOptions> options)
+    public HostedUpdateWebhooker(ILogger<HostedUpdateWebhooker> logger, ITelegramBotClient botClient, IUpdateRouter updateRouter, IOptions<WebhookerOptions> options)
     {
         if (string.IsNullOrEmpty(options.Value.WebhookUri))
             throw new ArgumentNullException(nameof(options), "Option \"WebhookUrl\" must be set to subscribe for update recieving");
 
+        _logger = logger;
         _botClient = botClient;
         _updateRouter = updateRouter;
         _options = options.Value;
@@ -43,9 +46,6 @@ public class HostedUpdateWebhooker : IHostedService
     /// <inheritdoc/>
     public async Task StartAsync(CancellationToken cancellationToken)
     {
-        if (_updateRouter.BotInfo is HostedTelegramBotInfo hostedInfo)
-            hostedInfo.User = await _botClient.GetMe(cancellationToken).ConfigureAwait(false);
-
         await StartInternal(cancellationToken).ConfigureAwait(false);
     }
 
@@ -88,6 +88,8 @@ public class HostedUpdateWebhooker : IHostedService
 
     private async Task StartInternal(CancellationToken cancellationToken)
     {
+        _logger.LogInformation("Hosted update receiver starting");
+        _logger.LogInformation("Receiving mode : WEB-HOOKING");
         await SetWebhook(cancellationToken).ConfigureAwait(false);
     }
 

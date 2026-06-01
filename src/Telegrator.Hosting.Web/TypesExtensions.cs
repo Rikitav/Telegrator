@@ -3,11 +3,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Diagnostics.CodeAnalysis;
 using Telegram.Bot;
-using Telegrator.Core;
 using Telegrator.Hosting;
 using Telegrator.Mediation;
 
@@ -91,36 +89,6 @@ public static class WebServicesCollectionExtensions
 /// </summary>
 public static class WebTelegramBotHostExtensions
 {
-    /// <summary>
-    /// Replaces the initialization logic from TelegramBotWebHost constructor.
-    /// Initializes the bot and logs handlers on application startup.
-    /// </summary>
-    public static T UseTelegratorWeb<T>(this T botHost, bool dontMap = false) where T : IEndpointRouteBuilder, IHost
-    {
-        if (!botHost.ServiceProvider.TryFindWebhooker(out HostedUpdateWebhooker? webhooker))
-            throw new InvalidOperationException("No service for type 'Telegrator.Mediation.HostedUpdateWebhooker' has been registered.");
-
-        ITelegramBotInfo info = botHost.ServiceProvider.GetRequiredService<ITelegramBotInfo>();
-        IHandlersCollection handlers = botHost.ServiceProvider.GetRequiredService<IHandlersCollection>();
-        ILoggerFactory loggerFactory = botHost.ServiceProvider.GetRequiredService<ILoggerFactory>();
-        ILogger logger = loggerFactory.CreateLogger("Telegrator.Hosting.Web.TelegratorHost");
-
-        if (logger.IsEnabled(LogLevel.Information))
-        {
-            logger.LogInformation("Telegrator Bot Host started (ASP.NET WebHost)");
-            logger.LogInformation("Receiving mode : WEB-HOOKING");
-            logger.LogInformation("Telegram Bot : {firstname}, @{usrname}, id:{id},", info.User.FirstName ?? "[NULL]", info.User.Username ?? "[NULL]", info.User.Id);
-            logger.LogHandlers(handlers);
-        }
-
-        if (!dontMap)
-            webhooker.MapWebhook(botHost);
-
-        botHost.AddLoggingAdapter();
-        botHost.SetBotCommands();
-        return botHost;
-    }
-
     /// <summary>
     /// Allows to remap receiving webhook endpoint and map new route to webhost.
     /// </summary>
