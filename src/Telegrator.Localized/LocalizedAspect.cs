@@ -1,9 +1,6 @@
-using System.Globalization;
-using Telegrator.Aspects;
-using Telegrator.Core.Handlers;
-
 namespace Telegrator;
 
+/*
 /// <summary>
 /// A handler aspect that sets and restores the current culture context
 /// according to the <see cref="ICultureResolver"/>.
@@ -45,3 +42,4 @@ public class LocalizedAspect : IPreProcessor, IPostProcessor
         return Task.FromResult(Result.Ok());
     }
 }
+*/

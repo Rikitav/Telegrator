@@ -44,7 +44,10 @@ public class WideUpdateReceiver(WTelegramBotClient client) : IUpdateReceiver
 
         try
         {
-            await _updateHandler.HandleUpdateAsync(_client, update, _cancellation).ConfigureAwait(false);
+            if (_updateHandler is IUpdateRouter router)
+                await router.ConsumeUpdateAsync(_client, update, _cancellation).ConfigureAwait(false);
+            else
+                await _updateHandler.HandleUpdateAsync(_client, update, _cancellation).ConfigureAwait(false);
         }
         catch (Exception ex)
         {

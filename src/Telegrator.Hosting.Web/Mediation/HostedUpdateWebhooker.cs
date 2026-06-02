@@ -138,7 +138,7 @@ public class HostedUpdateWebhooker : IHostedService
             return;
         }
 
-        await _updateRouter.HandleUpdateAsync(_botClient, update, ctx.RequestAborted).ConfigureAwait(false);
+        await _updateRouter.ConsumeUpdateAsync(_botClient, update, ctx.RequestAborted).ConfigureAwait(false);
         ctx.Response.StatusCode = StatusCodes.Status200OK;
     }
 }

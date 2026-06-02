@@ -23,7 +23,6 @@ var builder = Host.CreateApplicationBuilder(args);
 
 // 1. Configure credentials
 builder.Services.ConfigureWideBot(new WideBotOptions(
-    token: "BOT_TOKEN",
     apiId: 123456, 
     apiHash: "YOUR_HASH"
 ));

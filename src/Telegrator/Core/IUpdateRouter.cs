@@ -1,4 +1,6 @@
-﻿using Telegram.Bot.Polling;
+﻿using Telegram.Bot;
+using Telegram.Bot.Polling;
+using Telegram.Bot.Types;
 using Telegrator.Core.Handlers;
 using Telegrator.Core.States;
 
@@ -46,7 +48,16 @@ public interface IUpdateRouter : IUpdateHandler
     public IRouterExceptionHandler? ExceptionHandler { get; set; }
 
     /// <summary>
-    /// Default hand;er container factory
+    /// Default handler container factory
     /// </summary>
     public IHandlerContainerFactory? DefaultContainerFactory { get; set; }
+
+    /// <summary>
+    /// Queues the update for background processing through the handler pool without blocking the caller.
+    /// This method returns immediately; the update is processed asynchronously.
+    /// </summary>
+    /// <param name="botClient">The Telegram bot client.</param>
+    /// <param name="update">The update to consume.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    Task ConsumeUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken = default);
 }

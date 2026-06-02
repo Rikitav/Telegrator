@@ -12,6 +12,8 @@ namespace Telegrator;
 /// </summary>
 public static partial class ColletionsExtensions
 {
+    private static Random SharedRandom { get => field ??= new Random(); }
+
     /// <summary>
     /// Creates a <see cref="ReadOnlyDictionary{TKey, TValue}"/> from an <see cref="IEnumerable{TValue}"/>
     /// according to a specified key selector function.
@@ -65,12 +67,10 @@ public static partial class ColletionsExtensions
     /// <param name="source"></param>
     /// <param name="key"></param>
     /// <param name="value"></param>
-    public static void Set<TKey, TValue>(this IDictionary<TKey, TValue> source, TKey key, TValue value)
+    public static IDictionary<TKey, TValue> Set<TKey, TValue>(this IDictionary<TKey, TValue> source, TKey key, TValue value)
     {
-        if (source.ContainsKey(key))
-            source[key] = value;
-        else
-            source.Add(key, value);
+        source[key] = value;
+        return source;
     }
 
     /// <summary>
@@ -82,12 +82,14 @@ public static partial class ColletionsExtensions
     /// <param name="key"></param>
     /// <param name="value"></param>
     /// <param name="defaultValue"></param>
-    public static void Set<TKey, TValue>(this IDictionary<TKey, TValue> source, TKey key, TValue value, TValue defaultValue)
+    public static IDictionary<TKey, TValue> Set<TKey, TValue>(this IDictionary<TKey, TValue> source, TKey key, TValue value, TValue defaultValue)
     {
         if (source.ContainsKey(key))
             source[key] = value;
         else
             source.Add(key, defaultValue);
+
+        return source;
     }
 
     /// <summary>
@@ -97,7 +99,7 @@ public static partial class ColletionsExtensions
     /// <param name="source"></param>
     /// <returns></returns>
     public static TSource Random<TSource>(this IEnumerable<TSource> source)
-        => source.Random(new Random());
+        => source.Random(SharedRandom);
 
     /// <summary>
     /// Return the random object from <paramref name="source"/>
@@ -107,7 +109,7 @@ public static partial class ColletionsExtensions
     /// <param name="random"></param>
     /// <returns></returns>
     public static TSource Random<TSource>(this IEnumerable<TSource> source, Random random)
-        => source.ElementAt(random.Next(0, source.Count() - 1));
+        => source.ElementAt(random.Next(0, source.Count()) - 1);
 
     /// <summary>
     /// Adds a range of elements to collection if they dont already exist using default equality comparer
@@ -153,7 +155,20 @@ public static partial class ColletionsExtensions
     /// <param name="source"></param>
     /// <returns></returns>
     public static T? SingleOrNothing<T>(this IEnumerable<T> source)
-        => source.Count() == 1 ? source.ElementAt(0) : default;
+    {
+        if (source is IList<T> list)
+            return list.Count == 1 ? list[0] : default;
+
+        using var enumerator = source.GetEnumerator();
+        if (!enumerator.MoveNext())
+            return default;
+
+        T result = enumerator.Current;
+        if (enumerator.MoveNext())
+            return default;
+
+        return result;
+    }
 
     /// <summary>
     /// Returns the only element of a sequence that satisfies a specified condition or a default value if no such element exists.
@@ -165,8 +180,7 @@ public static partial class ColletionsExtensions
     /// <returns></returns>
     public static T? SingleOrNothing<T>(this IEnumerable<T> source, Func<T, bool> predicate)
     {
-        source = source.Where(predicate);
-        return source.Count() == 1 ? source.ElementAt(0) : default;
+        return source.Where(predicate).SingleOrNothing();
     }
 }
 

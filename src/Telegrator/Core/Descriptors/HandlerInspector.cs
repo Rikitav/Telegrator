@@ -79,8 +79,7 @@ public static class HandlerInspector
         if (handlerType == null)
             throw new ArgumentNullException(nameof(handlerType));
 
-        IEnumerable<Attribute> attrs = precompiledAttributes != null ? precompiledAttributes : handlerType.GetCustomAttributes();
-
+        IEnumerable<Attribute> attrs = precompiledAttributes ?? handlerType.GetCustomAttributes();
         Attribute? stateAttr = attrs.FirstOrDefault(attr =>
         {
             Type type = attr.GetType();
@@ -150,8 +149,7 @@ public static class HandlerInspector
 
     private static Type? GetGenericArgumentFromOpenGenericAttribute([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicMethods)] Type handlerType, Type openGenericAttributeType, Attribute[]? precompiledAttributes = null)
     {
-        IEnumerable<Attribute> attrs = precompiledAttributes != null ? precompiledAttributes : handlerType.GetCustomAttributes();
-
+        IEnumerable<Attribute> attrs = precompiledAttributes ?? handlerType.GetCustomAttributes();
         Attribute? attribute = attrs.FirstOrDefault(attr =>
         {
             Type type = attr.GetType();

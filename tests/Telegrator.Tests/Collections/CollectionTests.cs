@@ -308,7 +308,7 @@ public class CollectionTests
     /// <summary>
     /// Вспомогательный метод для создания тестового дескриптора.
     /// </summary>
-    private HandlerDescriptor CreateTestDescriptor()
+    private static ClassHandlerDescriptor CreateTestDescriptor()
     {
         return new ClassHandlerDescriptor(DescriptorType.General, typeof(TestUpdateHandler));
     }

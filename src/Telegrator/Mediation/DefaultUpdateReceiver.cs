@@ -65,7 +65,10 @@ public class DefaultUpdateReceiver(ITelegramBotClient client, ReceiverOptions? o
                     try
                     {
                         request.Offset = update.Id + 1;
-                        await updateHandler.HandleUpdateAsync(Client, update, cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
+                        if (updateHandler is IUpdateRouter router)
+                            await router.ConsumeUpdateAsync(Client, update, cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
+                        else
+                            await updateHandler.HandleUpdateAsync(Client, update, cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
                     }
                     catch (Exception exception2)
                     {

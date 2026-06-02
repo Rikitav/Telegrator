@@ -13,7 +13,7 @@ namespace Telegrator.Mediation;
 /// </summary>
 public class UpdateHandlersPool : IUpdateHandlersPool
 {
-    private static readonly ActivitySource ActivitySource = new("Telegrator.UpdateHandlersPool");
+    private static readonly ActivitySource ActivitySource = new ActivitySource("Telegrator.UpdateHandlersPool");
 
     /// <summary>
     /// Synchronization object for thread-safe operations.
@@ -30,10 +30,12 @@ public class UpdateHandlersPool : IUpdateHandlersPool
     /// </summary>
     protected readonly Channel<DescribedHandlerDescriptor> ExecutionChannel;
 
+    /*
     /// <summary>
     /// Semaphore for controlling the number of concurrently executing handlers.
     /// </summary>
     protected readonly SemaphoreSlim? ExecutionLimiter;
+    */
 
     /// <summary>
     /// The update router associated with this pool.
@@ -73,20 +75,32 @@ public class UpdateHandlersPool : IUpdateHandlersPool
         Options = options;
         GlobalCancellationToken = globalCancellationToken;
 
-        int channelCapacity = options.MaximumParallelWorkingHandlers is { } limit && limit > 0
-            ? limit * 2
-            : 100;
-
-        ExecutionChannel = Channel.CreateBounded<DescribedHandlerDescriptor>(new BoundedChannelOptions(channelCapacity)
+        if (options.MaximumParallelWorkingHandlers.HasValue)
         {
-            SingleReader = true,
-            SingleWriter = false,
-            AllowSynchronousContinuations = false,
-            FullMode = BoundedChannelFullMode.Wait
-        });
+            // Creating bounded
+            ExecutionChannel = Channel.CreateBounded<DescribedHandlerDescriptor>(new BoundedChannelOptions(options.MaximumParallelWorkingHandlers.Value)
+            {
+                SingleReader = true,
+                SingleWriter = false,
+                AllowSynchronousContinuations = false,
+                FullMode = BoundedChannelFullMode.Wait
+            });
+        }
+        else
+        {
+            // Creating unbounded
+            ExecutionChannel = Channel.CreateUnbounded<DescribedHandlerDescriptor>(new UnboundedChannelOptions()
+            {
+                SingleReader = true,
+                SingleWriter = false,
+                AllowSynchronousContinuations = false
+            });
+        }
 
+        /*
         if (options.MaximumParallelWorkingHandlers != null)
             ExecutionLimiter = new SemaphoreSlim(options.MaximumParallelWorkingHandlers.Value);
+        */
 
         GlobalCancellationToken.Register(() => ExecutionChannel.Writer.Complete());
         ChannelReaderTask = ReadChannel();
@@ -117,14 +131,12 @@ public class UpdateHandlersPool : IUpdateHandlersPool
         {
             await foreach (DescribedHandlerDescriptor handlerInfo in ExecutionChannel.Reader.ReadAllAsync(GlobalCancellationToken))
             {
+                /*
                 if (ExecutionLimiter != null)
                     await ExecutionLimiter.WaitAsync(GlobalCancellationToken);
+                */
 
-                _ = ProcessHandler(handlerInfo).ContinueWith(t =>
-                {
-                    if (t.IsFaulted)
-                        TelegratorLogging.LogError("Unhandled exception in handler processing", t.Exception!.GetBaseException());
-                }, CancellationToken.None, TaskContinuationOptions.OnlyOnFaulted, TaskScheduler.Default);
+                _ = ProcessHandler(handlerInfo);
             }
         }
         catch (ChannelClosedException)
@@ -170,7 +182,9 @@ public class UpdateHandlersPool : IUpdateHandlersPool
         }
         finally
         {
+            /*
             ExecutionLimiter?.Release(1);
+            */
         }
     }
 
@@ -197,7 +211,7 @@ public class UpdateHandlersPool : IUpdateHandlersPool
         }
 
         // do not dispose UpdateRouter
-        ExecutionLimiter?.Dispose();
+        //ExecutionLimiter?.Dispose();
 
         GC.SuppressFinalize(this);
         disposed = true;

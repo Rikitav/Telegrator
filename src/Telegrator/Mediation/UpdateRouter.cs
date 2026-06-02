@@ -21,7 +21,7 @@ namespace Telegrator.Mediation;
 /// </summary>
 public class UpdateRouter : IUpdateRouter
 {
-    private static readonly ActivitySource ActivitySource = new("Telegrator.UpdateRouter");
+    private static readonly ActivitySource ActivitySource = new ActivitySource("Telegrator.UpdateRouter");
 
     private readonly ITelegramBotInfo _botInfo;
 
@@ -84,6 +84,7 @@ public class UpdateRouter : IUpdateRouter
 
     /// <summary>
     /// Handles incoming updates by routing them to appropriate handlers.
+    /// This method awaits the full execution of matching handlers.
     /// </summary>
     /// <param name="botClient">The Telegram bot client.</param>
     /// <param name="update">The update to handle.</param>
@@ -92,6 +93,24 @@ public class UpdateRouter : IUpdateRouter
     public virtual Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
         return HandleUpdateAsyncInternal(botClient, update, cancellationToken);
+    }
+
+    /// <inheritdoc/>
+    public virtual Task ConsumeUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+    {
+        _ = Task.Run(async () =>
+        {
+            try
+            {
+                await HandleUpdateAsyncInternal(botClient, update, cancellationToken).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                await HandleErrorAsync(botClient, ex, HandleErrorSource.PollingError, cancellationToken).ConfigureAwait(false);
+            }
+        }, cancellationToken);
+
+        return Task.CompletedTask;
     }
 
     private async Task HandleUpdateAsyncInternal(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)

@@ -134,17 +134,17 @@ public class HostingUsageAnalyzer : DiagnosticAnalyzer
 
     private static void ReportMissing(CompilationAnalysisContext context, System.Collections.Generic.IEnumerable<(ISymbol Method, Location Loc, CallKind Kind)> invocations, CallKind targetKind, DiagnosticDescriptor descriptor)
     {
-        foreach (var item in invocations.Where(x => x.Kind == targetKind))
+        foreach (var (Method, Loc, Kind) in invocations.Where(x => x.Kind == targetKind))
         {
-            context.ReportDiagnostic(Diagnostic.Create(descriptor, item.Loc));
+            context.ReportDiagnostic(Diagnostic.Create(descriptor, Loc));
         }
     }
 
     private static void ReportMismatch(CompilationAnalysisContext context, IGrouping<ISymbol?, (ISymbol Method, Location Loc, CallKind Kind)> group, CallKind kind1, CallKind kind2, string name1, string name2)
     {
-        foreach (var item in group.Where(x => x.Kind == kind1 || x.Kind == kind2))
+        foreach (var (Method, Loc, Kind) in group.Where(x => x.Kind == kind1 || x.Kind == kind2))
         {
-            context.ReportDiagnostic(Diagnostic.Create(MismatchedReceivingModesWarning, item.Loc, name1, name2));
+            context.ReportDiagnostic(Diagnostic.Create(MismatchedReceivingModesWarning, Loc, name1, name2));
         }
     }
 }

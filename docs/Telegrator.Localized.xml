@@ -32,24 +32,6 @@
             Indicates that message handler utilizes localization
             </summary>
         </member>
-        <member name="T:Telegrator.LocalizedAspect">
-            <summary>
-            A handler aspect that sets and restores the current culture context
-            according to the <see cref="T:Telegrator.ICultureResolver"/>.
-            </summary>
-        </member>
-        <member name="M:Telegrator.LocalizedAspect.#ctor(Telegrator.ICultureResolver)">
-            <summary>
-            Initializes a new instance of <see cref="T:Telegrator.LocalizedAspect"/>.
-            </summary>
-            <param name="cultureResolver">The culture resolver used to get user language.</param>
-        </member>
-        <member name="M:Telegrator.LocalizedAspect.BeforeExecution(Telegrator.Core.Handlers.IHandlerContainer,System.Threading.CancellationToken)">
-            <inheritdoc/>
-        </member>
-        <member name="M:Telegrator.LocalizedAspect.AfterExecution(Telegrator.Core.Handlers.IHandlerContainer,System.Threading.CancellationToken)">
-            <inheritdoc/>
-        </member>
         <member name="T:Telegrator.LocalizedMessageHandlerExtensions">
             <summary>
             Provides extension methods for localized message handlers.
