@@ -13,6 +13,7 @@
             <summary>
             Initiallizes new instance of <see cref="T:Telegrator.Mediation.HostedUpdateWebhooker"/>
             </summary>
+            <param name="logger"></param>
             <param name="botClient"></param>
             <param name="updateRouter"></param>
             <param name="options"></param>

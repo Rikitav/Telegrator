@@ -1675,18 +1675,6 @@
             Validates the handler's constructor matches the requirements.
             </summary>
         </member>
-        <member name="T:Telegrator.Core.Descriptors.MethodHandlerDescriptor`1">
-            <summary>
-            Descriptor for creating handlers from methods
-            </summary>
-            <typeparam name="TUpdate"></typeparam>
-        </member>
-        <member name="M:Telegrator.Core.Descriptors.MethodHandlerDescriptor`1.#ctor(Telegrator.Handlers.Building.AbstractHandlerAction{`0})">
-            <summary>
-            Initializes new instance of <see cref="T:Telegrator.Core.Descriptors.MethodHandlerDescriptor`1"/>
-            </summary>
-            <param name="action"></param>
-        </member>
         <member name="T:Telegrator.Core.Descriptors.DescribedHandlerDescriptor">
             <summary>
             Contains information about a described handler, including its context, client, and execution logic.
@@ -2365,6 +2353,18 @@
             <summary>
             Initializes a new instance of the <see cref="T:Telegrator.Core.Descriptors.ImplicitHandlerDescriptor"/> class.
             </summary>
+        </member>
+        <member name="T:Telegrator.Core.Descriptors.MethodHandlerDescriptor`1">
+            <summary>
+            Descriptor for creating handlers from methods
+            </summary>
+            <typeparam name="TUpdate"></typeparam>
+        </member>
+        <member name="M:Telegrator.Core.Descriptors.MethodHandlerDescriptor`1.#ctor(Telegrator.Handlers.Building.AbstractHandlerAction{`0})">
+            <summary>
+            Initializes new instance of <see cref="T:Telegrator.Core.Descriptors.MethodHandlerDescriptor`1"/>
+            </summary>
+            <param name="action"></param>
         </member>
         <member name="T:Telegrator.Core.Filters.AnonymousCompiledFilter">
             <summary>
