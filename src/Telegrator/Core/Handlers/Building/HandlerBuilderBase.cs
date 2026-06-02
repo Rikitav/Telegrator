@@ -1,5 +1,4 @@
-﻿using System.Threading;
-using Telegram.Bot.Types;
+﻿using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegrator.Core.Descriptors;
 using Telegrator.Core.Filters;

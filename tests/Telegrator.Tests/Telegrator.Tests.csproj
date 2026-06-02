@@ -31,6 +31,7 @@
     <ProjectReference Include="..\..\src\Telegrator.Localized\Telegrator.Localized.csproj" />
     <ProjectReference Include="..\..\src\Telegrator\Telegrator.csproj" />
     <ProjectReference Include="..\..\src\Telegrator.Hosting\Telegrator.Hosting.csproj" />
+    <ProjectReference Include="..\..\src\Telegrator.Testing\Telegrator.Testing.csproj" />
   </ItemGroup>
 
   <ItemGroup>

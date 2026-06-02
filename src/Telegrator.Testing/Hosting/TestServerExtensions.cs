@@ -36,7 +36,7 @@ public static class TestServerExtensions
 
         builder.Services.RemoveAll<ITelegramBotClient>();
 
-        ITelegramBotClient mockClient = new Mock<ITelegramBotClient>();
+        Mock<ITelegramBotClient> mockClient = new Mock<ITelegramBotClient>();
         mockClient.Setup(x => x.BotId).Returns(botUser.Id);
 
         mockClient.Setup(x => x.SendRequest<User>(

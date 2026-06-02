@@ -94,7 +94,8 @@ public sealed class HandlerDescriptorList : IEnumerable<HandlerDescriptor>
     /// <returns>True if the descriptor exists; otherwise, false.</returns>
     public bool ContainsKey(DescriptorIndexer indexer)
     {
-        lock (_lock) return _innerCollection.ContainsKey(indexer);
+        lock (_lock)
+            return _innerCollection.ContainsKey(indexer);
     }
 
     /// <summary>
@@ -160,12 +161,14 @@ public sealed class HandlerDescriptorList : IEnumerable<HandlerDescriptor>
     /// <inheritdoc/>
     public IEnumerator<HandlerDescriptor> GetEnumerator()
     {
-        lock (_lock) return _innerCollection.Values.ToList().GetEnumerator();
+        lock (_lock)
+            return _innerCollection.Values.ToList().GetEnumerator();
     }
 
     /// <inheritdoc/>
     IEnumerator IEnumerable.GetEnumerator()
     {
-        lock (_lock) return _innerCollection.Values.ToList().GetEnumerator();
+        lock (_lock)
+            return _innerCollection.Values.ToList().GetEnumerator();
     }
 }

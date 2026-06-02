@@ -1,9 +1,6 @@
 using Moq;
-using System.Threading;
-using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
-using Telegram.Bot.Types.Enums;
 using Telegrator.Core;
 using Telegrator.Mediation;
 using Telegrator.Providers;
@@ -30,7 +27,7 @@ public class TestTelegratorClient : ITelegratorBot, ICollectingProvider
     public ITelegramBotInfo BotInfo { get; }
 
     /// <inheritdoc/>
-    public IUpdateRouter UpdateRouter => _updateRouter ?? throw new System.InvalidOperationException("Router's not created yet. Invoke `StartTestReceiving` to initialize this property.");
+    public IUpdateRouter UpdateRouter => _updateRouter ?? throw new InvalidOperationException("Router's not created yet. Invoke `StartTestReceiving` to initialize this property.");
 
     /// <summary>
     /// Gets the Mock of the underlying ITelegramBotClient to verify calls (e.g. Verify SendTextMessageAsync).

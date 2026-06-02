@@ -47,7 +47,7 @@ public static class MessageExtensions
     /// <exception cref="ArgumentNullException"></exception>
     public static string SubstringEntity(this Message message, MessageEntity entity)
     {
-        if (message.Text == null || string.IsNullOrEmpty(message.Text)) // DO NOT CHANGE! Compiler SOMEHOW warnings "probably null" here
+        if (message.Text is not { Length: > 0 })
             throw new ArgumentNullException(nameof(message), "Cannot substring entity from message with text that null or empty");
 
         return message.Text.Substring(entity.Offset, entity.Length);

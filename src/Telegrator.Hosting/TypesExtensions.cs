@@ -55,6 +55,8 @@ public static class HostBuilderExtensions
 
     /// <summary>
     /// Registers Telegrator in DI container and returns ITelegramBotHostBuilder for further configuration.
+    /// If options are not provided, it will attempt to bind them from configuration using the "Telegrator" section or "TelegratorOptions" as fallback.
+    /// If handlers collection is not provided, a default HostHandlersCollection will be created and registered.
     /// </summary>
     public static ITelegramBotHostBuilder AddTelegrator(this IHostApplicationBuilder builder, TelegratorOptions? options = null, IHandlersCollection? handlers = null)
     {

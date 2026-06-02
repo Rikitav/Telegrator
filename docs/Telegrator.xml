@@ -9634,19 +9634,42 @@
             <param name = "onlyFirst">The onlyFirst.</param>
             <returns>The same builder instance.</returns>
         </member>
-        <member name="T:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute">
+        <member name="T:System.Diagnostics.CodeAnalysis.UnscopedRefAttribute">
             <summary>
-            Specifies that when a method returns <see cref="P:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute.ReturnValue"/>, the parameter will not be null even if the corresponding type allows it.
+            Used to indicate a byref escapes and is not scoped.
+            </summary>
+            <remarks>
+            <para>
+            There are several cases where the C# compiler treats a <see langword="ref"/> as implicitly
+            <see langword="scoped"/> - where the compiler does not allow the <see langword="ref"/> to escape the method.
+            </para>
+            <para>
+            For example:
+            <list type="number">
+                <item><see langword="this"/> for <see langword="struct"/> instance methods.</item>
+                <item><see langword="ref"/> parameters that refer to <see langword="ref"/> <see langword="struct"/> types.</item>
+                <item><see langword="out"/> parameters.</item>
+            </list>
+            </para>
+            <para>
+            This attribute is used in those instances where the <see langword="ref"/> should be allowed to escape.
+            </para>
+            <para>
+            Applying this attribute, in any form, has impact on consumers of the applicable API. It is necessary for
+            API authors to understand the lifetime implications of applying this attribute and how it may impact their users.
+            </para>
+            </remarks>
+        </member>
+        <member name="T:System.Diagnostics.CodeAnalysis.NotNullAttribute">
+            <summary>
+            Specifies that an output will not be null even if the corresponding type allows it.
+            Specifies that an input argument was not null when the call returns.
             </summary>
         </member>
-        <member name="M:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute.#ctor(System.Boolean)">
+        <member name="T:System.Diagnostics.CodeAnalysis.MaybeNullAttribute">
             <summary>
-            Initializes the attribute with the specified return value condition.
+            Specifies that an output may be null even if the corresponding type disallows it.
             </summary>
-            <param name="returnValue">The return value condition. If the method returns this value, the associated parameter will not be null.</param>
-        </member>
-        <member name="P:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute.ReturnValue">
-            <summary>Gets the return value condition.</summary>
         </member>
         <member name="T:System.Diagnostics.CodeAnalysis.ConstantExpectedAttribute">
             <summary>
@@ -9664,6 +9687,25 @@
         <member name="P:System.Diagnostics.CodeAnalysis.ConstantExpectedAttribute.Max">
             <summary>
             Indicates the maximum bound of the expected constant, inclusive.
+            </summary>
+        </member>
+        <member name="T:System.Diagnostics.CodeAnalysis.DoesNotReturnIfAttribute">
+            <summary>
+            Specifies that the method will not return if the associated Boolean parameter is passed the specified value.
+            </summary>
+        </member>
+        <member name="M:System.Diagnostics.CodeAnalysis.DoesNotReturnIfAttribute.#ctor(System.Boolean)">
+            <summary>
+            Initializes the attribute with the specified parameter value.
+            </summary>
+            <param name="parameterValue">
+            The condition parameter value. Code after the method will be considered unreachable
+            by diagnostics if the argument to the associated parameter matches this value.
+            </param>
+        </member>
+        <member name="P:System.Diagnostics.CodeAnalysis.DoesNotReturnIfAttribute.ParameterValue">
+            <summary>
+            Gets the condition parameter value.
             </summary>
         </member>
         <member name="T:System.Diagnostics.CodeAnalysis.MemberNotNullWhenAttribute">
@@ -9696,20 +9738,20 @@
             Gets field or property member names.
             </summary>
         </member>
-        <member name="T:System.Diagnostics.CodeAnalysis.NotNullIfNotNullAttribute">
+        <member name="T:System.Diagnostics.CodeAnalysis.MaybeNullWhenAttribute">
             <summary>
-            Specifies that the output will be non-null if the named parameter is non-null.
+            Specifies that when a method returns <see cref="P:System.Diagnostics.CodeAnalysis.MaybeNullWhenAttribute.ReturnValue"/>, the parameter may be null even if the corresponding type disallows it.
             </summary>
         </member>
-        <member name="M:System.Diagnostics.CodeAnalysis.NotNullIfNotNullAttribute.#ctor(System.String)">
+        <member name="M:System.Diagnostics.CodeAnalysis.MaybeNullWhenAttribute.#ctor(System.Boolean)">
             <summary>
-            Initializes the attribute with the associated parameter name.
+            Initializes the attribute with the specified return value condition.
             </summary>
-            <param name="parameterName">The associated parameter name. The output will be non-null if the argument to the parameter specified is non-null.</param>
+            <param name="returnValue">The return value condition. If the method returns this value, the associated parameter may be null.</param>
         </member>
-        <member name="P:System.Diagnostics.CodeAnalysis.NotNullIfNotNullAttribute.ParameterName">
+        <member name="P:System.Diagnostics.CodeAnalysis.MaybeNullWhenAttribute.ReturnValue">
             <summary>
-            Gets the associated parameter name.
+            Gets the return value condition.
             </summary>
         </member>
         <member name="T:System.Diagnostics.CodeAnalysis.MemberNotNullAttribute">
@@ -9734,39 +9776,25 @@
             Gets field or property member names.
             </summary>
         </member>
-        <member name="T:System.Diagnostics.CodeAnalysis.DoesNotReturnIfAttribute">
+        <member name="T:System.Diagnostics.CodeAnalysis.NotNullIfNotNullAttribute">
             <summary>
-            Specifies that the method will not return if the associated Boolean parameter is passed the specified value.
+            Specifies that the output will be non-null if the named parameter is non-null.
             </summary>
         </member>
-        <member name="M:System.Diagnostics.CodeAnalysis.DoesNotReturnIfAttribute.#ctor(System.Boolean)">
+        <member name="M:System.Diagnostics.CodeAnalysis.NotNullIfNotNullAttribute.#ctor(System.String)">
             <summary>
-            Initializes the attribute with the specified parameter value.
+            Initializes the attribute with the associated parameter name.
             </summary>
-            <param name="parameterValue">
-            The condition parameter value. Code after the method will be considered unreachable
-            by diagnostics if the argument to the associated parameter matches this value.
-            </param>
+            <param name="parameterName">The associated parameter name. The output will be non-null if the argument to the parameter specified is non-null.</param>
         </member>
-        <member name="P:System.Diagnostics.CodeAnalysis.DoesNotReturnIfAttribute.ParameterValue">
+        <member name="P:System.Diagnostics.CodeAnalysis.NotNullIfNotNullAttribute.ParameterName">
             <summary>
-            Gets the condition parameter value.
+            Gets the associated parameter name.
             </summary>
         </member>
-        <member name="T:System.Diagnostics.CodeAnalysis.MaybeNullWhenAttribute">
+        <member name="T:System.Diagnostics.CodeAnalysis.DoesNotReturnAttribute">
             <summary>
-            Specifies that when a method returns <see cref="P:System.Diagnostics.CodeAnalysis.MaybeNullWhenAttribute.ReturnValue"/>, the parameter may be null even if the corresponding type disallows it.
-            </summary>
-        </member>
-        <member name="M:System.Diagnostics.CodeAnalysis.MaybeNullWhenAttribute.#ctor(System.Boolean)">
-            <summary>
-            Initializes the attribute with the specified return value condition.
-            </summary>
-            <param name="returnValue">The return value condition. If the method returns this value, the associated parameter may be null.</param>
-        </member>
-        <member name="P:System.Diagnostics.CodeAnalysis.MaybeNullWhenAttribute.ReturnValue">
-            <summary>
-            Gets the return value condition.
+            Applied to a method that will never return under any circumstance.
             </summary>
         </member>
         <member name="T:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute">
@@ -9827,28 +9855,6 @@
         <member name="F:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute.Xml">
             <summary>The syntax identifier for strings containing XML.</summary>
         </member>
-        <member name="T:System.Diagnostics.CodeAnalysis.AllowNullAttribute">
-            <summary>
-            Specifies that null is allowed as an input even if the corresponding type disallows it.
-            </summary>
-        </member>
-        <member name="T:System.Diagnostics.CodeAnalysis.NotNullAttribute">
-            <summary>
-            Specifies that an output will not be null even if the corresponding type allows it.
-            Specifies that an input argument was not null when the call returns.
-            </summary>
-        </member>
-        <member name="T:System.Diagnostics.CodeAnalysis.SetsRequiredMembersAttribute">
-            <summary>
-            Specifies that this constructor sets all required members for the current type,
-            and callers do not need to set any required members themselves.
-            </summary>
-        </member>
-        <member name="T:System.Diagnostics.CodeAnalysis.DisallowNullAttribute">
-            <summary>
-            Specifies that null is disallowed as an input even if the corresponding type allows it.
-            </summary>
-        </member>
         <member name="T:System.Diagnostics.CodeAnalysis.ExperimentalAttribute">
             <summary>
             Indicates that an API is experimental and it may change in the future.
@@ -9883,83 +9889,34 @@
             <value>The format string that represents a URL to corresponding documentation.</value>
             <remarks>An example format string is <c>https://contoso.com/obsoletion-warnings/{0}</c>.</remarks>
         </member>
-        <member name="T:System.Diagnostics.CodeAnalysis.UnscopedRefAttribute">
+        <member name="T:System.Diagnostics.CodeAnalysis.AllowNullAttribute">
             <summary>
-            Used to indicate a byref escapes and is not scoped.
-            </summary>
-            <remarks>
-            <para>
-            There are several cases where the C# compiler treats a <see langword="ref"/> as implicitly
-            <see langword="scoped"/> - where the compiler does not allow the <see langword="ref"/> to escape the method.
-            </para>
-            <para>
-            For example:
-            <list type="number">
-                <item><see langword="this"/> for <see langword="struct"/> instance methods.</item>
-                <item><see langword="ref"/> parameters that refer to <see langword="ref"/> <see langword="struct"/> types.</item>
-                <item><see langword="out"/> parameters.</item>
-            </list>
-            </para>
-            <para>
-            This attribute is used in those instances where the <see langword="ref"/> should be allowed to escape.
-            </para>
-            <para>
-            Applying this attribute, in any form, has impact on consumers of the applicable API. It is necessary for
-            API authors to understand the lifetime implications of applying this attribute and how it may impact their users.
-            </para>
-            </remarks>
-        </member>
-        <member name="T:System.Diagnostics.CodeAnalysis.DoesNotReturnAttribute">
-            <summary>
-            Applied to a method that will never return under any circumstance.
+            Specifies that null is allowed as an input even if the corresponding type disallows it.
             </summary>
         </member>
-        <member name="T:System.Diagnostics.CodeAnalysis.MaybeNullAttribute">
+        <member name="T:System.Diagnostics.CodeAnalysis.DisallowNullAttribute">
             <summary>
-            Specifies that an output may be null even if the corresponding type disallows it.
+            Specifies that null is disallowed as an input even if the corresponding type allows it.
             </summary>
         </member>
-        <member name="T:System.Runtime.CompilerServices.InterpolatedStringHandlerAttribute">
+        <member name="T:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute">
             <summary>
-            Indicates the attributed type is to be used as an interpolated string handler.
+            Specifies that when a method returns <see cref="P:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute.ReturnValue"/>, the parameter will not be null even if the corresponding type allows it.
             </summary>
         </member>
-        <member name="T:System.Runtime.CompilerServices.CallerArgumentExpressionAttribute">
+        <member name="M:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute.#ctor(System.Boolean)">
             <summary>
-            An attribute that allows parameters to receive the expression of other parameters.
+            Initializes the attribute with the specified return value condition.
             </summary>
+            <param name="returnValue">The return value condition. If the method returns this value, the associated parameter will not be null.</param>
         </member>
-        <member name="M:System.Runtime.CompilerServices.CallerArgumentExpressionAttribute.#ctor(System.String)">
-            <summary>
-            Initializes a new instance of the <see cref="T:System.Runtime.CompilerServices.CallerArgumentExpressionAttribute"/> class.
-            </summary>
-            <param name="parameterName">The condition parameter value.</param>
+        <member name="P:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute.ReturnValue">
+            <summary>Gets the return value condition.</summary>
         </member>
-        <member name="P:System.Runtime.CompilerServices.CallerArgumentExpressionAttribute.ParameterName">
+        <member name="T:System.Diagnostics.CodeAnalysis.SetsRequiredMembersAttribute">
             <summary>
-            Gets the parameter name the expression is retrieved from.
-            </summary>
-        </member>
-        <member name="T:System.Runtime.CompilerServices.OverloadResolutionPriorityAttribute">
-            <summary>
-            Specifies the priority of a member in overload resolution. When unspecified, the default priority is 0.
-            </summary>
-        </member>
-        <member name="M:System.Runtime.CompilerServices.OverloadResolutionPriorityAttribute.#ctor(System.Int32)">
-            <summary>
-            Initializes a new instance of the <see cref="T:System.Runtime.CompilerServices.OverloadResolutionPriorityAttribute"/> class.
-            </summary>
-            <param name="priority">The priority of the attributed member. Higher numbers are prioritized, lower numbers are deprioritized. 0 is the default if no attribute is present.</param>
-        </member>
-        <member name="P:System.Runtime.CompilerServices.OverloadResolutionPriorityAttribute.Priority">
-            <summary>
-            The priority of the member.
-            </summary>
-        </member>
-        <member name="T:System.Runtime.CompilerServices.IsExternalInit">
-            <summary>
-            Reserved to be used by the compiler for tracking metadata.
-            This class should not be used by developers in source code.
+            Specifies that this constructor sets all required members for the current type,
+            and callers do not need to set any required members themselves.
             </summary>
         </member>
         <member name="T:System.Runtime.CompilerServices.ModuleInitializerAttribute">
@@ -9984,26 +9941,46 @@
              https://github.com/dotnet/runtime/blob/main/docs/design/specs/Ecma-335-Augments.md#module-initializer
              </remarks>
         </member>
-        <member name="T:System.Runtime.CompilerServices.CompilerLoweringPreserveAttribute">
+        <member name="T:System.Runtime.CompilerServices.CallerArgumentExpressionAttribute">
             <summary>
-            When applied to an attribute class, instructs the compiler to flow applications of that attribute,
-            from source code down to compiler-generated symbols. This can help IL-based analysis tools.
-            </summary>
-            <remarks>
-            One example where this attribute applies is in C# primary constructor parameters. If an attribute
-            marked with <see cref="T:System.Runtime.CompilerServices.CompilerLoweringPreserveAttribute"/> gets applied to a primary constructor
-            parameter, the attribute will also be applied to any compiler-generated fields storing that parameter.
-            </remarks>
-        </member>
-        <member name="M:System.Runtime.CompilerServices.CompilerLoweringPreserveAttribute.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:System.Runtime.CompilerServices.CompilerLoweringPreserveAttribute"/> class.
+            An attribute that allows parameters to receive the expression of other parameters.
             </summary>
         </member>
-        <member name="T:System.Runtime.CompilerServices.RequiredMemberAttribute">
+        <member name="M:System.Runtime.CompilerServices.CallerArgumentExpressionAttribute.#ctor(System.String)">
             <summary>
-            Specifies that a type has required members or that a member is required.
+            Initializes a new instance of the <see cref="T:System.Runtime.CompilerServices.CallerArgumentExpressionAttribute"/> class.
             </summary>
+            <param name="parameterName">The condition parameter value.</param>
+        </member>
+        <member name="P:System.Runtime.CompilerServices.CallerArgumentExpressionAttribute.ParameterName">
+            <summary>
+            Gets the parameter name the expression is retrieved from.
+            </summary>
+        </member>
+        <member name="T:System.Runtime.CompilerServices.InterpolatedStringHandlerArgumentAttribute">
+            <summary>
+            Indicates which arguments to a method involving an interpolated string handler should be passed to that handler.
+            </summary>
+        </member>
+        <member name="M:System.Runtime.CompilerServices.InterpolatedStringHandlerArgumentAttribute.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Runtime.CompilerServices.InterpolatedStringHandlerArgumentAttribute"/> class.
+            </summary>
+            <param name="argument">The name of the argument that should be passed to the handler.</param>
+            <remarks><see langword="null"/> may be used as the name of the receiver in an instance method.</remarks>
+        </member>
+        <member name="M:System.Runtime.CompilerServices.InterpolatedStringHandlerArgumentAttribute.#ctor(System.String[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Runtime.CompilerServices.InterpolatedStringHandlerArgumentAttribute"/> class.
+            </summary>
+            <param name="arguments">The names of the arguments that should be passed to the handler.</param>
+            <remarks><see langword="null"/> may be used as the name of the receiver in an instance method.</remarks>
+        </member>
+        <member name="P:System.Runtime.CompilerServices.InterpolatedStringHandlerArgumentAttribute.Arguments">
+            <summary>
+            Gets the names of the arguments that should be passed to the handler.
+            </summary>
+            <remarks><see langword="null"/> may be used as the name of the receiver in an instance method.</remarks>
         </member>
         <member name="M:System.Runtime.CompilerServices.CollectionBuilderAttribute.#ctor(System.Type,System.String)">
             <summary>
@@ -10031,15 +10008,30 @@
             For example, this might be ".ctor" if targeting the type's constructor.
             </remarks>
         </member>
-        <member name="T:System.Runtime.CompilerServices.RequiresLocationAttribute">
+        <member name="T:System.Runtime.CompilerServices.RequiredMemberAttribute">
             <summary>
-            Reserved for use by a compiler for tracking metadata.
-            This attribute should not be used by developers in source code.
+            Specifies that a type has required members or that a member is required.
             </summary>
         </member>
         <member name="T:System.Runtime.CompilerServices.ParamCollectionAttribute">
             <summary>
             Indicates that a method will allow a variable number of arguments in its invocation.
+            </summary>
+        </member>
+        <member name="T:System.Runtime.CompilerServices.OverloadResolutionPriorityAttribute">
+            <summary>
+            Specifies the priority of a member in overload resolution. When unspecified, the default priority is 0.
+            </summary>
+        </member>
+        <member name="M:System.Runtime.CompilerServices.OverloadResolutionPriorityAttribute.#ctor(System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Runtime.CompilerServices.OverloadResolutionPriorityAttribute"/> class.
+            </summary>
+            <param name="priority">The priority of the attributed member. Higher numbers are prioritized, lower numbers are deprioritized. 0 is the default if no attribute is present.</param>
+        </member>
+        <member name="P:System.Runtime.CompilerServices.OverloadResolutionPriorityAttribute.Priority">
+            <summary>
+            The priority of the member.
             </summary>
         </member>
         <member name="T:System.Runtime.CompilerServices.ExtensionMarkerAttribute">
@@ -10055,30 +10047,17 @@
         <member name="P:System.Runtime.CompilerServices.ExtensionMarkerAttribute.Name">
             <summary>The name of the marker type this extension member is associated with.</summary>
         </member>
-        <member name="T:System.Runtime.CompilerServices.InterpolatedStringHandlerArgumentAttribute">
+        <member name="T:System.Runtime.CompilerServices.RequiresLocationAttribute">
             <summary>
-            Indicates which arguments to a method involving an interpolated string handler should be passed to that handler.
+            Reserved for use by a compiler for tracking metadata.
+            This attribute should not be used by developers in source code.
             </summary>
         </member>
-        <member name="M:System.Runtime.CompilerServices.InterpolatedStringHandlerArgumentAttribute.#ctor(System.String)">
+        <member name="T:System.Runtime.CompilerServices.IsExternalInit">
             <summary>
-            Initializes a new instance of the <see cref="T:System.Runtime.CompilerServices.InterpolatedStringHandlerArgumentAttribute"/> class.
+            Reserved to be used by the compiler for tracking metadata.
+            This class should not be used by developers in source code.
             </summary>
-            <param name="argument">The name of the argument that should be passed to the handler.</param>
-            <remarks><see langword="null"/> may be used as the name of the receiver in an instance method.</remarks>
-        </member>
-        <member name="M:System.Runtime.CompilerServices.InterpolatedStringHandlerArgumentAttribute.#ctor(System.String[])">
-            <summary>
-            Initializes a new instance of the <see cref="T:System.Runtime.CompilerServices.InterpolatedStringHandlerArgumentAttribute"/> class.
-            </summary>
-            <param name="arguments">The names of the arguments that should be passed to the handler.</param>
-            <remarks><see langword="null"/> may be used as the name of the receiver in an instance method.</remarks>
-        </member>
-        <member name="P:System.Runtime.CompilerServices.InterpolatedStringHandlerArgumentAttribute.Arguments">
-            <summary>
-            Gets the names of the arguments that should be passed to the handler.
-            </summary>
-            <remarks><see langword="null"/> may be used as the name of the receiver in an instance method.</remarks>
         </member>
         <member name="T:System.Runtime.CompilerServices.CompilerFeatureRequiredAttribute">
             <summary>
@@ -10111,9 +10090,30 @@
             The <see cref="P:System.Runtime.CompilerServices.CompilerFeatureRequiredAttribute.FeatureName"/> used for the required members C# feature.
             </summary>
         </member>
+        <member name="T:System.Runtime.CompilerServices.InterpolatedStringHandlerAttribute">
+            <summary>
+            Indicates the attributed type is to be used as an interpolated string handler.
+            </summary>
+        </member>
         <member name="T:System.Runtime.CompilerServices.SkipLocalsInitAttribute">
             <summary>
             Used to indicate to the compiler that the <c>.locals init</c> flag should not be set in method headers.
+            </summary>
+        </member>
+        <member name="T:System.Runtime.CompilerServices.CompilerLoweringPreserveAttribute">
+            <summary>
+            When applied to an attribute class, instructs the compiler to flow applications of that attribute,
+            from source code down to compiler-generated symbols. This can help IL-based analysis tools.
+            </summary>
+            <remarks>
+            One example where this attribute applies is in C# primary constructor parameters. If an attribute
+            marked with <see cref="T:System.Runtime.CompilerServices.CompilerLoweringPreserveAttribute"/> gets applied to a primary constructor
+            parameter, the attribute will also be applied to any compiler-generated fields storing that parameter.
+            </remarks>
+        </member>
+        <member name="M:System.Runtime.CompilerServices.CompilerLoweringPreserveAttribute.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Runtime.CompilerServices.CompilerLoweringPreserveAttribute"/> class.
             </summary>
         </member>
         <member name="M:System.Runtime.Versioning.RequiresPreviewFeaturesAttribute.#ctor">

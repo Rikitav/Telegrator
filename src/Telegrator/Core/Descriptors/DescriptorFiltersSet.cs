@@ -61,7 +61,7 @@ public sealed class DescriptorFiltersSet
             if (!result)
             {
                 anyErrors = true;
-                TelegratorLogging.LogTrace("(E) UpdateValidator filter of '{0}' for Update ({1}) didnt pass!", filterContext.Data["handler_name"], filterContext.Update.Id);
+                TelegratorLogging.LogTrace("(E) UpdateValidator filter of '{0}' for Update ({1}) didnt pass!", filterContext.Data.TryGetValue("handler_name", out object? handlerName) ? handlerName : "Unknown", filterContext.Update.Id);
 
                 if (!formReport)
                     return Result.Fault();
@@ -84,7 +84,7 @@ public sealed class DescriptorFiltersSet
             if (!result)
             {
                 anyErrors = true;
-                TelegratorLogging.LogTrace("(E) StateKeeperValidator filter of '{0}' for Update ({1}) didnt pass!", filterContext.Data["handler_name"], filterContext.Update.Id);
+                TelegratorLogging.LogTrace("(E) StateKeeperValidator filter of '{0}' for Update ({1}) didnt pass!", filterContext.Data.TryGetValue("handler_name", out object? handlerName) ? handlerName : "Unknown", filterContext.Update.Id);
 
                 if (!formReport)
                     return Result.Fault();
@@ -110,7 +110,7 @@ public sealed class DescriptorFiltersSet
                 if (!result)
                 {
                     anyErrors = true;
-                    TelegratorLogging.LogTrace("(E) '{0}' filter of '{1}' for Update ({2}) didnt pass!", filterName, filterContext.Data["handler_name"], filterContext.Update.Id);
+                    TelegratorLogging.LogTrace("(E) '{0}' filter of '{1}' for Update ({2}) didnt pass!", filterName, filterContext.Data.TryGetValue("handler_name", out object? handlerName) ? handlerName : "Unknown", filterContext.Update.Id);
 
                     if (!formReport)
                         return Result.Fault();
