@@ -46,18 +46,18 @@ public abstract class UpdateHandlerBase(UpdateType handlingUpdateType) : IUpdate
             // Creating container
             IHandlerContainer container = GetContainer(described);
             DescriptorAspectsSet? aspects = described.From.Aspects;
-            Result? execResult = null;
+            Result execResult = default;
 
             // Executing pre processor
             if (aspects != null)
             {
                 try
                 {
-                    Result? preResult = await aspects
+                    Result preResult = await aspects
                         .ExecutePre(this, container, cancellationToken)
                         .ConfigureAwait(false);
 
-                    if (!preResult.Success || preResult.RouteNext)
+                    if (preResult is not { Success: true } || preResult is { RouteNext: true })
                         return preResult;
                 }
                 catch (NotImplementedException)
@@ -70,7 +70,7 @@ public abstract class UpdateHandlerBase(UpdateType handlingUpdateType) : IUpdate
             {
                 // Executing handler
                 execResult = await ExecuteInternal(container, cancellationToken).ConfigureAwait(false);
-                if (!execResult.Success || execResult.RouteNext)
+                if (execResult is not { Success: true } || execResult is { RouteNext: true })
                     return execResult;
             }
             catch (NotImplementedException)

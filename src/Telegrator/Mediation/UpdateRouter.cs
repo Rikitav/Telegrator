@@ -119,7 +119,7 @@ public class UpdateRouter : IUpdateRouter
                 if (lastResult == null)
                     break; // Smth went horribly wrong, better to stop routing
 
-                if (!lastResult.RouteNext)
+                if (lastResult is not { RouteNext: true })
                     break;
 
                 TelegratorLogging.LogTrace("Handler '{0}' requested route continuation (Update {1})", handlerInfo.DisplayString, handlerInfo.HandlingUpdate.Id);
@@ -146,7 +146,7 @@ public class UpdateRouter : IUpdateRouter
                 if (lastResult == null)
                     break; // Smth went horribly wrong, better to stop routing
 
-                if (!lastResult.RouteNext)
+                if (lastResult is not { RouteNext: true })
                     break;
 
                 TelegratorLogging.LogTrace("Handler '{0}' requested route continuation (Update {1})", handlerInfo.DisplayString, handlerInfo.HandlingUpdate.Id);

@@ -8,26 +8,26 @@ namespace Telegrator;
 /// <summary>
 /// Represents handler results, allowing to communicate with router and control aspect execution
 /// </summary>
-public sealed class Result
+public readonly record struct Result
 {
-    private static readonly Result ok = new Result(true, false, null);
-    private static readonly Result fault = new Result(false, false, null);
-    private static readonly Result next = new Result(true, true, null);
+    private static readonly Result ok = new(true, false, null);
+    private static readonly Result fault = new(false, false, null);
+    private static readonly Result next = new(true, true, null);
 
     /// <summary>
     /// Tell router to stop describing
     /// </summary>
-    public bool Success { get; }
+    public bool Success { get; init; }
 
     /// <summary>
     /// Tell router to continue describing
     /// </summary>
-    public bool RouteNext { get; }
+    public bool RouteNext { get; init; }
 
     /// <summary>
     /// Exact type that router should search
     /// </summary>
-    public Type? NextType { get; }
+    public Type? NextType { get; init; }
 
     internal Result(bool success, bool routeNext, Type? nextType)
     {
