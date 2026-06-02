@@ -30,8 +30,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include=".\README.md" Pack="True" PackagePath="\" />
     <None Include="..\..\LICENSE" Pack="True" PackagePath="\" />
-    <None Include="..\..\README.md" Pack="True" PackagePath="\" />
     <None Include="..\..\resources\telegrator_nuget.png" Pack="True" PackagePath="\" />
   </ItemGroup>
 
