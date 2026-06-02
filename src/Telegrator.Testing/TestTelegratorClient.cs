@@ -90,7 +90,7 @@ public class TestTelegratorClient : ITelegratorBot, ICollectingProvider
     public async Task EmitUpdateAsync(Update update, CancellationToken cancellationToken = default)
     {
         if (_updateRouter == null)
-            throw new System.InvalidOperationException("You must call StartTestReceiving() before emitting updates.");
+            throw new InvalidOperationException("You must call StartTestReceiving() before emitting updates.");
 
         await _updateRouter.HandleUpdateAsync(Client, update, cancellationToken);
     }
