@@ -139,7 +139,7 @@ public class TelegratorClientIntegrationTests
         public override async Task<Result> Execute(IHandlerContainer<Message> container, CancellationToken cancellation)
         {
             Executed = true;
-            await Reply($"Echo: {container.ActualUpdate.Text}");
+            await Reply($"Echo: {container.ActualUpdate.Text}", cancellationToken: cancellation);
             return Ok;
         }
     }
@@ -153,7 +153,7 @@ public class TelegratorClientIntegrationTests
         public override async Task<Result> Execute(IHandlerContainer<CallbackQuery> container, CancellationToken cancellation)
         {
             Executed = true;
-            await Container.AnswerCallbackQuery("Action processed!");
+            await Answer("Action processed!", cancellationToken: cancellation);
             return Ok;
         }
     }
@@ -168,12 +168,14 @@ public class TelegratorClientIntegrationTests
         public override async Task<Result> Execute(IHandlerContainer<Message> container, CancellationToken cancellation)
         {
             Asked = true;
-            await Reply("What is your name?");
+            await Reply("What is your name?", cancellationToken: cancellation);
 
             var nextMessage = await AwaitingProvider.AwaitMessage(HandlingUpdate).BySenderId(cancellation);
-            Answered = true;
-            await Reply($"Hello, {nextMessage.Text}!");
+            if (nextMessage == null)
+                return Ok; // timeout or cancellation
 
+            Answered = true;
+            await Reply($"Hello, {nextMessage.Text}!", cancellationToken: cancellation);
             return Ok;
         }
     }

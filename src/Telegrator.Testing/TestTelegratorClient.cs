@@ -14,7 +14,7 @@ namespace Telegrator.Testing;
 /// </summary>
 public class TestTelegratorClient : ITelegratorBot, ICollectingProvider
 {
-    private IUpdateRouter? _updateRouter;
+    private UpdateRouter? _updateRouter;
     private readonly Mock<ITelegramBotClient> _clientMock;
 
     /// <inheritdoc/>

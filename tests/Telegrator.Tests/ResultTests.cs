@@ -42,7 +42,7 @@ public class ResultTests
 
         result.Success.Should().BeTrue();
         result.RouteNext.Should().BeTrue();
-        result.NextType.Should().Be(typeof(ResultTests));
+        result.NextType.Should().Be<ResultTests>();
     }
 
     [Fact]

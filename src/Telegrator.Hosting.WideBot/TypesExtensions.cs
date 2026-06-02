@@ -109,7 +109,7 @@ public static class WideHostBuilderExtensions
         {
             ApiHash = configuration[nameof(WideBotOptions.ApiHash)] ?? throw new MissingMemberException($"Required configuration value '{nameof(WideBotOptions.ApiHash)}' is missing."),
             ApiId = int.TryParse(configuration[nameof(WideBotOptions.ApiId)], out int apiId) ? apiId : throw new MissingMemberException($"Required configuration value '{nameof(WideBotOptions.ApiId)}' is missing or invalid."),
-            DropPendingUpdates = bool.TryParse(configuration[nameof(WideBotOptions.DropPendingUpdates)], out bool dropPending) ? dropPending : false,
+            DropPendingUpdates = bool.TryParse(configuration[nameof(WideBotOptions.DropPendingUpdates)], out bool dropPending) && dropPending,
             MTProxy = configuration[nameof(WideBotOptions.MTProxy)]
         };
     }

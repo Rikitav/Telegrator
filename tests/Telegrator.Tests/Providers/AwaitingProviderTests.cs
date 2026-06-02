@@ -60,7 +60,7 @@ public class AwaitingProviderTests
         act.Should().Throw<System.Exception>().WithMessage("*singleton instance*");
     }
 
-    private static HandlerDescriptor CreateTestHandlerDescriptor()
+    private static ClassHandlerDescriptor CreateTestHandlerDescriptor()
     {
         var descriptor = new ClassHandlerDescriptor(DescriptorType.General, typeof(TestUpdateHandler));
         descriptor.SetInstance(new TestUpdateHandler());

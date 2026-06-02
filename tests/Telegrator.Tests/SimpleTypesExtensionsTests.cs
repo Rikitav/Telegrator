@@ -81,7 +81,7 @@ public class SimpleTypesExtensionsTests
     public void UnionAdd_ShouldAddOnlyUniqueElements()
     {
         var list = new List<int> { 1, 2 };
-        list.UnionAdd(new[] { 2, 3, 4 });
+        list.UnionAdd([2, 3, 4]);
 
         list.Should().Equal(1, 2, 3, 4);
     }
