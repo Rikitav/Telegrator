@@ -100,6 +100,9 @@ public class TestTelegratorClient : ITelegratorBot, ICollectingProvider
     /// </summary>
     public async Task EmitMessageAsync(Message message, CancellationToken cancellationToken = default)
     {
+        if (message.Id == 0)
+            message.Id = 1; // Telegrator filters requires message Id, so we set a default if not provided
+
         Update update = new Update { Message = message };
         await EmitUpdateAsync(update, cancellationToken);
     }
