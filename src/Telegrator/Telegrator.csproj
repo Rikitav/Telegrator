@@ -8,7 +8,7 @@
 	<BaseOutputPath>..\..\bin</BaseOutputPath>
 	<DocumentationFile>..\..\docs\$(AssemblyName).xml</DocumentationFile>
 	<!--IsAotCompatible>True</IsAotCompatible-->
-	  
+
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <EnableNETAnalyzers>True</EnableNETAnalyzers>
@@ -16,14 +16,14 @@
     <IncludeSymbols>True</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <SignAssembly>False</SignAssembly>
-	  
+
     <Title>Telegrator : Telegram.Bot mediator framework</Title>
     <Version>1.18.4.1</Version>
 	<Authors>Rikitav Tim4ik</Authors>
 	<Company>Rikitav Tim4ik</Company>
     <RepositoryUrl>https://github.com/Rikitav/Telegrator</RepositoryUrl>
     <PackageTags>telegram;bot;mediator;attributes;aspect;hosting;host;framework;easy;simple;handlers</PackageTags>
-	  
+
     <PackageIcon>telegrator_nuget.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
@@ -34,15 +34,16 @@
     <None Include="..\..\README.md" Pack="True" PackagePath="\" />
     <None Include="..\..\resources\telegrator_nuget.png" Pack="True" PackagePath="\" />
   </ItemGroup>
-  
+
   <ItemGroup>
-    <PackageReference Include="PolySharp" Version="1.15.0">
+    <PackageReference Include="PolySharp" Version="1.16.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Telegram.Bot" Version="22.10.0.1" />
 	<PackageReference Include="System.Threading.Channels" Version="10.0.8" />
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="10.0.8" />
+    <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="10.0.8" />
   </ItemGroup>
 
   <ItemGroup>

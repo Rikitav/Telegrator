@@ -1,4 +1,5 @@
-﻿using System.Threading.Channels;
+﻿using System.Diagnostics;
+using System.Threading.Channels;
 using Telegrator.Core;
 using Telegrator.Core.Descriptors;
 using Telegrator.Core.Handlers;
@@ -12,6 +13,8 @@ namespace Telegrator.Mediation;
 /// </summary>
 public class UpdateHandlersPool : IUpdateHandlersPool
 {
+    private static readonly ActivitySource ActivitySource = new("Telegrator.UpdateHandlersPool");
+
     /// <summary>
     /// Synchronization object for thread-safe operations.
     /// </summary>
@@ -70,11 +73,16 @@ public class UpdateHandlersPool : IUpdateHandlersPool
         Options = options;
         GlobalCancellationToken = globalCancellationToken;
 
-        ExecutionChannel = Channel.CreateUnbounded<DescribedHandlerDescriptor>(new UnboundedChannelOptions()
+        int channelCapacity = options.MaximumParallelWorkingHandlers is { } limit && limit > 0
+            ? limit * 2
+            : 100;
+
+        ExecutionChannel = Channel.CreateBounded<DescribedHandlerDescriptor>(new BoundedChannelOptions(channelCapacity)
         {
             SingleReader = true,
-            SingleWriter = true,
-            AllowSynchronousContinuations = false
+            SingleWriter = false,
+            AllowSynchronousContinuations = false,
+            FullMode = BoundedChannelFullMode.Wait
         });
 
         if (options.MaximumParallelWorkingHandlers != null)
@@ -127,6 +135,10 @@ public class UpdateHandlersPool : IUpdateHandlersPool
 
     private async Task ProcessHandler(DescribedHandlerDescriptor handlerInfo)
     {
+        using Activity? activity = ActivitySource.StartActivity("ProcessHandler");
+        activity?.SetTag("handler", handlerInfo.DisplayString);
+        activity?.SetTag("update.id", handlerInfo.HandlingUpdate.Id);
+
         try
         {
             TelegratorLogging.LogDebug("Described handler '{0}' (Update {1})", handlerInfo.DisplayString, handlerInfo.HandlingUpdate.Id);

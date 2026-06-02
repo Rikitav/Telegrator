@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Text;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
@@ -20,6 +21,8 @@ namespace Telegrator.Mediation;
 /// </summary>
 public class UpdateRouter : IUpdateRouter
 {
+    private static readonly ActivitySource ActivitySource = new("Telegrator.UpdateRouter");
+
     private readonly ITelegramBotInfo _botInfo;
 
     /// <inheritdoc/>
@@ -93,6 +96,10 @@ public class UpdateRouter : IUpdateRouter
 
     private async Task HandleUpdateAsyncInternal(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
+        using Activity? activity = ActivitySource.StartActivity("HandleUpdate");
+        activity?.SetTag("update.id", update.Id);
+        activity?.SetTag("update.type", update.Type.ToString());
+
         // Logging
         LogUpdate(update);
 
