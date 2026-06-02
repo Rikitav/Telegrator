@@ -254,9 +254,59 @@
     "category": "Testing",
     "items": [
       {
+        "title": "Testing Strategies",
+        "id": "testing-strategies",
+        "path": "testing/testing-strategies.md"
+      },
+      {
         "title": "Integration Testing",
         "id": "integration-testing",
         "path": "testing/integration-testing.md"
+      }
+    ]
+  },
+  {
+    "category": "API Reference",
+    "items": [
+      {
+        "title": "Result",
+        "id": "api-result",
+        "path": "api-reference/result.md"
+      },
+      {
+        "title": "UpdateRouter",
+        "id": "api-update-router",
+        "path": "api-reference/update-router.md"
+      },
+      {
+        "title": "UpdateHandlerBase",
+        "id": "api-update-handler-base",
+        "path": "api-reference/update-handler-base.md"
+      },
+      {
+        "title": "HandlerBuilder",
+        "id": "api-handler-builder",
+        "path": "api-reference/handler-builder.md"
+      },
+      {
+        "title": "DescribedHandlerDescriptor",
+        "id": "api-described-handler-descriptor",
+        "path": "api-reference/described-handler-descriptor.md"
+      },
+      {
+        "title": "TelegratorClient",
+        "id": "api-telegrator-client",
+        "path": "api-reference/telegrator-client.md"
+      },
+      {
+        "title": "Filters",
+        "id": "api-filters",
+        "path": "api-reference/filters.md"
+      },
+      {
+        "title": "State Storage",
+        "id": "api-state-storage",
+        "path": "api-reference/state-storage.md"
       }
     ]
   },

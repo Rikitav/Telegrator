@@ -33,23 +33,7 @@ MyBot/
 
 ## Testing Strategies
 
-Test your bot components:
-
-```csharp
-[Test]
-public async Task StartHandler_ShouldReplyWithWelcome()
-{
-    // Arrange
-    var handler = new StartHandler();
-    var container = CreateMockContainer();
-    
-    // Act
-    var result = await handler.Execute(container, CancellationToken.None);
-    
-    // Assert
-    Assert.That(result.Positive, Is.True);
-}
-```
+See the dedicated <a href="../testing/testing-strategies">Testing Strategies</a> article for unit testing, integration testing with `Telegrator.Testing`, aspect testing, and stateful flow testing.
 
 ## Common Patterns
 
