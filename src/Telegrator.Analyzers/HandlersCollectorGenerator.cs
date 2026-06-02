@@ -165,9 +165,9 @@ public class HandlersCollectorGenerator : IIncrementalGenerator
         /// <summary>
         /// Collects all generated Telegrator handlers using the Hosting builder statically to support Native AOT compilation.
         /// </summary>
-        public static {builderType} CollectHandlers(this {builderType} builder, IHandlersCollection handlers)
+        public static {builderType} CollectHandlers(this {builderType} builder)
         {{
-            CollectHandlers(handlers); // Вызывает базовый метод выше
+            CollectHandlers(builder.Handlers);
             return builder;
         }}";
 
@@ -177,7 +177,7 @@ public class HandlersCollectorGenerator : IIncrementalGenerator
 
         ClassDeclarationSyntax classDeclaration = SyntaxFactory.ClassDeclaration("TelegratorHandlersCollectionExtensions")
             .WithModifiers(SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.PublicKeyword), SyntaxFactory.Token(SyntaxKind.StaticKeyword)))
-            .WithMembers(SyntaxFactory.SingletonList<MemberDeclarationSyntax>(methodDeclaration));
+            .WithMembers(SyntaxFactory.List<MemberDeclarationSyntax>(generatedMembers));
 
         NamespaceDeclarationSyntax namespaceDeclaration = SyntaxFactory.NamespaceDeclaration(SyntaxFactory.ParseName("Telegrator"))
             .WithMembers(SyntaxFactory.SingletonList<MemberDeclarationSyntax>(classDeclaration));
