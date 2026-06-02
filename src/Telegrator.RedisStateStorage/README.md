@@ -1,12 +1,13 @@
 # Telegrator.RedisStateStorage
 
-**Telegrator.RedisStateStorage** is an extension for the Telegrator framework that provides Redis powered IStateStorage implementation.
+**Telegrator.RedisStateStorage** is an extension for the Telegrator framework that provides a Redis-powered `IStateStorage` implementation.
 
 ---
 
 ## Requirements
-- .NET standart 2.1 or later
+- .NET Standard 2.1 or later
 - [Telegrator](https://github.com/Rikitav/Telegrator)
+- [StackExchange.Redis](https://www.nuget.org/packages/StackExchange.Redis/)
 
 ---
 
@@ -23,25 +24,24 @@ dotnet add package Telegrator.RedisStateStorage
 **Program.cs:**
 ```csharp
 using Telegrator.Hosting;
+using Telegrator.RedisStateStorage;
+using StackExchange.Redis;
 
 // Creating builder
-TelegramBotHostBuilder builder = TelegramBotHost.CreateBuilder(new HostApplicationBuilderSettings()
-{
-    Args = args,
-    ApplicationName = "TelegramBotHost example",
-});
+HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
 
-// Registerring handlers
-builder.Handlers.CollectHandlersAssemblyWide();
+// Registering handlers
+builder.AddTelegrator()
+    .WithPolling()
+    .Handlers.CollectHandlers();
 
-// Register your services and 
-builder.Services.AddService<IStateStorage, RedisStateStorage>(services =>
-    new RedisStateStorage(ConnectionMultiplexer.Connect("server1:6379, server2:6379")));
+// Register Redis state storage
+builder.Services.AddSingleton<IStateStorage, RedisStateStorage>(services =>
+    new RedisStateStorage(ConnectionMultiplexer.Connect("server1:6379,server2:6379")));
 
 // Building and running application
-TelegramBotHost telegramBot = builder.Build();
-telegramBot.SetBotCommands();
-telegramBot.Run();
+var host = builder.Build();
+host.Run();
 ```
 
 ---
@@ -54,4 +54,4 @@ telegramBot.Run();
 ---
 
 ## License
-GPLv3 
+MIT

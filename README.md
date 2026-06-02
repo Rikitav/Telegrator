@@ -25,6 +25,9 @@ The documentation may not be completely transparent, informative or even actual 
 - **Execution order and priorities**: Easily control handler priorities and execution order.
 - **Thread safety and concurrency control**: Limit the number of concurrent handlers, await other updates inside a handler.
 - **Extensibility via attributes and providers**: Easily add your own filters, handlers, and state keepers.
+- **Built-in awaiting mechanism**: Pause handler execution and wait for user reply without blocking the whole bot.
+- **OpenTelemetry support**: Automatic tracing spans for `UpdateRouter` and `UpdateHandlersPool`.
+- **Native AOT compatible**: Source generators eliminate runtime reflection for handler discovery.
 - **Minimal boilerplate—maximum declarativity!**
 
 ---
@@ -35,6 +38,7 @@ The documentation may not be completely transparent, informative or even actual 
 - **Mediator**: All Telegram updates go through a mediator, which decides which handlers should process them and in what order.
 - **Filters**: Describe handler trigger conditions in a flexible, declarative way.
 - **State**: Built-in mechanisms for user/chat state without manual state machines.
+- **Result pattern**: Handlers return `Result` values to control routing flow (`Ok`, `Fault`, `Next`).
 
 ---
 
@@ -61,8 +65,8 @@ public class HelloHandler : MessageHandler
 {
     public override async Task<Result> Execute(IHandlerContainer<Message> container, CancellationToken cancellation)
     {
-        await Reply("Hello, world!", cancellationToken: cancellation);
-        return Result.Ok();
+        await Reply("Hello, world!");
+        return Ok;
     }
 }
 
@@ -79,13 +83,15 @@ using Telegram.Bot.Types.Enums;
 using Telegrator.Handlers;
 using Telegrator.Annotations;
 
-[CommandHandler, CommandAlias("start", "hello"), ChatType(ChatType.Private)]
+[CommandHandler]
+[CommandAllias("start", "hello")]
+[ChatType(ChatType.Private)]
 public class StartCommandHandler : CommandHandler
 {
     public override async Task<Result> Execute(IHandlerContainer<Message> container, CancellationToken cancellation)
     {
-        await Responce("Welcome!", cancellationToken: cancellation);
-        return Result.Ok();
+        await Reply("Welcome!");
+        return Ok;
     }
 }
 
@@ -93,26 +99,64 @@ public class StartCommandHandler : CommandHandler
 bot.Handlers.AddHandler<StartCommandHandler>();
 ```
 
-### 4. State Management Example
+### 4. Awaiting User Reply
 
 ```csharp
 using Telegrator.Handlers;
 using Telegrator.Annotations;
 
-[CommandHandler, CommandAlias("first"), State<SetupWizard>(null)]
+[CommandHandler]
+[CommandAllias("ask")]
+public class AskNameHandler : CommandHandler
+{
+    public override async Task<Result> Execute(IHandlerContainer<Message> container, CancellationToken cancellation)
+    {
+        await Reply("What is your name?");
+
+        var nextMessage = await AwaitingProvider.AwaitMessage(HandlingUpdate).BySenderId(cancellation);
+        await Reply($"Hello, {nextMessage.Text}!");
+
+        return Ok;
+    }
+}
+```
+
+### 5. State Management Example
+
+```csharp
+using Telegrator.Handlers;
+using Telegrator.Annotations;
+
+public enum SetupWizard { Step1, Step2, Completed }
+
+[CommandHandler]
+[CommandAllias("first")]
+[State<SetupWizard>(null)]
 public class StateKeepFirst : CommandHandler
 {
     public override async Task<Result> Execute(IHandlerContainer<Message> container, CancellationToken cancellation)
     {
-        StateStorage.GetStateMachine<SetupWizard>().BysenderId().Advance();
-        await Reply("first state moved (1)", cancellationToken: cancellation);
-        return Result.Ok();
+        await StateStorage.GetStateMachine<SetupWizard>(HandlingUpdate).BySenderId().Advance(cancellation);
+        await Reply("First state moved (1)");
+        return Ok;
     }
 }
-
-// Registration:
-bot.Handlers.AddHandler<StateKeepFirst>();
 ```
+
+---
+
+## 📦 Project Structure
+
+| Package | Description |
+|---------|-------------|
+| `Telegrator` | Core framework — handlers, filters, routing, state |
+| `Telegrator.Hosting` | .NET Generic Host integration (background services, DI, configuration) |
+| `Telegrator.Hosting.Web` | ASP.NET Core integration for webhook-based bots |
+| `Telegrator.Hosting.WideBot` | Support for wide bots with multiple bot tokens |
+| `Telegrator.Localized` | Localization support via `IStringLocalizer` |
+| `Telegrator.RedisStateStorage` | Redis-backed `IStateStorage` implementation |
+| `Telegrator.Analyzers` | Roslyn source generators for Native AOT compatibility |
+| `Telegrator.Testing` | Testing utilities — `TestTelegratorClient`, mock helpers |
 
 ---
 
@@ -141,4 +185,4 @@ We welcome your questions, suggestions, and pull requests! Open issues or contac
 
 ## ⚡ License
 
-GPLv3
+MIT

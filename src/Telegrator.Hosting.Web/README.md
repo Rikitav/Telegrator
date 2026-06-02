@@ -67,11 +67,11 @@ builder.Build()
   "TelegratorOptions": {
     "Token": "YOUR_BOT_TOKEN",
     "ExceptIntersectingCommandAliases": true
-  }
+  },
 
-  "WebhookerOptioons": {
-    "WebhookUri" = "https://you-public-host.ru/bot",
-    "SecretToken": "MEDIC_GAMING"
+  "WebhookerOptions": {
+    "WebhookUri": "https://your-public-host.ru/bot",
+    "SecretToken": "MEDIC_GAMING",
     "DropPendingUpdates": true
   }
 }
@@ -87,4 +87,4 @@ builder.Build()
 ---
 
 ## License
-GPLv3
+MIT

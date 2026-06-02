@@ -6,7 +6,7 @@
 
 ## Features
 - Integration with `Microsoft.Extensions.Hosting` (background services, DI, configuration, logging)
-- Automatic handler discovery and registration
+- Automatic handler discovery and registration (via `CollectHandlers` source generator)
 - Strongly-typed configuration via `appsettings.json` and environment variables
 - Graceful startup/shutdown and lifecycle management
 - Advanced error handling and logging
@@ -90,4 +90,4 @@ builder.Build()
 ---
 
 ## License
-GPLv3
+MIT

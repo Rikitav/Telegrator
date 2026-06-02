@@ -5,30 +5,30 @@
 ## Структура тестов
 
 ### 1. Filters (Фильтры)
-**Файл:** `Filters/FilterTests.cs`
+**Файлы:** `Filters/FilterTests.cs`, `Filters/FilterCompositionTests.cs`
 
 **Парадигмы тестирования:**
-- **AAA (Arrange-Act-Assert)** - структура теста: подготовка, действие, проверка
-- **Given-When-Then** - альтернативная формулировка AAA для лучшей читаемости
+- **AAA (Arrange-Act-Assert)** — структура теста: подготовка, действие, проверка
+- **Given-When-Then** — альтернативная формулировка AAA для лучшей читаемости
 - **Тестирование граничных случаев** и исключений
 - **Использование моков** для изоляции тестируемого кода
 - **Тестирование как позитивных, так и негативных сценариев**
 
 **Что тестируется:**
 - Базовые фильтры (AnyFilter, ReverseFilter, AndFilter, OrFilter)
-- Компиляция фильтров
+- Композиция фильтров
 - Логические операции между фильтрами
 - Свойства фильтров (IsCollectible)
 
 ### 2. Handlers (Обработчики)
-**Файл:** `Handlers/HandlerTests.cs`
+**Файлы:** `Handlers/HandlerTests.cs`, `Handlers/HandlerExecutionTests.cs`
 
 **Парадигмы тестирования:**
-- **Mocking** - создание моков для изоляции зависимостей
-- **Dependency Injection** - тестирование через интерфейсы
-- **Test Doubles** - использование заглушек вместо реальных объектов
-- **Behavior Verification** - проверка поведения, а не только результата
-- **Exception Testing** - тестирование исключений
+- **Mocking** — создание моков для изоляции зависимостей
+- **Dependency Injection** — тестирование через интерфейсы
+- **Test Doubles** — использование заглушек вместо реальных объектов
+- **Behavior Verification** — проверка поведения, а не только результата
+- **Exception Testing** — тестирование исключений
 
 **Что тестируется:**
 - Базовые обработчики обновлений
@@ -38,103 +38,85 @@
 - Токены жизненного цикла
 
 ### 3. Descriptors (Дескрипторы)
-**Файл:** `Descriptors/HandlerDescriptorTests.cs`
+**Файлы:** `Descriptors/HandlerDescriptorTests.cs`, `Descriptors/DescriptorFiltersSetTests.cs`
 
 **Парадигмы тестирования:**
-- **Builder Pattern Testing** - тестирование паттерна строителя
-- **Factory Pattern Testing** - тестирование фабричных методов
-- **Immutable Object Testing** - тестирование неизменяемых объектов
-- **Configuration Testing** - тестирование конфигурации объектов
-- **Validation Testing** - тестирование валидации данных
+- **Builder Pattern Testing** — тестирование паттерна строителя
+- **Factory Pattern Testing** — тестирование фабричных методов
+- **Immutable Object Testing** — тестирование неизменяемых объектов
+- **Configuration Testing** — тестирование конфигурации объектов
+- **Validation Testing** — тестирование валидации данных
 
 **Что тестируется:**
 - Создание дескрипторов обработчиков
 - Различные типы дескрипторов (General, Singleton, Keyed, Implicit)
-- Наборы фильтров
+- Наборы фильтров (`DescriptorFiltersSet`)
+- Наборы аспектов (`DescriptorAspectsSet`)
 - Индексаторы
 - Валидация параметров
 
 ### 4. Providers (Провайдеры)
-**Файл:** `Providers/ProviderTests.cs`
+**Файлы:** `Providers/HandlersProviderTests.cs`, `Providers/AwaitingProviderTests.cs`
 
 **Парадигмы тестирования:**
-- **Service Layer Testing** - тестирование сервисного слоя
-- **Integration Testing** - тестирование интеграции компонентов
-- **Collection Testing** - тестирование коллекций и их операций
-- **Provider Pattern Testing** - тестирование паттерна провайдера
-- **Dependency Resolution Testing** - тестирование разрешения зависимостей
+- **Service Layer Testing** — тестирование сервисного слоя
+- **Integration Testing** — тестирование интеграции компонентов
+- **Collection Testing** — тестирование коллекций и их операций
+- **Provider Pattern Testing** — тестирование паттерна провайдера
+- **Dependency Resolution Testing** — тестирование разрешения зависимостей
 
 **Что тестируется:**
-- Провайдеры обработчиков
-- Коллекции обработчиков
+- Провайдеры обработчиков (`HandlersProvider`)
+- Провайдеры ожидания (`AwaitingProvider`)
+- Коллекции обработчиков (`HandlersCollection`)
 - Операции с коллекциями
 - Интеграция между провайдерами
 
-### 5. Hosting (Хостинг)
-**Файл:** `Hosting/HostingTests.cs`
+### 5. Mediation (Медиация)
+**Файлы:** `Mediation/UpdateRouterTests.cs`, `Mediation/UpdateHandlersPoolTests.cs`
 
 **Парадигмы тестирования:**
-- **Host Testing** - тестирование хостинга приложений
-- **Configuration Testing** - тестирование конфигурации
-- **Dependency Injection Testing** - тестирование DI контейнера
-- **Builder Pattern Testing** - тестирование паттерна строителя
-- **Lifecycle Testing** - тестирование жизненного цикла приложения
+- **Host Testing** — тестирование хостинга приложений
+- **Configuration Testing** — тестирование конфигурации
+- **Dependency Injection Testing** — тестирование DI контейнера
+- **Builder Pattern Testing** — тестирование паттерна строителя
+- **Lifecycle Testing** — тестирование жизненного цикла приложения
 
 **Что тестируется:**
-- Строители хостов
-- Конфигурация ботов
+- `UpdateRouter` — маршрутизация обновлений
+- `UpdateHandlersPool` — пул обработчиков с bounded channel
 - Жизненный цикл хостов
 - Валидация параметров
 
-### 6. Collections (Коллекции)
-**Файл:** `Collections/CollectionTests.cs`
+### 6. Integration (Интеграционные тесты)
+**Файлы:** `Integration/TelegratorClientIntegrationTests.cs`
 
 **Парадигмы тестирования:**
-- **Collection Testing** - тестирование коллекций и их операций
-- **List Testing** - тестирование списков
-- **Indexing Testing** - тестирование индексации
-- **Enumeration Testing** - тестирование перечисления
-- **Capacity Testing** - тестирование емкости коллекций
+- **Integration Testing** — тестирование взаимодействия компонентов
+- **End-to-End Testing** — тестирование полного потока
+- **System Testing** — тестирование системы в целом
+- **Workflow Testing** — тестирование рабочих процессов
+- **Scenario Testing** — тестирование сценариев использования
 
 **Что тестируется:**
-- Списки дескрипторов обработчиков
-- Списки завершенных фильтров
-- Операции с коллекциями
-- Производительность
-- Потокобезопасность
-
-### 7. Integration (Интеграционные тесты)
-**Файл:** `Integration/IntegrationTests.cs`
-
-**Парадигмы тестирования:**
-- **Integration Testing** - тестирование взаимодействия компонентов
-- **End-to-End Testing** - тестирование полного потока
-- **System Testing** - тестирование системы в целом
-- **Workflow Testing** - тестирование рабочих процессов
-- **Scenario Testing** - тестирование сценариев использования
-
-**Что тестируется:**
-- Полный цикл обработки обновлений
+- Полный цикл обработки обновлений через `TestTelegratorClient`
 - Взаимодействие фильтров и обработчиков
-- Композиция фильтров
+- Механизм ожидания (`AwaitMessage`)
 - Жизненный цикл обработчиков
 - Интеграция компонентов
 
-### 8. TestHelpers (Вспомогательные утилиты)
-**Файл:** `TestHelpers/TestUtilities.cs`
+### 7. Extensions (Расширения типов)
+**Файлы:** `SimpleTypesExtensionsTests.cs`
 
 **Парадигмы тестирования:**
-- **Test Utilities** - создание вспомогательных методов для тестов
-- **Test Data Builders** - построители тестовых данных
-- **Mock Factories** - фабрики моков
-- **Test Fixtures** - фикстуры для тестов
-- **Test Helpers** - вспомогательные классы для тестирования
+- **Extension Method Testing** — тестирование методов расширения
+- **Reflection Testing** — тестирование рефлексии
+- **String Manipulation Testing** — тестирование манипуляций со строками
 
-**Что предоставляется:**
-- Утилиты для создания тестовых данных
-- Фабрики моков
-- Вспомогательные классы
-- Тестовые обработчики
+**Что тестируется:**
+- Расширения коллекций (`ToReadOnlyDictionary`)
+- Расширения строк (`SliceBy`, `HasFlag`)
+- Расширения типов (`IsFilterType`, `IsHandlerAbstract`, `HasParameterlessCtor`)
 
 ## Основные принципы тестирования
 
@@ -199,6 +181,11 @@ public void TestExceptions()
 dotnet test
 ```
 
+### С покрытием кода
+```bash
+dotnet test --collect:"XPlat Code Coverage"
+```
+
 ### Через Visual Studio
 1. Откройте Test Explorer
 2. Запустите все тесты или выберите конкретные
@@ -206,13 +193,6 @@ dotnet test
 ### Через Rider
 1. Откройте Unit Tests window
 2. Запустите тесты
-
-## Покрытие кода
-
-Для анализа покрытия кода используйте:
-```bash
-dotnet test --collect:"XPlat Code Coverage"
-```
 
 ## Рекомендации по написанию тестов
 
@@ -229,4 +209,4 @@ dotnet test --collect:"XPlat Code Coverage"
 - [xUnit Documentation](https://xunit.net/)
 - [Moq Documentation](https://github.com/moq/moq4)
 - [FluentAssertions Documentation](https://fluentassertions.com/)
-- [.NET Testing Best Practices](https://docs.microsoft.com/en-us/dotnet/core/testing/) 
+- [.NET Testing Best Practices](https://docs.microsoft.com/en-us/dotnet/core/testing/)
