@@ -15,10 +15,15 @@ dotnet add package Telegrator.Testing
 
 The package ships with two complementary APIs:
 
-| API | Target | Use Case |
-| :--- | :--- | :--- |
-| `TestTelegratorClient` | `netstandard2.0` & `net10.0` | Stand-alone testing without the .NET Generic Host. |
-| `TelegratorTestServer` | `net10.0` only | Integration testing inside the full hosting pipeline (DI, logging, configuration). |
+<table>
+  <thead>
+    <tr><th>API</th><th>Target</th><th>Use Case</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>TestTelegratorClient</code></td><td><code>netstandard2.0</code> &amp; <code>net10.0</code></td><td>Stand-alone testing without the .NET Generic Host.</td></tr>
+    <tr><td><code>TelegratorTestServer</code></td><td><code>net10.0</code> only</td><td>Integration testing inside the full hosting pipeline (DI, logging, configuration).</td></tr>
+  </tbody>
+</table>
 
 Both APIs expose a **mocked `ITelegramBotClient`** (`ClientMock`) so you can verify that your handlers sent messages, edited keyboards, or performed any other Bot API call.
 
@@ -95,7 +100,7 @@ Because the client is a Moq mock, you can verify any interaction:
 
 ```csharp
 testClient.ClientMock.Verify(
-    c => c.SendTextMessageAsync(
+    c => c.SendMessage(
         It.Is<ChatId>(id => id.Identifier == 123456),
         "Welcome!",
         It.IsAny<int?>(),
@@ -248,10 +253,15 @@ testServer.ClientMock.Verify(
 
 ## Summary
 
-| Scenario | Recommended API |
-| :--- | :--- |
-| Unit-test a single handler | Instantiate handler directly + mock `IHandlerContainer<T>` |
-| Test routing, filters & state without DI | `TestTelegratorClient` |
-| Test full hosting pipeline (DI, logging, scoped services) | `TelegratorTestServer` via `WithTestServer()` |
+<table>
+  <thead>
+    <tr><th>Scenario</th><th>Recommended API</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Unit-test a single handler</td><td>Instantiate handler directly + mock <code>IHandlerContainer&lt;T&gt;</code></td></tr>
+    <tr><td>Test routing, filters &amp; state without DI</td><td><code>TestTelegratorClient</code></td></tr>
+    <tr><td>Test full hosting pipeline (DI, logging, scoped services)</td><td><code>TelegratorTestServer</code> via <code>WithTestServer()</code></td></tr>
+  </tbody>
+</table>
 
 The `Telegrator.Testing` package bridges the gap between isolated unit tests and slow, flaky production API tests, giving you fast, deterministic confidence in your bot's behavior.

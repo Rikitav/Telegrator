@@ -34,7 +34,7 @@ public class StartQuizHandler : CommandHandler
 {
     public override async Task<Result> Execute(IHandlerContainer<Message> container, CancellationToken cancellation)
     {
-        StateStorage.GetStateMachine<QuizState>().BySenderId().Advance();
+        await StateStorage.GetStateMachine<QuizState>(HandlingUpdate).BySenderId().Advance();
         await Reply("Quiz started! Question 1: What is the capital of France?");
         return Ok;
     }
@@ -51,7 +51,7 @@ public class Q1Handler : MessageHandler
         else
             await Reply("Incorrect. The answer is Paris.");
 
-        StateStorage.GetStateMachine<QuizState>().BySenderId().Advance();
+        await StateStorage.GetStateMachine<QuizState>(HandlingUpdate).BySenderId().Advance();
         await Reply("Question 2: What is 2 + 2?");
         return Ok;
     }
@@ -61,6 +61,6 @@ public class Q1Handler : MessageHandler
 > **How is it working?**
 > 1. **Enum State Definition**: `QuizState` enum defines the conversation flow with `Start = SpecialState.NoState` indicating no initial state.
 > 2. **State Filter**: `[State<QuizState>(QuizState.Start)]` ensures the handler only runs when the user is in the "Start" state.
-> 3. **State Transition**: `StateStorage.GetStateMachine<QuizState>().BySenderId().Advance()` moves the user to the next state (Q1).
+> 3. **State Transition**: `await StateStorage.GetStateMachine<QuizState>(HandlingUpdate).BySenderId().Advance()` moves the user to the next state (Q1).
 > 4. **Next Handler**: The `Q1Handler` will only run when the user is in state `QuizState.Q1`.
 > 5. **State Management**: Each handler manages its own state transition, creating a clear conversation flow.
