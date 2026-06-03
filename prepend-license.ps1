@@ -1,5 +1,6 @@
+$LicenseText = @"
 /*
- * Copyright (c) 2026 Rikitav Tim4ik
+ * Copyright (c) $(Get-Date -Format "yyyy") Rikitav Tim4ik
  * * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -17,25 +18,29 @@
  * SOFTWARE.
  */
 
-using Telegrator.Handlers;
 
-namespace Telegrator.Core.Handlers;
+"@
 
-/// <summary>
-/// Abstract handler for Telegram updates of type <typeparamref name="TUpdate"/>.
-/// </summary>
-public interface IAbstractUpdateHandler<TUpdate> where TUpdate : class
-{
-    /// <summary>
-    /// Handler container for the current update.
-    /// </summary>
-    public IHandlerContainer<TUpdate> Container { get; }
+$CheckPhrase = "Permission is hereby granted, free of charge"
+$Files = Get-ChildItem -Filter *.cs -Recurse
 
-    /// <summary>
-    /// Abstract method to execute the update handling logic.
-    /// </summary>
-    /// <param name="container">The handler container.</param>
-    /// <param name="cancellation">Cancellation token.</param>
-    /// <returns>A task representing the asynchronous operation.</returns>
-    public Task<Result> Execute(IHandlerContainer<TUpdate> container, CancellationToken cancellation);
+Write-Host "Started..." -ForegroundColor Cyan
+
+foreach ($File in $Files) {
+    $Content = Get-Content -Path $File.FullName -Raw
+
+    if ([string]::IsNullOrWhiteSpace($Content)) {
+        continue
+    }
+
+    if ($Content -match [regex]::Escape($CheckPhrase)) {
+        Write-Host "Skipped: $($File.FullName)" -ForegroundColor DarkGray
+        continue
+    }
+
+    $NewContent = $LicenseText + $Content
+    [System.IO.File]::WriteAllText($File.FullName, $NewContent)
+    Write-Host "Added : $($File.FullName)" -ForegroundColor Green
 }
+
+Write-Host "Done!" -ForegroundColor Cyan

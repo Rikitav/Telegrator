@@ -1,0 +1,121 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Telegrator.Testing</name>
+    </assembly>
+    <members>
+        <member name="T:Telegrator.Testing.Hosting.TelegratorTestServer">
+            <summary>
+            A specialized testing server for the hosting pipeline that mimics the production service.
+            </summary>
+        </member>
+        <member name="P:Telegrator.Testing.Hosting.TelegratorTestServer.ClientMock">
+            <summary>
+            Gets the Mock of the underlying ITelegramBotClient to verify calls.
+            This requires the client registered in DI to be the mock object.
+            </summary>
+        </member>
+        <member name="P:Telegrator.Testing.Hosting.TelegratorTestServer.Client">
+            <summary>
+            Gets the exposed mocked ITelegramBotClient.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Testing.Hosting.TelegratorTestServer.#ctor(Telegrator.Core.IUpdateRouter,Telegram.Bot.ITelegramBotClient)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Telegrator.Testing.Hosting.TelegratorTestServer"/> class.
+            </summary>
+            <param name="updateRouter">The update router from DI.</param>
+            <param name="client">The telegram bot client from DI.</param>
+        </member>
+        <member name="M:Telegrator.Testing.Hosting.TelegratorTestServer.EmitUpdateAsync(Telegram.Bot.Types.Update,System.Threading.CancellationToken)">
+            <summary>
+            Simulates receiving an update from Telegram by pushing it directly into the update router.
+            </summary>
+            <param name="update">The update to simulate.</param>
+            <param name="cancellationToken">The cancellation token.</param>
+            <returns>A task representing the update processing.</returns>
+        </member>
+        <member name="M:Telegrator.Testing.Hosting.TelegratorTestServer.EmitMessageAsync(Telegram.Bot.Types.Message,System.Threading.CancellationToken)">
+            <summary>
+            Simulates receiving a message update.
+            </summary>
+        </member>
+        <member name="T:Telegrator.Testing.Hosting.TestServerExtensions">
+            <summary>
+            Provides extension methods for adding a Telegrator test server.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Testing.Hosting.TestServerExtensions.WithTestServer(Telegrator.Hosting.ITelegramBotHostBuilder,Telegram.Bot.Types.User)">
+            <summary>
+            Registers Telegrator for testing by mocking the TelegramBotClient and avoiding
+            long-polling/webhook registration. Adds <see cref="T:Telegrator.Testing.Hosting.TelegratorTestServer"/> to the DI container.
+            </summary>
+            <param name="builder">The telegram bot host builder.</param>
+            <param name="botUser">Optional custom user info for the mocked bot.</param>
+            <returns>The same builder instance.</returns>
+        </member>
+        <member name="M:Telegrator.Testing.Hosting.TestServerExtensions.GetTestServer(Microsoft.Extensions.Hosting.IHost)">
+            <summary>
+            Retrieves the registered <see cref="T:Telegrator.Testing.Hosting.TelegratorTestServer"/> from the built host.
+            </summary>
+            <param name="host">The built host.</param>
+            <returns>The test server instance.</returns>
+        </member>
+        <member name="T:Telegrator.Testing.TestTelegratorClient">
+            <summary>
+            A specialized testing analog of TelegratorClient that mimics the production service,
+            but allows mimicking updates and mocking the underlying ITelegramBotClient.
+            </summary>
+        </member>
+        <member name="P:Telegrator.Testing.TestTelegratorClient.Options">
+            <inheritdoc/>
+        </member>
+        <member name="P:Telegrator.Testing.TestTelegratorClient.Handlers">
+            <inheritdoc/>
+        </member>
+        <member name="P:Telegrator.Testing.TestTelegratorClient.BotInfo">
+            <inheritdoc/>
+        </member>
+        <member name="P:Telegrator.Testing.TestTelegratorClient.UpdateRouter">
+            <inheritdoc/>
+        </member>
+        <member name="P:Telegrator.Testing.TestTelegratorClient.ClientMock">
+            <summary>
+            Gets the Mock of the underlying ITelegramBotClient to verify calls (e.g. Verify SendTextMessageAsync).
+            </summary>
+        </member>
+        <member name="P:Telegrator.Testing.TestTelegratorClient.Client">
+            <summary>
+            Gets the exposed mocked ITelegramBotClient.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Testing.TestTelegratorClient.#ctor(Telegrator.TelegratorOptions,Telegram.Bot.Types.User)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Telegrator.Testing.TestTelegratorClient"/> class.
+            </summary>
+            <param name="telegratorOptions">The Telegrator options.</param>
+            <param name="botUser">Optional custom user info for the bot.</param>
+        </member>
+        <member name="M:Telegrator.Testing.TestTelegratorClient.StartTestReceiving">
+            <summary>
+            Initializes the update router and providers for testing without actually connecting to Telegram.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Testing.TestTelegratorClient.StartReceivingAsync(Telegram.Bot.Polling.ReceiverOptions,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Telegrator.Testing.TestTelegratorClient.EmitUpdateAsync(Telegram.Bot.Types.Update,System.Threading.CancellationToken)">
+            <summary>
+            Simulates receiving an update from Telegram by pushing it directly into the update router.
+            </summary>
+            <param name="update">The update to simulate.</param>
+            <param name="cancellationToken">The cancellation token.</param>
+            <returns>A task representing the update processing.</returns>
+        </member>
+        <member name="M:Telegrator.Testing.TestTelegratorClient.EmitMessageAsync(Telegram.Bot.Types.Message,System.Threading.CancellationToken)">
+            <summary>
+            Simulates receiving a message update.
+            </summary>
+        </member>
+    </members>
+</doc>

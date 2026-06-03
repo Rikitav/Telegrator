@@ -4,8 +4,30 @@
     <TargetFrameworks>netstandard2.0;net10.0</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <LangVersion>latest</LangVersion>
-    <RootNamespace>Telegrator.Testing</RootNamespace>
+	<LangVersion>latest</LangVersion>
+	<RootNamespace>Telegrator</RootNamespace>
+	<BaseOutputPath>..\..\bin</BaseOutputPath>
+	<DocumentationFile>..\..\docs\$(AssemblyName).xml</DocumentationFile>
+	<!--IsAotCompatible>True</IsAotCompatible-->
+	  
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <EnableNETAnalyzers>True</EnableNETAnalyzers>
+    <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+    <IncludeSymbols>True</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <SignAssembly>False</SignAssembly>
+	  
+    <Title>Telegrator.Testing</Title>
+    <Version>1.18.5.1</Version>
+	<Authors>Rikitav Tim4ik</Authors>
+    <Company>Rikitav Tim4ik</Company>
+    <RepositoryUrl>https://github.com/Rikitav/Telegrator</RepositoryUrl>
+    <PackageTags>telegram;bot;mediator;attributes;aspect;hosting;host;framework;easy;simple;handlers;testing</PackageTags>
+	  
+    <PackageIcon>telegrator_nuget.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,4 +42,10 @@
     <PackageReference Include="Moq" Version="4.20.70" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include=".\README.md" Pack="True" PackagePath="\" />
+    <None Include="..\..\LICENSE" Pack="True" PackagePath="\" />
+    <None Include="..\..\resources\telegrator_nuget.png" Pack="True" PackagePath="\" />
+  </ItemGroup>
+  
 </Project>

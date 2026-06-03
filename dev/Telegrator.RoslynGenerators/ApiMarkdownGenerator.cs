@@ -1,3 +1,22 @@
+/*
+ * Copyright (c) 2026 Rikitav Tim4ik
+ * * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 #if DEBUG
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -9,7 +28,7 @@ using Telegrator.RoslynGenerators.RoslynExtensions;
 namespace Telegrator.RoslynGenerators
 {
     /// <summary>
-    /// Source Generator для автоматической генерации Markdown-документации по публичному API Telegrator.
+    /// Source Generator РґР»СЏ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРѕР№ РіРµРЅРµСЂР°С†РёРё Markdown-РґРѕРєСѓРјРµРЅС‚Р°С†РёРё РїРѕ РїСѓР±Р»РёС‡РЅРѕРјСѓ API Telegrator.
     /// </summary>
     [Generator]
     public class ApiMarkdownGenerator : IIncrementalGenerator
@@ -62,7 +81,7 @@ namespace Telegrator.RoslynGenerators
 
                 foreach (INamedTypeSymbol type in nsGroup.OrderBy(t => t.Name))
                 {
-                    // Формируем generic-параметры для заголовка класса
+                    // Р¤РѕСЂРјРёСЂСѓРµРј generic-РїР°СЂР°РјРµС‚СЂС‹ РґР»СЏ Р·Р°РіРѕР»РѕРІРєР° РєР»Р°СЃСЃР°
                     string genericArgs = type.FormatGenericTypes();
                     sourceBuilder.AppendFormat("## {0} `{1}{2}`\n\n", type.TypeKind, type.Name, genericArgs);
 
@@ -144,7 +163,7 @@ namespace Telegrator.RoslynGenerators
                 // Writing summary
                 string? summary = field.ExtractSummary();
                 if (!string.IsNullOrWhiteSpace(summary))
-                    sourceBuilder.Append(" — ").Append(summary);
+                    sourceBuilder.Append(" вЂ” ").Append(summary);
 
                 sourceBuilder.AppendLine();
             }
@@ -234,7 +253,7 @@ namespace Telegrator.RoslynGenerators
                 if (xSummary == null)
                     return null;
 
-                // Убираем лишние пробелы и переносы строк
+                // РЈР±РёСЂР°РµРј Р»РёС€РЅРёРµ РїСЂРѕР±РµР»С‹ Рё РїРµСЂРµРЅРѕСЃС‹ СЃС‚СЂРѕРє
                 string summary = xSummary.Value.Trim().Replace("\n", " ");
                 while (summary.Contains("  "))
                     summary = summary.Replace("  ", " ");

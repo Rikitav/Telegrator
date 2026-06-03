@@ -1,3 +1,22 @@
+/*
+ * Copyright (c) 2026 Rikitav Tim4ik
+ * * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 using FluentAssertions;
 using Moq;
 using Telegram.Bot;
@@ -13,21 +32,21 @@ using Xunit;
 namespace Telegrator.Tests.Handlers;
 
 /// <summary>
-/// Тесты для обработчиков обновлений.
+/// РўРµСЃС‚С‹ РґР»СЏ РѕР±СЂР°Р±РѕС‚С‡РёРєРѕРІ РѕР±РЅРѕРІР»РµРЅРёР№.
 ///
-/// ПАРАДИГМЫ ТЕСТИРОВАНИЯ:
-/// 1. Mocking - создание моков для изоляции зависимостей
-/// 2. Dependency Injection - тестирование через интерфейсы
-/// 3. Test Doubles - использование заглушек вместо реальных объектов
-/// 4. Behavior Verification - проверка поведения, а не только результата
-/// 5. Exception Testing - тестирование исключений
+/// РџРђР РђР”РР“РњР« РўР•РЎРўРР РћР’РђРќРРЇ:
+/// 1. Mocking - СЃРѕР·РґР°РЅРёРµ РјРѕРєРѕРІ РґР»СЏ РёР·РѕР»СЏС†РёРё Р·Р°РІРёСЃРёРјРѕСЃС‚РµР№
+/// 2. Dependency Injection - С‚РµСЃС‚РёСЂРѕРІР°РЅРёРµ С‡РµСЂРµР· РёРЅС‚РµСЂС„РµР№СЃС‹
+/// 3. Test Doubles - РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРµ Р·Р°РіР»СѓС€РµРє РІРјРµСЃС‚Рѕ СЂРµР°Р»СЊРЅС‹С… РѕР±СЉРµРєС‚РѕРІ
+/// 4. Behavior Verification - РїСЂРѕРІРµСЂРєР° РїРѕРІРµРґРµРЅРёСЏ, Р° РЅРµ С‚РѕР»СЊРєРѕ СЂРµР·СѓР»СЊС‚Р°С‚Р°
+/// 5. Exception Testing - С‚РµСЃС‚РёСЂРѕРІР°РЅРёРµ РёСЃРєР»СЋС‡РµРЅРёР№
 /// </summary>
 public class HandlerTests
 {
     /// <summary>
-    /// Тест для базового обработчика обновлений.
+    /// РўРµСЃС‚ РґР»СЏ Р±Р°Р·РѕРІРѕРіРѕ РѕР±СЂР°Р±РѕС‚С‡РёРєР° РѕР±РЅРѕРІР»РµРЅРёР№.
     ///
-    /// ПРИНЦИП: Тестируем абстрактный класс через конкретную реализацию
+    /// РџР РРќР¦РРџ: РўРµСЃС‚РёСЂСѓРµРј Р°Р±СЃС‚СЂР°РєС‚РЅС‹Р№ РєР»Р°СЃСЃ С‡РµСЂРµР· РєРѕРЅРєСЂРµС‚РЅСѓСЋ СЂРµР°Р»РёР·Р°С†РёСЋ
     /// </summary>
     [Fact]
     public async Task UpdateHandlerBase_ShouldExecuteAndMarkLifetimeAsEnded()
@@ -85,9 +104,9 @@ public class HandlerTests
     }
 
     /// <summary>
-    /// Тест для проверки токена жизненного цикла.
+    /// РўРµСЃС‚ РґР»СЏ РїСЂРѕРІРµСЂРєРё С‚РѕРєРµРЅР° Р¶РёР·РЅРµРЅРЅРѕРіРѕ С†РёРєР»Р°.
     ///
-    /// ПРИНЦИП: Тестируем состояние объектов
+    /// РџР РРќР¦РРџ: РўРµСЃС‚РёСЂСѓРµРј СЃРѕСЃС‚РѕСЏРЅРёРµ РѕР±СЉРµРєС‚РѕРІ
     /// </summary>
     [Fact]
     public void HandlerLifetimeToken_ShouldTrackLifetimeCorrectly()
@@ -106,9 +125,9 @@ public class HandlerTests
     }
 
     /// <summary>
-    /// Тест для проверки отмены операции.
+    /// РўРµСЃС‚ РґР»СЏ РїСЂРѕРІРµСЂРєРё РѕС‚РјРµРЅС‹ РѕРїРµСЂР°С†РёРё.
     ///
-    /// ПРИНЦИП: Тестируем асинхронные операции и отмену
+    /// РџР РРќР¦РРџ: РўРµСЃС‚РёСЂСѓРµРј Р°СЃРёРЅС…СЂРѕРЅРЅС‹Рµ РѕРїРµСЂР°С†РёРё Рё РѕС‚РјРµРЅСѓ
     /// </summary>
     [Fact]
     public async Task UpdateHandlerBase_ShouldHandleCancellation()
@@ -117,7 +136,7 @@ public class HandlerTests
         var mockContainer = new Mock<IHandlerContainer<Message>>();
         var testHandler = new TestUpdateHandler();
         var cancellationTokenSource = new CancellationTokenSource();
-        cancellationTokenSource.Cancel(); // Отменяем сразу
+        cancellationTokenSource.Cancel(); // РћС‚РјРµРЅСЏРµРј СЃСЂР°Р·Сѓ
 
         // Act & Assert
         await testHandler.Invoking(h => h.Execute(mockContainer.Object, cancellationTokenSource.Token))

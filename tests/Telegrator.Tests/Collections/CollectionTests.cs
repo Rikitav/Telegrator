@@ -1,3 +1,22 @@
+/*
+ * Copyright (c) 2026 Rikitav Tim4ik
+ * * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 using FluentAssertions;
 using Telegrator.Core.Descriptors;
 using Telegrator.Core.Filters;
@@ -6,21 +25,21 @@ using Xunit;
 namespace Telegrator.Tests.Collections;
 
 /// <summary>
-/// Тесты для коллекций.
+/// РўРµСЃС‚С‹ РґР»СЏ РєРѕР»Р»РµРєС†РёР№.
 ///
-/// ПАРАДИГМЫ ТЕСТИРОВАНИЯ:
-/// 1. Collection Testing - тестирование коллекций и их операций
-/// 2. List Testing - тестирование списков
-/// 3. Indexing Testing - тестирование индексации
-/// 4. Enumeration Testing - тестирование перечисления
-/// 5. Capacity Testing - тестирование емкости коллекций
+/// РџРђР РђР”РР“РњР« РўР•РЎРўРР РћР’РђРќРРЇ:
+/// 1. Collection Testing - С‚РµСЃС‚РёСЂРѕРІР°РЅРёРµ РєРѕР»Р»РµРєС†РёР№ Рё РёС… РѕРїРµСЂР°С†РёР№
+/// 2. List Testing - С‚РµСЃС‚РёСЂРѕРІР°РЅРёРµ СЃРїРёСЃРєРѕРІ
+/// 3. Indexing Testing - С‚РµСЃС‚РёСЂРѕРІР°РЅРёРµ РёРЅРґРµРєСЃР°С†РёРё
+/// 4. Enumeration Testing - С‚РµСЃС‚РёСЂРѕРІР°РЅРёРµ РїРµСЂРµС‡РёСЃР»РµРЅРёСЏ
+/// 5. Capacity Testing - С‚РµСЃС‚РёСЂРѕРІР°РЅРёРµ РµРјРєРѕСЃС‚Рё РєРѕР»Р»РµРєС†РёР№
 /// </summary>
 public class CollectionTests
 {
     /// <summary>
-    /// Тест для HandlerDescriptorList - создание списка.
+    /// РўРµСЃС‚ РґР»СЏ HandlerDescriptorList - СЃРѕР·РґР°РЅРёРµ СЃРїРёСЃРєР°.
     ///
-    /// ПРИНЦИП: Тестируем создание коллекций
+    /// РџР РРќР¦РРџ: РўРµСЃС‚РёСЂСѓРµРј СЃРѕР·РґР°РЅРёРµ РєРѕР»Р»РµРєС†РёР№
     /// </summary>
     [Fact]
     public void HandlerDescriptorList_ShouldBeCreated()
@@ -34,9 +53,9 @@ public class CollectionTests
     }
 
     /// <summary>
-    /// Тест для HandlerDescriptorList - добавление дескриптора.
+    /// РўРµСЃС‚ РґР»СЏ HandlerDescriptorList - РґРѕР±Р°РІР»РµРЅРёРµ РґРµСЃРєСЂРёРїС‚РѕСЂР°.
     ///
-    /// ПРИНЦИП: Тестируем добавление элементов в коллекцию
+    /// РџР РРќР¦РРџ: РўРµСЃС‚РёСЂСѓРµРј РґРѕР±Р°РІР»РµРЅРёРµ СЌР»РµРјРµРЅС‚РѕРІ РІ РєРѕР»Р»РµРєС†РёСЋ
     /// </summary>
     [Fact]
     public void HandlerDescriptorList_Add_ShouldAddDescriptor()
@@ -54,9 +73,9 @@ public class CollectionTests
     }
 
     /// <summary>
-    /// Тест для HandlerDescriptorList - добавление нескольких дескрипторов.
+    /// РўРµСЃС‚ РґР»СЏ HandlerDescriptorList - РґРѕР±Р°РІР»РµРЅРёРµ РЅРµСЃРєРѕР»СЊРєРёС… РґРµСЃРєСЂРёРїС‚РѕСЂРѕРІ.
     ///
-    /// ПРИНЦИП: Тестируем множественные операции
+    /// РџР РРќР¦РРџ: РўРµСЃС‚РёСЂСѓРµРј РјРЅРѕР¶РµСЃС‚РІРµРЅРЅС‹Рµ РѕРїРµСЂР°С†РёРё
     /// </summary>
     [Fact]
     public void HandlerDescriptorList_AddMultiple_ShouldAddAllDescriptors()
@@ -80,9 +99,9 @@ public class CollectionTests
     }
 
     /// <summary>
-    /// Тест для HandlerDescriptorList - получение по индексу.
+    /// РўРµСЃС‚ РґР»СЏ HandlerDescriptorList - РїРѕР»СѓС‡РµРЅРёРµ РїРѕ РёРЅРґРµРєСЃСѓ.
     ///
-    /// ПРИНЦИП: Тестируем индексацию коллекций
+    /// РџР РРќР¦РРџ: РўРµСЃС‚РёСЂСѓРµРј РёРЅРґРµРєСЃР°С†РёСЋ РєРѕР»Р»РµРєС†РёР№
     /// </summary>
     [Fact]
     public void HandlerDescriptorList_Indexer_ShouldReturnDescriptorAtIndex()
@@ -102,9 +121,9 @@ public class CollectionTests
     }
 
     /// <summary>
-    /// Тест для HandlerDescriptorList - получение по неверному индексу.
+    /// РўРµСЃС‚ РґР»СЏ HandlerDescriptorList - РїРѕР»СѓС‡РµРЅРёРµ РїРѕ РЅРµРІРµСЂРЅРѕРјСѓ РёРЅРґРµРєСЃСѓ.
     ///
-    /// ПРИНЦИП: Тестируем исключения при некорректном доступе
+    /// РџР РРќР¦РРџ: РўРµСЃС‚РёСЂСѓРµРј РёСЃРєР»СЋС‡РµРЅРёСЏ РїСЂРё РЅРµРєРѕСЂСЂРµРєС‚РЅРѕРј РґРѕСЃС‚СѓРїРµ
     /// </summary>
     [Theory]
     [InlineData(-1)]
@@ -124,9 +143,9 @@ public class CollectionTests
     }
 
     /// <summary>
-    /// Тест для HandlerDescriptorList - перечисление элементов.
+    /// РўРµСЃС‚ РґР»СЏ HandlerDescriptorList - РїРµСЂРµС‡РёСЃР»РµРЅРёРµ СЌР»РµРјРµРЅС‚РѕРІ.
     ///
-    /// ПРИНЦИП: Тестируем перечисление коллекций
+    /// РџР РРќР¦РРџ: РўРµСЃС‚РёСЂСѓРµРј РїРµСЂРµС‡РёСЃР»РµРЅРёРµ РєРѕР»Р»РµРєС†РёР№
     /// </summary>
     [Fact]
     public void HandlerDescriptorList_ShouldBeEnumerable()
@@ -150,9 +169,9 @@ public class CollectionTests
     }
 
     /// <summary>
-    /// Тест для HandlerDescriptorList - очистка списка.
+    /// РўРµСЃС‚ РґР»СЏ HandlerDescriptorList - РѕС‡РёСЃС‚РєР° СЃРїРёСЃРєР°.
     ///
-    /// ПРИНЦИП: Тестируем очистку коллекций
+    /// РџР РРќР¦РРџ: РўРµСЃС‚РёСЂСѓРµРј РѕС‡РёСЃС‚РєСѓ РєРѕР»Р»РµРєС†РёР№
     /// </summary>
     [Fact]
     public void HandlerDescriptorList_Clear_ShouldRemoveAllDescriptors()
@@ -173,9 +192,9 @@ public class CollectionTests
     }
 
     /// <summary>
-    /// Тест для HandlerDescriptorList - проверка содержания элемента.
+    /// РўРµСЃС‚ РґР»СЏ HandlerDescriptorList - РїСЂРѕРІРµСЂРєР° СЃРѕРґРµСЂР¶Р°РЅРёСЏ СЌР»РµРјРµРЅС‚Р°.
     ///
-    /// ПРИНЦИП: Тестируем поиск в коллекциях
+    /// РџР РРќР¦РРџ: РўРµСЃС‚РёСЂСѓРµРј РїРѕРёСЃРє РІ РєРѕР»Р»РµРєС†РёСЏС…
     /// </summary>
     [Fact]
     public void HandlerDescriptorList_Contains_ShouldReturnCorrectResult()
@@ -196,9 +215,9 @@ public class CollectionTests
     }
 
     /// <summary>
-    /// Тест для HandlerDescriptorList - удаление элемента.
+    /// РўРµСЃС‚ РґР»СЏ HandlerDescriptorList - СѓРґР°Р»РµРЅРёРµ СЌР»РµРјРµРЅС‚Р°.
     ///
-    /// ПРИНЦИП: Тестируем удаление элементов из коллекций
+    /// РџР РРќР¦РРџ: РўРµСЃС‚РёСЂСѓРµРј СѓРґР°Р»РµРЅРёРµ СЌР»РµРјРµРЅС‚РѕРІ РёР· РєРѕР»Р»РµРєС†РёР№
     /// </summary>
     [Fact]
     public void HandlerDescriptorList_Remove_ShouldRemoveDescriptor()
@@ -218,9 +237,9 @@ public class CollectionTests
     }
 
     /// <summary>
-    /// Тест для HandlerDescriptorList - удаление несуществующего элемента.
+    /// РўРµСЃС‚ РґР»СЏ HandlerDescriptorList - СѓРґР°Р»РµРЅРёРµ РЅРµСЃСѓС‰РµСЃС‚РІСѓСЋС‰РµРіРѕ СЌР»РµРјРµРЅС‚Р°.
     ///
-    /// ПРИНЦИП: Тестируем удаление несуществующих элементов
+    /// РџР РРќР¦РРџ: РўРµСЃС‚РёСЂСѓРµРј СѓРґР°Р»РµРЅРёРµ РЅРµСЃСѓС‰РµСЃС‚РІСѓСЋС‰РёС… СЌР»РµРјРµРЅС‚РѕРІ
     /// </summary>
     [Fact]
     public void HandlerDescriptorList_RemoveNonExistent_ShouldReturnFalse()
@@ -238,9 +257,9 @@ public class CollectionTests
     }
 
     /// <summary>
-    /// Тест для CompletedFiltersList - создание списка.
+    /// РўРµСЃС‚ РґР»СЏ CompletedFiltersList - СЃРѕР·РґР°РЅРёРµ СЃРїРёСЃРєР°.
     ///
-    /// ПРИНЦИП: Тестируем создание специализированных коллекций
+    /// РџР РРќР¦РРџ: РўРµСЃС‚РёСЂСѓРµРј СЃРѕР·РґР°РЅРёРµ СЃРїРµС†РёР°Р»РёР·РёСЂРѕРІР°РЅРЅС‹С… РєРѕР»Р»РµРєС†РёР№
     /// </summary>
     [Fact]
     public void CompletedFiltersList_ShouldBeCreated()
@@ -254,9 +273,9 @@ public class CollectionTests
     }
 
     /// <summary>
-    /// Тест для проверки производительности коллекций.
+    /// РўРµСЃС‚ РґР»СЏ РїСЂРѕРІРµСЂРєРё РїСЂРѕРёР·РІРѕРґРёС‚РµР»СЊРЅРѕСЃС‚Рё РєРѕР»Р»РµРєС†РёР№.
     ///
-    /// ПРИНЦИП: Тестируем производительность при большом количестве элементов
+    /// РџР РРќР¦РРџ: РўРµСЃС‚РёСЂСѓРµРј РїСЂРѕРёР·РІРѕРґРёС‚РµР»СЊРЅРѕСЃС‚СЊ РїСЂРё Р±РѕР»СЊС€РѕРј РєРѕР»РёС‡РµСЃС‚РІРµ СЌР»РµРјРµРЅС‚РѕРІ
     /// </summary>
     [Fact]
     public void HandlerDescriptorList_ShouldHandleLargeNumberOfItems()
@@ -276,9 +295,9 @@ public class CollectionTests
     }
 
     /// <summary>
-    /// Тест для проверки потокобезопасности (базовый тест).
+    /// РўРµСЃС‚ РґР»СЏ РїСЂРѕРІРµСЂРєРё РїРѕС‚РѕРєРѕР±РµР·РѕРїР°СЃРЅРѕСЃС‚Рё (Р±Р°Р·РѕРІС‹Р№ С‚РµСЃС‚).
     ///
-    /// ПРИНЦИП: Тестируем базовую потокобезопасность
+    /// РџР РРќР¦РРџ: РўРµСЃС‚РёСЂСѓРµРј Р±Р°Р·РѕРІСѓСЋ РїРѕС‚РѕРєРѕР±РµР·РѕРїР°СЃРЅРѕСЃС‚СЊ
     /// </summary>
     [Fact]
     public async Task HandlerDescriptorList_ShouldHandleConcurrentAccess()
@@ -306,7 +325,7 @@ public class CollectionTests
     }
 
     /// <summary>
-    /// Вспомогательный метод для создания тестового дескриптора.
+    /// Р’СЃРїРѕРјРѕРіР°С‚РµР»СЊРЅС‹Р№ РјРµС‚РѕРґ РґР»СЏ СЃРѕР·РґР°РЅРёСЏ С‚РµСЃС‚РѕРІРѕРіРѕ РґРµСЃРєСЂРёРїС‚РѕСЂР°.
     /// </summary>
     private static ClassHandlerDescriptor CreateTestDescriptor()
     {
