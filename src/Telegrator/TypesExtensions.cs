@@ -200,12 +200,196 @@ public static class HandlerContainerExtensions
         => container.AwaitUpdate<Message>(UpdateType.Message);
 
     /// <summary>
+    /// Creates an awaiter builder for edited message updates.
+    /// </summary>
+    /// <param name="container">The handler container.</param>
+    /// <returns>An awaiter builder for edited message updates.</returns>
+    public static IAwaiterHandlerBuilder<Message> AwaitEditedMessage(this IHandlerContainer container)
+        => container.AwaitUpdate<Message>(UpdateType.EditedMessage);
+
+    /// <summary>
+    /// Creates an awaiter builder for channel post updates.
+    /// </summary>
+    /// <param name="container">The handler container.</param>
+    /// <returns>An awaiter builder for channel post updates.</returns>
+    public static IAwaiterHandlerBuilder<Message> AwaitChannelPost(this IHandlerContainer container)
+        => container.AwaitUpdate<Message>(UpdateType.ChannelPost);
+
+    /// <summary>
+    /// Creates an awaiter builder for edited channel post updates.
+    /// </summary>
+    /// <param name="container">The handler container.</param>
+    /// <returns>An awaiter builder for edited channel post updates.</returns>
+    public static IAwaiterHandlerBuilder<Message> AwaitEditedChannelPost(this IHandlerContainer container)
+        => container.AwaitUpdate<Message>(UpdateType.EditedChannelPost);
+
+    /// <summary>
+    /// Creates an awaiter builder for business message updates.
+    /// </summary>
+    /// <param name="container">The handler container.</param>
+    /// <returns>An awaiter builder for business message updates.</returns>
+    public static IAwaiterHandlerBuilder<Message> AwaitBusinessMessage(this IHandlerContainer container)
+        => container.AwaitUpdate<Message>(UpdateType.BusinessMessage);
+
+    /// <summary>
+    /// Creates an awaiter builder for edited business message updates.
+    /// </summary>
+    /// <param name="container">The handler container.</param>
+    /// <returns>An awaiter builder for edited business message updates.</returns>
+    public static IAwaiterHandlerBuilder<Message> AwaitEditedBusinessMessage(this IHandlerContainer container)
+        => container.AwaitUpdate<Message>(UpdateType.EditedBusinessMessage);
+
+    /// <summary>
+    /// Creates an awaiter builder for deleted business messages updates.
+    /// </summary>
+    /// <param name="container">The handler container.</param>
+    /// <returns>An awaiter builder for deleted business messages updates.</returns>
+    public static IAwaiterHandlerBuilder<BusinessMessagesDeleted> AwaitDeletedBusinessMessages(this IHandlerContainer container)
+        => container.AwaitUpdate<BusinessMessagesDeleted>(UpdateType.DeletedBusinessMessages);
+
+    /// <summary>
+    /// Creates an awaiter builder for business connection updates.
+    /// </summary>
+    /// <param name="container">The handler container.</param>
+    /// <returns>An awaiter builder for business connection updates.</returns>
+    public static IAwaiterHandlerBuilder<BusinessConnection> AwaitBusinessConnection(this IHandlerContainer container)
+        => container.AwaitUpdate<BusinessConnection>(UpdateType.BusinessConnection);
+
+    /// <summary>
+    /// Creates an awaiter builder for message reaction updates.
+    /// </summary>
+    /// <param name="container">The handler container.</param>
+    /// <returns>An awaiter builder for message reaction updates.</returns>
+    public static IAwaiterHandlerBuilder<MessageReactionUpdated> AwaitMessageReaction(this IHandlerContainer container)
+        => container.AwaitUpdate<MessageReactionUpdated>(UpdateType.MessageReaction);
+
+    /// <summary>
+    /// Creates an awaiter builder for message reaction count updates.
+    /// </summary>
+    /// <param name="container">The handler container.</param>
+    /// <returns>An awaiter builder for message reaction count updates.</returns>
+    public static IAwaiterHandlerBuilder<MessageReactionCountUpdated> AwaitMessageReactionCount(this IHandlerContainer container)
+        => container.AwaitUpdate<MessageReactionCountUpdated>(UpdateType.MessageReactionCount);
+
+    /// <summary>
+    /// Creates an awaiter builder for inline query updates.
+    /// </summary>
+    /// <param name="container">The handler container.</param>
+    /// <returns>An awaiter builder for inline query updates.</returns>
+    public static IAwaiterHandlerBuilder<InlineQuery> AwaitInlineQuery(this IHandlerContainer container)
+        => container.AwaitUpdate<InlineQuery>(UpdateType.InlineQuery);
+
+    /// <summary>
+    /// Creates an awaiter builder for chosen inline result updates.
+    /// </summary>
+    /// <param name="container">The handler container.</param>
+    /// <returns>An awaiter builder for chosen inline result updates.</returns>
+    public static IAwaiterHandlerBuilder<ChosenInlineResult> AwaitChosenInlineResult(this IHandlerContainer container)
+        => container.AwaitUpdate<ChosenInlineResult>(UpdateType.ChosenInlineResult);
+
+    /// <summary>
     /// Creates an awaiter builder for callback query updates.
     /// </summary>
     /// <param name="container">The handler container.</param>
     /// <returns>An awaiter builder for callback query updates.</returns>
     public static IAwaiterHandlerBuilder<CallbackQuery> AwaitCallbackQuery(this IHandlerContainer container)
         => container.AwaitUpdate<CallbackQuery>(UpdateType.CallbackQuery);
+
+    /// <summary>
+    /// Creates an awaiter builder for shipping query updates.
+    /// </summary>
+    /// <param name="container">The handler container.</param>
+    /// <returns>An awaiter builder for shipping query updates.</returns>
+    public static IAwaiterHandlerBuilder<ShippingQuery> AwaitShippingQuery(this IHandlerContainer container)
+        => container.AwaitUpdate<ShippingQuery>(UpdateType.ShippingQuery);
+
+    /// <summary>
+    /// Creates an awaiter builder for pre-checkout query updates.
+    /// </summary>
+    /// <param name="container">The handler container.</param>
+    /// <returns>An awaiter builder for pre-checkout query updates.</returns>
+    public static IAwaiterHandlerBuilder<PreCheckoutQuery> AwaitPreCheckoutQuery(this IHandlerContainer container)
+        => container.AwaitUpdate<PreCheckoutQuery>(UpdateType.PreCheckoutQuery);
+
+    /// <summary>
+    /// Creates an awaiter builder for purchased paid media updates.
+    /// </summary>
+    /// <param name="container">The handler container.</param>
+    /// <returns>An awaiter builder for purchased paid media updates.</returns>
+    public static IAwaiterHandlerBuilder<PaidMediaPurchased> AwaitPurchasedPaidMedia(this IHandlerContainer container)
+        => container.AwaitUpdate<PaidMediaPurchased>(UpdateType.PurchasedPaidMedia);
+
+    /// <summary>
+    /// Creates an awaiter builder for poll updates.
+    /// </summary>
+    /// <param name="container">The handler container.</param>
+    /// <returns>An awaiter builder for poll updates.</returns>
+    public static IAwaiterHandlerBuilder<Poll> AwaitPoll(this IHandlerContainer container)
+        => container.AwaitUpdate<Poll>(UpdateType.Poll);
+
+    /// <summary>
+    /// Creates an awaiter builder for poll answer updates.
+    /// </summary>
+    /// <param name="container">The handler container.</param>
+    /// <returns>An awaiter builder for poll answer updates.</returns>
+    public static IAwaiterHandlerBuilder<PollAnswer> AwaitPollAnswer(this IHandlerContainer container)
+        => container.AwaitUpdate<PollAnswer>(UpdateType.PollAnswer);
+
+    /// <summary>
+    /// Creates an awaiter builder for my chat member updates.
+    /// </summary>
+    /// <param name="container">The handler container.</param>
+    /// <returns>An awaiter builder for my chat member updates.</returns>
+    public static IAwaiterHandlerBuilder<ChatMemberUpdated> AwaitMyChatMember(this IHandlerContainer container)
+        => container.AwaitUpdate<ChatMemberUpdated>(UpdateType.MyChatMember);
+
+    /// <summary>
+    /// Creates an awaiter builder for chat member updates.
+    /// </summary>
+    /// <param name="container">The handler container.</param>
+    /// <returns>An awaiter builder for chat member updates.</returns>
+    public static IAwaiterHandlerBuilder<ChatMemberUpdated> AwaitChatMember(this IHandlerContainer container)
+        => container.AwaitUpdate<ChatMemberUpdated>(UpdateType.ChatMember);
+
+    /// <summary>
+    /// Creates an awaiter builder for chat join request updates.
+    /// </summary>
+    /// <param name="container">The handler container.</param>
+    /// <returns>An awaiter builder for chat join request updates.</returns>
+    public static IAwaiterHandlerBuilder<ChatJoinRequest> AwaitChatJoinRequest(this IHandlerContainer container)
+        => container.AwaitUpdate<ChatJoinRequest>(UpdateType.ChatJoinRequest);
+
+    /// <summary>
+    /// Creates an awaiter builder for chat boost updates.
+    /// </summary>
+    /// <param name="container">The handler container.</param>
+    /// <returns>An awaiter builder for chat boost updates.</returns>
+    public static IAwaiterHandlerBuilder<ChatBoostUpdated> AwaitChatBoost(this IHandlerContainer container)
+        => container.AwaitUpdate<ChatBoostUpdated>(UpdateType.ChatBoost);
+
+    /// <summary>
+    /// Creates an awaiter builder for removed chat boost updates.
+    /// </summary>
+    /// <param name="container">The handler container.</param>
+    /// <returns>An awaiter builder for removed chat boost updates.</returns>
+    public static IAwaiterHandlerBuilder<ChatBoostRemoved> AwaitRemovedChatBoost(this IHandlerContainer container)
+        => container.AwaitUpdate<ChatBoostRemoved>(UpdateType.RemovedChatBoost);
+
+    /// <summary>
+    /// Creates an awaiter builder for managed bot updates.
+    /// </summary>
+    /// <param name="container">The handler container.</param>
+    /// <returns>An awaiter builder for managed bot updates.</returns>
+    public static IAwaiterHandlerBuilder<ManagedBotUpdated> AwaitManagedBot(this IHandlerContainer container)
+        => container.AwaitUpdate<ManagedBotUpdated>(UpdateType.ManagedBot);
+
+    /// <summary>
+    /// Creates an awaiter builder for guest message updates.
+    /// </summary>
+    /// <param name="container">The handler container.</param>
+    /// <returns>An awaiter builder for guest message updates.</returns>
+    public static IAwaiterHandlerBuilder<Message> AwaitGuestMessage(this IHandlerContainer container)
+        => container.AwaitUpdate<Message>(UpdateType.GuestMessage);
 }
 
 /// <summary>
@@ -281,6 +465,105 @@ public static class AwaitingProviderExtensions
         => awaitingProvider.CreateAbstract<Message>(UpdateType.Message, handlingUpdate);
 
     /// <summary>
+    /// Creates an awaiter builder for edited message updates.
+    /// </summary>
+    /// <param name="awaitingProvider"></param>
+    /// <param name="handlingUpdate"></param>
+    /// <returns>An awaiter builder for edited message updates.</returns>
+    public static IAwaiterHandlerBuilder<Message> AwaitEditedMessage(this IAwaitingProvider awaitingProvider, Update handlingUpdate)
+        => awaitingProvider.CreateAbstract<Message>(UpdateType.EditedMessage, handlingUpdate);
+
+    /// <summary>
+    /// Creates an awaiter builder for channel post updates.
+    /// </summary>
+    /// <param name="awaitingProvider"></param>
+    /// <param name="handlingUpdate"></param>
+    /// <returns>An awaiter builder for channel post updates.</returns>
+    public static IAwaiterHandlerBuilder<Message> AwaitChannelPost(this IAwaitingProvider awaitingProvider, Update handlingUpdate)
+        => awaitingProvider.CreateAbstract<Message>(UpdateType.ChannelPost, handlingUpdate);
+
+    /// <summary>
+    /// Creates an awaiter builder for edited channel post updates.
+    /// </summary>
+    /// <param name="awaitingProvider"></param>
+    /// <param name="handlingUpdate"></param>
+    /// <returns>An awaiter builder for edited channel post updates.</returns>
+    public static IAwaiterHandlerBuilder<Message> AwaitEditedChannelPost(this IAwaitingProvider awaitingProvider, Update handlingUpdate)
+        => awaitingProvider.CreateAbstract<Message>(UpdateType.EditedChannelPost, handlingUpdate);
+
+    /// <summary>
+    /// Creates an awaiter builder for business message updates.
+    /// </summary>
+    /// <param name="awaitingProvider"></param>
+    /// <param name="handlingUpdate"></param>
+    /// <returns>An awaiter builder for business message updates.</returns>
+    public static IAwaiterHandlerBuilder<Message> AwaitBusinessMessage(this IAwaitingProvider awaitingProvider, Update handlingUpdate)
+        => awaitingProvider.CreateAbstract<Message>(UpdateType.BusinessMessage, handlingUpdate);
+
+    /// <summary>
+    /// Creates an awaiter builder for edited business message updates.
+    /// </summary>
+    /// <param name="awaitingProvider"></param>
+    /// <param name="handlingUpdate"></param>
+    /// <returns>An awaiter builder for edited business message updates.</returns>
+    public static IAwaiterHandlerBuilder<Message> AwaitEditedBusinessMessage(this IAwaitingProvider awaitingProvider, Update handlingUpdate)
+        => awaitingProvider.CreateAbstract<Message>(UpdateType.EditedBusinessMessage, handlingUpdate);
+
+    /// <summary>
+    /// Creates an awaiter builder for deleted business messages updates.
+    /// </summary>
+    /// <param name="awaitingProvider"></param>
+    /// <param name="handlingUpdate"></param>
+    /// <returns>An awaiter builder for deleted business messages updates.</returns>
+    public static IAwaiterHandlerBuilder<BusinessMessagesDeleted> AwaitDeletedBusinessMessages(this IAwaitingProvider awaitingProvider, Update handlingUpdate)
+        => awaitingProvider.CreateAbstract<BusinessMessagesDeleted>(UpdateType.DeletedBusinessMessages, handlingUpdate);
+
+    /// <summary>
+    /// Creates an awaiter builder for business connection updates.
+    /// </summary>
+    /// <param name="awaitingProvider"></param>
+    /// <param name="handlingUpdate"></param>
+    /// <returns>An awaiter builder for business connection updates.</returns>
+    public static IAwaiterHandlerBuilder<BusinessConnection> AwaitBusinessConnection(this IAwaitingProvider awaitingProvider, Update handlingUpdate)
+        => awaitingProvider.CreateAbstract<BusinessConnection>(UpdateType.BusinessConnection, handlingUpdate);
+
+    /// <summary>
+    /// Creates an awaiter builder for message reaction updates.
+    /// </summary>
+    /// <param name="awaitingProvider"></param>
+    /// <param name="handlingUpdate"></param>
+    /// <returns>An awaiter builder for message reaction updates.</returns>
+    public static IAwaiterHandlerBuilder<MessageReactionUpdated> AwaitMessageReaction(this IAwaitingProvider awaitingProvider, Update handlingUpdate)
+        => awaitingProvider.CreateAbstract<MessageReactionUpdated>(UpdateType.MessageReaction, handlingUpdate);
+
+    /// <summary>
+    /// Creates an awaiter builder for message reaction count updates.
+    /// </summary>
+    /// <param name="awaitingProvider"></param>
+    /// <param name="handlingUpdate"></param>
+    /// <returns>An awaiter builder for message reaction count updates.</returns>
+    public static IAwaiterHandlerBuilder<MessageReactionCountUpdated> AwaitMessageReactionCount(this IAwaitingProvider awaitingProvider, Update handlingUpdate)
+        => awaitingProvider.CreateAbstract<MessageReactionCountUpdated>(UpdateType.MessageReactionCount, handlingUpdate);
+
+    /// <summary>
+    /// Creates an awaiter builder for inline query updates.
+    /// </summary>
+    /// <param name="awaitingProvider"></param>
+    /// <param name="handlingUpdate"></param>
+    /// <returns>An awaiter builder for inline query updates.</returns>
+    public static IAwaiterHandlerBuilder<InlineQuery> AwaitInlineQuery(this IAwaitingProvider awaitingProvider, Update handlingUpdate)
+        => awaitingProvider.CreateAbstract<InlineQuery>(UpdateType.InlineQuery, handlingUpdate);
+
+    /// <summary>
+    /// Creates an awaiter builder for chosen inline result updates.
+    /// </summary>
+    /// <param name="awaitingProvider"></param>
+    /// <param name="handlingUpdate"></param>
+    /// <returns>An awaiter builder for chosen inline result updates.</returns>
+    public static IAwaiterHandlerBuilder<ChosenInlineResult> AwaitChosenInlineResult(this IAwaitingProvider awaitingProvider, Update handlingUpdate)
+        => awaitingProvider.CreateAbstract<ChosenInlineResult>(UpdateType.ChosenInlineResult, handlingUpdate);
+
+    /// <summary>
     /// Creates an awaiter builder for callback query updates.
     /// </summary>
     /// <param name="awaitingProvider"></param>
@@ -288,6 +571,114 @@ public static class AwaitingProviderExtensions
     /// <returns>An awaiter builder for callback query updates.</returns>
     public static IAwaiterHandlerBuilder<CallbackQuery> AwaitCallbackQuery(this IAwaitingProvider awaitingProvider, Update handlingUpdate)
         => awaitingProvider.CreateAbstract<CallbackQuery>(UpdateType.CallbackQuery, handlingUpdate);
+
+    /// <summary>
+    /// Creates an awaiter builder for shipping query updates.
+    /// </summary>
+    /// <param name="awaitingProvider"></param>
+    /// <param name="handlingUpdate"></param>
+    /// <returns>An awaiter builder for shipping query updates.</returns>
+    public static IAwaiterHandlerBuilder<ShippingQuery> AwaitShippingQuery(this IAwaitingProvider awaitingProvider, Update handlingUpdate)
+        => awaitingProvider.CreateAbstract<ShippingQuery>(UpdateType.ShippingQuery, handlingUpdate);
+
+    /// <summary>
+    /// Creates an awaiter builder for pre-checkout query updates.
+    /// </summary>
+    /// <param name="awaitingProvider"></param>
+    /// <param name="handlingUpdate"></param>
+    /// <returns>An awaiter builder for pre-checkout query updates.</returns>
+    public static IAwaiterHandlerBuilder<PreCheckoutQuery> AwaitPreCheckoutQuery(this IAwaitingProvider awaitingProvider, Update handlingUpdate)
+        => awaitingProvider.CreateAbstract<PreCheckoutQuery>(UpdateType.PreCheckoutQuery, handlingUpdate);
+
+    /// <summary>
+    /// Creates an awaiter builder for purchased paid media updates.
+    /// </summary>
+    /// <param name="awaitingProvider"></param>
+    /// <param name="handlingUpdate"></param>
+    /// <returns>An awaiter builder for purchased paid media updates.</returns>
+    public static IAwaiterHandlerBuilder<PaidMediaPurchased> AwaitPurchasedPaidMedia(this IAwaitingProvider awaitingProvider, Update handlingUpdate)
+        => awaitingProvider.CreateAbstract<PaidMediaPurchased>(UpdateType.PurchasedPaidMedia, handlingUpdate);
+
+    /// <summary>
+    /// Creates an awaiter builder for poll updates.
+    /// </summary>
+    /// <param name="awaitingProvider"></param>
+    /// <param name="handlingUpdate"></param>
+    /// <returns>An awaiter builder for poll updates.</returns>
+    public static IAwaiterHandlerBuilder<Poll> AwaitPoll(this IAwaitingProvider awaitingProvider, Update handlingUpdate)
+        => awaitingProvider.CreateAbstract<Poll>(UpdateType.Poll, handlingUpdate);
+
+    /// <summary>
+    /// Creates an awaiter builder for poll answer updates.
+    /// </summary>
+    /// <param name="awaitingProvider"></param>
+    /// <param name="handlingUpdate"></param>
+    /// <returns>An awaiter builder for poll answer updates.</returns>
+    public static IAwaiterHandlerBuilder<PollAnswer> AwaitPollAnswer(this IAwaitingProvider awaitingProvider, Update handlingUpdate)
+        => awaitingProvider.CreateAbstract<PollAnswer>(UpdateType.PollAnswer, handlingUpdate);
+
+    /// <summary>
+    /// Creates an awaiter builder for my chat member updates.
+    /// </summary>
+    /// <param name="awaitingProvider"></param>
+    /// <param name="handlingUpdate"></param>
+    /// <returns>An awaiter builder for my chat member updates.</returns>
+    public static IAwaiterHandlerBuilder<ChatMemberUpdated> AwaitMyChatMember(this IAwaitingProvider awaitingProvider, Update handlingUpdate)
+        => awaitingProvider.CreateAbstract<ChatMemberUpdated>(UpdateType.MyChatMember, handlingUpdate);
+
+    /// <summary>
+    /// Creates an awaiter builder for chat member updates.
+    /// </summary>
+    /// <param name="awaitingProvider"></param>
+    /// <param name="handlingUpdate"></param>
+    /// <returns>An awaiter builder for chat member updates.</returns>
+    public static IAwaiterHandlerBuilder<ChatMemberUpdated> AwaitChatMember(this IAwaitingProvider awaitingProvider, Update handlingUpdate)
+        => awaitingProvider.CreateAbstract<ChatMemberUpdated>(UpdateType.ChatMember, handlingUpdate);
+
+    /// <summary>
+    /// Creates an awaiter builder for chat join request updates.
+    /// </summary>
+    /// <param name="awaitingProvider"></param>
+    /// <param name="handlingUpdate"></param>
+    /// <returns>An awaiter builder for chat join request updates.</returns>
+    public static IAwaiterHandlerBuilder<ChatJoinRequest> AwaitChatJoinRequest(this IAwaitingProvider awaitingProvider, Update handlingUpdate)
+        => awaitingProvider.CreateAbstract<ChatJoinRequest>(UpdateType.ChatJoinRequest, handlingUpdate);
+
+    /// <summary>
+    /// Creates an awaiter builder for chat boost updates.
+    /// </summary>
+    /// <param name="awaitingProvider"></param>
+    /// <param name="handlingUpdate"></param>
+    /// <returns>An awaiter builder for chat boost updates.</returns>
+    public static IAwaiterHandlerBuilder<ChatBoostUpdated> AwaitChatBoost(this IAwaitingProvider awaitingProvider, Update handlingUpdate)
+        => awaitingProvider.CreateAbstract<ChatBoostUpdated>(UpdateType.ChatBoost, handlingUpdate);
+
+    /// <summary>
+    /// Creates an awaiter builder for removed chat boost updates.
+    /// </summary>
+    /// <param name="awaitingProvider"></param>
+    /// <param name="handlingUpdate"></param>
+    /// <returns>An awaiter builder for removed chat boost updates.</returns>
+    public static IAwaiterHandlerBuilder<ChatBoostRemoved> AwaitRemovedChatBoost(this IAwaitingProvider awaitingProvider, Update handlingUpdate)
+        => awaitingProvider.CreateAbstract<ChatBoostRemoved>(UpdateType.RemovedChatBoost, handlingUpdate);
+
+    /// <summary>
+    /// Creates an awaiter builder for managed bot updates.
+    /// </summary>
+    /// <param name="awaitingProvider"></param>
+    /// <param name="handlingUpdate"></param>
+    /// <returns>An awaiter builder for managed bot updates.</returns>
+    public static IAwaiterHandlerBuilder<ManagedBotUpdated> AwaitManagedBot(this IAwaitingProvider awaitingProvider, Update handlingUpdate)
+        => awaitingProvider.CreateAbstract<ManagedBotUpdated>(UpdateType.ManagedBot, handlingUpdate);
+
+    /// <summary>
+    /// Creates an awaiter builder for guest message updates.
+    /// </summary>
+    /// <param name="awaitingProvider"></param>
+    /// <param name="handlingUpdate"></param>
+    /// <returns>An awaiter builder for guest message updates.</returns>
+    public static IAwaiterHandlerBuilder<Message> AwaitGuestMessage(this IAwaitingProvider awaitingProvider, Update handlingUpdate)
+        => awaitingProvider.CreateAbstract<Message>(UpdateType.GuestMessage, handlingUpdate);
 
     /// <summary>
     /// Deletes all awaiting handlers for callback query updates.
@@ -672,7 +1063,7 @@ public static partial class UpdateExtensions
         "Telegram.Bot.Types.PollAnswer" => [UpdateType.PollAnswer],
         "Telegram.Bot.Types.ChatJoinRequest" => [UpdateType.ChatJoinRequest],
         "Telegram.Bot.Types.MessageReactionUpdated" => [UpdateType.MessageReaction],
-        "Telegram.Bot.TypesMessageReactionCountUpdated" => [UpdateType.MessageReactionCount],
+        "Telegram.Bot.Types.MessageReactionCountUpdated" => [UpdateType.MessageReactionCount],
         "Telegram.Bot.Types.ChatBoostUpdated" => [UpdateType.ChatBoost],
         "Telegram.Bot.Types.ChatBoostRemoved" => [UpdateType.RemovedChatBoost],
         "Telegram.Bot.Types.BusinessConnection" => [UpdateType.BusinessConnection],

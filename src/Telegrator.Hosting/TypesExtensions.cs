@@ -32,6 +32,48 @@ public static class HostBuilderExtensions
     public const string HandlersCollectionPropertyKey = nameof(IHandlersCollection);
 
     /// <summary>
+    /// Registers Telegrator in DI container and returns ITelegramBotHostBuilder for further configuration.
+    /// If options are not provided, it will attempt to bind them from configuration using the "Telegrator" section or "TelegratorOptions" as fallback.
+    /// If handlers collection is not provided, a default HostHandlersCollection will be created and registered.
+    /// </summary>
+    public static ITelegramBotHostBuilder AddTelegrator(this IHostApplicationBuilder builder, TelegratorOptions? options = null, IHandlersCollection? handlers = null)
+    {
+        AddTelegratorInternal(builder.Services, builder.Configuration, builder.Properties, ref handlers, options);
+        return new TelegramBotHostBuilder(builder, handlers);
+    }
+
+    /// <summary>
+    /// Registers Telegrator in DI container and returns ITelegramBotHostBuilder for further configuration.
+    /// If options are not provided, it will attempt to bind them from configuration using the "Telegrator" section or "TelegratorOptions" as fallback.
+    /// If handlers collection is not provided, a default HostHandlersCollection will be created and registered.
+    /// </summary>
+    public static IHostApplicationBuilder ConfigureTelegrator(this IHostApplicationBuilder builder, TelegratorOptions? options = null, IHandlersCollection? handlers = null, Action<TelegramBotHostBuilder>? action = null)
+    {
+        AddTelegratorInternal(builder.Services, builder.Configuration, builder.Properties, ref handlers, options);
+        if (action is not null)
+            action.Invoke(new TelegramBotHostBuilder(builder, handlers));
+
+        return builder;
+    }
+
+    /// <summary>
+    /// Registers Telegrator in DI container and returns ITelegramBotHostBuilder for further configuration.
+    /// If options are not provided, it will attempt to bind them from configuration using the "Telegrator" section or "TelegratorOptions" as fallback.
+    /// If handlers collection is not provided, a default HostHandlersCollection will be created and registered.
+    /// </summary>
+    public static IHostBuilder ConfigureTelegrator(this IHostBuilder builder, TelegratorOptions? options = null, IHandlersCollection? handlers = null, Action<TelegramBotHostBuilder>? action = null)
+    {
+        builder.ConfigureServices((ctx, services) => builder.ConfigureAppConfiguration((ctx, configuration) => builder.ConfigureLogging((ctx, logging) => builder.ConfigureMetrics((ctx, metrics) =>
+        {
+            AddTelegratorInternal(services, ctx.Configuration, ctx.Properties, ref handlers, options);
+            if (action is not null)
+                action.Invoke(new TelegramBotHostBuilder(handlers, services, configuration.Build(), logging, ctx.HostingEnvironment, ctx.Properties, metrics));
+        }))));
+
+        return builder;
+    }
+
+    /// <summary>
     /// Registers Telegrator and configures it to receive updates via long-polling.
     /// </summary>
     public static ITelegramBotHostBuilder WithPolling(this ITelegramBotHostBuilder builder)
@@ -51,17 +93,6 @@ public static class HostBuilderExtensions
 
         builder.Services.AddTelegramReceiver();
         return builder;
-    }
-
-    /// <summary>
-    /// Registers Telegrator in DI container and returns ITelegramBotHostBuilder for further configuration.
-    /// If options are not provided, it will attempt to bind them from configuration using the "Telegrator" section or "TelegratorOptions" as fallback.
-    /// If handlers collection is not provided, a default HostHandlersCollection will be created and registered.
-    /// </summary>
-    public static ITelegramBotHostBuilder AddTelegrator(this IHostApplicationBuilder builder, TelegratorOptions? options = null, IHandlersCollection? handlers = null)
-    {
-        AddTelegratorInternal(builder.Services, builder.Configuration, builder.Properties, ref handlers, options);
-        return new TelegramBotHostBuilder(builder, handlers);
     }
 
     private static TelegratorOptions ParseTelegratorOptions(IConfiguration configuration)

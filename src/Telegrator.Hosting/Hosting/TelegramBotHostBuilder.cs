@@ -11,38 +11,35 @@ namespace Telegrator.Hosting;
 /// <inheritdoc/>
 public class TelegramBotHostBuilder : ITelegramBotHostBuilder
 {
-    private readonly IHostApplicationBuilder _innerBuilder;
-    internal IHandlersCollection _handlers = null!;
+    //private readonly IHostApplicationBuilder _innerBuilder;
+    private readonly IHandlersCollection _handlers;
+    private readonly IServiceCollection _services;
+    private readonly IConfiguration _configuration;
+    private readonly ILoggingBuilder _logging;
+    private readonly IHostEnvironment _environment;
+    private readonly IDictionary<object, object> _properties;
+    private readonly IMetricsBuilder _metrics;
 
     /// <inheritdoc/>
     public IHandlersCollection Handlers => _handlers;
 
     /// <inheritdoc/>
-    public IServiceCollection Services => _innerBuilder.Services;
+    public IServiceCollection Services => _services;
 
     /// <inheritdoc/>
-    public IConfigurationManager Configuration => _innerBuilder.Configuration;
+    public IConfiguration Configuration => _configuration;
 
     /// <inheritdoc/>
-    public ILoggingBuilder Logging => _innerBuilder.Logging;
+    public ILoggingBuilder Logging => _logging;
 
     /// <inheritdoc/>
-    public IHostEnvironment Environment => _innerBuilder.Environment;
+    public IHostEnvironment Environment => _environment;
 
     /// <inheritdoc/>
-    public IDictionary<object, object> Properties => _innerBuilder.Properties;
+    public IDictionary<object, object> Properties => _properties;
 
     /// <inheritdoc/>
-    public IMetricsBuilder Metrics => _innerBuilder.Metrics;
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="TelegramBotHostBuilder"/> class.
-    /// </summary>
-    /// <param name="hostApplicationBuilder"></param>
-    public TelegramBotHostBuilder(IHostApplicationBuilder hostApplicationBuilder)
-    {
-        _innerBuilder = hostApplicationBuilder ?? throw new ArgumentNullException(nameof(hostApplicationBuilder));
-    }
+    public IMetricsBuilder Metrics => _metrics;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="TelegramBotHostBuilder"/> class.
@@ -51,13 +48,37 @@ public class TelegramBotHostBuilder : ITelegramBotHostBuilder
     /// <param name="handlers"></param>
     public TelegramBotHostBuilder(IHostApplicationBuilder hostApplicationBuilder, IHandlersCollection handlers)
     {
-        _innerBuilder = hostApplicationBuilder ?? throw new ArgumentNullException(nameof(hostApplicationBuilder));
+        if (hostApplicationBuilder == null)
+            throw new ArgumentNullException(nameof(hostApplicationBuilder));
+
         _handlers = handlers ?? throw new ArgumentNullException(nameof(handlers));
+        _services = hostApplicationBuilder.Services;
+        _configuration = hostApplicationBuilder.Configuration;
+        _logging = hostApplicationBuilder.Logging;
+        _environment = hostApplicationBuilder.Environment;
+        _properties = hostApplicationBuilder.Properties;
+        _metrics = hostApplicationBuilder.Metrics;
     }
 
-    /// <inheritdoc/>
-    public void ConfigureContainer<TContainerBuilder>(IServiceProviderFactory<TContainerBuilder> factory, Action<TContainerBuilder>? configure = null) where TContainerBuilder : notnull
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TelegramBotHostBuilder"/> class.
+    /// </summary>
+    /// <param name="handlers"></param>
+    /// <param name="services"></param>
+    /// <param name="configuration"></param>
+    /// <param name="logging"></param>
+    /// <param name="environment"></param>
+    /// <param name="properties"></param>
+    /// <param name="metrics"></param>
+    /// <exception cref="ArgumentNullException"></exception>
+    public TelegramBotHostBuilder(IHandlersCollection handlers, IServiceCollection services, IConfiguration configuration, ILoggingBuilder logging, IHostEnvironment environment, IDictionary<object, object> properties, IMetricsBuilder metrics)
     {
-        _innerBuilder.ConfigureContainer(factory, configure);
+        _handlers = handlers ?? throw new ArgumentNullException(nameof(handlers));
+        _services = services ?? throw new ArgumentNullException(nameof(services));
+        _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+        _logging = logging ?? throw new ArgumentNullException(nameof(logging));
+        _environment = environment ?? throw new ArgumentNullException(nameof(environment));
+        _properties = properties ?? throw new ArgumentNullException(nameof(properties));
+        _metrics = metrics ?? throw new ArgumentNullException(nameof(metrics));
     }
 }

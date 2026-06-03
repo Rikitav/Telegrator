@@ -38,6 +38,36 @@
             Represents a hosted telegram bots and services builder that helps manage configuration, logging, lifetime, and more.
             </summary>
         </member>
+        <member name="P:Telegrator.Hosting.ITelegramBotHostBuilder.Properties">
+            <summary>
+            Gets a central location for sharing state between components during the host building process.
+            </summary>
+        </member>
+        <member name="P:Telegrator.Hosting.ITelegramBotHostBuilder.Configuration">
+            <summary>
+            Gets the set of key/value configuration properties.
+            </summary>
+        </member>
+        <member name="P:Telegrator.Hosting.ITelegramBotHostBuilder.Environment">
+            <summary>
+            Gets the information about the hosting environment an application is running in.
+            </summary>
+        </member>
+        <member name="P:Telegrator.Hosting.ITelegramBotHostBuilder.Logging">
+            <summary>
+            Gets a collection of logging providers for the application to compose. This is useful for adding new logging providers.
+            </summary>
+        </member>
+        <member name="P:Telegrator.Hosting.ITelegramBotHostBuilder.Metrics">
+            <summary>
+            Gets a builder that allows enabling metrics and directing their output.
+            </summary>
+        </member>
+        <member name="P:Telegrator.Hosting.ITelegramBotHostBuilder.Services">
+            <summary>
+            Gets a collection of services for the application to compose. This is useful for adding user provided or framework provided services.
+            </summary>
+        </member>
         <member name="T:Telegrator.Hosting.TelegramBotHostBuilder">
             <inheritdoc/>
         </member>
@@ -62,12 +92,6 @@
         <member name="P:Telegrator.Hosting.TelegramBotHostBuilder.Metrics">
             <inheritdoc/>
         </member>
-        <member name="M:Telegrator.Hosting.TelegramBotHostBuilder.#ctor(Microsoft.Extensions.Hosting.IHostApplicationBuilder)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Telegrator.Hosting.TelegramBotHostBuilder"/> class.
-            </summary>
-            <param name="hostApplicationBuilder"></param>
-        </member>
         <member name="M:Telegrator.Hosting.TelegramBotHostBuilder.#ctor(Microsoft.Extensions.Hosting.IHostApplicationBuilder,Telegrator.Core.IHandlersCollection)">
             <summary>
             Initializes a new instance of the <see cref="T:Telegrator.Hosting.TelegramBotHostBuilder"/> class.
@@ -75,8 +99,18 @@
             <param name="hostApplicationBuilder"></param>
             <param name="handlers"></param>
         </member>
-        <member name="M:Telegrator.Hosting.TelegramBotHostBuilder.ConfigureContainer``1(Microsoft.Extensions.DependencyInjection.IServiceProviderFactory{``0},System.Action{``0})">
-            <inheritdoc/>
+        <member name="M:Telegrator.Hosting.TelegramBotHostBuilder.#ctor(Telegrator.Core.IHandlersCollection,Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration,Microsoft.Extensions.Logging.ILoggingBuilder,Microsoft.Extensions.Hosting.IHostEnvironment,System.Collections.Generic.IDictionary{System.Object,System.Object},Microsoft.Extensions.Diagnostics.Metrics.IMetricsBuilder)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Telegrator.Hosting.TelegramBotHostBuilder"/> class.
+            </summary>
+            <param name="handlers"></param>
+            <param name="services"></param>
+            <param name="configuration"></param>
+            <param name="logging"></param>
+            <param name="environment"></param>
+            <param name="properties"></param>
+            <param name="metrics"></param>
+            <exception cref="T:System.ArgumentNullException"></exception>
         </member>
         <member name="T:Telegrator.Logging.MicrosoftLoggingAdapter">
             <summary>
@@ -252,16 +286,30 @@
             The key used to store the <see cref="T:Telegrator.Core.IHandlersCollection"/> in the builder properties.
             </summary>
         </member>
-        <member name="M:Telegrator.HostBuilderExtensions.WithPolling(Telegrator.Hosting.ITelegramBotHostBuilder)">
-            <summary>
-            Registers Telegrator and configures it to receive updates via long-polling.
-            </summary>
-        </member>
         <member name="M:Telegrator.HostBuilderExtensions.AddTelegrator(Microsoft.Extensions.Hosting.IHostApplicationBuilder,Telegrator.TelegratorOptions,Telegrator.Core.IHandlersCollection)">
             <summary>
             Registers Telegrator in DI container and returns ITelegramBotHostBuilder for further configuration.
             If options are not provided, it will attempt to bind them from configuration using the "Telegrator" section or "TelegratorOptions" as fallback.
             If handlers collection is not provided, a default HostHandlersCollection will be created and registered.
+            </summary>
+        </member>
+        <member name="M:Telegrator.HostBuilderExtensions.ConfigureTelegrator(Microsoft.Extensions.Hosting.IHostApplicationBuilder,Telegrator.TelegratorOptions,Telegrator.Core.IHandlersCollection,System.Action{Telegrator.Hosting.TelegramBotHostBuilder})">
+            <summary>
+            Registers Telegrator in DI container and returns ITelegramBotHostBuilder for further configuration.
+            If options are not provided, it will attempt to bind them from configuration using the "Telegrator" section or "TelegratorOptions" as fallback.
+            If handlers collection is not provided, a default HostHandlersCollection will be created and registered.
+            </summary>
+        </member>
+        <member name="M:Telegrator.HostBuilderExtensions.ConfigureTelegrator(Microsoft.Extensions.Hosting.IHostBuilder,Telegrator.TelegratorOptions,Telegrator.Core.IHandlersCollection,System.Action{Telegrator.Hosting.TelegramBotHostBuilder})">
+            <summary>
+            Registers Telegrator in DI container and returns ITelegramBotHostBuilder for further configuration.
+            If options are not provided, it will attempt to bind them from configuration using the "Telegrator" section or "TelegratorOptions" as fallback.
+            If handlers collection is not provided, a default HostHandlersCollection will be created and registered.
+            </summary>
+        </member>
+        <member name="M:Telegrator.HostBuilderExtensions.WithPolling(Telegrator.Hosting.ITelegramBotHostBuilder)">
+            <summary>
+            Registers Telegrator and configures it to receive updates via long-polling.
             </summary>
         </member>
         <member name="M:Telegrator.HostBuilderExtensions.AddTelegratorInternal(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration,System.Collections.Generic.IDictionary{System.Object,System.Object},Telegrator.Core.IHandlersCollection@,Telegrator.TelegratorOptions)">

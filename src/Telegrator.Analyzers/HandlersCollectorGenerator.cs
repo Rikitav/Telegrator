@@ -56,6 +56,7 @@ public class HandlersCollectorGenerator : IIncrementalGenerator
         string fullTypeName = symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
 
         var attributesList = new List<string>();
+        bool hasMightAwait = false;
         foreach (var attr in symbol.GetAttributes())
         {
             if (attr.AttributeClass == null)
@@ -66,6 +67,9 @@ public class HandlersCollectorGenerator : IIncrementalGenerator
                 continue;
 
             string attrType = attr.AttributeClass.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+            if (attr.AttributeClass.Name is "MightAwaitAttribute" or "MightAwait")
+                hasMightAwait = true;
+
             var ctorArgs = attr.ConstructorArguments.IsDefault ? Enumerable.Empty<TypedConstant>() : attr.ConstructorArguments;
             var namedArgs = attr.NamedArguments.IsDefault ? Enumerable.Empty<KeyValuePair<string, TypedConstant>>() : attr.NamedArguments;
 
@@ -76,7 +80,104 @@ public class HandlersCollectorGenerator : IIncrementalGenerator
             attributesList.Add(initString);
         }
 
+        // Auto-inject MightAwait if awaiting calls are present but attribute is missing
+        if (!hasMightAwait)
+        {
+            var awaitedTypes = ExtractAwaitedUpdateTypes(classSyntax);
+            if (awaitedTypes.Count > 0)
+            {
+                string mightAwaitArgs = string.Join(", ", awaitedTypes.Select(t => $"global::Telegram.Bot.Types.Enums.UpdateType.{t}"));
+                attributesList.Add($"new global::Telegrator.Annotations.MightAwaitAttribute({mightAwaitArgs})");
+            }
+        }
+
         return new HandlerRegistrationModel(fullTypeName, attributesList.ToImmutableArray(), isValid);
+    }
+
+    private static List<string> ExtractAwaitedUpdateTypes(ClassDeclarationSyntax classSyntax)
+    {
+        var result = new List<string>();
+        var awaitingMethods = new Dictionary<string, string>(StringComparer.Ordinal)
+        {
+            ["AwaitAny"] = "Unknown",
+            ["AwaitMessage"] = "Message",
+            ["AwaitCallbackQuery"] = "CallbackQuery",
+            ["AwaitInlineQuery"] = "InlineQuery",
+            ["AwaitChosenInlineResult"] = "ChosenInlineResult",
+            ["AwaitEditedMessage"] = "EditedMessage",
+            ["AwaitChannelPost"] = "ChannelPost",
+            ["AwaitEditedChannelPost"] = "EditedChannelPost",
+            ["AwaitBusinessMessage"] = "BusinessMessage",
+            ["AwaitEditedBusinessMessage"] = "EditedBusinessMessage",
+            ["AwaitDeletedBusinessMessages"] = "DeletedBusinessMessages",
+            ["AwaitBusinessConnection"] = "BusinessConnection",
+            ["AwaitMessageReaction"] = "MessageReaction",
+            ["AwaitMessageReactionCount"] = "MessageReactionCount",
+            ["AwaitShippingQuery"] = "ShippingQuery",
+            ["AwaitPreCheckoutQuery"] = "PreCheckoutQuery",
+            ["AwaitPurchasedPaidMedia"] = "PurchasedPaidMedia",
+            ["AwaitPoll"] = "Poll",
+            ["AwaitPollAnswer"] = "PollAnswer",
+            ["AwaitMyChatMember"] = "MyChatMember",
+            ["AwaitChatMember"] = "ChatMember",
+            ["AwaitChatJoinRequest"] = "ChatJoinRequest",
+            ["AwaitChatBoost"] = "ChatBoost",
+            ["AwaitRemovedChatBoost"] = "RemovedChatBoost",
+            ["AwaitManagedBot"] = "ManagedBot",
+            ["AwaitGuestMessage"] = "GuestMessage",
+            ["CancellAllCallbacks"] = "CallbackQuery"
+        };
+
+        var parametrizedMethods = new HashSet<string>(StringComparer.Ordinal)
+        {
+            "CreateAbstract",
+            "CreateDeleting",
+            "AwaitUpdate"
+        };
+
+        foreach (var node in classSyntax.DescendantNodes())
+        {
+            if (node is not InvocationExpressionSyntax invocation)
+                continue;
+
+            string? methodName = invocation.Expression switch
+            {
+                MemberAccessExpressionSyntax memberAccess => memberAccess.Name switch
+                {
+                    IdentifierNameSyntax id => id.Identifier.Text,
+                    GenericNameSyntax generic => generic.Identifier.Text,
+                    _ => null
+                },
+                IdentifierNameSyntax identifier => identifier.Identifier.Text,
+                _ => null
+            };
+
+            if (string.IsNullOrEmpty(methodName))
+                continue;
+
+            if (awaitingMethods.TryGetValue(methodName, out string? updateType) && !result.Contains(updateType))
+            {
+                result.Add(updateType);
+                continue;
+            }
+
+            if (parametrizedMethods.Contains(methodName) && invocation.ArgumentList.Arguments.Count > 0)
+            {
+                var firstArg = invocation.ArgumentList.Arguments[0].Expression;
+                string? resolved = firstArg switch
+                {
+                    MemberAccessExpressionSyntax memberAccess when
+                        memberAccess.Expression is IdentifierNameSyntax id && id.Identifier.Text == "UpdateType"
+                        => memberAccess.Name.Identifier.Text,
+                    _ => null
+                };
+
+                if (!string.IsNullOrEmpty(resolved) && !result.Contains(resolved))
+                    result.Add(resolved);
+            }
+        }
+
+        return result;
     }
 
     private static string FormatTypedConstant(TypedConstant arg)

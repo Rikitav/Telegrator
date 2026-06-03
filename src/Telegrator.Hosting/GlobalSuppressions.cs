@@ -11,3 +11,4 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("Maintainability", "CA1510")]
 [assembly: SuppressMessage("Style", "IDE0270")]
 [assembly: SuppressMessage("Roslynator", "RCS1037")]
+[assembly: SuppressMessage("Style", "IDE1005")]
