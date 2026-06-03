@@ -12,7 +12,8 @@ namespace Telegrator;
 /// </summary>
 public static partial class ColletionsExtensions
 {
-    private static Random SharedRandom { get => field ??= new Random(); }
+    private static readonly ThreadLocal<Random> _threadLocalRandom = new ThreadLocal<Random>(() => new Random(Guid.NewGuid().GetHashCode()));
+    private static Random SharedRandom => _threadLocalRandom.Value;
 
     /// <summary>
     /// Creates a <see cref="ReadOnlyDictionary{TKey, TValue}"/> from an <see cref="IEnumerable{TValue}"/>

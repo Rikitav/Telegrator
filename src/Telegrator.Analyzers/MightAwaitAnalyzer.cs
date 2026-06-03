@@ -15,7 +15,7 @@ public class MightAwaitAnalyzer : IIncrementalGenerator
         defaultSeverity: DiagnosticSeverity.Warning,
         isEnabledByDefault: true);
 
-    private static readonly string[] AwaitingMethodNames =
+    private static readonly HashSet<string> AwaitingMethodNames =
     [
         "AwaitAny",
         "AwaitMessage",
@@ -78,7 +78,7 @@ public class MightAwaitAnalyzer : IIncrementalGenerator
             return null;
 
         // Search for awaiting calls inside the class
-        var awaitingCalls = new List<(string MethodName, string UpdateType)>();
+        List<(string MethodName, string UpdateType)> awaitingCalls = [];
         foreach (var node in classSyntax.DescendantNodes())
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -87,7 +87,7 @@ public class MightAwaitAnalyzer : IIncrementalGenerator
                 continue;
 
             string? methodName = ExtractMethodName(invocation);
-            if (string.IsNullOrEmpty(methodName))
+            if (methodName == null || string.IsNullOrEmpty(methodName))
                 continue;
 
             if (AwaitingMethodNames.Contains(methodName))
@@ -118,7 +118,7 @@ public class MightAwaitAnalyzer : IIncrementalGenerator
         string className = symbol?.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)
             ?? classSyntax.Identifier.Text;
 
-        return new MightAwaitDiagnosticModel(className, awaitingCalls, classSyntax.Identifier.GetLocation());
+        return new MightAwaitDiagnosticModel(className, awaitingCalls.ToImmutableArray(), classSyntax.Identifier.GetLocation());
     }
 
     private static string? ExtractMethodName(InvocationExpressionSyntax invocation)
@@ -222,4 +222,30 @@ public class MightAwaitAnalyzer : IIncrementalGenerator
     }
 }
 
-internal sealed record MightAwaitDiagnosticModel(string ClassName, List<(string MethodName, string UpdateType)> AwaitingCalls, Location Location);
+internal sealed record MightAwaitDiagnosticModel(string ClassName, ImmutableArray<(string MethodName, string UpdateType)> AwaitingCalls, Location Location)
+{
+    public bool Equals(MightAwaitDiagnosticModel? other)
+    {
+        if (other is null)
+            return false;
+        if (ClassName != other.ClassName)
+            return false;
+
+        // Сравниваем элементы массива, а не ссылку на массив
+        return AwaitingCalls.SequenceEqual(other.AwaitingCalls);
+    }
+
+    public override int GetHashCode()
+    {
+        unchecked
+        {
+            int hash = 17;
+            hash = hash * 23 + ClassName.GetHashCode();
+            foreach (var call in AwaitingCalls)
+            {
+                hash = hash * 23 + call.GetHashCode();
+            }
+            return hash;
+        }
+    }
+}

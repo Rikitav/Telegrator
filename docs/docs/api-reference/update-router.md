@@ -21,7 +21,15 @@ public interface IUpdateRouter
     IRouterExceptionHandler? ExceptionHandler { get; set; }
     IHandlerContainerFactory? DefaultContainerFactory { get; set; }
 
+    /// <summary>
+    /// Fully awaits the handler pipeline. Blocking call.
+    /// </summary>
     Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Schedules the update for background processing without blocking the caller.
+    /// </summary>
+    Task ConsumeUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken);
 }
 ```
 

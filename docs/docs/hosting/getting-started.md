@@ -36,6 +36,23 @@ host.UseTelegrator();
 await host.RunAsync();
 ```
 
+### IHostBuilder Support
+
+Telegrator also supports the classic `IHostBuilder` API (e.g. when using `Host.CreateDefaultBuilder` or ASP.NET Core `WebApplicationBuilder`):
+
+```csharp
+var host = Host.CreateDefaultBuilder(args)
+    .ConfigureTelegrator(options: new TelegratorOptions { ... }, action: builder =>
+    {
+        builder.WithPolling();
+        builder.Handlers.CollectHandlers();
+    })
+    .Build();
+
+host.UseTelegrator();
+await host.RunAsync();
+```
+
 > [!CAUTION]
 > **Obsolete Method**: `CollectHandlersAssemblyWide()` and other reflection-based discovery methods are now obsolete. Please use the source-generated `CollectHandlers()` method, which is required for Native AOT and better performance.
 

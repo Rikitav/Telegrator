@@ -11,11 +11,11 @@ Running a bot on Webhooks in a web server environment has different performance 
 
 When an update arrives at the Webhook endpoint:
 1. `Telegrator.Hosting.Web` reads the JSON.
-2. It pushes the update into an internal `Channel<UpdateHandlerContext>`.
+2. It calls `IUpdateRouter.ConsumeUpdateAsync`, which schedules the update on `Task.Run`.
 3. It immediately returns `200 OK` to Telegram.
-4. An internal background worker picks up the update from the channel and executes the handlers.
+4. The router processes the update in the background: filters, sorts, and executes handlers via `UpdateHandlersPool`.
 
-This ensures that even if a handler is slow (e.g., waiting for AI response), the Webhook request is closed quickly, preventing Telegram from marking your bot as "down".
+This ensures that even if a handler is slow (e.g., waiting for AI response), the Webhook request is closed quickly, preventing Telegram from marking your bot as "down". The unbounded channel in `UpdateHandlersPool` guarantees that the webhook endpoint never blocks, while `MaximumParallelWorkingHandlers` controls actual execution concurrency.
 
 ## Concurrency Control
 

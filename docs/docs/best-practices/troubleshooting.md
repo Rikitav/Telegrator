@@ -14,6 +14,22 @@ description: "Resolving common issues and managing bugs."
 - Enable debug logging
 - Verify that the handler class inherits from the correct base class
 
+### Q: I see warning TLG201 in my build. What does it mean?
+**A:** `TLG201` is emitted by the **MightAwaitAnalyzer** when a handler calls an awaiting method (e.g. `AwaitMessage`, `AwaitCallbackQuery`) but is missing the `[MightAwait]` attribute. The generator will auto-inject the attribute for you at compile time, but you should add it explicitly for clarity:
+
+```csharp
+[MessageHandler]
+[MightAwait(UpdateType.Message)]
+public class AskHandler : MessageHandler
+{
+    public override async Task<Result> Execute(IHandlerContainer<Message> container, CancellationToken cancellation)
+    {
+        var next = await container.AwaitMessage().BySenderId(cancellation);
+        return Ok;
+    }
+}
+```
+
 ### Q: How can I access the `ITelegramBotClient` or the original `Update` object inside a handler?
 - Use `Client`, `Update`, and `Input` properties in your handlers container
 

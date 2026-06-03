@@ -48,3 +48,11 @@ public class CachingAspect : IPreProcessor
 - **Use async/await** properly throughout your code
 - **Monitor memory usage** in long-running bots
 - **Implement proper error handling** to prevent crashes
+
+## Fire-and-Forget Update Processing
+
+All production receivers use `ConsumeUpdateAsync` instead of `HandleUpdateAsync`:
+- **Polling**: `DefaultUpdateReceiver` and `WideUpdateReceiver` call `ConsumeUpdateAsync` so the receive loop never blocks on handler execution.
+- **Webhooks**: `HostedUpdateWebhooker` returns HTTP 200 immediately while handlers run in the background.
+
+This ensures that slow handlers (e.g. AI inference, database queries) do not stall the update ingestion pipeline. Concurrency is controlled separately by `MaximumParallelWorkingHandlers`.

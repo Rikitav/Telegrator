@@ -74,6 +74,21 @@ public class MyDatabaseStorage : IStateStorage
 }
 ```
 
+## Awaiting Provider Extensions
+
+You can extend the awaiting mechanism with custom extension methods on `IAwaitingProvider` or `IHandlerContainer`:
+
+```csharp
+public static class MyAwaitingExtensions
+{
+    public static IAwaiterHandlerBuilder<Message> AwaitPhoto(this IHandlerContainer container)
+        => container.AwaitUpdate<Message>(UpdateType.Message)
+                    .Where(u => u.Photo != null);
+}
+```
+
+All built-in convenience methods (`AwaitMessage`, `AwaitCallbackQuery`, etc.) follow this same pattern.
+
 ## Automatic Handler Discovery
 
 Telegrator provides high-performance, automatic discovery and registration of handlers using a **Source Generator**.
@@ -83,6 +98,7 @@ The `CollectHandlers()` method is generated at compile-time by the Telegrator So
 
 **How it works:**
 - Scans your source code during compilation.
+- Detects awaiting calls inside handlers and **auto-injects `[MightAwait]`** if missing.
 - Generates a static method that registers all found handlers.
 - **No reflection** is used at runtime.
 - **Native AOT Compatible**: Since the registration is static, it survives code trimming and works in Native AOT binaries.
@@ -105,5 +121,6 @@ The `CollectHandlersDomainWide()` and `CollectHandlersAssemblyWide()` methods sc
 **Benefits of Generative Collection:**
 - Significant performance boost during startup.
 - Full support for Trimming and Native AOT.
-- Design-time validation via **DeveloperHelperAnalyzer**.
+- Design-time validation via **DeveloperHelperAnalyzer** and **MightAwaitAnalyzer**.
+- Auto-injection of `[MightAwait]` for handlers that call awaiting methods.
 - Zero boilerplate while maintaining maximum performance.
