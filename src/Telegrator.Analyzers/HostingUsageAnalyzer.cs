@@ -83,11 +83,11 @@ public class HostingUsageAnalyzer : DiagnosticAnalyzer
 
         context.RegisterCompilationStartAction(compilationContext =>
         {
-            var invocations = new ConcurrentBag<(ISymbol Method, Location Loc, CallKind Kind)>();
+            ConcurrentBag<(ISymbol Method, Location Loc, CallKind Kind)> invocations = new ConcurrentBag<(ISymbol Method, Location Loc, CallKind Kind)>();
 
             compilationContext.RegisterOperationAction(operationContext =>
             {
-                var invocation = (IInvocationOperation)operationContext.Operation;
+                IInvocationOperation invocation = (IInvocationOperation)operationContext.Operation;
                 var methodName = invocation.TargetMethod.Name;
                 ISymbol methodSymbol = operationContext.ContainingSymbol;
 
@@ -109,7 +109,7 @@ public class HostingUsageAnalyzer : DiagnosticAnalyzer
 
             compilationContext.RegisterCompilationEndAction(endContext =>
             {
-                var allInvocations = invocations.ToList();
+                List<(ISymbol Method, Location Loc, CallKind Kind)> allInvocations = invocations.ToList();
                 if (allInvocations.Count == 0)
                     return;
 
@@ -132,7 +132,7 @@ public class HostingUsageAnalyzer : DiagnosticAnalyzer
 
                 foreach (IGrouping<ISymbol, (ISymbol Method, Location Loc, CallKind Kind)>? group in methodGroups)
                 {
-                    var localKinds = group.Select(x => x.Kind).ToImmutableHashSet();
+                    ImmutableHashSet<CallKind> localKinds = group.Select(x => x.Kind).ToImmutableHashSet();
 
                     bool hasWithPolling = localKinds.Contains(CallKind.WithPolling);
                     bool hasWithWeb = localKinds.Contains(CallKind.WithWeb);

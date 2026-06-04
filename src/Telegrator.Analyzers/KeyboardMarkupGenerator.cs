@@ -30,7 +30,7 @@ namespace Telegrator.Analyzers;
 public class KeyboardMarkupGenerator : IIncrementalGenerator
 {
     // Records
-    private record class GeneratedMarkupMethodModel(MethodDeclarationSyntax OriginalMethod, FieldDeclarationSyntax GeneratedField, MethodDeclarationSyntax GeneratedMethod);
+    private record class GeneratedMarkupMethodModel(MethodDeclarationSyntax OriginalMethod, FieldDeclarationSyntax? GeneratedField, MethodDeclarationSyntax GeneratedMethod);
     private record class GeneratedMarkupPropertyModel(PropertyDeclarationSyntax OriginalProperty, PropertyDeclarationSyntax GeneratedProperty);
 
     // Return types
@@ -98,7 +98,6 @@ public class KeyboardMarkupGenerator : IIncrementalGenerator
     private static readonly DiagnosticDescriptor UnsupportedAttribute = new DiagnosticDescriptor("TLG202", "Unsupported or invalid attribute", "The applied attribute is not supported for keyboard markup generation", "Telegrator.Modelling", DiagnosticSeverity.Error, true);
     private static readonly DiagnosticDescriptor NotPartialMethod = new DiagnosticDescriptor("TLG203", "Not a partial member", "Keyboard markup method must be declared as partial", "Telegrator.Modelling", DiagnosticSeverity.Error, true);
     private static readonly DiagnosticDescriptor UseBodylessMethod = new DiagnosticDescriptor("TLG204", "Use bodyless method", "Keyboard markup method must not have a body; implementation will be generated", "Telegrator.Modelling", DiagnosticSeverity.Error, true);
-    private static readonly DiagnosticDescriptor UseParametrlessMethod = new DiagnosticDescriptor("TLG205", "Use parametrless method", "Keyboard markup method must not have parameters", "Telegrator.Modelling", DiagnosticSeverity.Error, true);
     private static readonly DiagnosticDescriptor UseGetOnlyProperty = new DiagnosticDescriptor("TLG206", "Use property with only get accessor", "Keyboard markup property must have a get accessor without a setter, initializer, or expression body", "Telegrator.Modelling", DiagnosticSeverity.Error, true);
     private static readonly DiagnosticDescriptor UseBodylessGetAccessor = new DiagnosticDescriptor("TLG207", "Use bodyless get accessor", "Keyboard markup property get accessor must not have a body; implementation will be generated", "Telegrator.Modelling", DiagnosticSeverity.Error, true);
 
@@ -214,7 +213,7 @@ public class KeyboardMarkupGenerator : IIncrementalGenerator
                 if (anyErrors || layout == null)
                     continue;
 
-                SeparatedSyntaxList<CollectionElementSyntax> matrix = ParseAttributesMatrix(context, layout, prop);
+                SeparatedSyntaxList<CollectionElementSyntax> matrix = ParseAttributesMatrix(context, layout, prop, Enumerable.Empty<string>());
                 PropertyDeclarationSyntax genProp = GeneratedPropertyDeclaration(prop, SyntaxFactory.CollectionExpression(matrix));
                 models.Add(new GeneratedMarkupPropertyModel(prop, genProp));
             }
@@ -274,12 +273,6 @@ public class KeyboardMarkupGenerator : IIncrementalGenerator
                     anyErrors = true;
                 }
 
-                if (method.ParameterList.Parameters.Count > 0)
-                {
-                    context.ReportDiagnostic(Diagnostic.Create(UseParametrlessMethod, method.ParameterList.GetLocation()));
-                    anyErrors = true;
-                }
-
                 if (method.ExpressionBody != null)
                 {
                     context.ReportDiagnostic(Diagnostic.Create(UseBodylessMethod, method.ExpressionBody.GetLocation()));
@@ -295,9 +288,33 @@ public class KeyboardMarkupGenerator : IIncrementalGenerator
                 if (anyErrors || layout == null)
                     continue;
 
-                SeparatedSyntaxList<CollectionElementSyntax> matrix = ParseAttributesMatrix(context, layout, method);
-                FieldDeclarationSyntax genField = GeneratedFieldDeclaration(methodName, method.ReturnType, SyntaxFactory.CollectionExpression(matrix));
-                MethodDeclarationSyntax genMethod = GeneratedMethodDeclaration(methodName, method.Modifiers, method.ReturnType, genField);
+                bool hasParameters = method.ParameterList.Parameters.Count > 0;
+                IEnumerable<string> paramNames = method.ParameterList.Parameters.Select(p => p.Identifier.Text);
+
+                SeparatedSyntaxList<CollectionElementSyntax> matrix = ParseAttributesMatrix(context, layout, method, paramNames);
+                CollectionExpressionSyntax collection = SyntaxFactory.CollectionExpression(matrix);
+
+                FieldDeclarationSyntax? genField = null;
+                MethodDeclarationSyntax genMethod;
+
+                if (hasParameters)
+                {
+                    ArgumentSyntax argument = SyntaxFactory.Argument(collection);
+                    ArgumentListSyntax arguments = SyntaxFactory.ArgumentList(SyntaxFactory.SingletonSeparatedList(argument));
+                    ObjectCreationExpressionSyntax objectCreation = SyntaxFactory.ObjectCreationExpression(method.ReturnType, arguments, null);
+
+                    genMethod = SyntaxFactory.MethodDeclaration(method.ReturnType, methodName)
+                        .WithModifiers(method.Modifiers)
+                        .WithParameterList(method.ParameterList) // Сохраняем параметры!
+                        .WithExpressionBody(SyntaxFactory.ArrowExpressionClause(objectCreation))
+                        .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken));
+                }
+                else
+                {
+                    genField = GeneratedFieldDeclaration(methodName, method.ReturnType, collection);
+                    genMethod = GeneratedMethodDeclaration(methodName, method.Modifiers, method.ReturnType, genField);
+                }
+
                 models.Add(new GeneratedMarkupMethodModel(method, genField, genMethod));
             }
             catch (Exception ex)
@@ -317,7 +334,13 @@ public class KeyboardMarkupGenerator : IIncrementalGenerator
             context.CancellationToken.ThrowIfCancellationRequested();
             try
             {
-                MemberDeclarationSyntax wrappedMembers = WrapInParentDeclarations(model.OriginalMethod, new List<MemberDeclarationSyntax> { model.GeneratedField, model.GeneratedMethod });
+                List<MemberDeclarationSyntax> generatedMembers = new List<MemberDeclarationSyntax>();
+                if (model.GeneratedField != null)
+                    generatedMembers.Add(model.GeneratedField);
+
+                generatedMembers.Add(model.GeneratedMethod);
+
+                MemberDeclarationSyntax wrappedMembers = WrapInParentDeclarations(model.OriginalMethod, generatedMembers);
                 compilationUnit = compilationUnit.AddMembers(wrappedMembers);
             }
             catch (Exception ex)
@@ -330,7 +353,7 @@ public class KeyboardMarkupGenerator : IIncrementalGenerator
         context.AddSource("GeneratedKeyboards.Methods.g.cs", SourceText.From(compilationUnit.ToFullString(), Encoding.UTF8));
     }
 
-    private static SeparatedSyntaxList<CollectionElementSyntax> ParseAttributesMatrix(SourceProductionContext context, Dictionary<string, MemberAccessExpressionSyntax> layout, MemberDeclarationSyntax member)
+    private static SeparatedSyntaxList<CollectionElementSyntax> ParseAttributesMatrix(SourceProductionContext context, Dictionary<string, MemberAccessExpressionSyntax> layout, MemberDeclarationSyntax member, IEnumerable<string> paramNames)
     {
         SeparatedSyntaxList<CollectionElementSyntax> vertical = new SeparatedSyntaxList<CollectionElementSyntax>();
 
@@ -350,7 +373,7 @@ public class KeyboardMarkupGenerator : IIncrementalGenerator
                     continue;
                 }
 
-                InvocationExpressionSyntax expression = SyntaxFactory.InvocationExpression(accessSyntax, ConvertArguments(attribute.ArgumentList));
+                InvocationExpressionSyntax expression = SyntaxFactory.InvocationExpression(accessSyntax, ConvertArguments(attribute.ArgumentList, paramNames));
                 horizontal = horizontal.Add(SyntaxFactory.ExpressionElement(expression));
             }
 
@@ -396,23 +419,33 @@ public class KeyboardMarkupGenerator : IIncrementalGenerator
             .WithModifiers(fieldModifiers);
     }
 
-    private static ArgumentListSyntax ConvertArguments(AttributeArgumentListSyntax? attributeArgs)
+    private static ArgumentListSyntax ConvertArguments(AttributeArgumentListSyntax? attributeArgs, IEnumerable<string> paramNames)
     {
         if (attributeArgs == null)
             return SyntaxFactory.ArgumentList();
 
-        IEnumerable<ArgumentSyntax> arguments = attributeArgs.Arguments.Select(CastArgument);
+        IEnumerable<ArgumentSyntax> arguments = attributeArgs.Arguments.Select(arg => CastArgument(arg, paramNames));
         return SyntaxFactory.ArgumentList(SyntaxFactory.SeparatedList(arguments));
     }
 
-    private static ArgumentSyntax CastArgument(AttributeArgumentSyntax argument)
+    private static ArgumentSyntax CastArgument(AttributeArgumentSyntax argument, IEnumerable<string> paramNames)
     {
-        if (argument.NameColon != null)
+        ExpressionSyntax expr = argument.Expression;
+        if (paramNames.Any() && expr is LiteralExpressionSyntax literal && literal.IsKind(SyntaxKind.StringLiteralExpression))
         {
-            return SyntaxFactory.Argument(argument.Expression).WithNameColon(argument.NameColon);
+            string text = literal.Token.Text;
+            bool containsParam = paramNames.Any(p => text.Contains("{" + p + "}") || text.Contains("{" + p + ":") || text.Contains("{" + p + "."));
+
+            if (containsParam)
+                expr = SyntaxFactory.ParseExpression("$" + text);
         }
 
-        return SyntaxFactory.Argument(argument.Expression);
+        if (argument.NameColon != null)
+        {
+            return SyntaxFactory.Argument(expr).WithNameColon(argument.NameColon);
+        }
+
+        return SyntaxFactory.Argument(expr);
     }
 
     private static TypeDeclarationSyntax CreateTypeDeclaration(TypeDeclarationSyntax original, SyntaxList<MemberDeclarationSyntax> members)

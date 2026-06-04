@@ -67,7 +67,7 @@ public static class TestServerExtensions
         builder.Services.AddSingleton<TelegratorTestServer>();
 
         // Remove any receivers (long-polling or webhooks) just in case
-        var receiverDescriptors = builder.Services.Where(x =>
+        List<ServiceDescriptor> receiverDescriptors = builder.Services.Where(x =>
             x.ServiceType == typeof(IHostedService) &&
             x.ImplementationType != null &&
             x.ImplementationType.Name.Contains("HostedUpdate")).ToList();

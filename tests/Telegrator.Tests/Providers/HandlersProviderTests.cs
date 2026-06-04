@@ -31,8 +31,8 @@ public class HandlersProviderTests
     [Fact]
     public void IsEmpty_ShouldReturnTrue_ForEmptyCollection()
     {
-        var collection = new HandlersCollection(new TelegratorOptions());
-        var provider = new HandlersProvider(collection, new TelegratorOptions());
+        HandlersCollection collection = new HandlersCollection(new TelegratorOptions());
+        HandlersProvider provider = new HandlersProvider(collection, new TelegratorOptions());
 
         provider.IsEmpty().Should().BeTrue();
     }
@@ -40,10 +40,10 @@ public class HandlersProviderTests
     [Fact]
     public void IsEmpty_ShouldReturnFalse_WhenHandlersExist()
     {
-        var collection = new HandlersCollection(new TelegratorOptions());
+        HandlersCollection collection = new HandlersCollection(new TelegratorOptions());
         collection.AddDescriptor(new ClassHandlerDescriptor(DescriptorType.General, typeof(TestUpdateHandler)));
 
-        var provider = new HandlersProvider(collection, new TelegratorOptions());
+        HandlersProvider provider = new HandlersProvider(collection, new TelegratorOptions());
 
         provider.IsEmpty().Should().BeFalse();
     }
@@ -51,10 +51,10 @@ public class HandlersProviderTests
     [Fact]
     public void TryGetDescriptorList_ShouldReturnTrue_WhenUpdateTypeExists()
     {
-        var collection = new HandlersCollection(new TelegratorOptions());
+        HandlersCollection collection = new HandlersCollection(new TelegratorOptions());
         collection.AddDescriptor(new ClassHandlerDescriptor(DescriptorType.General, typeof(TestUpdateHandler)));
 
-        var provider = new HandlersProvider(collection, new TelegratorOptions());
+        HandlersProvider provider = new HandlersProvider(collection, new TelegratorOptions());
 
         bool found = provider.TryGetDescriptorList(UpdateType.Message, out HandlerDescriptorList? list);
         found.Should().BeTrue();
@@ -65,8 +65,8 @@ public class HandlersProviderTests
     [Fact]
     public void TryGetDescriptorList_ShouldReturnFalse_WhenUpdateTypeMissing()
     {
-        var collection = new HandlersCollection(new TelegratorOptions());
-        var provider = new HandlersProvider(collection, new TelegratorOptions());
+        HandlersCollection collection = new HandlersCollection(new TelegratorOptions());
+        HandlersProvider provider = new HandlersProvider(collection, new TelegratorOptions());
 
         bool found = provider.TryGetDescriptorList(UpdateType.CallbackQuery, out HandlerDescriptorList? list);
         found.Should().BeFalse();
@@ -76,11 +76,11 @@ public class HandlersProviderTests
     [Fact]
     public void GetHandlerInstance_ShouldCreateInstance_ForGeneralDescriptor()
     {
-        var collection = new HandlersCollection(new TelegratorOptions());
-        var descriptor = new ClassHandlerDescriptor(DescriptorType.General, typeof(TestUpdateHandler));
+        HandlersCollection collection = new HandlersCollection(new TelegratorOptions());
+        ClassHandlerDescriptor descriptor = new ClassHandlerDescriptor(DescriptorType.General, typeof(TestUpdateHandler));
         collection.AddDescriptor(descriptor);
 
-        var provider = new HandlersProvider(collection, new TelegratorOptions());
+        HandlersProvider provider = new HandlersProvider(collection, new TelegratorOptions());
         UpdateHandlerBase instance = provider.GetHandlerInstance(descriptor);
 
         instance.Should().NotBeNull();
@@ -90,13 +90,13 @@ public class HandlersProviderTests
     [Fact]
     public void GetHandlerInstance_ShouldReturnSingleton_ForSingletonDescriptor()
     {
-        var collection = new HandlersCollection(new TelegratorOptions());
-        var handler = new TestUpdateHandler();
-        var descriptor = new ClassHandlerDescriptor(DescriptorType.Singleton, typeof(TestUpdateHandler));
+        HandlersCollection collection = new HandlersCollection(new TelegratorOptions());
+        TestUpdateHandler handler = new TestUpdateHandler();
+        ClassHandlerDescriptor descriptor = new ClassHandlerDescriptor(DescriptorType.Singleton, typeof(TestUpdateHandler));
         descriptor.SetInstance(handler);
         collection.AddDescriptor(descriptor);
 
-        var provider = new HandlersProvider(collection, new TelegratorOptions());
+        HandlersProvider provider = new HandlersProvider(collection, new TelegratorOptions());
         UpdateHandlerBase instance1 = provider.GetHandlerInstance(descriptor);
         UpdateHandlerBase instance2 = provider.GetHandlerInstance(descriptor);
 
@@ -107,10 +107,10 @@ public class HandlersProviderTests
     [Fact]
     public void GetHandlerInstance_ShouldUseFactory_WhenAddedViaAddHandler()
     {
-        var collection = new HandlersCollection(new TelegratorOptions());
+        HandlersCollection collection = new HandlersCollection(new TelegratorOptions());
         collection.AddHandler<TestUpdateHandler>();
 
-        var provider = new HandlersProvider(collection, new TelegratorOptions());
+        HandlersProvider provider = new HandlersProvider(collection, new TelegratorOptions());
         HandlerDescriptor? descriptor = provider.TryGetDescriptorList(UpdateType.Message, out HandlerDescriptorList? list) ? list![0] : null;
 
         descriptor.Should().NotBeNull();

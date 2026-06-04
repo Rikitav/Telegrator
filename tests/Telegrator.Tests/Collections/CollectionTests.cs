@@ -45,7 +45,7 @@ public class CollectionTests
     public void HandlerDescriptorList_ShouldBeCreated()
     {
         // Arrange & Act
-        var list = new HandlerDescriptorList();
+        HandlerDescriptorList list = new HandlerDescriptorList();
 
         // Assert
         list.Should().NotBeNull();
@@ -61,7 +61,7 @@ public class CollectionTests
     public void HandlerDescriptorList_Add_ShouldAddDescriptor()
     {
         // Arrange
-        var list = new HandlerDescriptorList();
+        HandlerDescriptorList list = new HandlerDescriptorList();
         ClassHandlerDescriptor descriptor = CreateTestDescriptor();
 
         // Act
@@ -81,7 +81,7 @@ public class CollectionTests
     public void HandlerDescriptorList_AddMultiple_ShouldAddAllDescriptors()
     {
         // Arrange
-        var list = new HandlerDescriptorList();
+        HandlerDescriptorList list = new HandlerDescriptorList();
         ClassHandlerDescriptor descriptor1 = CreateTestDescriptor();
         ClassHandlerDescriptor descriptor2 = CreateTestDescriptor();
         ClassHandlerDescriptor descriptor3 = CreateTestDescriptor();
@@ -108,7 +108,7 @@ public class CollectionTests
     {
         // Arrange
         ClassHandlerDescriptor descriptor = CreateTestDescriptor();
-        var list = new HandlerDescriptorList
+        HandlerDescriptorList list = new HandlerDescriptorList
         {
             descriptor
         };
@@ -132,7 +132,7 @@ public class CollectionTests
     public void HandlerDescriptorList_IndexerWithInvalidIndex_ShouldThrowArgumentOutOfRangeException(int invalidIndex)
     {
         // Arrange
-        var list = new HandlerDescriptorList
+        HandlerDescriptorList list = new HandlerDescriptorList
         {
             CreateTestDescriptor()
         };
@@ -153,14 +153,14 @@ public class CollectionTests
         // Arrange
         ClassHandlerDescriptor descriptor1 = CreateTestDescriptor();
         ClassHandlerDescriptor descriptor2 = CreateTestDescriptor();
-        var list = new HandlerDescriptorList
+        HandlerDescriptorList list = new HandlerDescriptorList
         {
             descriptor1,
             descriptor2
         };
 
         // Act
-        var enumeratedItems = list.ToList();
+        List<HandlerDescriptor> enumeratedItems = list.ToList();
 
         // Assert
         enumeratedItems.Should().HaveCount(2);
@@ -177,7 +177,7 @@ public class CollectionTests
     public void HandlerDescriptorList_Clear_ShouldRemoveAllDescriptors()
     {
         // Arrange
-        var list = new HandlerDescriptorList
+        HandlerDescriptorList list = new HandlerDescriptorList
         {
             CreateTestDescriptor(),
             CreateTestDescriptor()
@@ -200,7 +200,7 @@ public class CollectionTests
     public void HandlerDescriptorList_Contains_ShouldReturnCorrectResult()
     {
         // Arrange
-        var list = new HandlerDescriptorList();
+        HandlerDescriptorList list = new HandlerDescriptorList();
         ClassHandlerDescriptor descriptor = CreateTestDescriptor();
         ClassHandlerDescriptor nonExistentDescriptor = CreateTestDescriptor();
 
@@ -223,7 +223,7 @@ public class CollectionTests
     public void HandlerDescriptorList_Remove_ShouldRemoveDescriptor()
     {
         // Arrange
-        var list = new HandlerDescriptorList();
+        HandlerDescriptorList list = new HandlerDescriptorList();
         ClassHandlerDescriptor descriptor = CreateTestDescriptor();
         list.Add(descriptor);
 
@@ -245,7 +245,7 @@ public class CollectionTests
     public void HandlerDescriptorList_RemoveNonExistent_ShouldReturnFalse()
     {
         // Arrange
-        var list = new HandlerDescriptorList();
+        HandlerDescriptorList list = new HandlerDescriptorList();
         ClassHandlerDescriptor nonExistentDescriptor = CreateTestDescriptor();
 
         // Act
@@ -265,7 +265,7 @@ public class CollectionTests
     public void CompletedFiltersList_ShouldBeCreated()
     {
         // Arrange & Act
-        var list = new CompletedFiltersList();
+        CompletedFiltersList list = new CompletedFiltersList();
 
         // Assert
         list.Should().NotBeNull();
@@ -281,7 +281,7 @@ public class CollectionTests
     public void HandlerDescriptorList_ShouldHandleLargeNumberOfItems()
     {
         // Arrange
-        var list = new HandlerDescriptorList();
+        HandlerDescriptorList list = new HandlerDescriptorList();
         var itemsCount = 1000;
 
         // Act
@@ -303,8 +303,8 @@ public class CollectionTests
     public async Task HandlerDescriptorList_ShouldHandleConcurrentAccess()
     {
         // Arrange
-        var list = new HandlerDescriptorList();
-        var tasks = new List<Task>();
+        HandlerDescriptorList list = new HandlerDescriptorList();
+        List<Task> tasks = new List<Task>();
 
         // Act
         for (int i = 0; i < 10; i++)

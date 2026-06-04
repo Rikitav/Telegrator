@@ -48,7 +48,7 @@ public class FilterTests
     {
         // Arrange (Given) - РїРѕРґРіРѕС‚РѕРІРєР° С‚РµСЃС‚РѕРІС‹С… РґР°РЅРЅС‹С…
         AnyFilter<Update> anyFilter = Filter<Update>.Any();
-        var context = new FilterExecutionContext<Update>(null, new TelegramBotInfo(null), new Update(), new Update(), new Dictionary<string, object>(), new CompletedFiltersList());
+        FilterExecutionContext<Update> context = new FilterExecutionContext<Update>(null, new TelegramBotInfo(null), new Update(), new Update(), new Dictionary<string, object>(), new CompletedFiltersList());
 
         // Act (When) - РІС‹РїРѕР»РЅРµРЅРёРµ С‚РµСЃС‚РёСЂСѓРµРјРѕРіРѕ РґРµР№СЃС‚РІРёСЏ
         var result = anyFilter.CanPass(context);
@@ -68,7 +68,7 @@ public class FilterTests
         // Arrange
         AnyFilter<Update> alwaysTrueFilter = Filter<Update>.Any();
         Filter<Update> reverseFilter = alwaysTrueFilter.Not();
-        var context = new FilterExecutionContext<Update>(null, new TelegramBotInfo(null), new Update(), new Update(), new Dictionary<string, object>(), new CompletedFiltersList());
+        FilterExecutionContext<Update> context = new FilterExecutionContext<Update>(null, new TelegramBotInfo(null), new Update(), new Update(), new Dictionary<string, object>(), new CompletedFiltersList());
 
         // Act
         var result = reverseFilter.CanPass(context);
@@ -90,10 +90,10 @@ public class FilterTests
     public void AndFilter_ShouldCombineFiltersWithAndLogic(bool firstResult, bool secondResult, bool expectedResult)
     {
         // Arrange
-        var firstFilter = Filter<Update>.If(_ => firstResult);
-        var secondFilter = Filter<Update>.If(_ => secondResult);
+        Filter<Update> firstFilter = Filter<Update>.If(_ => firstResult);
+        Filter<Update> secondFilter = Filter<Update>.If(_ => secondResult);
         AndFilter<Update> andFilter = firstFilter.And(secondFilter);
-        var context = new FilterExecutionContext<Update>(null, new TelegramBotInfo(null), new Update(), new Update(), new Dictionary<string, object>(), new CompletedFiltersList());
+        FilterExecutionContext<Update> context = new FilterExecutionContext<Update>(null, new TelegramBotInfo(null), new Update(), new Update(), new Dictionary<string, object>(), new CompletedFiltersList());
 
         // Act
         var result = andFilter.CanPass(context);
@@ -115,10 +115,10 @@ public class FilterTests
     public void OrFilter_ShouldCombineFiltersWithOrLogic(bool firstResult, bool secondResult, bool expectedResult)
     {
         // Arrange
-        var firstFilter = Filter<Update>.If(_ => firstResult);
-        var secondFilter = Filter<Update>.If(_ => secondResult);
+        Filter<Update> firstFilter = Filter<Update>.If(_ => firstResult);
+        Filter<Update> secondFilter = Filter<Update>.If(_ => secondResult);
         OrFilter<Update> orFilter = firstFilter.Or(secondFilter);
-        var context = new FilterExecutionContext<Update>(null, new TelegramBotInfo(null), new Update(), new Update(), new Dictionary<string, object>(), new CompletedFiltersList());
+        FilterExecutionContext<Update> context = new FilterExecutionContext<Update>(null, new TelegramBotInfo(null), new Update(), new Update(), new Dictionary<string, object>(), new CompletedFiltersList());
 
         // Act
         var result = orFilter.CanPass(context);
@@ -136,13 +136,13 @@ public class FilterTests
     public void CompiledFilter_ShouldPassOnlyWhenAllFiltersPass()
     {
         // Arrange
-        var filter1 = Filter<Update>.If(_ => true);
-        var filter2 = Filter<Update>.If(_ => true);
-        var filter3 = Filter<Update>.If(_ => false);
+        Filter<Update> filter1 = Filter<Update>.If(_ => true);
+        Filter<Update> filter2 = Filter<Update>.If(_ => true);
+        Filter<Update> filter3 = Filter<Update>.If(_ => false);
 
-        var compiledFilter = new CompiledFilter<Update>(filter1, filter2, filter3);
-        var data = new Dictionary<string, object> { { "handler_name", "TestHandler" } };
-        var context = new FilterExecutionContext<Update>(null, new TelegramBotInfo(null), new Update(), new Update(), data, new CompletedFiltersList());
+        CompiledFilter<Update> compiledFilter = new CompiledFilter<Update>(filter1, filter2, filter3);
+        Dictionary<string, object> data = new Dictionary<string, object> { { "handler_name", "TestHandler" } };
+        FilterExecutionContext<Update> context = new FilterExecutionContext<Update>(null, new TelegramBotInfo(null), new Update(), new Update(), data, new CompletedFiltersList());
 
         // Act
         var result = compiledFilter.CanPass(context);
@@ -179,12 +179,12 @@ public class FilterTests
     {
         // Arrange
         var wasCalled = false;
-        var functionFilter = Filter<Update>.If(_ =>
+        Filter<Update> functionFilter = Filter<Update>.If(_ =>
         {
             wasCalled = true;
             return true;
         });
-        var context = new FilterExecutionContext<Update>(null, new TelegramBotInfo(null), new Update(), new Update(), new Dictionary<string, object>(), new CompletedFiltersList());
+        FilterExecutionContext<Update> context = new FilterExecutionContext<Update>(null, new TelegramBotInfo(null), new Update(), new Update(), new Dictionary<string, object>(), new CompletedFiltersList());
 
         // Act
         var result = functionFilter.CanPass(context);

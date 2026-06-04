@@ -30,7 +30,7 @@ public class AwaitingProviderTests
     [Fact]
     public void TryGetDescriptorList_ShouldReturnFalse_WhenNoHandlersRegistered()
     {
-        var provider = new AwaitingProvider(new TelegratorOptions());
+        AwaitingProvider provider = new AwaitingProvider(new TelegratorOptions());
 
         bool found = provider.TryGetDescriptorList(UpdateType.Message, out HandlerDescriptorList? list);
 
@@ -41,7 +41,7 @@ public class AwaitingProviderTests
     [Fact]
     public void TryGetDescriptorList_ShouldReturnTrue_WhenHandlerRegistered()
     {
-        var provider = new AwaitingProvider(new TelegratorOptions());
+        AwaitingProvider provider = new AwaitingProvider(new TelegratorOptions());
         ClassHandlerDescriptor handler = CreateTestHandlerDescriptor();
 
         using (provider.UseHandler(handler))
@@ -57,7 +57,7 @@ public class AwaitingProviderTests
     [Fact]
     public void UseHandler_ShouldAutoRemoveOnDispose()
     {
-        var provider = new AwaitingProvider(new TelegratorOptions());
+        AwaitingProvider provider = new AwaitingProvider(new TelegratorOptions());
         ClassHandlerDescriptor handler = CreateTestHandlerDescriptor();
 
         using (provider.UseHandler(handler))
@@ -71,8 +71,8 @@ public class AwaitingProviderTests
     [Fact]
     public void UseHandler_ShouldThrow_WhenDescriptorHasNoSingletonInstance()
     {
-        var provider = new AwaitingProvider(new TelegratorOptions());
-        var descriptor = new ClassHandlerDescriptor(DescriptorType.General, typeof(TestUpdateHandler));
+        AwaitingProvider provider = new AwaitingProvider(new TelegratorOptions());
+        ClassHandlerDescriptor descriptor = new ClassHandlerDescriptor(DescriptorType.General, typeof(TestUpdateHandler));
 
         System.Action act = () => provider.UseHandler(descriptor);
 
@@ -81,7 +81,7 @@ public class AwaitingProviderTests
 
     private static ClassHandlerDescriptor CreateTestHandlerDescriptor()
     {
-        var descriptor = new ClassHandlerDescriptor(DescriptorType.General, typeof(TestUpdateHandler));
+        ClassHandlerDescriptor descriptor = new ClassHandlerDescriptor(DescriptorType.General, typeof(TestUpdateHandler));
         descriptor.SetInstance(new TestUpdateHandler());
         return descriptor;
     }

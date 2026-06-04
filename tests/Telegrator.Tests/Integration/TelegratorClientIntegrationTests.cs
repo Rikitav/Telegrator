@@ -20,24 +20,26 @@
 using FluentAssertions;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
+using Telegram.Bot.Types.ReplyMarkups;
 using Telegrator.Annotations;
 using Telegrator.Handlers;
+using Telegrator.Markups;
 using Telegrator.Testing;
 using Xunit;
 
 namespace Telegrator.Tests.Integration;
 
-public class TelegratorClientIntegrationTests
+public partial class TelegratorClientIntegrationTests
 {
     [Fact]
     public async Task EmitMessageAsync_ShouldRouteToMessageHandler()
     {
         EchoHandler.Executed = false;
-        var client = new TestTelegratorClient();
+        TestTelegratorClient client = new TestTelegratorClient();
         client.Handlers.AddHandler<EchoHandler>();
         client.StartTestReceiving();
 
-        var message = new Message
+        Message message = new Message
         {
             Id = 1, // Required
             Text = "hello",
@@ -54,11 +56,11 @@ public class TelegratorClientIntegrationTests
     public async Task EmitMessageAsync_ShouldNotRoute_WhenFilterDoesNotMatch()
     {
         EchoHandler.Executed = false;
-        var client = new TestTelegratorClient();
+        TestTelegratorClient client = new TestTelegratorClient();
         client.Handlers.AddHandler<EchoHandler>();
         client.StartTestReceiving();
 
-        var message = new Message
+        Message message = new Message
         {
             Id = 1, // Required
             Text = "goodbye",
@@ -75,11 +77,11 @@ public class TelegratorClientIntegrationTests
     public async Task EmitUpdateAsync_ShouldRouteToCallbackQueryHandler()
     {
         ButtonHandler.Executed = false;
-        var client = new TestTelegratorClient();
+        TestTelegratorClient client = new TestTelegratorClient();
         client.Handlers.AddHandler<ButtonHandler>();
         client.StartTestReceiving();
 
-        var update = new Update
+        Update update = new Update
         {
             Id = 1,
             CallbackQuery = new CallbackQuery
@@ -101,11 +103,11 @@ public class TelegratorClientIntegrationTests
     {
         AskNameHandler.Asked = false;
         AskNameHandler.Answered = false;
-        var client = new TestTelegratorClient();
+        TestTelegratorClient client = new TestTelegratorClient();
         client.Handlers.AddHandler<AskNameHandler>();
         client.StartTestReceiving();
 
-        var message1 = new Message
+        Message message1 = new Message
         {
             Id = 1, // Required
             Text = "/ask",
@@ -114,7 +116,7 @@ public class TelegratorClientIntegrationTests
             From = new User { Id = 7, FirstName = "Charlie" }
         };
 
-        var message2 = new Message
+        Message message2 = new Message
         {
             Id = 2, // Required
             Text = "Charlie",
@@ -123,7 +125,7 @@ public class TelegratorClientIntegrationTests
         };
 
         // Step 1: trigger in background because handler blocks awaiting next message
-        var handlerTask = Task.Run(async () => await client.EmitMessageAsync(message1));
+        Task handlerTask = Task.Run(async () => await client.EmitMessageAsync(message1));
         await Task.Delay(200); // let the handler register the awaiter
 
         AskNameHandler.Asked.Should().BeTrue();
@@ -141,7 +143,7 @@ public class TelegratorClientIntegrationTests
     [Fact]
     public void StartTestReceiving_ShouldInitializeRouter()
     {
-        var client = new TestTelegratorClient();
+        TestTelegratorClient client = new TestTelegratorClient();
         Action action = () => { client.UpdateRouter.GetType(); };
         action.Should().Throw<InvalidOperationException>();
 
@@ -179,7 +181,7 @@ public class TelegratorClientIntegrationTests
 
     [CommandHandler]
     [CommandAllias("ask")]
-    public class AskNameHandler : CommandHandler
+    public partial class AskNameHandler : CommandHandler
     {
         public static bool Asked { get; set; }
         public static bool Answered { get; set; }
@@ -191,11 +193,14 @@ public class TelegratorClientIntegrationTests
 
             Message? nextMessage = await AwaitingProvider.AwaitMessage(HandlingUpdate).BySenderId(cancellation);
             if (nextMessage == null)
-                return Ok; // timeout or cancellation
+                return Ok;
 
             Answered = true;
-            await Reply($"Hello, {nextMessage.Text}!", cancellationToken: cancellation);
+            await Reply($"Hello, {nextMessage.Text}!", replyMarkup: Keyboard(10), cancellationToken: cancellation);
             return Ok;
         }
+
+        [CallbackButton("Отмена", "cancell"), CallbackButton("Применить", "apply:{val}")]
+        private static partial InlineKeyboardMarkup Keyboard(int val);
     }
 }

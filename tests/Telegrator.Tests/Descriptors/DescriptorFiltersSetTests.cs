@@ -36,10 +36,10 @@ public class DescriptorFiltersSetTests
     [Fact]
     public void Validate_ShouldReturnOk_WhenNoFilters()
     {
-        var filtersSet = new DescriptorFiltersSet(null, null, null);
+        DescriptorFiltersSet filtersSet = new DescriptorFiltersSet(null, null, null);
         FilterExecutionContext<Update> context = CreateContext();
-        var descriptor = new ClassHandlerDescriptor(DescriptorType.General, typeof(TestUpdateHandler));
-        var report = new FiltersFallbackReport(descriptor, context);
+        ClassHandlerDescriptor descriptor = new ClassHandlerDescriptor(DescriptorType.General, typeof(TestUpdateHandler));
+        FiltersFallbackReport report = new FiltersFallbackReport(descriptor, context);
 
         Result result = filtersSet.Validate(context, false, ref report);
 
@@ -49,11 +49,11 @@ public class DescriptorFiltersSetTests
     [Fact]
     public void Validate_ShouldReturnOk_WhenAllFiltersPass()
     {
-        var filter = Filter<Update>.If(_ => true);
-        var filtersSet = new DescriptorFiltersSet(null, null, [filter]);
+        Filter<Update> filter = Filter<Update>.If(_ => true);
+        DescriptorFiltersSet filtersSet = new DescriptorFiltersSet(null, null, [filter]);
         FilterExecutionContext<Update> context = CreateContext();
-        var descriptor = new ClassHandlerDescriptor(DescriptorType.General, typeof(TestUpdateHandler));
-        var report = new FiltersFallbackReport(descriptor, context);
+        ClassHandlerDescriptor descriptor = new ClassHandlerDescriptor(DescriptorType.General, typeof(TestUpdateHandler));
+        FiltersFallbackReport report = new FiltersFallbackReport(descriptor, context);
 
         Result result = filtersSet.Validate(context, false, ref report);
 
@@ -63,11 +63,11 @@ public class DescriptorFiltersSetTests
     [Fact]
     public void Validate_ShouldReturnFault_WhenFilterFails()
     {
-        var filter = Filter<Update>.If(_ => false);
-        var filtersSet = new DescriptorFiltersSet(null, null, [filter]);
+        Filter<Update> filter = Filter<Update>.If(_ => false);
+        DescriptorFiltersSet filtersSet = new DescriptorFiltersSet(null, null, [filter]);
         FilterExecutionContext<Update> context = CreateContext();
-        var descriptor = new ClassHandlerDescriptor(DescriptorType.General, typeof(TestUpdateHandler));
-        var report = new FiltersFallbackReport(descriptor, context);
+        ClassHandlerDescriptor descriptor = new ClassHandlerDescriptor(DescriptorType.General, typeof(TestUpdateHandler));
+        FiltersFallbackReport report = new FiltersFallbackReport(descriptor, context);
 
         Result result = filtersSet.Validate(context, false, ref report);
 
@@ -77,17 +77,17 @@ public class DescriptorFiltersSetTests
     [Fact]
     public void Validate_ShouldReturnNext_WhenRouteNextModifierIsUsed()
     {
-        var filter = new Mock<IFilter<Update>>();
+        Mock<IFilter<Update>> filter = new Mock<IFilter<Update>>();
         filter.Setup(f => f.CanPass(It.IsAny<FilterExecutionContext<Update>>())).Returns(true);
 
-        var filtersSet = new DescriptorFiltersSet(
+        DescriptorFiltersSet filtersSet = new DescriptorFiltersSet(
             new MessageHandlerAttribute { FormReport = true },
             null,
             [filter.Object]);
 
         FilterExecutionContext<Update> context = CreateContext();
-        var descriptor = new ClassHandlerDescriptor(DescriptorType.General, typeof(TestUpdateHandler));
-        var report = new FiltersFallbackReport(descriptor, context);
+        ClassHandlerDescriptor descriptor = new ClassHandlerDescriptor(DescriptorType.General, typeof(TestUpdateHandler));
+        FiltersFallbackReport report = new FiltersFallbackReport(descriptor, context);
         Result result = filtersSet.Validate(context, true, ref report);
 
         result.Success.Should().BeTrue();
@@ -96,8 +96,8 @@ public class DescriptorFiltersSetTests
     [Fact]
     public async Task ExecutePre_ShouldReturnOk_WhenNoAspects()
     {
-        var aspectsSet = new DescriptorAspectsSet(null, null);
-        var handler = new TestUpdateHandler();
+        DescriptorAspectsSet aspectsSet = new DescriptorAspectsSet(null, null);
+        TestUpdateHandler handler = new TestUpdateHandler();
         IHandlerContainer container = new Mock<IHandlerContainer>().Object;
 
         Result result = await aspectsSet.ExecutePre(handler, container, CancellationToken.None);
@@ -108,8 +108,8 @@ public class DescriptorFiltersSetTests
     [Fact]
     public async Task ExecutePost_ShouldReturnOk_WhenNoAspects()
     {
-        var aspectsSet = new DescriptorAspectsSet(null, null);
-        var handler = new TestUpdateHandler();
+        DescriptorAspectsSet aspectsSet = new DescriptorAspectsSet(null, null);
+        TestUpdateHandler handler = new TestUpdateHandler();
         IHandlerContainer container = new Mock<IHandlerContainer>().Object;
 
         Result result = await aspectsSet.ExecutePost(handler, container, CancellationToken.None);

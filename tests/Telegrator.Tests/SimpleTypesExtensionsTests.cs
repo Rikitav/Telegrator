@@ -45,8 +45,8 @@ public class SimpleTypesExtensionsTests
     [Fact]
     public void Squeeze_ShouldRemoveNulls()
     {
-        var items = new List<string?> { "a", null, "b", null, "c" };
-        var squeezed = items.Squeeze().ToList();
+        List<string?> items = new List<string?> { "a", null, "b", null, "c" };
+        List<string> squeezed = items.Squeeze().ToList();
 
         squeezed.Should().Equal("a", "b", "c");
     }
@@ -54,7 +54,7 @@ public class SimpleTypesExtensionsTests
     [Fact]
     public void ForEach_ShouldExecuteAction()
     {
-        var items = new List<int> { 1, 2, 3 };
+        List<int> items = new List<int> { 1, 2, 3 };
         var sum = 0;
         items.ForEach(x => sum += x);
 
@@ -64,7 +64,7 @@ public class SimpleTypesExtensionsTests
     [Fact]
     public void Set_ShouldUpdateExistingKey()
     {
-        var dict = new Dictionary<string, int> { { "a", 1 } };
+        Dictionary<string, int> dict = new Dictionary<string, int> { { "a", 1 } };
         dict.Set("a", 2);
 
         dict["a"].Should().Be(2);
@@ -73,7 +73,7 @@ public class SimpleTypesExtensionsTests
     [Fact]
     public void Set_ShouldAddNewKey()
     {
-        var dict = new Dictionary<string, int>();
+        Dictionary<string, int> dict = new Dictionary<string, int>();
         dict.Set("a", 1);
 
         dict.Should().ContainKey("a").WhoseValue.Should().Be(1);
@@ -82,7 +82,7 @@ public class SimpleTypesExtensionsTests
     [Fact]
     public void Set_WithDefaultValue_ShouldAddDefaultWhenKeyMissing()
     {
-        var dict = new Dictionary<string, int>();
+        Dictionary<string, int> dict = new Dictionary<string, int>();
         dict.Set("a", 10, 99);
 
         dict["a"].Should().Be(99);
@@ -91,7 +91,7 @@ public class SimpleTypesExtensionsTests
     [Fact]
     public void Random_ShouldReturnElementFromCollection()
     {
-        var items = new List<int> { 1, 2, 3, 4, 5 };
+        List<int> items = new List<int> { 1, 2, 3, 4, 5 };
         var result = items.Random();
 
         items.Should().Contain(result);
@@ -100,7 +100,7 @@ public class SimpleTypesExtensionsTests
     [Fact]
     public void UnionAdd_ShouldAddOnlyUniqueElements()
     {
-        var list = new List<int> { 1, 2 };
+        List<int> list = new List<int> { 1, 2 };
         list.UnionAdd([2, 3, 4]);
 
         list.Should().Equal(1, 2, 3, 4);
@@ -109,7 +109,7 @@ public class SimpleTypesExtensionsTests
     [Fact]
     public void IndexOf_ShouldReturnCorrectIndex()
     {
-        var items = new List<int> { 10, 20, 30 };
+        List<int> items = new List<int> { 10, 20, 30 };
         items.IndexOf(x => x == 20).Should().Be(1);
         items.IndexOf(x => x == 99).Should().Be(-1);
     }
@@ -117,28 +117,28 @@ public class SimpleTypesExtensionsTests
     [Fact]
     public void SingleOrNothing_ShouldReturnElement_WhenSingle()
     {
-        var items = new List<int> { 42 };
+        List<int> items = new List<int> { 42 };
         items.SingleOrNothing().Should().Be(42);
     }
 
     [Fact]
     public void SingleOrNothing_ShouldReturnDefault_WhenEmpty()
     {
-        var items = new List<int>();
+        List<int> items = new List<int>();
         items.SingleOrNothing().Should().Be(0);
     }
 
     [Fact]
     public void SingleOrNothing_ShouldReturnDefault_WhenMultiple()
     {
-        var items = new List<int> { 1, 2 };
+        List<int> items = new List<int> { 1, 2 };
         items.SingleOrNothing().Should().Be(0);
     }
 
     [Fact]
     public void SingleOrNothing_WithPredicate_ShouldReturnElement_WhenSingleMatch()
     {
-        var items = new List<int> { 1, 2, 3 };
+        List<int> items = new List<int> { 1, 2, 3 };
         items.SingleOrNothing(x => x == 2).Should().Be(2);
     }
 
@@ -207,7 +207,7 @@ public class SimpleTypesExtensionsTests
     [Fact]
     public void SliceBy_ShouldSplitStringIntoChunks()
     {
-        var chunks = "HelloWorld".SliceBy(3).ToList();
+        List<string> chunks = "HelloWorld".SliceBy(3).ToList();
         chunks.Should().Equal("Hel", "loW", "orl", "d");
     }
 

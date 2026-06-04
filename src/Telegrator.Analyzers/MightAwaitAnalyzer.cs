@@ -86,7 +86,7 @@ public class MightAwaitAnalyzer : IIncrementalGenerator
 
     private static MightAwaitDiagnosticModel? Transform(GeneratorSyntaxContext context, CancellationToken cancellationToken)
     {
-        var classSyntax = (ClassDeclarationSyntax)context.Node;
+        ClassDeclarationSyntax classSyntax = (ClassDeclarationSyntax)context.Node;
 
         // Only process valid handlers
         string? foundAttribute = classSyntax.GetHandlerAttributeName();

@@ -27,7 +27,7 @@ public class ResultTests
     [Fact]
     public void Ok_ShouldHaveSuccessTrue_AndRouteNextFalse()
     {
-        var result = Result.Ok();
+        Result result = Result.Ok();
 
         result.Success.Should().BeTrue();
         result.RouteNext.Should().BeFalse();
@@ -37,7 +37,7 @@ public class ResultTests
     [Fact]
     public void Fault_ShouldHaveSuccessFalse_AndRouteNextFalse()
     {
-        var result = Result.Fault();
+        Result result = Result.Fault();
 
         result.Success.Should().BeFalse();
         result.RouteNext.Should().BeFalse();
@@ -47,7 +47,7 @@ public class ResultTests
     [Fact]
     public void Next_ShouldHaveSuccessTrue_AndRouteNextTrue()
     {
-        var result = Result.Next();
+        Result result = Result.Next();
 
         result.Success.Should().BeTrue();
         result.RouteNext.Should().BeTrue();
@@ -57,7 +57,7 @@ public class ResultTests
     [Fact]
     public void NextOfT_ShouldHaveCorrectNextType()
     {
-        var result = Result.Next<ResultTests>();
+        Result result = Result.Next<ResultTests>();
 
         result.Success.Should().BeTrue();
         result.RouteNext.Should().BeTrue();
@@ -67,8 +67,8 @@ public class ResultTests
     [Fact]
     public void Ok_ShouldBeSingleton()
     {
-        var a = Result.Ok();
-        var b = Result.Ok();
+        Result a = Result.Ok();
+        Result b = Result.Ok();
 
         a.Should().Be(b);
     }
@@ -76,8 +76,8 @@ public class ResultTests
     [Fact]
     public void Fault_ShouldBeSingleton()
     {
-        var a = Result.Fault();
-        var b = Result.Fault();
+        Result a = Result.Fault();
+        Result b = Result.Fault();
 
         a.Should().Be(b);
     }
@@ -85,8 +85,8 @@ public class ResultTests
     [Fact]
     public void Next_ShouldBeSingleton()
     {
-        var a = Result.Next();
-        var b = Result.Next();
+        Result a = Result.Next();
+        Result b = Result.Next();
 
         a.Should().Be(b);
     }
@@ -94,8 +94,8 @@ public class ResultTests
     [Fact]
     public void NextOfT_ShouldNotBeEqualTo_Next()
     {
-        var a = Result.Next<ResultTests>();
-        var b = Result.Next();
+        Result a = Result.Next<ResultTests>();
+        Result b = Result.Next();
 
         a.Should().NotBe(b);
     }
@@ -103,8 +103,8 @@ public class ResultTests
     [Fact]
     public void Result_ShouldSupportValueEquality()
     {
-        var a = Result.Ok();
-        var b = Result.Ok();
+        Result a = Result.Ok();
+        Result b = Result.Ok();
 
         (a == b).Should().BeTrue();
         a.GetHashCode().Should().Be(b.GetHashCode());
@@ -113,8 +113,8 @@ public class ResultTests
     [Fact]
     public void Result_ShouldSupportValueInequality()
     {
-        var a = Result.Ok();
-        var b = Result.Fault();
+        Result a = Result.Ok();
+        Result b = Result.Fault();
 
         (a != b).Should().BeTrue();
     }
@@ -122,7 +122,7 @@ public class ResultTests
     [Fact]
     public void Result_ShouldBeImmutable()
     {
-        var result = Result.Ok();
+        Result result = Result.Ok();
 
         // init-only setters prevent mutation after creation
         // This test documents the immutability contract

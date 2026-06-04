@@ -74,7 +74,7 @@ public class HandlersCollectorGenerator : IIncrementalGenerator
 
         string fullTypeName = symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
 
-        var attributesList = new List<string>();
+        List<string> attributesList = new List<string>();
         bool hasMightAwait = false;
         foreach (AttributeData attr in symbol.GetAttributes())
         {
@@ -115,8 +115,8 @@ public class HandlersCollectorGenerator : IIncrementalGenerator
 
     private static List<string> ExtractAwaitedUpdateTypes(ClassDeclarationSyntax classSyntax)
     {
-        var result = new List<string>();
-        var awaitingMethods = new Dictionary<string, string>(StringComparer.Ordinal)
+        List<string> result = new List<string>();
+        Dictionary<string, string> awaitingMethods = new Dictionary<string, string>(StringComparer.Ordinal)
         {
             ["AwaitAny"] = "Unknown",
             ["AwaitMessage"] = "Message",
@@ -147,7 +147,7 @@ public class HandlersCollectorGenerator : IIncrementalGenerator
             ["CancellAllCallbacks"] = "CallbackQuery"
         };
 
-        var parametrizedMethods = new HashSet<string>(StringComparer.Ordinal)
+        HashSet<string> parametrizedMethods = new HashSet<string>(StringComparer.Ordinal)
         {
             "CreateAbstract",
             "CreateDeleting",
