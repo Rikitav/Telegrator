@@ -43,7 +43,7 @@ namespace Telegrator.RoslynGenerators
                 .Where(typeDecl => typeDecl != null)
                 .Collect();
 
-            var combined = typeDeclarations.Combine(context.CompilationProvider);
+            IncrementalValueProvider<(ImmutableArray<BaseTypeDeclarationSyntax> Left, Compilation Right)> combined = typeDeclarations.Combine(context.CompilationProvider);
 
             context.RegisterSourceOutput(combined, (spc, source) =>
             {

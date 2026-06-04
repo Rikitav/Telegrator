@@ -106,7 +106,7 @@ public static class TelegratorLogging
             adaptersSnapshot = _adapters.ToArray();
         }
 
-        foreach (var adapter in adaptersSnapshot)
+        foreach (ITelegratorLogger adapter in adaptersSnapshot)
         {
             try
             {

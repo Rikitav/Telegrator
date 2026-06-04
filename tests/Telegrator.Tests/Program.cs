@@ -104,7 +104,7 @@ internal static class Program
             .WithWeb()
             .Handlers.CollectHandlers();
 
-        var app = builder.Build();
+        WebApplication app = builder.Build();
         app.UseTelegrator();
         app.RemapWebhook("https://amazing-butt-sex.cloudpub.ru/");
         app.Run();

@@ -179,7 +179,7 @@ public static partial class ColletionsExtensions
         if (source is IList<T> list)
             return list.Count == 1 ? list[0] : default;
 
-        using var enumerator = source.GetEnumerator();
+        using IEnumerator<T> enumerator = source.GetEnumerator();
         if (!enumerator.MoveNext())
             return default;
 

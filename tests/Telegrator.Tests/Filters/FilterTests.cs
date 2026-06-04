@@ -47,7 +47,7 @@ public class FilterTests
     public void AnyFilter_ShouldAlwaysPass()
     {
         // Arrange (Given) - РїРѕРґРіРѕС‚РѕРІРєР° С‚РµСЃС‚РѕРІС‹С… РґР°РЅРЅС‹С…
-        var anyFilter = Filter<Update>.Any();
+        AnyFilter<Update> anyFilter = Filter<Update>.Any();
         var context = new FilterExecutionContext<Update>(null, new TelegramBotInfo(null), new Update(), new Update(), new Dictionary<string, object>(), new CompletedFiltersList());
 
         // Act (When) - РІС‹РїРѕР»РЅРµРЅРёРµ С‚РµСЃС‚РёСЂСѓРµРјРѕРіРѕ РґРµР№СЃС‚РІРёСЏ
@@ -66,8 +66,8 @@ public class FilterTests
     public void ReverseFilter_ShouldInvertResult()
     {
         // Arrange
-        var alwaysTrueFilter = Filter<Update>.Any();
-        var reverseFilter = alwaysTrueFilter.Not();
+        AnyFilter<Update> alwaysTrueFilter = Filter<Update>.Any();
+        Filter<Update> reverseFilter = alwaysTrueFilter.Not();
         var context = new FilterExecutionContext<Update>(null, new TelegramBotInfo(null), new Update(), new Update(), new Dictionary<string, object>(), new CompletedFiltersList());
 
         // Act
@@ -92,7 +92,7 @@ public class FilterTests
         // Arrange
         var firstFilter = Filter<Update>.If(_ => firstResult);
         var secondFilter = Filter<Update>.If(_ => secondResult);
-        var andFilter = firstFilter.And(secondFilter);
+        AndFilter<Update> andFilter = firstFilter.And(secondFilter);
         var context = new FilterExecutionContext<Update>(null, new TelegramBotInfo(null), new Update(), new Update(), new Dictionary<string, object>(), new CompletedFiltersList());
 
         // Act
@@ -117,7 +117,7 @@ public class FilterTests
         // Arrange
         var firstFilter = Filter<Update>.If(_ => firstResult);
         var secondFilter = Filter<Update>.If(_ => secondResult);
-        var orFilter = firstFilter.Or(secondFilter);
+        OrFilter<Update> orFilter = firstFilter.Or(secondFilter);
         var context = new FilterExecutionContext<Update>(null, new TelegramBotInfo(null), new Update(), new Update(), new Dictionary<string, object>(), new CompletedFiltersList());
 
         // Act
@@ -160,7 +160,7 @@ public class FilterTests
     public void Filter_IsCollectible_ShouldBeTrueForAnyFilter()
     {
         // Arrange
-        var anyFilter = Filter<Update>.Any();
+        AnyFilter<Update> anyFilter = Filter<Update>.Any();
 
         // Act
         var isCollectible = anyFilter.IsCollectible;

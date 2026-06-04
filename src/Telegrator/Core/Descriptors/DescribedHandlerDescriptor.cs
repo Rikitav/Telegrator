@@ -131,7 +131,7 @@ public class DescribedHandlerDescriptor
     /// <param name="cancellationToken">The cancellation token.</param>
     public async Task AwaitResult(CancellationToken cancellationToken)
     {
-        using var registration = cancellationToken.Register(() => _tcs.TrySetCanceled(cancellationToken), useSynchronizationContext: false);
+        using CancellationTokenRegistration registration = cancellationToken.Register(() => _tcs.TrySetCanceled(cancellationToken), useSynchronizationContext: false);
         await _tcs.Task.ConfigureAwait(false);
     }
 

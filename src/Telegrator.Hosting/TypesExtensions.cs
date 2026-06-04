@@ -147,7 +147,7 @@ public static class HostBuilderExtensions
             List<UpdateType> updatesList = [];
             foreach (IConfigurationSection child in allowedUpdatesSection.GetChildren())
             {
-                if (Enum.TryParse<UpdateType>(child.Value, ignoreCase: true, out var updateType))
+                if (Enum.TryParse<UpdateType>(child.Value, ignoreCase: true, out UpdateType updateType))
                     updatesList.Add(updateType);
             }
 

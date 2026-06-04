@@ -56,7 +56,7 @@ public class ConsoleLogger : ITelegratorLogger
         }
 
         // Write to console with appropriate color
-        var originalColor = Console.ForegroundColor;
+        ConsoleColor originalColor = Console.ForegroundColor;
         try
         {
             Console.ForegroundColor = level switch

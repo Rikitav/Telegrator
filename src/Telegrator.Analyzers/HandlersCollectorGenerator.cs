@@ -38,7 +38,7 @@ public class HandlersCollectorGenerator : IIncrementalGenerator
             .Where(handler => handler != null && handler.IsValid)
             .Collect();
 
-        var compilationAndHandlers = context.CompilationProvider.Combine(pipeline);
+        IncrementalValueProvider<(Compilation Left, ImmutableArray<HandlerRegistrationModel> Right)> compilationAndHandlers = context.CompilationProvider.Combine(pipeline);
         context.RegisterSourceOutput(compilationAndHandlers, (spc, source) => Execute(spc, source.Left, source.Right));
     }
 
@@ -76,7 +76,7 @@ public class HandlersCollectorGenerator : IIncrementalGenerator
 
         var attributesList = new List<string>();
         bool hasMightAwait = false;
-        foreach (var attr in symbol.GetAttributes())
+        foreach (AttributeData attr in symbol.GetAttributes())
         {
             if (attr.AttributeClass == null)
                 continue;
@@ -89,8 +89,8 @@ public class HandlersCollectorGenerator : IIncrementalGenerator
             if (attr.AttributeClass.Name is "MightAwaitAttribute" or "MightAwait")
                 hasMightAwait = true;
 
-            var ctorArgs = attr.ConstructorArguments.IsDefault ? Enumerable.Empty<TypedConstant>() : attr.ConstructorArguments;
-            var namedArgs = attr.NamedArguments.IsDefault ? Enumerable.Empty<KeyValuePair<string, TypedConstant>>() : attr.NamedArguments;
+            IEnumerable<TypedConstant> ctorArgs = attr.ConstructorArguments.IsDefault ? Enumerable.Empty<TypedConstant>() : attr.ConstructorArguments;
+            IEnumerable<KeyValuePair<string, TypedConstant>> namedArgs = attr.NamedArguments.IsDefault ? Enumerable.Empty<KeyValuePair<string, TypedConstant>>() : attr.NamedArguments;
 
             string args = string.Join(", ", ctorArgs.Select(FormatTypedConstant));
             string named = string.Join(", ", namedArgs.Select(n => $"{n.Key} = {FormatTypedConstant(n.Value)}"));
@@ -102,7 +102,7 @@ public class HandlersCollectorGenerator : IIncrementalGenerator
         // Auto-inject MightAwait if awaiting calls are present but attribute is missing
         if (!hasMightAwait)
         {
-            var awaitedTypes = ExtractAwaitedUpdateTypes(classSyntax);
+            List<string> awaitedTypes = ExtractAwaitedUpdateTypes(classSyntax);
             if (awaitedTypes.Count > 0)
             {
                 string mightAwaitArgs = string.Join(", ", awaitedTypes.Select(t => $"global::Telegram.Bot.Types.Enums.UpdateType.{t}"));
@@ -154,7 +154,7 @@ public class HandlersCollectorGenerator : IIncrementalGenerator
             "AwaitUpdate"
         };
 
-        foreach (var node in classSyntax.DescendantNodes())
+        foreach (SyntaxNode node in classSyntax.DescendantNodes())
         {
             if (node is not InvocationExpressionSyntax invocation)
                 continue;
@@ -182,7 +182,7 @@ public class HandlersCollectorGenerator : IIncrementalGenerator
 
             if (parametrizedMethods.Contains(methodName) && invocation.ArgumentList.Arguments.Count > 0)
             {
-                var firstArg = invocation.ArgumentList.Arguments[0].Expression;
+                ExpressionSyntax firstArg = invocation.ArgumentList.Arguments[0].Expression;
                 string? resolved = firstArg switch
                 {
                     MemberAccessExpressionSyntax memberAccess when
@@ -209,7 +209,7 @@ public class HandlersCollectorGenerator : IIncrementalGenerator
             if (arg.Values.IsDefault)
                 return "null";
 
-            var values = arg.Values.Select(FormatTypedConstant);
+            IEnumerable<string> values = arg.Values.Select(FormatTypedConstant);
             string typeName = arg.Type is IArrayTypeSymbol arrayType
                 ? arrayType.ElementType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)
                 : "object";

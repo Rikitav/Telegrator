@@ -20,6 +20,7 @@
 using FluentAssertions;
 using Telegram.Bot.Types.Enums;
 using Telegrator.Core.Descriptors;
+using Telegrator.Core.Handlers;
 using Telegrator.Providers;
 using Xunit;
 
@@ -55,7 +56,7 @@ public class HandlersProviderTests
 
         var provider = new HandlersProvider(collection, new TelegratorOptions());
 
-        bool found = provider.TryGetDescriptorList(UpdateType.Message, out var list);
+        bool found = provider.TryGetDescriptorList(UpdateType.Message, out HandlerDescriptorList? list);
         found.Should().BeTrue();
         list.Should().NotBeNull();
         list!.Count.Should().Be(1);
@@ -67,7 +68,7 @@ public class HandlersProviderTests
         var collection = new HandlersCollection(new TelegratorOptions());
         var provider = new HandlersProvider(collection, new TelegratorOptions());
 
-        bool found = provider.TryGetDescriptorList(UpdateType.CallbackQuery, out var list);
+        bool found = provider.TryGetDescriptorList(UpdateType.CallbackQuery, out HandlerDescriptorList? list);
         found.Should().BeFalse();
         list.Should().BeNull();
     }
@@ -80,7 +81,7 @@ public class HandlersProviderTests
         collection.AddDescriptor(descriptor);
 
         var provider = new HandlersProvider(collection, new TelegratorOptions());
-        var instance = provider.GetHandlerInstance(descriptor);
+        UpdateHandlerBase instance = provider.GetHandlerInstance(descriptor);
 
         instance.Should().NotBeNull();
         instance.Should().BeOfType<TestUpdateHandler>();
@@ -96,8 +97,8 @@ public class HandlersProviderTests
         collection.AddDescriptor(descriptor);
 
         var provider = new HandlersProvider(collection, new TelegratorOptions());
-        var instance1 = provider.GetHandlerInstance(descriptor);
-        var instance2 = provider.GetHandlerInstance(descriptor);
+        UpdateHandlerBase instance1 = provider.GetHandlerInstance(descriptor);
+        UpdateHandlerBase instance2 = provider.GetHandlerInstance(descriptor);
 
         instance1.Should().BeSameAs(handler);
         instance2.Should().BeSameAs(handler);
@@ -110,10 +111,10 @@ public class HandlersProviderTests
         collection.AddHandler<TestUpdateHandler>();
 
         var provider = new HandlersProvider(collection, new TelegratorOptions());
-        var descriptor = provider.TryGetDescriptorList(UpdateType.Message, out var list) ? list![0] : null;
+        HandlerDescriptor? descriptor = provider.TryGetDescriptorList(UpdateType.Message, out HandlerDescriptorList? list) ? list![0] : null;
 
         descriptor.Should().NotBeNull();
-        var instance = provider.GetHandlerInstance(descriptor!);
+        UpdateHandlerBase instance = provider.GetHandlerInstance(descriptor!);
 
         instance.Should().NotBeNull();
         instance.Should().BeOfType<TestUpdateHandler>();

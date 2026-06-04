@@ -37,11 +37,11 @@ public class DescriptorFiltersSetTests
     public void Validate_ShouldReturnOk_WhenNoFilters()
     {
         var filtersSet = new DescriptorFiltersSet(null, null, null);
-        var context = CreateContext();
+        FilterExecutionContext<Update> context = CreateContext();
         var descriptor = new ClassHandlerDescriptor(DescriptorType.General, typeof(TestUpdateHandler));
         var report = new FiltersFallbackReport(descriptor, context);
 
-        var result = filtersSet.Validate(context, false, ref report);
+        Result result = filtersSet.Validate(context, false, ref report);
 
         result.Success.Should().BeTrue();
     }
@@ -51,11 +51,11 @@ public class DescriptorFiltersSetTests
     {
         var filter = Filter<Update>.If(_ => true);
         var filtersSet = new DescriptorFiltersSet(null, null, [filter]);
-        var context = CreateContext();
+        FilterExecutionContext<Update> context = CreateContext();
         var descriptor = new ClassHandlerDescriptor(DescriptorType.General, typeof(TestUpdateHandler));
         var report = new FiltersFallbackReport(descriptor, context);
 
-        var result = filtersSet.Validate(context, false, ref report);
+        Result result = filtersSet.Validate(context, false, ref report);
 
         result.Success.Should().BeTrue();
     }
@@ -65,11 +65,11 @@ public class DescriptorFiltersSetTests
     {
         var filter = Filter<Update>.If(_ => false);
         var filtersSet = new DescriptorFiltersSet(null, null, [filter]);
-        var context = CreateContext();
+        FilterExecutionContext<Update> context = CreateContext();
         var descriptor = new ClassHandlerDescriptor(DescriptorType.General, typeof(TestUpdateHandler));
         var report = new FiltersFallbackReport(descriptor, context);
 
-        var result = filtersSet.Validate(context, false, ref report);
+        Result result = filtersSet.Validate(context, false, ref report);
 
         result.Success.Should().BeFalse();
     }
@@ -85,10 +85,10 @@ public class DescriptorFiltersSetTests
             null,
             [filter.Object]);
 
-        var context = CreateContext();
+        FilterExecutionContext<Update> context = CreateContext();
         var descriptor = new ClassHandlerDescriptor(DescriptorType.General, typeof(TestUpdateHandler));
         var report = new FiltersFallbackReport(descriptor, context);
-        var result = filtersSet.Validate(context, true, ref report);
+        Result result = filtersSet.Validate(context, true, ref report);
 
         result.Success.Should().BeTrue();
     }
@@ -98,9 +98,9 @@ public class DescriptorFiltersSetTests
     {
         var aspectsSet = new DescriptorAspectsSet(null, null);
         var handler = new TestUpdateHandler();
-        var container = new Mock<IHandlerContainer>().Object;
+        IHandlerContainer container = new Mock<IHandlerContainer>().Object;
 
-        var result = await aspectsSet.ExecutePre(handler, container, CancellationToken.None);
+        Result result = await aspectsSet.ExecutePre(handler, container, CancellationToken.None);
 
         result.Success.Should().BeTrue();
     }
@@ -110,9 +110,9 @@ public class DescriptorFiltersSetTests
     {
         var aspectsSet = new DescriptorAspectsSet(null, null);
         var handler = new TestUpdateHandler();
-        var container = new Mock<IHandlerContainer>().Object;
+        IHandlerContainer container = new Mock<IHandlerContainer>().Object;
 
-        var result = await aspectsSet.ExecutePost(handler, container, CancellationToken.None);
+        Result result = await aspectsSet.ExecutePost(handler, container, CancellationToken.None);
 
         result.Success.Should().BeTrue();
     }

@@ -249,7 +249,7 @@ public class UpdateRouter : IUpdateRouter
         foreach (HandlerDescriptor descriptor in descriptors.Reverse())
         {
             cancellationToken.ThrowIfCancellationRequested();
-            var (describedHandler, breakRouting) = await DescribeHandler(provider, descriptor, client, update, cancellationToken).ConfigureAwait(false);
+            (DescribedHandlerDescriptor? describedHandler, bool breakRouting) = await DescribeHandler(provider, descriptor, client, update, cancellationToken).ConfigureAwait(false);
             if (breakRouting)
                 yield break;
 

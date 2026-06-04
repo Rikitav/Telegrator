@@ -50,7 +50,7 @@ public class EnumStateMachine<TEnum> : IStateMachine<TEnum> where TEnum : struct
         int currentIndex = Array.IndexOf(_states, currentState);
         if (currentIndex < _states.Length - 1)
         {
-            var nextState = _states[currentIndex + 1];
+            TEnum nextState = _states[currentIndex + 1];
             await storage.SetAsync(key, nextState, cancellationToken);
         }
     }
@@ -64,7 +64,7 @@ public class EnumStateMachine<TEnum> : IStateMachine<TEnum> where TEnum : struct
         int currentIndex = Array.IndexOf(_states, currentState);
         if (currentIndex > 0)
         {
-            var nextState = _states[currentIndex - 1];
+            TEnum nextState = _states[currentIndex - 1];
             await storage.SetAsync(key, nextState, cancellationToken);
         }
     }

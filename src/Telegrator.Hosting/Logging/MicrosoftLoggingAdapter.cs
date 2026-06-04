@@ -39,7 +39,7 @@ public class MicrosoftLoggingAdapter : ITelegratorLogger
     /// <inheritdoc/>
     public void Log(LogLevel level, string message, Exception? exception = null)
     {
-        var msLogLevel = level switch
+        Microsoft.Extensions.Logging.LogLevel msLogLevel = level switch
         {
             LogLevel.Trace => Microsoft.Extensions.Logging.LogLevel.Trace,
             LogLevel.Debug => Microsoft.Extensions.Logging.LogLevel.Debug,

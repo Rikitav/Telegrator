@@ -189,7 +189,7 @@ public class TelegratorClientIntegrationTests
             Asked = true;
             await Reply("What is your name?", cancellationToken: cancellation);
 
-            var nextMessage = await AwaitingProvider.AwaitMessage(HandlingUpdate).BySenderId(cancellation);
+            Message? nextMessage = await AwaitingProvider.AwaitMessage(HandlingUpdate).BySenderId(cancellation);
             if (nextMessage == null)
                 return Ok; // timeout or cancellation
 

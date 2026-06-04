@@ -89,7 +89,7 @@ public class HostingUsageAnalyzer : DiagnosticAnalyzer
             {
                 var invocation = (IInvocationOperation)operationContext.Operation;
                 var methodName = invocation.TargetMethod.Name;
-                var methodSymbol = operationContext.ContainingSymbol;
+                ISymbol methodSymbol = operationContext.ContainingSymbol;
 
                 CallKind? kind = methodName switch
                 {
@@ -128,9 +128,9 @@ public class HostingUsageAnalyzer : DiagnosticAnalyzer
                 if (globalAdd && !globalWithPolling && !globalWithWeb && !globalWithWide)
                     ReportMissing(endContext, allInvocations, CallKind.Add, MissingReceivingModeWarning);
 
-                var methodGroups = allInvocations.GroupBy(x => x.Method, SymbolEqualityComparer.Default);
+                IEnumerable<IGrouping<ISymbol, (ISymbol Method, Location Loc, CallKind Kind)>> methodGroups = allInvocations.GroupBy(x => x.Method, SymbolEqualityComparer.Default);
 
-                foreach (var group in methodGroups)
+                foreach (IGrouping<ISymbol, (ISymbol Method, Location Loc, CallKind Kind)>? group in methodGroups)
                 {
                     var localKinds = group.Select(x => x.Kind).ToImmutableHashSet();
 
@@ -153,7 +153,7 @@ public class HostingUsageAnalyzer : DiagnosticAnalyzer
 
     private static void ReportMissing(CompilationAnalysisContext context, System.Collections.Generic.IEnumerable<(ISymbol Method, Location Loc, CallKind Kind)> invocations, CallKind targetKind, DiagnosticDescriptor descriptor)
     {
-        foreach (var (Method, Loc, Kind) in invocations.Where(x => x.Kind == targetKind))
+        foreach ((ISymbol? Method, Location? Loc, CallKind Kind) in invocations.Where(x => x.Kind == targetKind))
         {
             context.ReportDiagnostic(Diagnostic.Create(descriptor, Loc));
         }
@@ -161,7 +161,7 @@ public class HostingUsageAnalyzer : DiagnosticAnalyzer
 
     private static void ReportMismatch(CompilationAnalysisContext context, IGrouping<ISymbol?, (ISymbol Method, Location Loc, CallKind Kind)> group, CallKind kind1, CallKind kind2, string name1, string name2)
     {
-        foreach (var (Method, Loc, Kind) in group.Where(x => x.Kind == kind1 || x.Kind == kind2))
+        foreach ((ISymbol? Method, Location? Loc, CallKind Kind) in group.Where(x => x.Kind == kind1 || x.Kind == kind2))
         {
             context.ReportDiagnostic(Diagnostic.Create(MismatchedReceivingModesWarning, Loc, name1, name2));
         }

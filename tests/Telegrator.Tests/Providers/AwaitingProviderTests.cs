@@ -32,7 +32,7 @@ public class AwaitingProviderTests
     {
         var provider = new AwaitingProvider(new TelegratorOptions());
 
-        bool found = provider.TryGetDescriptorList(UpdateType.Message, out var list);
+        bool found = provider.TryGetDescriptorList(UpdateType.Message, out HandlerDescriptorList? list);
 
         found.Should().BeFalse();
         list.Should().BeNull();
@@ -42,12 +42,12 @@ public class AwaitingProviderTests
     public void TryGetDescriptorList_ShouldReturnTrue_WhenHandlerRegistered()
     {
         var provider = new AwaitingProvider(new TelegratorOptions());
-        var handler = CreateTestHandlerDescriptor();
+        ClassHandlerDescriptor handler = CreateTestHandlerDescriptor();
 
         using (provider.UseHandler(handler))
         {
             // AwaitingProvider is designed to register handlers dynamically and does not ties to a specific update type, so we can check for `UpdateType.Unknown` here.
-            bool found = provider.TryGetDescriptorList(UpdateType.Unknown, out var list);
+            bool found = provider.TryGetDescriptorList(UpdateType.Unknown, out HandlerDescriptorList? list);
             found.Should().BeTrue();
             list.Should().NotBeNull();
             list!.Count.Should().Be(1);
@@ -58,12 +58,12 @@ public class AwaitingProviderTests
     public void UseHandler_ShouldAutoRemoveOnDispose()
     {
         var provider = new AwaitingProvider(new TelegratorOptions());
-        var handler = CreateTestHandlerDescriptor();
+        ClassHandlerDescriptor handler = CreateTestHandlerDescriptor();
 
         using (provider.UseHandler(handler))
         { }
 
-        bool found = provider.TryGetDescriptorList(UpdateType.Message, out var list);
+        bool found = provider.TryGetDescriptorList(UpdateType.Message, out HandlerDescriptorList? list);
         found.Should().BeFalse();
         list.Should().BeNull();
     }

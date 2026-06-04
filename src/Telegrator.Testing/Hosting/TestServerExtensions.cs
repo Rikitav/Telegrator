@@ -72,7 +72,7 @@ public static class TestServerExtensions
             x.ImplementationType != null &&
             x.ImplementationType.Name.Contains("HostedUpdate")).ToList();
 
-        foreach (var descriptor in receiverDescriptors)
+        foreach (ServiceDescriptor? descriptor in receiverDescriptors)
             builder.Services.Remove(descriptor);
 
         return builder;

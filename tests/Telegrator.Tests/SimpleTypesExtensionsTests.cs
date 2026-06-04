@@ -18,6 +18,7 @@
  */
 
 using FluentAssertions;
+using System.Collections.ObjectModel;
 using System.Reflection;
 using Telegrator.Core.Filters;
 using Telegrator.Core.Handlers.Building;
@@ -34,7 +35,7 @@ public class SimpleTypesExtensionsTests
     public void ToReadOnlyDictionary_ShouldCreateDictionary()
     {
         var items = new[] { "a", "bb", "ccc" };
-        var dict = items.ToReadOnlyDictionary(x => x.Length);
+        ReadOnlyDictionary<int, string> dict = items.ToReadOnlyDictionary(x => x.Length);
 
         dict.Should().ContainKey(1).WhoseValue.Should().Be("a");
         dict.Should().ContainKey(2).WhoseValue.Should().Be("bb");
@@ -265,7 +266,7 @@ public class SimpleTypesExtensionsTests
     [Fact]
     public void HasFlag_Generic_ShouldWorkWithEnum()
     {
-        var value = BindingFlags.Public | BindingFlags.Instance;
+        BindingFlags value = BindingFlags.Public | BindingFlags.Instance;
         value.HasFlag(BindingFlags.Public).Should().BeTrue();
         value.HasFlag(BindingFlags.Static).Should().BeFalse();
     }

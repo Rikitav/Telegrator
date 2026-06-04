@@ -74,7 +74,7 @@ public class MightAwaitAnalyzer : IIncrementalGenerator
 
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        var pipeline = context.SyntaxProvider
+        IncrementalValueProvider<ImmutableArray<MightAwaitDiagnosticModel?>> pipeline = context.SyntaxProvider
             .CreateSyntaxProvider(
                 static (node, _) => node is ClassDeclarationSyntax,
                 Transform)
@@ -98,7 +98,7 @@ public class MightAwaitAnalyzer : IIncrementalGenerator
 
         // Search for awaiting calls inside the class
         List<(string MethodName, string UpdateType)> awaitingCalls = [];
-        foreach (var node in classSyntax.DescendantNodes())
+        foreach (SyntaxNode node in classSyntax.DescendantNodes())
         {
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -133,7 +133,7 @@ public class MightAwaitAnalyzer : IIncrementalGenerator
         if (hasMightAwait)
             return null;
 
-        var symbol = context.SemanticModel.GetDeclaredSymbol(classSyntax, cancellationToken);
+        ISymbol? symbol = context.SemanticModel.GetDeclaredSymbol(classSyntax, cancellationToken);
         string className = symbol?.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)
             ?? classSyntax.Identifier.Text;
 
@@ -160,7 +160,7 @@ public class MightAwaitAnalyzer : IIncrementalGenerator
         if (invocation.ArgumentList.Arguments.Count == 0)
             return null;
 
-        var firstArg = invocation.ArgumentList.Arguments[0].Expression;
+        ExpressionSyntax firstArg = invocation.ArgumentList.Arguments[0].Expression;
 
         // Handles UpdateType.Message
         if (firstArg is MemberAccessExpressionSyntax memberAccess &&
@@ -223,14 +223,14 @@ public class MightAwaitAnalyzer : IIncrementalGenerator
         if (handlers.IsDefaultOrEmpty)
             return;
 
-        foreach (var handler in handlers)
+        foreach (MightAwaitDiagnosticModel? handler in handlers)
         {
             if (handler == null)
                 continue;
 
             context.CancellationToken.ThrowIfCancellationRequested();
 
-            var firstCall = handler.AwaitingCalls[0];
+            (string MethodName, string UpdateType) firstCall = handler.AwaitingCalls[0];
             context.ReportDiagnostic(Diagnostic.Create(
                 MissingMightAwaitWarning,
                 handler.Location,
@@ -260,7 +260,7 @@ internal sealed record MightAwaitDiagnosticModel(string ClassName, ImmutableArra
         {
             int hash = 17;
             hash = hash * 23 + ClassName.GetHashCode();
-            foreach (var call in AwaitingCalls)
+            foreach ((string MethodName, string UpdateType) call in AwaitingCalls)
             {
                 hash = hash * 23 + call.GetHashCode();
             }

@@ -62,7 +62,7 @@ public class CollectionTests
     {
         // Arrange
         var list = new HandlerDescriptorList();
-        var descriptor = CreateTestDescriptor();
+        ClassHandlerDescriptor descriptor = CreateTestDescriptor();
 
         // Act
         list.Add(descriptor);
@@ -82,9 +82,9 @@ public class CollectionTests
     {
         // Arrange
         var list = new HandlerDescriptorList();
-        var descriptor1 = CreateTestDescriptor();
-        var descriptor2 = CreateTestDescriptor();
-        var descriptor3 = CreateTestDescriptor();
+        ClassHandlerDescriptor descriptor1 = CreateTestDescriptor();
+        ClassHandlerDescriptor descriptor2 = CreateTestDescriptor();
+        ClassHandlerDescriptor descriptor3 = CreateTestDescriptor();
 
         // Act
         list.Add(descriptor1);
@@ -107,14 +107,14 @@ public class CollectionTests
     public void HandlerDescriptorList_Indexer_ShouldReturnDescriptorAtIndex()
     {
         // Arrange
-        var descriptor = CreateTestDescriptor();
+        ClassHandlerDescriptor descriptor = CreateTestDescriptor();
         var list = new HandlerDescriptorList
         {
             descriptor
         };
 
         // Act
-        var result = list[0];
+        HandlerDescriptor result = list[0];
 
         // Assert
         result.Should().Be(descriptor);
@@ -151,8 +151,8 @@ public class CollectionTests
     public void HandlerDescriptorList_ShouldBeEnumerable()
     {
         // Arrange
-        var descriptor1 = CreateTestDescriptor();
-        var descriptor2 = CreateTestDescriptor();
+        ClassHandlerDescriptor descriptor1 = CreateTestDescriptor();
+        ClassHandlerDescriptor descriptor2 = CreateTestDescriptor();
         var list = new HandlerDescriptorList
         {
             descriptor1,
@@ -201,8 +201,8 @@ public class CollectionTests
     {
         // Arrange
         var list = new HandlerDescriptorList();
-        var descriptor = CreateTestDescriptor();
-        var nonExistentDescriptor = CreateTestDescriptor();
+        ClassHandlerDescriptor descriptor = CreateTestDescriptor();
+        ClassHandlerDescriptor nonExistentDescriptor = CreateTestDescriptor();
 
         // Act
         list.Add(descriptor);
@@ -224,7 +224,7 @@ public class CollectionTests
     {
         // Arrange
         var list = new HandlerDescriptorList();
-        var descriptor = CreateTestDescriptor();
+        ClassHandlerDescriptor descriptor = CreateTestDescriptor();
         list.Add(descriptor);
 
         // Act
@@ -246,7 +246,7 @@ public class CollectionTests
     {
         // Arrange
         var list = new HandlerDescriptorList();
-        var nonExistentDescriptor = CreateTestDescriptor();
+        ClassHandlerDescriptor nonExistentDescriptor = CreateTestDescriptor();
 
         // Act
         var removed = list.Remove(nonExistentDescriptor);
