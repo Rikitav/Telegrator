@@ -100,15 +100,17 @@ public class DeveloperHelperAnalyzer : IIncrementalGenerator
         {
             context.CancellationToken.ThrowIfCancellationRequested();
 
+            string? normalizedBaseClass = handler.BaseClassName?.NormalizeBranchingName();
+
             if (handler.AttributeName != null && handler.BaseClassName == null)
             {
                 context.ReportDiagnostic(Diagnostic.Create(MissingBaseClassWarning, handler.Location, handler.ClassName, handler.AttributeName));
             }
             else if (handler.AttributeName == null && handler.BaseClassName != null)
             {
-                context.ReportDiagnostic(Diagnostic.Create(MissingAttributeWarning, handler.Location, handler.ClassName, handler.BaseClassName));
+                context.ReportDiagnostic(Diagnostic.Create(MissingAttributeWarning, handler.Location, handler.ClassName, normalizedBaseClass ?? handler.BaseClassName));
             }
-            else if (handler.AttributeName != null && handler.BaseClassName != null && handler.AttributeName != handler.BaseClassName)
+            else if (handler.AttributeName != null && handler.BaseClassName != null && handler.AttributeName != normalizedBaseClass)
             {
                 context.ReportDiagnostic(Diagnostic.Create(MismatchedHandlerWarning, handler.Location, handler.ClassName, handler.AttributeName, handler.BaseClassName));
             }
@@ -120,6 +122,7 @@ internal static class DeveloperHelperAnalyzerExtensions
 {
     private static readonly string[] HandlersNames =
     [
+        // Regular handlers
         "AnyUpdateHandler",
         "CallbackQueryHandler",
         "CommandHandler",
@@ -147,7 +150,36 @@ internal static class DeveloperHelperAnalyzerExtensions
         "TextMessageHandler",
         "PhotoMessageHandler",
         "DocumentMessageHandler",
-        "CallbackDataHandler"
+        "CallbackDataHandler",
+        // Branching handlers
+        "BranchingAnyUpdateHandler",
+        "BranchingCallbackQueryHandler",
+        "BranchingCommandHandler",
+        "BranchingInlineQueryHandler",
+        "BranchingMessageHandler",
+        "BranchingEditedMessageHandler",
+        "BranchingChannelPostHandler",
+        "BranchingEditedChannelPostHandler",
+        "BranchingBusinessMessageHandler",
+        "BranchingEditedBusinessMessageHandler",
+        "BranchingBusinessConnectionHandler",
+        "BranchingDeletedBusinessMessagesHandler",
+        "BranchingMessageReactionHandler",
+        "BranchingMessageReactionCountHandler",
+        "BranchingShippingQueryHandler",
+        "BranchingPreCheckoutQueryHandler",
+        "BranchingPurchasedPaidMediaHandler",
+        "BranchingPollHandler",
+        "BranchingPollAnswerHandler",
+        "BranchingMyChatMemberHandler",
+        "BranchingChatMemberHandler",
+        "BranchingChatJoinRequestHandler",
+        "BranchingChatBoostHandler",
+        "BranchingRemovedChatBoostHandler",
+        "BranchingTextMessageHandler",
+        "BranchingPhotoMessageHandler",
+        "BranchingDocumentMessageHandler",
+        "BranchingCallbackDataHandler"
     ];
 
     // Ищет атрибут и возвращает его нормализованное имя (без суффикса Attribute)
@@ -170,6 +202,21 @@ internal static class DeveloperHelperAnalyzerExtensions
         return classSyntax.BaseList.Types
             .Select(t => t.Type.ToString())
             .FirstOrDefault(name => HandlersNames.Contains(name));
+    }
+
+    /// <summary>
+    /// Normalizes a branching handler base class name to its regular counterpart.
+    /// e.g. "BranchingMessageHandler" → "MessageHandler"
+    /// </summary>
+    public static string? NormalizeBranchingName(this string? baseClassName)
+    {
+        if (baseClassName == null)
+            return null;
+
+        if (baseClassName.StartsWith("Branching"))
+            return baseClassName.Substring("Branching".Length);
+
+        return baseClassName;
     }
 
     // Достает namespace, в котором объявлен класс

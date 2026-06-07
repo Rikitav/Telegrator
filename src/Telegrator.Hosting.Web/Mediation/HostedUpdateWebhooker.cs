@@ -65,7 +65,7 @@ public class HostedUpdateWebhooker : IHostedService
     /// <inheritdoc/>
     public async Task StartAsync(CancellationToken cancellationToken)
     {
-        await StartInternal(cancellationToken).ConfigureAwait(false);
+        _ = StartInternal(cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc/>
@@ -87,7 +87,7 @@ public class HostedUpdateWebhooker : IHostedService
         if (!Uri.TryCreate(webhookUri, UriKind.Absolute, out Uri? result))
             throw new ArgumentException("invalid URL");
 
-        _options.WebhookUri = result.ToString();
+        //_options.WebhookUri = result.ToString();
         await SetWebhook(cancellationToken);
         MapWebhook(routeBuilder);
     }
@@ -109,6 +109,9 @@ public class HostedUpdateWebhooker : IHostedService
     {
         _logger.LogInformation("Hosted update receiver starting");
         _logger.LogInformation("Receiving mode : WEB-HOOKING");
+        _logger.LogInformation("Webhook URL : {WebhookUrl}", _options.WebhookUri);
+        //_logger.LogInformation($"Webhhok status : https://api.telegram.org/bot{}/getWebhookInfo");
+
         await SetWebhook(cancellationToken).ConfigureAwait(false);
     }
 

@@ -94,8 +94,17 @@ public abstract class BranchingUpdateHandler<TUpdate> : AbstractUpdateHandler<TU
     {
         Type thisType = GetType();
 
-        if (branch.GetParameters().Length != 0)
-            throw new Exception("Branch method must have no parameters.");
+        ParameterInfo[] parameters = branch.GetParameters();
+        if (parameters.Length != 0 && parameters.Length != 2)
+            throw new Exception("Branch method must have either 0 or 2 parameters (IHandlerContainer<TUpdate>, CancellationToken).");
+
+        if (parameters.Length == 2)
+        {
+            if (!typeof(IHandlerContainer<TUpdate>).IsAssignableFrom(parameters[0].ParameterType))
+                throw new Exception("First branch method parameter must be IHandlerContainer<TUpdate>.");
+            if (parameters[1].ParameterType != typeof(CancellationToken))
+                throw new Exception("Second branch method parameter must be CancellationToken.");
+        }
 
         if (!AllowedBranchReturnTypes.Any(branch.ReturnType.Equals))
             throw new Exception("Branch method must have one of allowed return types. [void, Task<Result>]");
@@ -143,7 +152,7 @@ public abstract class BranchingUpdateHandler<TUpdate> : AbstractUpdateHandler<TU
             throw new InvalidOperationException($"No suitable branch method found for update.");
 
         Cancellation = cancellation;
-        return await BranchExecuteWrapper(container, branchMethodInfo);
+        return await BranchExecuteWrapper(container, branchMethodInfo, cancellation);
     }
 
     /// <summary>
@@ -151,16 +160,27 @@ public abstract class BranchingUpdateHandler<TUpdate> : AbstractUpdateHandler<TU
     /// </summary>
     /// <param name="container">The handler container.</param>
     /// <param name="methodInfo">The method to execute.</param>
-    protected virtual async Task<Result> BranchExecuteWrapper(IHandlerContainer<TUpdate> container, MethodInfo methodInfo)
+    protected virtual async Task<Result> BranchExecuteWrapper(IHandlerContainer<TUpdate> container, MethodInfo methodInfo, CancellationToken cancellation)
     {
+        object?[]? args = null;
+        ParameterInfo[] parameters = methodInfo.GetParameters();
+        if (parameters.Length == 2)
+        {
+            args = [container, cancellation];
+        }
+        else if (parameters.Length != 0)
+        {
+            throw new InvalidOperationException($"Branch method {methodInfo.Name} must have either 0 or 2 parameters (IHandlerContainer<TUpdate>, CancellationToken).");
+        }
+
         if (methodInfo.ReturnType == typeof(void))
         {
-            methodInfo.Invoke(this, []);
+            methodInfo.Invoke(this, args);
             return Result.Ok();
         }
         else
         {
-            object branchReturn = methodInfo.Invoke(this, []);
+            object branchReturn = methodInfo.Invoke(this, args);
             if (branchReturn is not Task<Result> branchTask)
                 throw new InvalidOperationException($"Branch method {methodInfo.Name} is expected to return Task<Result>.");
 

@@ -320,7 +320,7 @@ public static class TelegramBotHostExtensions
         ITelegramBotInfo info = botHost.Services.GetRequiredService<ITelegramBotInfo>();
         IHandlersCollection handlers = botHost.Services.GetRequiredService<IHandlersCollection>();
         ILoggerFactory loggerFactory = botHost.Services.GetRequiredService<ILoggerFactory>();
-        ILogger logger = loggerFactory.CreateLogger("Telegrator.Hosting.Web.TelegratorHost");
+        ILogger logger = loggerFactory.CreateLogger("TelegratorHost");
 
         if (logger.IsEnabled(Microsoft.Extensions.Logging.LogLevel.Information))
             logger.LogInformation("Initializing Telegrator Bot Host...");

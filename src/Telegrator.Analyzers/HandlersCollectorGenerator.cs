@@ -63,7 +63,7 @@ public class HandlersCollectorGenerator : IIncrementalGenerator
         string? foundAttribute = classSyntax.GetHandlerAttributeName();
         string? foundBaseClass = classSyntax.GetHandlerBaseClassName();
 
-        bool isValid = foundAttribute != null && foundBaseClass != null && foundAttribute == foundBaseClass;
+        bool isValid = foundAttribute != null && foundBaseClass != null && foundAttribute == foundBaseClass.NormalizeBranchingName();
 
         if (!isValid)
             return null!;

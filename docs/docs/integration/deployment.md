@@ -42,10 +42,10 @@ using Telegrator.Hosting;
 var builder = WebApplication.CreateBuilder(args);
 
 // 1. Add Telegrator with standard setup
-builder.AddTelegrator(action: b => {
-    b.Handlers.CollectHandlers(); 
-})
-.WithPolling(); // Use polling for this example
+builder.ConfigureTelegrator(action: b => {
+    b.Handlers.CollectHandlers();
+    b.WithPolling(); // Use polling for this example 
+});
 
 var app = builder.Build();
 
@@ -76,11 +76,11 @@ using Telegrator.Hosting.Web;
 var builder = WebApplication.CreateBuilder(args);
 
 // 1. Add Telegrator with Web integration
-builder.AddTelegrator(action: b => {
+builder.ConfigureTelegrator(action: b => {
     // 2. Register handlers using source generator
     b.Handlers.CollectHandlers();
-})
-.WithWeb();
+    b.WithWeb();
+});
 
 // 3. Configure services
 builder.Services.AddSingleton<IMyService, MyService>();
