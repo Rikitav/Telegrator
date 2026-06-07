@@ -9,11 +9,16 @@ Telegrator uses standard .NET Configuration. This means you can use `appsettings
 
 ## Configuration Sections Overview
 
-| Section | Options Type | Used By | Required For |
-|---------|--------------|---------|--------------|
-| `"Telegrator"` or `"TelegratorOptions"` | `TelegratorOptions` | All hosting modes | Always |
-| `"Receiver"` or `"ReceiverOptions"` | `ReceiverOptions` | Long-polling (`.WithPolling()`) | Polling bots |
-| `"WebhookerOptions"` or `"Webhooker"` | `WebhookerOptions` | Webhooks (`.WithWeb()`) | Webhook bots |
+<table>
+<thead>
+<tr><th>Section</th><th>Options Type</th><th>Used By</th><th>Required For</th></tr>
+</thead>
+<tbody>
+<tr><td>`"Telegrator"` or `"TelegratorOptions"`</td><td>`TelegratorOptions`</td><td>All hosting modes</td><td>Always</td></tr>
+<tr><td>`"Receiver"` or `"ReceiverOptions"`</td><td>`ReceiverOptions`</td><td>Long-polling (`.WithPolling()`)</td><td>Polling bots</td></tr>
+<tr><td>`"WebhookerOptions"` or `"Webhooker"`</td><td>`WebhookerOptions`</td><td>Webhooks (`.WithWeb()`)</td><td>Webhook bots</td></tr>
+</tbody>
+</table>
 
 ## `TelegratorOptions` (Always Required)
 
@@ -181,11 +186,16 @@ spec:
 
 In Azure Portal → Configuration → Application Settings, add:
 
-| Name | Value |
-|------|-------|
-| `Telegrator__Token` | `123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11` |
-| `Telegrator__MaximumParallelWorkingHandlers` | `20` |
-| `WebhookerOptions__WebhookUri` | `https://mybot.azurewebsites.net/api/telegrator/update` |
+<table>
+<thead>
+<tr><th>Name</th><th>Value</th></tr>
+</thead>
+<tbody>
+<tr><td>`Telegrator__Token`</td><td>`123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11`</td></tr>
+<tr><td>`Telegrator__MaximumParallelWorkingHandlers`</td><td>`20`</td></tr>
+<tr><td>`WebhookerOptions__WebhookUri`</td><td>`https://mybot.azurewebsites.net/api/telegrator/update`</td></tr>
+</tbody>
+</table>
 
 Azure automatically surfaces these as environment variables.
 

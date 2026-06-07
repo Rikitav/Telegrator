@@ -20,10 +20,15 @@ public interface IStateStorage
 
 ## Built-in Implementations
 
-| Implementation | Persistence | Use Case |
-|---------------|-------------|----------|
-| `DefaultStateStorage` | In-memory `ConcurrentDictionary` | Single-instance bots, testing |
-| `RedisStateStorage` | Redis via `IConnectionMultiplexer` | Distributed bots, multi-instance deployments |
+<table>
+<thead>
+<tr><th>Implementation</th><th>Persistence</th><th>Use Case</th></tr>
+</thead>
+<tbody>
+<tr><td>`DefaultStateStorage`</td><td>In-memory `ConcurrentDictionary`</td><td>Single-instance bots, testing</td></tr>
+<tr><td>`RedisStateStorage`</td><td>Redis via `IConnectionMultiplexer`</td><td>Distributed bots, multi-instance deployments</td></tr>
+</tbody>
+</table>
 
 ## State Machine
 
@@ -40,19 +45,29 @@ await machine.BySenderId().Reset();
 
 ### Key Resolvers
 
-| Resolver | Key Format | Use Case |
-|----------|-----------|----------|
-| `SenderIdResolver` | `state:{userId}` | Per-user state |
-| `ChatIdResolver` | `state:{chatId}` | Per-chat state |
+<table>
+<thead>
+<tr><th>Resolver</th><th>Key Format</th><th>Use Case</th></tr>
+</thead>
+<tbody>
+<tr><td>`SenderIdResolver`</td><td>`state:{userId}`</td><td>Per-user state</td></tr>
+<tr><td>`ChatIdResolver`</td><td>`state:{chatId}`</td><td>Per-chat state</td></tr>
+</tbody>
+</table>
 
 ### Methods
 
-| Method | Description |
-|--------|-------------|
-| `Advance()` | Moves to the next state in the enum sequence |
-| `Back()` | Moves to the previous state |
-| `Current()` | Returns the current state value |
-| `Reset()` | Clears the state |
+<table>
+<thead>
+<tr><th>Method</th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td>`Advance()`</td><td>Moves to the next state in the enum sequence</td></tr>
+<tr><td>`Back()`</td><td>Moves to the previous state</td></tr>
+<tr><td>`Current()`</td><td>Returns the current state value</td></tr>
+<tr><td>`Reset()`</td><td>Clears the state</td></tr>
+</tbody>
+</table>
 
 ## Declarative State Filtering
 

@@ -31,16 +31,21 @@ Implement this in your handler to define the actual behavior.
 
 Inside any handler method you have access to:
 
-| Property | Description |
-|----------|-------------|
-| `HandlingUpdate` | The raw `Update` object |
-| `Client` | The `ITelegramBotClient` instance |
-| `Input` | Shortcut to `HandlingUpdate.Message` (for message handlers) |
-| `StateStorage` | The `IStateStorage` for state machines |
-| `AwaitingProvider` | The `IAwaitingProvider` for awaiting user input |
-| `Ok` | Shorthand for `Result.Ok()` |
-| `Fault` | Shorthand for `Result.Fault()` |
-| `Next` | Shorthand for `Result.Next()` |
+<table>
+<thead>
+<tr><th>Property</th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td>`HandlingUpdate`</td><td>The raw `Update` object</td></tr>
+<tr><td>`Client`</td><td>The `ITelegramBotClient` instance</td></tr>
+<tr><td>`Input`</td><td>Shortcut to `HandlingUpdate.Message` (for message handlers)</td></tr>
+<tr><td>`StateStorage`</td><td>The `IStateStorage` for state machines</td></tr>
+<tr><td>`AwaitingProvider`</td><td>The `IAwaitingProvider` for awaiting user input</td></tr>
+<tr><td>`Ok`</td><td>Shorthand for `Result.Ok()`</td></tr>
+<tr><td>`Fault`</td><td>Shorthand for `Result.Fault()`</td></tr>
+<tr><td>`Next`</td><td>Shorthand for `Result.Next()`</td></tr>
+</tbody>
+</table>
 
 ## Reply Helpers
 

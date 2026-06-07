@@ -32,12 +32,17 @@ await bot.StartReceivingAsync();
 
 ## Properties
 
-| Property | Description |
-|----------|-------------|
-| `Options` | Global `TelegratorOptions` (concurrency, routing flags) |
-| `Handlers` | `HandlersCollection` for registering handlers |
-| `BotInfo` | Information about the bot user (populated after `GetMe`) |
-| `UpdateRouter` | The `IUpdateRouter` that processes incoming updates |
+<table>
+<thead>
+<tr><th>Property</th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td>`Options`</td><td>Global `TelegratorOptions` (concurrency, routing flags)</td></tr>
+<tr><td>`Handlers`</td><td>`HandlersCollection` for registering handlers</td></tr>
+<tr><td>`BotInfo`</td><td>Information about the bot user (populated after `GetMe`)</td></tr>
+<tr><td>`UpdateRouter`</td><td>The `IUpdateRouter` that processes incoming updates</td></tr>
+</tbody>
+</table>
 
 ## Starting Reception
 

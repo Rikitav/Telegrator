@@ -49,11 +49,16 @@ When `HandleUpdateAsync` is called, the router performs the following steps:
 
 Control routing behavior via `TelegratorOptions`:
 
-| Option | Effect |
-|--------|--------|
-| `MaximumParallelWorkingHandlers` | Global concurrency limit for handler execution |
-| `ExclusiveAwaitingHandlerRouting` | If `true`, only awaiting handlers are considered for an update |
-| `ExceptIntersectingCommandAliases` | Prevents multiple command handlers from matching the same message |
+<table>
+<thead>
+<tr><th>Option</th><th>Effect</th></tr>
+</thead>
+<tbody>
+<tr><td>`MaximumParallelWorkingHandlers`</td><td>Global concurrency limit for handler execution</td></tr>
+<tr><td>`ExclusiveAwaitingHandlerRouting`</td><td>If `true`, only awaiting handlers are considered for an update</td></tr>
+<tr><td>`ExceptIntersectingCommandAliases`</td><td>Prevents multiple command handlers from matching the same message</td></tr>
+</tbody>
+</table>
 
 ## OpenTelemetry Spans
 

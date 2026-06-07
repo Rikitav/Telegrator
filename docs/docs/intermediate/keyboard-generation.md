@@ -11,10 +11,15 @@ Telegrator ships with a **Roslyn source generator** that turns attributed `parti
 
 Only two return types are recognized:
 
-| Return type | Generated markup |
-|-------------|-----------------|
-| `InlineKeyboardMarkup` | Inline keyboard |
-| `ReplyKeyboardMarkup` | Reply keyboard |
+<table>
+<thead>
+<tr><th>Return type</th><th>Generated markup</th></tr>
+</thead>
+<tbody>
+<tr><td><code>InlineKeyboardMarkup</code></td><td>Inline keyboard</td></tr>
+<tr><td><code>ReplyKeyboardMarkup</code></td><td>Reply keyboard</td></tr>
+</tbody>
+</table>
 
 Any other return type triggers **TLG201** (`Wrong return type`).
 
@@ -22,18 +27,23 @@ Any other return type triggers **TLG201** (`Wrong return type`).
 
 Apply one or more of the following attributes on a `partial` method or property. Each attribute list becomes one row; attributes inside the same list become buttons in that row.
 
-| Attribute | Maps to |
-|-----------|---------|
-| `[CallbackButton]` | `InlineKeyboardButton.WithCallbackData` |
-| `[GameButton]` | `InlineKeyboardButton.WithCallbackGame` |
-| `[CopyTextButton]` | `InlineKeyboardButton.WithCopyText` |
-| `[LoginRequestButton]` | `InlineKeyboardButton.WithLoginUrl` |
-| `[PayRequestButton]` | `InlineKeyboardButton.WithPay` |
-| `[UrlRedirectButton]` | `InlineKeyboardButton.WithUrl` |
-| `[WebApp]` | `InlineKeyboardButton.WithWebApp` |
-| `[SwitchQueryButton]` | `InlineKeyboardButton.WithSwitchInlineQuery` |
-| `[QueryChosenButton]` | `InlineKeyboardButton.WithSwitchInlineQueryChosenChat` |
-| `[QueryCurrentButton]` | `InlineKeyboardButton.WithSwitchInlineQueryCurrentChat` |
+<table>
+<thead>
+<tr><th>Attribute</th><th>Maps to</th></tr>
+</thead>
+<tbody>
+<tr><td><code>[CallbackButton]</code></td><td><code>InlineKeyboardButton.WithCallbackData</code></td></tr>
+<tr><td><code>[GameButton]</code></td><td><code>InlineKeyboardButton.WithCallbackGame</code></td></tr>
+<tr><td><code>[CopyTextButton]</code></td><td><code>InlineKeyboardButton.WithCopyText</code></td></tr>
+<tr><td><code>[LoginRequestButton]</code></td><td><code>InlineKeyboardButton.WithLoginUrl</code></td></tr>
+<tr><td><code>[PayRequestButton]</code></td><td><code>InlineKeyboardButton.WithPay</code></td></tr>
+<tr><td><code>[UrlRedirectButton]</code></td><td><code>InlineKeyboardButton.WithUrl</code></td></tr>
+<tr><td><code>[WebApp]</code></td><td><code>InlineKeyboardButton.WithWebApp</code></td></tr>
+<tr><td><code>[SwitchQueryButton]</code></td><td><code>InlineKeyboardButton.WithSwitchInlineQuery</code></td></tr>
+<tr><td><code>[QueryChosenButton]</code></td><td><code>InlineKeyboardButton.WithSwitchInlineQueryChosenChat</code></td></tr>
+<tr><td><code>[QueryCurrentButton]</code></td><td><code>InlineKeyboardButton.WithSwitchInlineQueryCurrentChat</code></td></tr>
+</tbody>
+</table>
 
 ### Inline Example — Static Layout
 
@@ -88,14 +98,19 @@ private static partial InlineKeyboardMarkup ActionKeyboard(int value)
 
 Reply keyboards use the same mechanic with a different attribute set.
 
-| Attribute | Maps to |
-|-----------|---------|
-| `[RequestChatButton]` | `KeyboardButton.WithRequestChat` |
-| `[RequestContactButton]` | `KeyboardButton.WithRequestContact` |
-| `[RequestLocationButton]` | `KeyboardButton.WithRequestLocation` |
-| `[RequestPoolButton]` | `KeyboardButton.WithRequestPoll` |
-| `[RequestUsersButton]` | `KeyboardButton.WithRequestUsers` |
-| `[WebApp]` | `KeyboardButton.WithWebApp` |
+<table>
+<thead>
+<tr><th>Attribute</th><th>Maps to</th></tr>
+</thead>
+<tbody>
+<tr><td><code>[RequestChatButton]</code></td><td><code>KeyboardButton.WithRequestChat</code></td></tr>
+<tr><td><code>[RequestContactButton]</code></td><td><code>KeyboardButton.WithRequestContact</code></td></tr>
+<tr><td><code>[RequestLocationButton]</code></td><td><code>KeyboardButton.WithRequestLocation</code></td></tr>
+<tr><td><code>[RequestPoolButton]</code></td><td><code>KeyboardButton.WithRequestPoll</code></td></tr>
+<tr><td><code>[RequestUsersButton]</code></td><td><code>KeyboardButton.WithRequestUsers</code></td></tr>
+<tr><td><code>[WebApp]</code></td><td><code>KeyboardButton.WithWebApp</code></td></tr>
+</tbody>
+</table>
 
 ### Reply Example
 
@@ -138,14 +153,19 @@ private static partial InlineKeyboardMarkup Grid();
 
 The analyzer emits the following diagnostics when the declaration does not meet the generator’s requirements:
 
-| ID | Severity | Trigger |
-|----|----------|---------|
-| **TLG201** | Error | Return type is not `InlineKeyboardMarkup` or `ReplyKeyboardMarkup` |
-| **TLG202** | Error | Attribute is not supported for the chosen return type |
-| **TLG203** | Error | Member is not declared as `partial` |
-| **TLG204** | Error | Method has a body or expression body |
-| **TLG206** | Error | Property has a setter, initializer, or expression body |
-| **TLG207** | Error | Property `get` accessor has a body |
+<table>
+<thead>
+<tr><th>ID</th><th>Severity</th><th>Trigger</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>TLG201</strong></td><td>Error</td><td>Return type is not <code>InlineKeyboardMarkup</code> or <code>ReplyKeyboardMarkup</code></td></tr>
+<tr><td><strong>TLG202</strong></td><td>Error</td><td>Attribute is not supported for the chosen return type</td></tr>
+<tr><td><strong>TLG203</strong></td><td>Error</td><td>Member is not declared as <code>partial</code></td></tr>
+<tr><td><strong>TLG204</strong></td><td>Error</td><td>Method has a body or expression body</td></tr>
+<tr><td><strong>TLG206</strong></td><td>Error</td><td>Property has a setter, initializer, or expression body</td></tr>
+<tr><td><strong>TLG207</strong></td><td>Error</td><td>Property <code>get</code> accessor has a body</td></tr>
+</tbody>
+</table>
 
 > ⚠️ **Known Issue:** `TLG201` is currently shared with `MightAwaitAnalyzer`. If you see an RS1019 warning during build, it is a benign ID collision and does not affect functionality. A future release will move keyboard diagnostics to a separate range (TLG301+).
 
@@ -160,12 +180,17 @@ The analyzer emits the following diagnostics when the declaration does not meet 
 
 ## When to Use
 
-| Scenario | Recommendation |
-|----------|---------------|
-| Static menus (settings, confirmation dialogs) | **Ideal** — minimal boilerplate, visual alignment with UI |
-| Parametrized callbacks (`apply:{id}`) | **Good** — keeps markup declarative while allowing argument injection |
-| Pagination, dynamic lists | **Avoid** — use imperative keyboard construction instead |
-| Complex conditional layouts | **Avoid** — attributes cannot express branches or loops |
+<table>
+<thead>
+<tr><th>Scenario</th><th>Recommendation</th></tr>
+</thead>
+<tbody>
+<tr><td>Static menus (settings, confirmation dialogs)</td><td><strong>Ideal</strong> — minimal boilerplate, visual alignment with UI</td></tr>
+<tr><td>Parametrized callbacks (<code>apply:{id}</code>)</td><td><strong>Good</strong> — keeps markup declarative while allowing argument injection</td></tr>
+<tr><td>Pagination, dynamic lists</td><td><strong>Avoid</strong> — use imperative keyboard construction instead</td></tr>
+<tr><td>Complex conditional layouts</td><td><strong>Avoid</strong> — attributes cannot express branches or loops</td></tr>
+</tbody>
+</table>
 
 ## Summary
 

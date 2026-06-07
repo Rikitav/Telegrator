@@ -15,9 +15,14 @@ The WideBot addon reads from the **`WideBotOptions`** configuration section.
 
 ### Primary and Fallback Section Names
 
-| Options Type | Primary Section | Fallback Section |
-|--------------|-----------------|------------------|
-| `WideBotOptions` | `"WideBotOptions"` | `"WideBot"` |
+<table>
+<thead>
+<tr><th>Options Type</th><th>Primary Section</th><th>Fallback Section</th></tr>
+</thead>
+<tbody>
+<tr><td>`WideBotOptions`</td><td>`"WideBotOptions"`</td><td>`"WideBot"`</td></tr>
+</tbody>
+</table>
 
 If neither section exists in configuration, `WithWide()` throws a `MissingMemberException` unless you have already registered `IOptions<WideBotOptions>` manually.
 
@@ -25,13 +30,18 @@ If neither section exists in configuration, `WithWide()` throws a `MissingMember
 
 ## `WideBotOptions` Reference
 
-| Property | Type | Required | Default | Description |
-|----------|------|----------|---------|-------------|
-| `ApiId` | `int` | **Yes** | — | Your App ID from [my.telegram.org](https://my.telegram.org). |
-| `ApiHash` | `string` | **Yes** | — | Your App Hash from [my.telegram.org](https://my.telegram.org). |
-| `DropPendingUpdates` | `bool` | No | `false` | If `true`, drops all pending updates on startup. |
-| `MTProxy` | `string?` | No | `null` | MTProto proxy string. Example: `"https://1.2.3.4:443/secret"`. |
-| `SqlCommands` | `WTelegram.SqlCommands` | No | `Detect` | Controls how WTelegramBot detects SQL commands. **Not parsed from JSON.** Set only in code. |
+<table>
+<thead>
+<tr><th>Property</th><th>Type</th><th>Required</th><th>Default</th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td>`ApiId`</td><td>`int`</td><td>**Yes**</td><td>—</td><td>Your App ID from [my.telegram.org](https://my.telegram.org).</td></tr>
+<tr><td>`ApiHash`</td><td>`string`</td><td>**Yes**</td><td>—</td><td>Your App Hash from [my.telegram.org](https://my.telegram.org).</td></tr>
+<tr><td>`DropPendingUpdates`</td><td>`bool`</td><td>No</td><td>`false`</td><td>If `true`, drops all pending updates on startup.</td></tr>
+<tr><td>`MTProxy`</td><td>`string?`</td><td>No</td><td>`null`</td><td>MTProto proxy string. Example: `"https://1.2.3.4:443/secret"`.</td></tr>
+<tr><td>`SqlCommands`</td><td>`WTelegram.SqlCommands`</td><td>No</td><td>`Detect`</td><td>Controls how WTelegramBot detects SQL commands. **Not parsed from JSON.** Set only in code.</td></tr>
+</tbody>
+</table>
 
 ### `appsettings.json` Example
 
@@ -246,13 +256,18 @@ Quick example:
 
 ## Validation & Common Errors
 
-| Error | Cause | Fix |
-|-------|-------|-----|
-| `MissingMemberException`: Auto configuration enabled, yet no options of type 'WideBotOptions'... | `WideBotOptions`/`WideBot` section missing and no `ConfigureWideBot` call. | Add the section to `appsettings.json` or call `ConfigureWideBot`. |
-| `MissingMemberException`: ApiId or ApiHash is required. | `ApiId` is 0 or `ApiHash` is null/empty. | Set both values in configuration. |
-| `InvalidOperationException`: `HostedUpdateReceiver` found in services... | Both `.WithPolling()` and `.WithWide()` were called. | Remove `.WithPolling()` — WideBot replaces it. |
-| `InvalidOperationException`: `HostedUpdateWebhooker` found in services... | Both `.WithWeb()` and `.WithWide()` were called. | Remove `.WithWeb()` — WideBot replaces it. |
-| Session file not found / authentication fails | First run requires interactive login (phone code). | Check WTelegramBot logs for the login prompt. |
+<table>
+<thead>
+<tr><th>Error</th><th>Cause</th><th>Fix</th></tr>
+</thead>
+<tbody>
+<tr><td>`MissingMemberException`: Auto configuration enabled, yet no options of type 'WideBotOptions'...</td><td>`WideBotOptions`/`WideBot` section missing and no `ConfigureWideBot` call.</td><td>Add the section to `appsettings.json` or call `ConfigureWideBot`.</td></tr>
+<tr><td>`MissingMemberException`: ApiId or ApiHash is required.</td><td>`ApiId` is 0 or `ApiHash` is null/empty.</td><td>Set both values in configuration.</td></tr>
+<tr><td>`InvalidOperationException`: `HostedUpdateReceiver` found in services...</td><td>Both `.WithPolling()` and `.WithWide()` were called.</td><td>Remove `.WithPolling()` — WideBot replaces it.</td></tr>
+<tr><td>`InvalidOperationException`: `HostedUpdateWebhooker` found in services...</td><td>Both `.WithWeb()` and `.WithWide()` were called.</td><td>Remove `.WithWeb()` — WideBot replaces it.</td></tr>
+<tr><td>Session file not found / authentication fails</td><td>First run requires interactive login (phone code).</td><td>Check WTelegramBot logs for the login prompt.</td></tr>
+</tbody>
+</table>
 
 ---
 

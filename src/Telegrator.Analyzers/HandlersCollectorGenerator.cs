@@ -191,7 +191,7 @@ public class HandlersCollectorGenerator : IIncrementalGenerator
                     _ => null
                 };
 
-                if (!string.IsNullOrEmpty(resolved) && !result.Contains(resolved))
+                if (resolved != null && !string.IsNullOrEmpty(resolved) && !result.Contains(resolved))
                     result.Add(resolved);
             }
         }
@@ -222,8 +222,10 @@ public class HandlersCollectorGenerator : IIncrementalGenerator
 
     private static void Execute(SourceProductionContext context, Compilation compilation, ImmutableArray<HandlerRegistrationModel> handlers)
     {
+        /* TheMakarik asked me to
         if (handlers.IsDefaultOrEmpty)
             return;
+        */
 
         List<StatementSyntax> statements = [];
         List<string> foundHandlersNames = [];

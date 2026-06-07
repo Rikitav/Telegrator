@@ -15,10 +15,15 @@ This guide covers every configuration option, every way to set it, and common pi
 
 The Hosting layer reads from two main configuration sections:
 
-| Options Type | Primary Section | Fallback Section | Used By |
-|--------------|-----------------|------------------|---------|
-| `TelegratorOptions` | `"Telegrator"` | `"TelegratorOptions"` | Core framework (token, routing, limits) |
-| `ReceiverOptions` | `"Receiver"` | `"ReceiverOptions"` | Long-polling receiver (offset, limit, allowed updates) |
+<table>
+<thead>
+<tr><th>Options Type</th><th>Primary Section</th><th>Fallback Section</th><th>Used By</th></tr>
+</thead>
+<tbody>
+<tr><td>`TelegratorOptions`</td><td>`"Telegrator"`</td><td>`"TelegratorOptions"`</td><td>Core framework (token, routing, limits)</td></tr>
+<tr><td>`ReceiverOptions`</td><td>`"Receiver"`</td><td>`"ReceiverOptions"`</td><td>Long-polling receiver (offset, limit, allowed updates)</td></tr>
+</tbody>
+</table>
 
 If a section is missing and you haven't registered the options manually, the framework throws a `MissingMemberException` at startup.
 
@@ -28,16 +33,21 @@ If a section is missing and you haven't registered the options manually, the fra
 
 This is the **most important** configuration object. It controls the bot token, retry behavior, routing, and concurrency.
 
-| Property | Type | Default | Description |
-|----------|------|---------|-------------|
-| `Token` | `string` | *(required)* | Your Telegram Bot API token. Example: `"123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11"` |
-| `BaseUrl` | `string?` | `null` | Custom Bot API server URL. Use this if you run a local Bot API server instead of `https://api.telegram.org`. |
-| `UseTestEnvironment` | `bool` | `false` | If `true`, the bot connects to the Telegram test environment instead of the production API. |
-| `RetryThreshold` | `int` | `60` | Seconds to wait before retrying a failed request to Telegram. |
-| `RetryCount` | `int` | `3` | Maximum number of retries for failed requests. |
-| `MaximumParallelWorkingHandlers` | `int?` | `null` | Global concurrency limit for handler execution. If set, a `SemaphoreSlim` limits how many handlers run simultaneously. `null` means unlimited. |
-| `ExclusiveAwaitingHandlerRouting` | `bool` | `false` | If `true`, when an update matches an awaiting handler, no regular handlers are executed for that update. |
-| `ExceptIntersectingCommandAliases` | `bool` | `true` | If `true`, when multiple command handlers match the same message, only the highest-importance one runs. |
+<table>
+<thead>
+<tr><th>Property</th><th>Type</th><th>Default</th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td>`Token`</td><td>`string`</td><td>*(required)*</td><td>Your Telegram Bot API token. Example: `"123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11"`</td></tr>
+<tr><td>`BaseUrl`</td><td>`string?`</td><td>`null`</td><td>Custom Bot API server URL. Use this if you run a local Bot API server instead of `https://api.telegram.org`.</td></tr>
+<tr><td>`UseTestEnvironment`</td><td>`bool`</td><td>`false`</td><td>If `true`, the bot connects to the Telegram test environment instead of the production API.</td></tr>
+<tr><td>`RetryThreshold`</td><td>`int`</td><td>`60`</td><td>Seconds to wait before retrying a failed request to Telegram.</td></tr>
+<tr><td>`RetryCount`</td><td>`int`</td><td>`3`</td><td>Maximum number of retries for failed requests.</td></tr>
+<tr><td>`MaximumParallelWorkingHandlers`</td><td>`int?`</td><td>`null`</td><td>Global concurrency limit for handler execution. If set, a `SemaphoreSlim` limits how many handlers run simultaneously. `null` means unlimited.</td></tr>
+<tr><td>`ExclusiveAwaitingHandlerRouting`</td><td>`bool`</td><td>`false`</td><td>If `true`, when an update matches an awaiting handler, no regular handlers are executed for that update.</td></tr>
+<tr><td>`ExceptIntersectingCommandAliases`</td><td>`bool`</td><td>`true`</td><td>If `true`, when multiple command handlers match the same message, only the highest-importance one runs.</td></tr>
+</tbody>
+</table>
 
 ### `appsettings.json` Example
 
@@ -73,12 +83,17 @@ Or using the fallback section name:
 
 These options only apply when using **long-polling** (`.WithPolling()`).
 
-| Property | Type | Default | Description |
-|----------|------|---------|-------------|
-| `Offset` | `int?` | `null` | Identifier of the first update to be returned. `null` means start from the latest. |
-| `Limit` | `int?` | `null` | Limits the number of updates to be retrieved (1–100). `null` uses Telegram's default. |
-| `DropPendingUpdates` | `bool?` | `null` | If `true`, drops all pending updates on startup. |
-| `AllowedUpdates` | `UpdateType[]?` | `null` | Array of update types to receive. `null` means receive all update types except `ChatMember`. |
+<table>
+<thead>
+<tr><th>Property</th><th>Type</th><th>Default</th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td>`Offset`</td><td>`int?`</td><td>`null`</td><td>Identifier of the first update to be returned. `null` means start from the latest.</td></tr>
+<tr><td>`Limit`</td><td>`int?`</td><td>`null`</td><td>Limits the number of updates to be retrieved (1–100). `null` uses Telegram's default.</td></tr>
+<tr><td>`DropPendingUpdates`</td><td>`bool?`</td><td>`null`</td><td>If `true`, drops all pending updates on startup.</td></tr>
+<tr><td>`AllowedUpdates`</td><td>`UpdateType[]?`</td><td>`null`</td><td>Array of update types to receive. `null` means receive all update types except `ChatMember`.</td></tr>
+</tbody>
+</table>
 
 ### `appsettings.json` Example
 
@@ -278,12 +293,17 @@ TelegratorLogging.AddAdapter(new MyCustomLoggerAdapter());
 
 ## Validation & Common Errors
 
-| Error | Cause | Fix |
-|-------|-------|-----|
-| `MissingMemberException`: Token is required. | `TelegratorOptions.Token` is missing from all sources. | Add `"Token"` to the `"Telegrator"` section or pass it inline. |
-| `MissingMemberException`: Auto configuration enabled, yet no options of type 'ReceiverOptions'... | `Receiver`/`ReceiverOptions` section missing and `.WithPolling()` called without pre-registered options. | Add the section to `appsettings.json` or call `ConfigureReceiver`. |
-| `MissingMemberException`: Auto configuration enabled, yet no options of type 'TelegratorOptions'... | `Telegrator`/`TelegratorOptions` section missing and `AddTelegrator()` called without explicit options. | Add the section or pass options inline. |
-| Handlers not executing | `MaximumParallelWorkingHandlers` is too low and all slots are occupied. | Increase the limit or set to `null` for unlimited. |
+<table>
+<thead>
+<tr><th>Error</th><th>Cause</th><th>Fix</th></tr>
+</thead>
+<tbody>
+<tr><td>`MissingMemberException`: Token is required.</td><td>`TelegratorOptions.Token` is missing from all sources.</td><td>Add `"Token"` to the `"Telegrator"` section or pass it inline.</td></tr>
+<tr><td>`MissingMemberException`: Auto configuration enabled, yet no options of type 'ReceiverOptions'...</td><td>`Receiver`/`ReceiverOptions` section missing and `.WithPolling()` called without pre-registered options.</td><td>Add the section to `appsettings.json` or call `ConfigureReceiver`.</td></tr>
+<tr><td>`MissingMemberException`: Auto configuration enabled, yet no options of type 'TelegratorOptions'...</td><td>`Telegrator`/`TelegratorOptions` section missing and `AddTelegrator()` called without explicit options.</td><td>Add the section or pass options inline.</td></tr>
+<tr><td>Handlers not executing</td><td>`MaximumParallelWorkingHandlers` is too low and all slots are occupied.</td><td>Increase the limit or set to `null` for unlimited.</td></tr>
+</tbody>
+</table>
 
 ---
 

@@ -52,35 +52,40 @@ Message msg = await AwaitingProvider.AwaitMessage(HandlingUpdate).ByChatId(cance
 
 ### Supported Await Types
 
-| Method | Return Type | Update Type |
-|--------|-------------|-------------|
-| `AwaitAny` | `Update` | `Unknown` |
-| `AwaitMessage` | `Message` | `Message` |
-| `AwaitEditedMessage` | `Message` | `EditedMessage` |
-| `AwaitChannelPost` | `Message` | `ChannelPost` |
-| `AwaitEditedChannelPost` | `Message` | `EditedChannelPost` |
-| `AwaitBusinessMessage` | `Message` | `BusinessMessage` |
-| `AwaitEditedBusinessMessage` | `Message` | `EditedBusinessMessage` |
-| `AwaitDeletedBusinessMessages` | `BusinessMessagesDeleted` | `DeletedBusinessMessages` |
-| `AwaitBusinessConnection` | `BusinessConnection` | `BusinessConnection` |
-| `AwaitMessageReaction` | `MessageReactionUpdated` | `MessageReaction` |
-| `AwaitMessageReactionCount` | `MessageReactionCountUpdated` | `MessageReactionCount` |
-| `AwaitInlineQuery` | `InlineQuery` | `InlineQuery` |
-| `AwaitChosenInlineResult` | `ChosenInlineResult` | `ChosenInlineResult` |
-| `AwaitCallbackQuery` | `CallbackQuery` | `CallbackQuery` |
-| `AwaitShippingQuery` | `ShippingQuery` | `ShippingQuery` |
-| `AwaitPreCheckoutQuery` | `PreCheckoutQuery` | `PreCheckoutQuery` |
-| `AwaitPurchasedPaidMedia` | `PaidMediaPurchased` | `PurchasedPaidMedia` |
-| `AwaitPoll` | `Poll` | `Poll` |
-| `AwaitPollAnswer` | `PollAnswer` | `PollAnswer` |
-| `AwaitMyChatMember` | `ChatMemberUpdated` | `MyChatMember` |
-| `AwaitChatMember` | `ChatMemberUpdated` | `ChatMember` |
-| `AwaitChatJoinRequest` | `ChatJoinRequest` | `ChatJoinRequest` |
-| `AwaitChatBoost` | `ChatBoostUpdated` | `ChatBoost` |
-| `AwaitRemovedChatBoost` | `ChatBoostRemoved` | `RemovedChatBoost` |
-| `AwaitManagedBot` | `ManagedBotUpdated` | `ManagedBot` |
-| `AwaitGuestMessage` | `Message` | `GuestMessage` |
-| `CancellAllCallbacks` | `CallbackQuery` | `CallbackQuery` (auto-deleting) |
+<table>
+<thead>
+<tr><th>Method</th><th>Return Type</th><th>Update Type</th></tr>
+</thead>
+<tbody>
+<tr><td>`AwaitAny`</td><td>`Update`</td><td>`Unknown`</td></tr>
+<tr><td>`AwaitMessage`</td><td>`Message`</td><td>`Message`</td></tr>
+<tr><td>`AwaitEditedMessage`</td><td>`Message`</td><td>`EditedMessage`</td></tr>
+<tr><td>`AwaitChannelPost`</td><td>`Message`</td><td>`ChannelPost`</td></tr>
+<tr><td>`AwaitEditedChannelPost`</td><td>`Message`</td><td>`EditedChannelPost`</td></tr>
+<tr><td>`AwaitBusinessMessage`</td><td>`Message`</td><td>`BusinessMessage`</td></tr>
+<tr><td>`AwaitEditedBusinessMessage`</td><td>`Message`</td><td>`EditedBusinessMessage`</td></tr>
+<tr><td>`AwaitDeletedBusinessMessages`</td><td>`BusinessMessagesDeleted`</td><td>`DeletedBusinessMessages`</td></tr>
+<tr><td>`AwaitBusinessConnection`</td><td>`BusinessConnection`</td><td>`BusinessConnection`</td></tr>
+<tr><td>`AwaitMessageReaction`</td><td>`MessageReactionUpdated`</td><td>`MessageReaction`</td></tr>
+<tr><td>`AwaitMessageReactionCount`</td><td>`MessageReactionCountUpdated`</td><td>`MessageReactionCount`</td></tr>
+<tr><td>`AwaitInlineQuery`</td><td>`InlineQuery`</td><td>`InlineQuery`</td></tr>
+<tr><td>`AwaitChosenInlineResult`</td><td>`ChosenInlineResult`</td><td>`ChosenInlineResult`</td></tr>
+<tr><td>`AwaitCallbackQuery`</td><td>`CallbackQuery`</td><td>`CallbackQuery`</td></tr>
+<tr><td>`AwaitShippingQuery`</td><td>`ShippingQuery`</td><td>`ShippingQuery`</td></tr>
+<tr><td>`AwaitPreCheckoutQuery`</td><td>`PreCheckoutQuery`</td><td>`PreCheckoutQuery`</td></tr>
+<tr><td>`AwaitPurchasedPaidMedia`</td><td>`PaidMediaPurchased`</td><td>`PurchasedPaidMedia`</td></tr>
+<tr><td>`AwaitPoll`</td><td>`Poll`</td><td>`Poll`</td></tr>
+<tr><td>`AwaitPollAnswer`</td><td>`PollAnswer`</td><td>`PollAnswer`</td></tr>
+<tr><td>`AwaitMyChatMember`</td><td>`ChatMemberUpdated`</td><td>`MyChatMember`</td></tr>
+<tr><td>`AwaitChatMember`</td><td>`ChatMemberUpdated`</td><td>`ChatMember`</td></tr>
+<tr><td>`AwaitChatJoinRequest`</td><td>`ChatJoinRequest`</td><td>`ChatJoinRequest`</td></tr>
+<tr><td>`AwaitChatBoost`</td><td>`ChatBoostUpdated`</td><td>`ChatBoost`</td></tr>
+<tr><td>`AwaitRemovedChatBoost`</td><td>`ChatBoostRemoved`</td><td>`RemovedChatBoost`</td></tr>
+<tr><td>`AwaitManagedBot`</td><td>`ManagedBotUpdated`</td><td>`ManagedBot`</td></tr>
+<tr><td>`AwaitGuestMessage`</td><td>`Message`</td><td>`GuestMessage`</td></tr>
+<tr><td>`CancellAllCallbacks`</td><td>`CallbackQuery`</td><td>`CallbackQuery` (auto-deleting)</td></tr>
+</tbody>
+</table>
 
 For update types not covered above, use the generic `AwaitUpdate<TUpdate>(UpdateType)` method.
 

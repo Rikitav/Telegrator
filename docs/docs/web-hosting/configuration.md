@@ -19,9 +19,14 @@ The Webhook addon reads from the **`WebhookerOptions`** configuration section.
 
 ### Primary and Fallback Section Names
 
-| Options Type | Primary Section | Fallback Section |
-|--------------|-----------------|------------------|
-| `WebhookerOptions` | `"WebhookerOptions"` | `"Webhooker"` |
+<table>
+<thead>
+<tr><th>Options Type</th><th>Primary Section</th><th>Fallback Section</th></tr>
+</thead>
+<tbody>
+<tr><td>`WebhookerOptions`</td><td>`"WebhookerOptions"`</td><td>`"Webhooker"`</td></tr>
+</tbody>
+</table>
 
 If neither section exists in configuration, `WithWeb()` throws a `MissingMemberException` unless you have already registered `IOptions<WebhookerOptions>` manually.
 
@@ -29,12 +34,17 @@ If neither section exists in configuration, `WithWeb()` throws a `MissingMemberE
 
 ## `WebhookerOptions` Reference
 
-| Property | Type | Default | Description |
-|----------|------|---------|-------------|
-| `WebhookUri` | `string?` | `null` | The public HTTPS URL where Telegram will send updates. **Required.** Example: `"https://mybot.example.com/api/telegrator/update"` |
-| `SecretToken` | `string?` | `null` | Optional secret token. Telegram sends it in the `X-Telegram-Bot-Api-Secret-Token` header. If set, requests without this header are rejected with `401 Unauthorized`. |
-| `MaxConnections` | `int` | `40` | Maximum number of simultaneous HTTPS connections allowed for the webhook. Passed to `setWebhook`. |
-| `DropPendingUpdates` | `bool` | `false` | If `true`, pending updates are dropped when the webhook is set and when the application stops. |
+<table>
+<thead>
+<tr><th>Property</th><th>Type</th><th>Default</th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td>`WebhookUri`</td><td>`string?`</td><td>`null`</td><td>The public HTTPS URL where Telegram will send updates. **Required.** Example: `"https://mybot.example.com/api/telegrator/update"`</td></tr>
+<tr><td>`SecretToken`</td><td>`string?`</td><td>`null`</td><td>Optional secret token. Telegram sends it in the `X-Telegram-Bot-Api-Secret-Token` header. If set, requests without this header are rejected with `401 Unauthorized`.</td></tr>
+<tr><td>`MaxConnections`</td><td>`int`</td><td>`40`</td><td>Maximum number of simultaneous HTTPS connections allowed for the webhook. Passed to `setWebhook`.</td></tr>
+<tr><td>`DropPendingUpdates`</td><td>`bool`</td><td>`false`</td><td>If `true`, pending updates are dropped when the webhook is set and when the application stops.</td></tr>
+</tbody>
+</table>
 
 ### `appsettings.json` Example
 
@@ -164,12 +174,17 @@ Quick example for webhook bots:
 
 ## Validation & Common Errors
 
-| Error | Cause | Fix |
-|-------|-------|-----|
-| `MissingMemberException`: Auto configuration enabled, yet no options of type 'WebhookerOptions' was registered. | `appsettings.json` missing the `WebhookerOptions`/`Webhooker` section, and no `ConfigureWebhooker` call. | Add the section to `appsettings.json` or call `ConfigureWebhooker`. |
-| `ArgumentNullException`: Option "WebhookUrl" must be set... | `WebhookUri` is null or empty. | Set `WebhookUri` in configuration. |
-| `InvalidOperationException`: `HostedUpdateReceiver` found in services... | Both `.WithPolling()` and `.WithWeb()` were called on the same builder. | Remove `.WithPolling()` or use separate builders. |
-| `400 Bad Request` on webhook endpoint | Missing or invalid `X-Telegram-Bot-Api-Secret-Token` header. | Ensure the header matches `WebhookerOptions.SecretToken`. |
+<table>
+<thead>
+<tr><th>Error</th><th>Cause</th><th>Fix</th></tr>
+</thead>
+<tbody>
+<tr><td>`MissingMemberException`: Auto configuration enabled, yet no options of type 'WebhookerOptions' was registered.</td><td>`appsettings.json` missing the `WebhookerOptions`/`Webhooker` section, and no `ConfigureWebhooker` call.</td><td>Add the section to `appsettings.json` or call `ConfigureWebhooker`.</td></tr>
+<tr><td>`ArgumentNullException`: Option "WebhookUrl" must be set...</td><td>`WebhookUri` is null or empty.</td><td>Set `WebhookUri` in configuration.</td></tr>
+<tr><td>`InvalidOperationException`: `HostedUpdateReceiver` found in services...</td><td>Both `.WithPolling()` and `.WithWeb()` were called on the same builder.</td><td>Remove `.WithPolling()` or use separate builders.</td></tr>
+<tr><td>`400 Bad Request` on webhook endpoint</td><td>Missing or invalid `X-Telegram-Bot-Api-Secret-Token` header.</td><td>Ensure the header matches `WebhookerOptions.SecretToken`.</td></tr>
+</tbody>
+</table>
 
 ---
 

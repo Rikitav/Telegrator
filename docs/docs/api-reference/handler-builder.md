@@ -42,16 +42,21 @@ For generic subclasses (e.g., `HandlerBuilder<Message>`), extension methods in `
 
 ## Key Methods
 
-| Method | Purpose |
-|--------|---------|
-| `SetPriority(int)` | Sets the handler priority (higher = earlier execution) |
-| `SetConcurreny(int)` | Sets the per-handler concurrency limit |
-| `SetIndexer(int, int)` | Sets both priority and concurrency in one call |
-| `AddFilter(IFilter<Update>)` | Adds a raw update filter |
-| `AddFilters(params IFilter<Update>[])` | Adds multiple raw update filters |
-| `SetState<TKey, TValue>(TValue?)` | Attaches a state keeper with a key resolver |
-| `AddTargetedFilter<T>(Func<Update, T?>, IFilter<T>)` | Adds a filter targeted at a specific sub-type (e.g., `Message`) |
-| `SetUpdateValidating(UpdateValidateAction)` | Sets a validation action that runs before filters |
+<table>
+<thead>
+<tr><th>Method</th><th>Purpose</th></tr>
+</thead>
+<tbody>
+<tr><td>`SetPriority(int)`</td><td>Sets the handler priority (higher = earlier execution)</td></tr>
+<tr><td>`SetConcurreny(int)`</td><td>Sets the per-handler concurrency limit</td></tr>
+<tr><td>`SetIndexer(int, int)`</td><td>Sets both priority and concurrency in one call</td></tr>
+<tr><td>`AddFilter(IFilter<Update>)`</td><td>Adds a raw update filter</td></tr>
+<tr><td>`AddFilters(params IFilter<Update>[])`</td><td>Adds multiple raw update filters</td></tr>
+<tr><td>`SetState<TKey, TValue>(TValue?)`</td><td>Attaches a state keeper with a key resolver</td></tr>
+<tr><td>`AddTargetedFilter<T>(Func<Update, T?>, IFilter<T>)`</td><td>Adds a filter targeted at a specific sub-type (e.g., `Message`)</td></tr>
+<tr><td>`SetUpdateValidating(UpdateValidateAction)`</td><td>Sets a validation action that runs before filters</td></tr>
+</tbody>
+</table>
 
 ## State Keepers
 
