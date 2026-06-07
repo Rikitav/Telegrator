@@ -26,7 +26,7 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegrator.Core;
 
-namespace Telegrator.Testing.Hosting;
+namespace Telegrator.Hosting;
 
 /// <summary>
 /// A specialized testing server for the hosting pipeline that mimics the production service.

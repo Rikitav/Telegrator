@@ -35,16 +35,9 @@ public async Task StartHandler_ShouldReplyWithWelcome()
 
 ### What to Assert
 
-<table>
-<thead>
-<tr><th>Assertion</th><th>Meaning</th></tr>
-</thead>
-<tbody>
-<tr><td>`result.Success`</td><td>The handler completed without faulting</td></tr>
-<tr><td>`result.RouteNext`</td><td>The router should continue to the next handler</td></tr>
-<tr><td>`mockClient.Verify(...)`</td><td>The handler called the expected Bot API method</td></tr>
-</tbody>
-</table>
+- **`result.Success`**: The handler completed without faulting
+- **`result.RouteNext`**: The router should continue to the next handler
+- **`mockClient.Verify(...)`**: The handler called the expected Bot API method
 
 ### Mocking the Container
 

@@ -13,24 +13,39 @@ Descriptors are created by `UpdateRouter.DescribeHandler` after a handler's filt
 
 ## Key Properties
 
-<table>
-<thead>
-<tr><th>Property</th><th>Type</th><th>Description</th></tr>
-</thead>
-<tbody>
-<tr><td>`From`</td><td>`HandlerDescriptor`</td><td>The static metadata descriptor</td></tr>
-<tr><td>`UpdateRouter`</td><td>`IUpdateRouter`</td><td>The router that created this descriptor</td></tr>
-<tr><td>`AwaitingProvider`</td><td>`IAwaitingProvider`</td><td>Provider for temporary awaiting handlers</td></tr>
-<tr><td>`StateStorage`</td><td>`IStateStorage`</td><td>State persistence service</td></tr>
-<tr><td>`Client`</td><td>`ITelegramBotClient`</td><td>The Telegram bot client</td></tr>
-<tr><td>`HandlerInstance`</td><td>`UpdateHandlerBase`</td><td>The actual handler instance to execute</td></tr>
-<tr><td>`ExtraData`</td><td>`Dictionary<string, object>`</td><td>Additional context data from filters</td></tr>
-<tr><td>`CompletedFilters`</td><td>`CompletedFiltersList`</td><td>Filters that have already been evaluated</td></tr>
-<tr><td>`HandlingUpdate`</td><td>`Update`</td><td>The incoming Telegram update</td></tr>
-<tr><td>`DisplayString`</td><td>`string`</td><td>Human-readable name for logging</td></tr>
-<tr><td>`Result`</td><td>`Result?`</td><td>The execution result (set after completion)</td></tr>
-</tbody>
-</table>
+- **`From`**
+  - Type: `HandlerDescriptor`
+  - Description: The static metadata descriptor
+- **`UpdateRouter`**
+  - Type: `IUpdateRouter`
+  - Description: The router that created this descriptor
+- **`AwaitingProvider`**
+  - Type: `IAwaitingProvider`
+  - Description: Provider for temporary awaiting handlers
+- **`StateStorage`**
+  - Type: `IStateStorage`
+  - Description: State persistence service
+- **`Client`**
+  - Type: `ITelegramBotClient`
+  - Description: The Telegram bot client
+- **`HandlerInstance`**
+  - Type: `UpdateHandlerBase`
+  - Description: The actual handler instance to execute
+- **`ExtraData`**
+  - Type: `Dictionary<string, object>`
+  - Description: Additional context data from filters
+- **`CompletedFilters`**
+  - Type: `CompletedFiltersList`
+  - Description: Filters that have already been evaluated
+- **`HandlingUpdate`**
+  - Type: `Update`
+  - Description: The incoming Telegram update
+- **`DisplayString`**
+  - Type: `string`
+  - Description: Human-readable name for logging
+- **`Result`**
+  - Type: `Result?`
+  - Description: The execution result (set after completion)
 
 ## Awaiting the Result
 

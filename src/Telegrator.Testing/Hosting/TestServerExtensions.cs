@@ -29,7 +29,7 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegrator.Hosting;
 
-namespace Telegrator.Testing.Hosting;
+namespace Telegrator.Hosting;
 
 /// <summary>
 /// Provides extension methods for adding a Telegrator test server.

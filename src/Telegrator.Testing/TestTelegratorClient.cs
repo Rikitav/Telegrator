@@ -25,7 +25,7 @@ using Telegrator.Mediation;
 using Telegrator.Providers;
 using Telegrator.States;
 
-namespace Telegrator.Testing;
+namespace Telegrator;
 
 /// <summary>
 /// A specialized testing analog of TelegratorClient that mimics the production service,

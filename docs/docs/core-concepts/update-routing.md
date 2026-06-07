@@ -19,15 +19,12 @@ The `UpdateRouter` is the central component that manages how updates flow throug
 
 `IUpdateRouter` exposes two ways to process an incoming update:
 
-<table>
-<thead>
-<tr><th>Method</th><th>Behavior</th><th>Use Case</th></tr>
-</thead>
-<tbody>
-<tr><td>`HandleUpdateAsync`</td><td>Fully blocking. Awaits the entire handler pipeline before returning.</td><td>Tests, manual control, custom receivers</td></tr>
-<tr><td>`ConsumeUpdateAsync`</td><td>Fire-and-forget. Schedules the update on `Task.Run` and returns `Task.CompletedTask` immediately.</td><td>Production receivers (polling, webhooks, WideBot)</td></tr>
-</tbody>
-</table>
+- **`HandleUpdateAsync`**
+  - Behavior: Fully blocking. Awaits the entire handler pipeline before returning.
+  - Use Case: Tests, manual control, custom receivers
+- **`ConsumeUpdateAsync`**
+  - Behavior: Fire-and-forget. Schedules the update on `Task.Run` and returns `Task.CompletedTask` immediately.
+  - Use Case: Production receivers (polling, webhooks, WideBot)
 
 All built-in receivers (`DefaultUpdateReceiver`, `HostedUpdateWebhooker`, `WideUpdateReceiver`) use `ConsumeUpdateAsync` so that:
 - **Long-polling** doesn't block the receive loop while handlers run.

@@ -1,19 +1,18 @@
 # Telegram Link Generation
 
-Telegrator provides a set of extension methods that make it easy to build Telegram-specific URLs and deep links directly from framework types such as <code>User</code>, <code>Chat</code>, and <code>Message</code>. This avoids hard-coding URL templates throughout your handlers and keeps link generation consistent.
+Telegrator provides a set of extension methods that make it easy to build Telegram-specific URLs and deep links directly from framework types such as `User`, `Chat`, and `Message`. This avoids hard-coding URL templates throughout your handlers and keeps link generation consistent.
 
 ## User Links
 
-<table>
-<thead>
-<tr><th>Method</th><th>Return Type</th><th>Description</th></tr>
-</thead>
-<tbody>
-<tr><td><code>GetUserLink()</code></td><td><code>string</code></td><td>Returns a <code>tg://user?id=...</code> deep link that opens the user's profile inside Telegram.</td></tr>
-<tr><td><code>GetPublicLink()</code></td><td><code>string?</code></td><td>Returns <code>https://t.me/username</code> when the user has a username; otherwise <code>null</code>.</td></tr>
-<tr><td><code>GetDeepLink()</code></td><td><code>string</code></td><td>Alias for <code>GetUserLink()</code>.</td></tr>
-</tbody>
-</table>
+- **`GetUserLink()`**
+  - Return Type: `string`
+  - Description: Returns a `tg://user?id=...` deep link that opens the user's profile inside Telegram.
+- **`GetPublicLink()`**
+  - Return Type: `string?`
+  - Description: Returns `https://t.me/username` when the user has a username; otherwise `null`.
+- **`GetDeepLink()`**
+  - Return Type: `string`
+  - Description: Alias for `GetUserLink()`.
 
 ```csharp
 User user = new User { Id = 123456, Username = "durov" };
@@ -22,36 +21,26 @@ string deep = user.GetUserLink();        // tg://user?id=123456
 string? pub = user.GetPublicLink();      // https://t.me/durov
 ```
 
-> Passing a <code>null</code> <code>User</code> to any of these methods throws <code>ArgumentNullException</code>.
+> Passing a `null` `User` to any of these methods throws `ArgumentNullException`.
 
 ## Chat Links
 
-<table>
-<thead>
-<tr><th>Method</th><th>Return Type</th><th>Description</th></tr>
-</thead>
-<tbody>
-<tr><td><code>GetPublicLink()</code></td><td><code>string?</code></td><td>Returns <code>https://t.me/username</code> when the chat has a username; otherwise <code>null</code>.</td></tr>
-</tbody>
-</table>
+- **`GetPublicLink()`**
+  - Return Type: `string?`
+  - Description: Returns `https://t.me/username` when the chat has a username; otherwise `null`.
 
 ```csharp
 Chat chat = new Chat { Id = 1, Username = "mychannel" };
 string? link = chat.GetPublicLink();     // https://t.me/mychannel
 ```
 
-> Passing a <code>null</code> <code>Chat</code> throws <code>ArgumentNullException</code>.
+> Passing a `null` `Chat` throws `ArgumentNullException`.
 
 ## Message Links
 
-<table>
-<thead>
-<tr><th>Method</th><th>Return Type</th><th>Description</th></tr>
-</thead>
-<tbody>
-<tr><td><code>GetMessageLink()</code></td><td><code>string?</code></td><td>Returns <code>https://t.me/username/messageId</code> when the containing chat has a username; otherwise <code>null</code>.</td></tr>
-</tbody>
-</table>
+- **`GetMessageLink()`**
+  - Return Type: `string?`
+  - Description: Returns `https://t.me/username/messageId` when the containing chat has a username; otherwise `null`.
 
 ```csharp
 Message message = new Message
@@ -63,39 +52,25 @@ Message message = new Message
 string? link = message.GetMessageLink(); // https://t.me/channel/42
 ```
 
-> Passing a <code>null</code> <code>Message</code> throws <code>ArgumentNullException</code>.
+> Passing a `null` `Message` throws `ArgumentNullException`.
 
 ## String Helpers
 
-These extensions work on plain <code>string</code> values and normalize the input automatically (trim whitespace, strip leading <code>@</code> or <code>+</code>).
+These extensions work on plain `string` values and normalize the input automatically (trim whitespace, strip leading `@` or `+`).
 
-<table>
-<thead>
-<tr><th>Method</th><th>Description</th></tr>
-</thead>
-<tbody>
-<tr><td><code>ToTelegramPublicUrl()</code></td><td>Converts a username into <code>https://t.me/username</code>.</td></tr>
-<tr><td><code>ToTelegramInviteUrl()</code></td><td>Converts an invite hash into <code>https://t.me/+hash</code>.</td></tr>
-</tbody>
-</table>
+- **`ToTelegramPublicUrl()`**: Converts a username into `https://t.me/username`.
+- **`ToTelegramInviteUrl()`**: Converts an invite hash into `https://t.me/+hash`.
 
 ```csharp
 "@durov".ToTelegramPublicUrl();          // https://t.me/durov
 "+AbCdEf".ToTelegramInviteUrl();         // https://t.me/+AbCdEf
 ```
 
-> Empty or whitespace-only input throws <code>ArgumentException</code>.
+> Empty or whitespace-only input throws `ArgumentException`.
 
 ## Share URLs
 
-<table>
-<thead>
-<tr><th>Method</th><th>Description</th></tr>
-</thead>
-<tbody>
-<tr><td><code>GetShareUrl(url, text?)</code></td><td>Builds a <code>https://t.me/share/url?url=...</code> link with optional pre-filled text. Both parameters are URL-encoded automatically.</td></tr>
-</tbody>
-</table>
+- **`GetShareUrl(url, text?)`**: Builds a `https://t.me/share/url?url=...` link with optional pre-filled text. Both parameters are URL-encoded automatically.
 
 ```csharp
 TelegramLinkExtensions.GetShareUrl("https://example.com", "Check this");
@@ -106,18 +81,21 @@ TelegramLinkExtensions.GetShareUrl("https://example.com", "Check this");
 
 Static helpers that return well-known Telegram deep links.
 
-<table>
-<thead>
-<tr><th>Method</th><th>Returns</th><th>Description</th></tr>
-</thead>
-<tbody>
-<tr><td><code>GetSettingsDeepLink()</code></td><td><code>tg://settings</code></td><td>Opens Telegram settings.</td></tr>
-<tr><td><code>GetAddStickersDeepLink(setName)</code></td><td><code>tg://addstickers?set=...</code></td><td>Opens the sticker pack installation screen.</td></tr>
-<tr><td><code>GetResolveDeepLink(username)</code></td><td><code>tg://resolve?domain=...</code></td><td>Opens a profile by username.</td></tr>
-<tr><td><code>GetJoinDeepLink(inviteHash)</code></td><td><code>tg://join?invite=...</code></td><td>Invites the user to a group or channel.</td></tr>
-<tr><td><code>GetMessageDeepLink(text)</code></td><td><code>tg://msg?text=...</code></td><td>Pre-fills the message text field.</td></tr>
-</tbody>
-</table>
+- **`GetSettingsDeepLink()`**
+  - Returns: `tg://settings`
+  - Description: Opens Telegram settings.
+- **`GetAddStickersDeepLink(setName)`**
+  - Returns: `tg://addstickers?set=...`
+  - Description: Opens the sticker pack installation screen.
+- **`GetResolveDeepLink(username)`**
+  - Returns: `tg://resolve?domain=...`
+  - Description: Opens a profile by username.
+- **`GetJoinDeepLink(inviteHash)`**
+  - Returns: `tg://join?invite=...`
+  - Description: Invites the user to a group or channel.
+- **`GetMessageDeepLink(text)`**
+  - Returns: `tg://msg?text=...`
+  - Description: Pre-fills the message text field.
 
 ```csharp
 TelegramLinkExtensions.GetSettingsDeepLink();                        // tg://settings
@@ -127,20 +105,13 @@ TelegramLinkExtensions.GetJoinDeepLink("+AbCdEf");                  // tg://join
 TelegramLinkExtensions.GetMessageDeepLink("Hello world");            // tg://msg?text=Hello%20world
 ```
 
-> Empty or whitespace-only arguments throw <code>ArgumentException</code>.
+> Empty or whitespace-only arguments throw `ArgumentException`.
 
 ## When to Use Which
 
-<table>
-<thead>
-<tr><th>Scenario</th><th>Recommended Method</th></tr>
-</thead>
-<tbody>
-<tr><td>Inline mention / button that opens a user profile</td><td><code>user.GetUserLink()</code></td></tr>
-<tr><td>Share a public channel or user profile outside Telegram</td><td><code>user.GetPublicLink()</code> or <code>chat.GetPublicLink()</code></td></tr>
-<tr><td>Link to a specific message in a public channel</td><td><code>message.GetMessageLink()</code></td></tr>
-<tr><td>Share button that pre-fills a URL and text</td><td><code>GetShareUrl(url, text)</code></td></tr>
-<tr><td>Invite user to a private group</td><td><code>GetJoinDeepLink(hash)</code></td></tr>
-<tr><td>Pre-fill a message before sending</td><td><code>GetMessageDeepLink(text)</code></td></tr>
-</tbody>
-</table>
+- **Inline mention / button that opens a user profile**: `user.GetUserLink()`
+- **Share a public channel or user profile outside Telegram**: `user.GetPublicLink()` or `chat.GetPublicLink()`
+- **Link to a specific message in a public channel**: `message.GetMessageLink()`
+- **Share button that pre-fills a URL and text**: `GetShareUrl(url, text)`
+- **Invite user to a private group**: `GetJoinDeepLink(hash)`
+- **Pre-fill a message before sending**: `GetMessageDeepLink(text)`

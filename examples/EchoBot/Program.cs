@@ -16,7 +16,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+using Microsoft.Extensions.Hosting;
 using Telegrator;
+using Telegrator.Hosting;
 
 namespace Telegrator.Examples;
 
@@ -24,6 +26,14 @@ public class EchoBot
 {
     public static void Main(string[] args)
     {
-        var client = new TelegratorClient();
+        HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
+
+        ITelegramBotHostBuilder tg = builder.AddTelegrator();
+        tg.Handlers.CollectHandlers();
+        tg.WithPolling();
+
+        IHost host = builder.Build();
+        host.UseTelegrator();
+        host.Run();
     }
 }

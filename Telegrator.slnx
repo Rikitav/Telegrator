@@ -6,6 +6,7 @@
   <Project Path="src/Telegrator.Hosting/Telegrator.Hosting.csproj" />
   <Project Path="src/Telegrator.Localized/Telegrator.Localized.csproj" />
   <Project Path="src/Telegrator.RedisStateStorage/Telegrator.RedisStateStorage.csproj" />
+  <Project Path="src/Telegrator.OpenTelemetry/Telegrator.OpenTelemetry.csproj" />
   <Project Path="src/Telegrator.Testing/Telegrator.Testing.csproj" />
   <Project Path="src/Telegrator/Telegrator.csproj" />
   <Project Path="tests/Telegrator.Tests/Telegrator.Tests.csproj" />

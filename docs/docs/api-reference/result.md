@@ -72,16 +72,15 @@ public override async Task<Result> Execute(IHandlerContainer<Message> container,
 
 ## Property Reference
 
-<table>
-<thead>
-<tr><th>Property</th><th>Type</th><th>Meaning</th></tr>
-</thead>
-<tbody>
-<tr><td>`Success`</td><td>`bool`</td><td>`true` for `Ok` and `Next`; `false` for `Fault`</td></tr>
-<tr><td>`RouteNext`</td><td>`bool`</td><td>`true` if the router should continue describing handlers</td></tr>
-<tr><td>`NextType`</td><td>`Type?`</td><td>When set, restricts continued routing to handlers of this exact type</td></tr>
-</tbody>
-</table>
+- **`Success`**
+  - Type: `bool`
+  - Meaning: `true` for `Ok` and `Next`; `false` for `Fault`
+- **`RouteNext`**
+  - Type: `bool`
+  - Meaning: `true` if the router should continue describing handlers
+- **`NextType`**
+  - Type: `Type?`
+  - Meaning: When set, restricts continued routing to handlers of this exact type
 
 ## Common Patterns
 

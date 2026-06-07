@@ -107,10 +107,13 @@ public class HostedUpdateWebhooker : IHostedService
 
     private async Task StartInternal(CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Hosted update receiver starting");
-        _logger.LogInformation("Receiving mode : WEB-HOOKING");
-        _logger.LogInformation("Webhook URL : {WebhookUrl}", _options.WebhookUri);
-        //_logger.LogInformation($"Webhhok status : https://api.telegram.org/bot{}/getWebhookInfo");
+        if (_logger.IsEnabled(LogLevel.Warning))
+        {
+            _logger.LogInformation("Hosted update receiver starting");
+            _logger.LogInformation("Receiving mode : WEB-HOOKING");
+            _logger.LogInformation("Webhook URL : {WebhookUrl}", _options.WebhookUri);
+            //_logger.LogInformation($"Webhhok status : https://api.telegram.org/bot{}/getWebhookInfo");
+        }
 
         await SetWebhook(cancellationToken).ConfigureAwait(false);
     }

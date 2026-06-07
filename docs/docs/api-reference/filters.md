@@ -31,22 +31,33 @@ public class HelloHandler : MessageHandler { }
 
 ### Built-in Filter Attributes
 
-<table>
-<thead>
-<tr><th>Attribute</th><th>Targets</th><th>Description</th></tr>
-</thead>
-<tbody>
-<tr><td>`[MessageHandler]`</td><td>`Message`</td><td>Handles text and media messages</td></tr>
-<tr><td>`[CommandHandler]`</td><td>`Message`</td><td>Handles messages starting with `/`</td></tr>
-<tr><td>`[CallbackQueryHandler]`</td><td>`CallbackQuery`</td><td>Handles inline button clicks</td></tr>
-<tr><td>`[AnyUpdateHandler]`</td><td>`Update`</td><td>Handles any update type</td></tr>
-<tr><td>`[TextContains("...")]`</td><td>`Message`</td><td>Matches substrings in message text</td></tr>
-<tr><td>`[TextStartsWith("...")]`</td><td>`Message`</td><td>Matches prefixes</td></tr>
-<tr><td>`[ChatType(...)]`</td><td>`Message`</td><td>Matches private/group/supergroup/channel</td></tr>
-<tr><td>`[FromUserId(123)]`</td><td>`Update`</td><td>Matches specific user ID</td></tr>
-<tr><td>`[State<TKey, TValue>(value)]`</td><td>`Update`</td><td>Matches current state in storage</td></tr>
-</tbody>
-</table>
+- **`[MessageHandler]`**
+  - Targets: `Message`
+  - Description: Handles text and media messages
+- **`[CommandHandler]`**
+  - Targets: `Message`
+  - Description: Handles messages starting with `/`
+- **`[CallbackQueryHandler]`**
+  - Targets: `CallbackQuery`
+  - Description: Handles inline button clicks
+- **`[AnyUpdateHandler]`**
+  - Targets: `Update`
+  - Description: Handles any update type
+- **`[TextContains("...")]`**
+  - Targets: `Message`
+  - Description: Matches substrings in message text
+- **`[TextStartsWith("...")]`**
+  - Targets: `Message`
+  - Description: Matches prefixes
+- **`[ChatType(...)]`**
+  - Targets: `Message`
+  - Description: Matches private/group/supergroup/channel
+- **`[FromUserId(123)]`**
+  - Targets: `Update`
+  - Description: Matches specific user ID
+- **`[State<TKey, TValue>(value)]`**
+  - Targets: `Update`
+  - Description: Matches current state in storage
 
 ## Filter Modifiers
 
@@ -58,16 +69,9 @@ Control how multiple filters combine:
 public class BotOrMentionHandler : MessageHandler { }
 ```
 
-<table>
-<thead>
-<tr><th>Modifier</th><th>Behavior</th></tr>
-</thead>
-<tbody>
-<tr><td>`None` (default)</td><td>AND with the next filter</td></tr>
-<tr><td>`Not`</td><td>Inverts the filter</td></tr>
-<tr><td>`OrNext`</td><td>OR with the next filter</td></tr>
-</tbody>
-</table>
+- **`None` (default)**: AND with the next filter
+- **`Not`**: Inverts the filter
+- **`OrNext`**: OR with the next filter
 
 ## Imperative Filters
 
