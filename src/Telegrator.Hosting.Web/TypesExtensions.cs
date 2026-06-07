@@ -17,6 +17,8 @@
  * SOFTWARE.
  */
 
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -133,7 +135,8 @@ public static class WebTelegramBotHostExtensions
     }
 
     /// <summary>
-    /// Registers <see cref="ITelegramBotClient"/> service with <see cref="HostedUpdateWebhooker"/> to receive updates using webhook
+    /// Registers <see cref="ITelegramBotClient"/> service with <see cref="HostedUpdateWebhooker"/> to receive updates using webhook.
+    /// Automatically registers the webhook endpoint via <see cref="IStartupFilter"/>.
     /// </summary>
     /// <param name="services"></param>
     /// <returns></returns>
@@ -144,7 +147,29 @@ public static class WebTelegramBotHostExtensions
 
         services.AddHttpClient<ITelegramBotClient>("tgwebhook").RemoveAllLoggers().AddTypedClient(TypedTelegramBotClientFactory);
         services.AddHostedService<HostedUpdateWebhooker>();
+        services.AddSingleton<IStartupFilter, WebhookEndpointStartupFilter>();
         return services;
+    }
+
+    /// <summary>
+    /// Startup filter that maps the Telegram webhook endpoint during application pipeline construction.
+    /// Works with <see cref="WebApplication"/> (which implements <see cref="IEndpointRouteBuilder"/>).
+    /// </summary>
+    internal sealed class WebhookEndpointStartupFilter : IStartupFilter
+    {
+        public Action<IApplicationBuilder> Configure(Action<IApplicationBuilder> next)
+        {
+            return app =>
+            {
+                next(app);
+
+                if (app is IEndpointRouteBuilder endpointRouteBuilder
+                    && app.ApplicationServices.GetService<HostedUpdateWebhooker>() is { } webhooker)
+                {
+                    webhooker.MapWebhook(endpointRouteBuilder);
+                }
+            };
+        }
     }
 
     private static ITelegramBotClient TypedTelegramBotClientFactory(HttpClient httpClient, IServiceProvider provider)

@@ -15,30 +15,30 @@ dotnet add package Telegrator.Hosting.Web
 
 ## Basic Usage
 
-In an ASP.NET Core application, use `AddTelegratorWeb` and `UseTelegratorWeb`:
+In an ASP.NET Core application, use `.WithWeb()` during configuration and `UseTelegrator()` after building:
 
 ```csharp
 using Telegrator.Hosting.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.AddTelegrator() // 1. Add Telegrator
-    .WithWeb(provider => new SqliteConnection($"Data Source={database}")) // 2. Add update receiving method
+builder.AddTelegrator() // 1. Add Telegrator core
+    .WithWeb()            // 2. Configure webhook receiving
     .Handlers.CollectHandlers(); // 3. Register handlers using source generator
 
 var app = builder.Build();
 
-// 4. Map the webhook endpoint and initialize
+// 4. Initialize Telegrator (webhook endpoint is mapped automatically)
 app.UseTelegrator();
 
-// 5. Optional: Remap webhook to specific URL (e.g. for behind a proxy or cloud host)
+// 5. Optional: Remap webhook to a specific URL (e.g. behind a proxy)
 // app.RemapWebhook("https://your-domain.com/api/telegrator/update");
 
 await app.RunAsync();
 ```
 
-> [!CAUTION]
-> **Obsolete Method**: `AddTelegratorWeb()` and `UseTelegratorWeb()` are now replaced by the unified fluent API. Use `.WithWeb()` and `UseTelegrator()` instead.
+> [!NOTE]
+> The webhook endpoint is registered automatically via an `IStartupFilter` inside `.WithWeb()`. You do **not** need to call any extra endpoint mapping method after `builder.Build()`.
 
 ## Configuration Options
 

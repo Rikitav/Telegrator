@@ -94,10 +94,17 @@
         </member>
         <member name="M:Telegrator.WebTelegramBotHostExtensions.AddTelegramWebhook(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
             <summary>
-            Registers <see cref="T:Telegram.Bot.ITelegramBotClient"/> service with <see cref="T:Telegrator.Mediation.HostedUpdateWebhooker"/> to receive updates using webhook
+            Registers <see cref="T:Telegram.Bot.ITelegramBotClient"/> service with <see cref="T:Telegrator.Mediation.HostedUpdateWebhooker"/> to receive updates using webhook.
+            Automatically registers the webhook endpoint via <see cref="T:Microsoft.AspNetCore.Hosting.IStartupFilter"/>.
             </summary>
             <param name="services"></param>
             <returns></returns>
+        </member>
+        <member name="T:Telegrator.WebTelegramBotHostExtensions.WebhookEndpointStartupFilter">
+            <summary>
+            Startup filter that maps the Telegram webhook endpoint during application pipeline construction.
+            Works with <see cref="T:Microsoft.AspNetCore.Builder.WebApplication"/> (which implements <see cref="T:Microsoft.AspNetCore.Routing.IEndpointRouteBuilder"/>).
+            </summary>
         </member>
         <member name="T:Telegrator.WebhookerOptions">
             <summary>
