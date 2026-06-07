@@ -23,6 +23,24 @@ using Telegram.Bot.Types;
 namespace Telegrator;
 
 /// <summary>
+/// Represents administrator rights for generating Telegram deep links.
+/// </summary>
+public enum BotAdminRight
+{
+    ChangeInfo,
+    PostMessages,
+    EditMessages,
+    DeleteMessages,
+    RestrictMembers,
+    InviteUsers,
+    PinMessages,
+    AddAdmins,
+    Anonymous,
+    ManageVideoChats,
+    ManageTopics
+}
+
+/// <summary>
 /// Provides extension methods for generating Telegram deep links and public URLs.
 /// </summary>
 public static class TelegramLinkExtensions
@@ -224,5 +242,113 @@ public static class TelegramLinkExtensions
             throw new ArgumentException("Text cannot be null or empty.", nameof(text));
 
         return $"tg://msg?text={Uri.EscapeDataString(text)}";
+    }
+
+    /// <summary>
+    /// Converts the enum value to its corresponding Telegram API string.
+    /// This approach is strictly AOT-compatible and avoids runtime reflection.
+    /// </summary>
+    /// <param name="right">The administrator right to convert.</param>
+    /// <returns>A string representation of the right as expected by Telegram API.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when an unknown enum value is provided.</exception>
+    public static string ToApiString(this BotAdminRight right) => right switch
+    {
+        BotAdminRight.ChangeInfo => "change_info",
+        BotAdminRight.PostMessages => "post_messages",
+        BotAdminRight.EditMessages => "edit_messages",
+        BotAdminRight.DeleteMessages => "delete_messages",
+        BotAdminRight.RestrictMembers => "restrict_members",
+        BotAdminRight.InviteUsers => "invite_users",
+        BotAdminRight.PinMessages => "pin_messages",
+        BotAdminRight.AddAdmins => "add_admins",
+        BotAdminRight.Anonymous => "anonymous",
+        BotAdminRight.ManageVideoChats => "manage_video_chats",
+        BotAdminRight.ManageTopics => "manage_topics",
+        _ => throw new ArgumentOutOfRangeException(nameof(right), right, null)
+    };
+
+    /// <summary>
+    /// Generates a deep link to add the bot to a group.
+    /// </summary>
+    /// <param name="bot">The bot User object (typically obtained via GetMeAsync).</param>
+    /// <param name="payload">Optional payload for the /start command (will be automatically URL-escaped).</param>
+    /// <param name="adminRights">List of requested administrator rights.</param>
+    /// <returns>A formatted deep link string.</returns>
+    public static string GenerateAddToGroupLink(
+        this User bot,
+        string? payload = null,
+        params BotAdminRight[] adminRights)
+    {
+        return GenerateDeepLink(bot, "startgroup", payload, adminRights);
+    }
+
+    /// <summary>
+    /// Generates a deep link to add the bot to a channel.
+    /// </summary>
+    /// <param name="bot">The bot User object (typically obtained via GetMeAsync).</param>
+    /// <param name="payload">Optional payload for the /start command (will be automatically URL-escaped).</param>
+    /// <param name="adminRights">List of requested administrator rights.</param>
+    /// <returns>A formatted deep link string.</returns>
+    public static string GenerateAddToChannelLink(
+        this User bot,
+        string? payload = null,
+        params BotAdminRight[] adminRights)
+    {
+        return GenerateDeepLink(bot, "startchannel", payload, adminRights);
+    }
+
+    /// <summary>
+    /// Generates a deep link to redirect the user to a private chat with the bot.
+    /// </summary>
+    /// <param name="bot">The bot User object (typically obtained via GetMeAsync).</param>
+    /// <param name="payload">Payload for the /start command (will be automatically URL-escaped).</param>
+    /// <returns>A formatted deep link string.</returns>
+    /// <exception cref="ArgumentException">Thrown when the bot's username is missing.</exception>
+    public static string GenerateStartLink(this User bot, string payload)
+    {
+        if (bot == null || string.IsNullOrWhiteSpace(bot.Username))
+            throw new ArgumentException("Bot User object must contain a valid Username.");
+
+        if (string.IsNullOrWhiteSpace(payload))
+            return $"https://t.me/{bot.Username}";
+
+        return $"https://t.me/{bot.Username}?start={Uri.EscapeDataString(payload)}";
+    }
+
+    private static string GenerateDeepLink(
+        User bot,
+        string startParameter,
+        string? payload,
+        BotAdminRight[]? adminRights)
+    {
+        if (bot == null || string.IsNullOrWhiteSpace(bot.Username))
+            throw new ArgumentException("Bot User object must contain a valid Username.");
+
+        StringBuilder sb = new StringBuilder($"https://t.me/{bot.Username}");
+        bool hasQuery = false;
+
+        if (!string.IsNullOrWhiteSpace(payload))
+        {
+            sb.Append('?')
+              .Append(startParameter)
+              .Append('=')
+              .Append(Uri.EscapeDataString(payload!));
+
+            hasQuery = true;
+        }
+
+        if (adminRights != null && adminRights.Length > 0)
+        {
+            sb.Append(hasQuery ? '&' : '?').Append("admin=");
+            for (int i = 0; i < adminRights.Length; i++)
+            {
+                if (i > 0)
+                    sb.Append('+');
+
+                sb.Append(adminRights[i].ToApiString());
+            }
+        }
+
+        return sb.ToString();
     }
 }

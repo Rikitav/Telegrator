@@ -98,6 +98,11 @@
         "path": "intermediate/keyboard-generation.md"
       },
       {
+        "title": "Telegram Links",
+        "id": "telegram-links",
+        "path": "intermediate/telegram-links.md"
+      },
+      {
         "title": "Advanced Hosting",
         "id": "advanced-hosting",
         "path": "intermediate/advanced-hosting.md"

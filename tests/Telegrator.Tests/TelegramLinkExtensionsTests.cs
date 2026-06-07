@@ -30,7 +30,7 @@ public class TelegramLinkExtensionsTests
     [Fact]
     public void GetUserLink_ShouldReturnDeepLink()
     {
-        var user = new User { Id = 123456, Username = "testuser" };
+        User user = new User { Id = 123456, Username = "testuser" };
 
         user.GetUserLink().Should().Be("tg://user?id=123456");
     }
@@ -38,7 +38,7 @@ public class TelegramLinkExtensionsTests
     [Fact]
     public void GetPublicLink_ForUser_WithUsername_ShouldReturnTmeLink()
     {
-        var user = new User { Id = 1, Username = "testuser" };
+        User user = new User { Id = 1, Username = "testuser" };
 
         user.GetPublicLink().Should().Be("https://t.me/testuser");
     }
@@ -46,7 +46,7 @@ public class TelegramLinkExtensionsTests
     [Fact]
     public void GetPublicLink_ForUser_WithoutUsername_ShouldReturnNull()
     {
-        var user = new User { Id = 1 };
+        User user = new User { Id = 1 };
 
         user.GetPublicLink().Should().BeNull();
     }
@@ -54,7 +54,7 @@ public class TelegramLinkExtensionsTests
     [Fact]
     public void GetDeepLink_ForUser_ShouldBeAliasToGetUserLink()
     {
-        var user = new User { Id = 42 };
+        User user = new User { Id = 42 };
 
         user.GetDeepLink().Should().Be(user.GetUserLink());
     }
@@ -75,7 +75,7 @@ public class TelegramLinkExtensionsTests
     [Fact]
     public void GetPublicLink_ForChat_WithUsername_ShouldReturnTmeLink()
     {
-        var chat = new Chat { Id = 1, Username = "mychannel" };
+        Chat chat = new Chat { Id = 1, Username = "mychannel" };
 
         chat.GetPublicLink().Should().Be("https://t.me/mychannel");
     }
@@ -83,7 +83,7 @@ public class TelegramLinkExtensionsTests
     [Fact]
     public void GetPublicLink_ForChat_WithoutUsername_ShouldReturnNull()
     {
-        var chat = new Chat { Id = -100500 };
+        Chat chat = new Chat { Id = -100500 };
 
         chat.GetPublicLink().Should().BeNull();
     }
@@ -104,7 +104,7 @@ public class TelegramLinkExtensionsTests
     [Fact]
     public void GetMessageLink_ForPublicChat_ShouldReturnTmeMessageLink()
     {
-        var message = new Message
+        Message message = new Message
         {
             Id = 42,
             Chat = new Chat { Id = 1, Username = "channel" }
@@ -116,7 +116,7 @@ public class TelegramLinkExtensionsTests
     [Fact]
     public void GetMessageLink_ForPrivateChat_ShouldReturnNull()
     {
-        var message = new Message
+        Message message = new Message
         {
             Id = 1,
             Chat = new Chat { Id = 123 }
