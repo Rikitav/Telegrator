@@ -40,15 +40,39 @@ await app.RunAsync();
 > [!NOTE]
 > The webhook endpoint is registered automatically via an `IStartupFilter` inside `.WithWeb()`. You do **not** need to call any extra endpoint mapping method after `builder.Build()`.
 
-## Configuration Options
+## Configuration
 
-You can customize the webhook behavior using `TelegramBotWebOptions`:
+For a complete reference of every option, precedence rules, environment variables, and common errors, see the [Webhook Configuration](configuration.md) guide.
+
+Quick example via `appsettings.json`:
+
+```json
+{
+  "Telegrator": {
+    "Token": "123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11"
+  },
+  "WebhookerOptions": {
+    "WebhookUri": "https://mybot.example.com/api/telegrator/update",
+    "SecretToken": "MySuperSecretToken123",
+    "MaxConnections": 50,
+    "DropPendingUpdates": true
+  }
+}
+```
+
+Or configure in code:
 
 ```csharp
-builder.Services.Configure<TelegramBotWebOptions>(options => {
-    options.EndpointPath = "/my/secret/path";
-    options.SecretToken = "A_Secure_Token";
+builder.Services.ConfigureWebhooker(new WebhookerOptions
+{
+    WebhookUri = "https://mybot.example.com/api/telegrator/update",
+    SecretToken = "MySecret",
+    MaxConnections = 100
 });
+
+builder.AddTelegrator()
+    .WithWeb()
+    .Handlers.CollectHandlers();
 ```
 
 ## Advantages
@@ -60,3 +84,8 @@ builder.Services.Configure<TelegramBotWebOptions>(options => {
 - **HTTPS**: Telegram only sends webhooks to secure URLs.
 - **Valid SSL**: Self-signed certificates are only allowed if you manually upload your public key to Telegram.
 - **Public URL**: Your server must be accessible from the internet (use `ngrok` for local development).
+
+## Next Steps
+- Learn about [Webhook Configuration](configuration.md) — every option explained.
+- Read about [Webhook Optimization](optimization.md) — performance tuning.
+- Read about [Webhook Security](security.md) — secret tokens and reverse proxies.

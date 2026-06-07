@@ -22,11 +22,10 @@ using Telegrator.Hosting;
 
 var builder = Host.CreateApplicationBuilder(args);
 
-builder.ConfigureReceiver(new ReceiverOptions() { ... });
-
-builder.AddTelegrator(options: new TelegratorOptions() { ... }) // 1. Add Telegrator with Polling (Long-polling)
-    .WithPolling() // 2. Add update receiving method
-    .Handlers.CollectHandlers(); // 3. Register handlers using source generator
+// 1. Add Telegrator core (reads "Telegrator" section from appsettings.json automatically)
+builder.AddTelegrator()
+    .WithPolling()                  // 2. Add long-polling receiver
+    .Handlers.CollectHandlers();    // 3. Register handlers using source generator
 
 var host = builder.Build();
 
@@ -36,13 +35,30 @@ host.UseTelegrator();
 await host.RunAsync();
 ```
 
+> [!NOTE]
+> If you don't pass explicit options to `AddTelegrator()`, the framework automatically reads the `"Telegrator"` section from `appsettings.json`. See the [Configuration](configuration.md) guide for every option and every way to set it.
+
+### Minimal `appsettings.json`
+
+```json
+{
+  "Telegrator": {
+    "Token": "123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11"
+  },
+  "Receiver": {
+    "DropPendingUpdates": true,
+    "Limit": 100
+  }
+}
+```
+
 ### IHostBuilder Support
 
-Telegrator also supports the classic `IHostBuilder` API (e.g. when using `Host.CreateDefaultBuilder` or ASP.NET Core `WebApplicationBuilder`):
+Telegrator also supports the classic `IHostBuilder` API (e.g. when using `Host.CreateDefaultBuilder`):
 
 ```csharp
 var host = Host.CreateDefaultBuilder(args)
-    .ConfigureTelegrator(options: new TelegratorOptions { ... }, action: builder =>
+    .ConfigureTelegrator(action: builder =>
     {
         builder.WithPolling();
         builder.Handlers.CollectHandlers();

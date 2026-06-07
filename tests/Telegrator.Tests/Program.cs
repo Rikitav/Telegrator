@@ -77,7 +77,7 @@ internal static class Program
         });
 
         builder.AddTelegrator()
-            .WithWide(dbConnectionFactory: provider => new SqliteConnection($"Data Source={Environment.ExpandEnvironmentVariables("%AppData%\\Telegrator\\%wtgb.db")}"))
+            .WithWide(dbConnectionFactory: provider => new SqliteConnection($"Data Source={Environment.ExpandEnvironmentVariables("%AppData%\\Telegrator\\wtgb.db")}"))
             .Handlers.CollectHandlers();
 
         builder.Build()

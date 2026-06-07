@@ -93,6 +93,11 @@
         "path": "intermediate/branching-handlers.md"
       },
       {
+        "title": "Keyboard Generation",
+        "id": "keyboard-generation",
+        "path": "intermediate/keyboard-generation.md"
+      },
+      {
         "title": "Advanced Hosting",
         "id": "advanced-hosting",
         "path": "intermediate/advanced-hosting.md"
@@ -153,6 +158,11 @@
         "path": "web-hosting/setup.md"
       },
       {
+        "title": "Configuration",
+        "id": "web-config",
+        "path": "web-hosting/configuration.md"
+      },
+      {
         "title": "Security",
         "id": "web-security",
         "path": "web-hosting/security.md"
@@ -171,6 +181,11 @@
         "title": "Introduction",
         "id": "wide-intro",
         "path": "wide-bot/introduction.md"
+      },
+      {
+        "title": "Configuration",
+        "id": "wide-config",
+        "path": "wide-bot/configuration.md"
       },
       {
         "title": "Handling Updates",

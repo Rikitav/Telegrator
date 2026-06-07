@@ -21,24 +21,36 @@ WideBot requires `api_id` and `api_hash` from [my.telegram.org](https://my.teleg
 ```csharp
 var builder = Host.CreateApplicationBuilder(args);
 
-// 1. Configure credentials
-builder.Services.ConfigureWideBot(new WideBotOptions(
-    apiId: 123456, 
-    apiHash: "YOUR_HASH"
-));
-
 string appData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-string database = Path.Combine(appData, "wtgb.db");
+string database = Path.Combine(appData, "Telegrator", "wtgb.db");
 
-builder.AddTelegrator() // 2. Add Telegrator
-    .WithWide(provider => new SqliteConnection($"Data Source={database}")) // 3. Add update receiving method
-    .Handlers.CollectHandlers(); // 4. Register handlers using source generator
+builder.AddTelegrator() // 1. Add Telegrator core
+    .WithWide(provider => new SqliteConnection($"Data Source={database}")) // 2. Add MTProto receiver
+    .Handlers.CollectHandlers(); // 3. Register handlers using source generator
 
 var app = builder.Build();
 
-// 5. Initialize Telegrator
-app.UseTelegrator()
-   .Run();
+// 4. Initialize Telegrator
+app.UseTelegrator();
+await app.RunAsync();
+```
+
+> [!NOTE]
+> If you don't pass explicit options, `.WithWide()` automatically reads the `"WideBotOptions"` section from `appsettings.json`. See the [Configuration](configuration.md) guide for every option and every way to set it.
+
+### Minimal `appsettings.json`
+
+```json
+{
+  "Telegrator": {
+    "Token": "123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11"
+  },
+  "WideBotOptions": {
+    "ApiId": 123456,
+    "ApiHash": "YOUR_API_HASH_FROM_MY_TELEGRAM_ORG",
+    "DropPendingUpdates": true
+  }
+}
 ```
 
 > [!CAUTION]
