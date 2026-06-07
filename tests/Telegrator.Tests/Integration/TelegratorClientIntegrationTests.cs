@@ -181,6 +181,7 @@ public partial class TelegratorClientIntegrationTests
 
     [CommandHandler]
     [CommandAllias("ask")]
+    [MightAwait(UpdateType.Message)]
     public partial class AskNameHandler : CommandHandler
     {
         public static bool Asked { get; set; }

@@ -84,7 +84,7 @@ public class HostedUpdateWebhooker : IHostedService
     /// <exception cref="ArgumentException"></exception>
     public async Task RemapWebhook(IEndpointRouteBuilder routeBuilder, string webhookUri, CancellationToken cancellationToken = default)
     {
-        if (!Uri.TryCreate(webhookUri, UriKind.Absolute, out Uri? result))
+        if (!Uri.TryCreate(webhookUri, UriKind.Absolute, out Uri? _))
             throw new ArgumentException("invalid URL");
 
         //_options.WebhookUri = result.ToString();

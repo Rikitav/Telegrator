@@ -27,6 +27,7 @@ namespace Telegrator;
 /// </summary>
 public enum BotAdminRight
 {
+#pragma warning disable CS1591
     ChangeInfo,
     PostMessages,
     EditMessages,
@@ -38,6 +39,7 @@ public enum BotAdminRight
     Anonymous,
     ManageVideoChats,
     ManageTopics
+#pragma warning restore
 }
 
 /// <summary>

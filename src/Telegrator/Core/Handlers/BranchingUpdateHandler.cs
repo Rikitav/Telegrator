@@ -160,6 +160,7 @@ public abstract class BranchingUpdateHandler<TUpdate> : AbstractUpdateHandler<TU
     /// </summary>
     /// <param name="container">The handler container.</param>
     /// <param name="methodInfo">The method to execute.</param>
+    /// <param name="cancellation"></param>
     protected virtual async Task<Result> BranchExecuteWrapper(IHandlerContainer<TUpdate> container, MethodInfo methodInfo, CancellationToken cancellation)
     {
         object?[]? args = null;
@@ -196,7 +197,7 @@ public abstract class BranchingUpdateHandler<TUpdate> : AbstractUpdateHandler<TU
             LazyInitialization = handler =>
             {
                 if (handler is not BranchingUpdateHandler<TUpdate> brancher)
-                    throw new InvalidDataException($"Expected {nameof(BranchingUpdateHandler<TUpdate>)}, got {handler.GetType().Name}.");
+                    throw new InvalidDataException($"Expected {nameof(BranchingUpdateHandler<>)}, got {handler.GetType().Name}.");
 
                 brancher.branchMethodInfo = method;
             };

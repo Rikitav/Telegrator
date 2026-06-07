@@ -171,7 +171,7 @@ public class HandlersCollectorGenerator : IIncrementalGenerator
                 _ => null
             };
 
-            if (string.IsNullOrEmpty(methodName))
+            if (methodName == null || string.IsNullOrEmpty(methodName))
                 continue;
 
             if (awaitingMethods.TryGetValue(methodName, out string? updateType) && !result.Contains(updateType))
