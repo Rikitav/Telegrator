@@ -129,7 +129,7 @@ public static partial class ColletionsExtensions
     /// <param name="random"></param>
     /// <returns></returns>
     public static TSource Random<TSource>(this IEnumerable<TSource> source, Random random)
-        => source.ElementAt(random.Next(0, source.Count()) - 1);
+        => source.ElementAt(random.Next(0, source.Count() - 1));
 
     /// <summary>
     /// Adds a range of elements to collection if they dont already exist using default equality comparer
