@@ -19,10 +19,11 @@
     <SignAssembly>False</SignAssembly>
 	  
     <Title>Telegrator.RedisStateStorage</Title>
-    <Version>1.18.5.3</Version>
+    <Version>1.18.6</Version>
 	<Authors>Rikitav Tim4ik</Authors>
     <Company>Rikitav Tim4ik</Company>
     <RepositoryUrl>https://github.com/Rikitav/Telegrator</RepositoryUrl>
+	<PackageProjectUrl>https://rikitav.github.io/telegrator.docs/#/docs/redis-setup</PackageProjectUrl>
     <PackageTags>telegram;bot;mediator;attributes;aspect;hosting;host;framework;easy;simple;handlers</PackageTags>
 	  
     <PackageIcon>telegrator_nuget.png</PackageIcon>

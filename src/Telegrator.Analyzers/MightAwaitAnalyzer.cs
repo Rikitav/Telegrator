@@ -1,14 +1,14 @@
 /*
  * Copyright (c) 2026 Rikitav Tim4ik
- * * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * * The above copyright notice and this permission notice shall be included in all
+ * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
@@ -75,9 +75,7 @@ public class MightAwaitAnalyzer : IIncrementalGenerator
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
         IncrementalValueProvider<ImmutableArray<MightAwaitDiagnosticModel?>> pipeline = context.SyntaxProvider
-            .CreateSyntaxProvider(
-                static (node, _) => node is ClassDeclarationSyntax,
-                Transform)
+            .CreateSyntaxProvider(static (node, _) => node is ClassDeclarationSyntax, Transform)
             .Where(static model => model != null)
             .Collect();
 
@@ -101,7 +99,6 @@ public class MightAwaitAnalyzer : IIncrementalGenerator
         foreach (SyntaxNode node in classSyntax.DescendantNodes())
         {
             cancellationToken.ThrowIfCancellationRequested();
-
             if (node is not InvocationExpressionSyntax invocation)
                 continue;
 
@@ -229,14 +226,10 @@ public class MightAwaitAnalyzer : IIncrementalGenerator
                 continue;
 
             context.CancellationToken.ThrowIfCancellationRequested();
+            (string MethodName, string UpdateType) = handler.AwaitingCalls[0];
 
-            (string MethodName, string UpdateType) firstCall = handler.AwaitingCalls[0];
             context.ReportDiagnostic(Diagnostic.Create(
-                MissingMightAwaitWarning,
-                handler.Location,
-                handler.ClassName,
-                firstCall.MethodName,
-                firstCall.UpdateType));
+                MissingMightAwaitWarning, handler.Location, handler.ClassName, MethodName, UpdateType));
         }
     }
 }
@@ -247,10 +240,10 @@ internal sealed record MightAwaitDiagnosticModel(string ClassName, ImmutableArra
     {
         if (other is null)
             return false;
+
         if (ClassName != other.ClassName)
             return false;
 
-        // РЎСЂР°РІРЅРёРІР°РµРј СЌР»РµРјРµРЅС‚С‹ РјР°СЃСЃРёРІР°, Р° РЅРµ СЃСЃС‹Р»РєСѓ РЅР° РјР°СЃСЃРёРІ
         return AwaitingCalls.SequenceEqual(other.AwaitingCalls);
     }
 
@@ -261,9 +254,8 @@ internal sealed record MightAwaitDiagnosticModel(string ClassName, ImmutableArra
             int hash = 17;
             hash = hash * 23 + ClassName.GetHashCode();
             foreach ((string MethodName, string UpdateType) call in AwaitingCalls)
-            {
                 hash = hash * 23 + call.GetHashCode();
-            }
+
             return hash;
         }
     }

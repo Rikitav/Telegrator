@@ -241,6 +241,26 @@
     ]
   },
   {
+    "category": "Essentials",
+    "items": [
+      {
+        "title": "Overview",
+        "id": "essentials-overview",
+        "path": "essentials/overview.md"
+      }
+    ]
+  },
+  {
+    "category": "OpenTelemetry",
+    "items": [
+      {
+        "title": "Overview",
+        "id": "opentelemetry-overview",
+        "path": "opentelemetry/overview.md"
+      }
+    ]
+  },
+  {
     "category": "Integration & Deployment",
     "items": [
       {

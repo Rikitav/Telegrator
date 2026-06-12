@@ -1,14 +1,14 @@
 /*
  * Copyright (c) 2026 Rikitav Tim4ik
- * * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * * The above copyright notice and this permission notice shall be included in all
+ * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
@@ -284,6 +284,42 @@ public static partial class ReflectionExtensions
 /// </summary>
 public static partial class StringExtensions
 {
+    /// <summary>
+    /// Truncates the string to the specified maximum length, appending an ellipsis if truncated.
+    /// </summary>
+    /// <param name="value">The string to truncate.</param>
+    /// <param name="maxLength">The maximum length including the ellipsis.</param>
+    /// <param name="ellipsis">The suffix to append when truncating.</param>
+    /// <returns>The truncated string.</returns>
+    public static string Truncate(this string value, int maxLength, string ellipsis = "…")
+    {
+        if (value is null)
+            throw new ArgumentNullException(nameof(value));
+
+        if (maxLength <= 0)
+            throw new ArgumentOutOfRangeException(nameof(maxLength));
+
+        if (value.Length <= maxLength)
+            return value;
+
+        int take = Math.Max(0, maxLength - ellipsis.Length);
+        return value[..take] + ellipsis;
+    }
+
+    /// <summary>
+    /// Returns the first line of the string, or the whole string if it contains no newlines.
+    /// </summary>
+    /// <param name="text">The input text.</param>
+    /// <returns>The first line.</returns>
+    public static string FirstLine(this string text)
+    {
+        if (text is null)
+            throw new ArgumentNullException(nameof(text));
+
+        int index = text.IndexOfAny(['\r', '\n']);
+        return index < 0 ? text : text[..index];
+    }
+
     /// <summary>
     /// Slices a <paramref name="source"/> string into a array of substrings of fixed <paramref name="length"/>
     /// </summary>

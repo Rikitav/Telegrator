@@ -32,6 +32,7 @@
     <ProjectReference Include="..\..\src\Telegrator\Telegrator.csproj" />
     <ProjectReference Include="..\..\src\Telegrator.Hosting\Telegrator.Hosting.csproj" />
     <ProjectReference Include="..\..\src\Telegrator.Testing\Telegrator.Testing.csproj" />
+    <ProjectReference Include="..\..\src\Telegrator.Essentials\Telegrator.Essentials.csproj" />
   </ItemGroup>
 
   <ItemGroup>

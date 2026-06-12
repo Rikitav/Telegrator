@@ -8,6 +8,21 @@
             <summary>
             A specialized testing server for the hosting pipeline that mimics the production service.
             </summary>
+            <remarks>
+            Initializes a new instance of the <see cref="T:Telegrator.Testing.Hosting.TelegratorTestServer"/> class.
+            </remarks>
+            <param name="updateRouter">The update router from DI.</param>
+            <param name="client">The telegram bot client from DI.</param>
+        </member>
+        <member name="M:Telegrator.Testing.Hosting.TelegratorTestServer.#ctor(Telegrator.Core.IUpdateRouter,Telegram.Bot.ITelegramBotClient)">
+            <summary>
+            A specialized testing server for the hosting pipeline that mimics the production service.
+            </summary>
+            <remarks>
+            Initializes a new instance of the <see cref="T:Telegrator.Testing.Hosting.TelegratorTestServer"/> class.
+            </remarks>
+            <param name="updateRouter">The update router from DI.</param>
+            <param name="client">The telegram bot client from DI.</param>
         </member>
         <member name="P:Telegrator.Testing.Hosting.TelegratorTestServer.ClientMock">
             <summary>
@@ -19,13 +34,6 @@
             <summary>
             Gets the exposed mocked ITelegramBotClient.
             </summary>
-        </member>
-        <member name="M:Telegrator.Testing.Hosting.TelegratorTestServer.#ctor(Telegrator.Core.IUpdateRouter,Telegram.Bot.ITelegramBotClient)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Telegrator.Testing.Hosting.TelegratorTestServer"/> class.
-            </summary>
-            <param name="updateRouter">The update router from DI.</param>
-            <param name="client">The telegram bot client from DI.</param>
         </member>
         <member name="M:Telegrator.Testing.Hosting.TelegratorTestServer.EmitUpdateAsync(Telegram.Bot.Types.Update,System.Threading.CancellationToken)">
             <summary>

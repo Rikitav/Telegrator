@@ -1,14 +1,14 @@
 /*
  * Copyright (c) 2026 Rikitav Tim4ik
- * * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * * The above copyright notice and this permission notice shall be included in all
+ * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
@@ -19,23 +19,27 @@
 
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
-using Telegrator.Filters;
+using Telegrator.Attributes;
+using Telegrator.Core.Filters;
 
 namespace Telegrator.Annotations;
 
 /// <summary>
-/// Attribute for filtering message with command "start" in bot's private chats.
-/// Allows handlers to respond to "welcome" bot commands.
+/// Filter annotation that matches "/start" commands sent in private chats.
 /// </summary>
-public class WelcomeAttribute : MessageFilterAttribute
+public class WelcomeAttribute : FilterAnnotation<Message>
 {
-    /// <summary>
-    /// Creates new instance of <see cref="WelcomeAttribute"/>
-    /// </summary>
-    /// <param name="onlyFirst"></param>
-    public WelcomeAttribute(bool onlyFirst = false) : base(
-        new MessageChatTypeFilter(ChatType.Private),
-        new CommandAlliasFilter("start"),
-        Filter<Message>.If(ctx => !onlyFirst || ctx.Input.Id == 0))
-    { }
+    /// <inheritdoc/>
+    public override bool CanPass(FilterExecutionContext<Message> context)
+    {
+        if (context.Input.Chat.Type != ChatType.Private)
+            return false;
+
+        string? text = context.Input.Text;
+        if (text is null)
+            return false;
+
+        return text.Equals("/start", StringComparison.OrdinalIgnoreCase)
+            || text.StartsWith("/start ", StringComparison.OrdinalIgnoreCase);
+    }
 }

@@ -4,7 +4,31 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <LangVersion>latest</LangVersion>
+	<LangVersion>latest</LangVersion>
+	<RootNamespace>Telegrator</RootNamespace>
+	<BaseOutputPath>..\..\bin</BaseOutputPath>
+	<DocumentationFile>..\..\docs\$(AssemblyName).xml</DocumentationFile>
+	<!--IsAotCompatible>True</IsAotCompatible-->
+	  
+    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <EnableNETAnalyzers>True</EnableNETAnalyzers>
+    <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+    <IncludeSymbols>True</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <SignAssembly>False</SignAssembly>
+	  
+    <Title>Telegrator.OpenTelemetry</Title>
+    <Version>1.18.6</Version>
+	<Authors>Rikitav Tim4ik</Authors>
+    <Company>Rikitav Tim4ik</Company>
+    <RepositoryUrl>https://github.com/Rikitav/Telegrator</RepositoryUrl>
+	<PackageProjectUrl>https://rikitav.github.io/telegrator.docs/#/docs/loc-setup</PackageProjectUrl>
+    <PackageTags>telegram;bot;mediator;attributes;aspect;hosting;host;framework;easy;simple;handlers;telemetry</PackageTags>
+	  
+    <PackageIcon>telegrator_nuget.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,6 +38,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Telegrator\Telegrator.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include=".\README.md" Pack="True" PackagePath="\" />
+    <None Include="..\..\LICENSE" Pack="True" PackagePath="\" />
+    <None Include="..\..\resources\telegrator_nuget.png" Pack="True" PackagePath="\" />
   </ItemGroup>
 
 </Project>
