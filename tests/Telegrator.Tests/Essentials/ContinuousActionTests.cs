@@ -4,7 +4,7 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegrator.Core.Handlers;
-using Telegrator.Essentials.Extensions;
+using Telegrator.Extensions;
 using Xunit;
 
 namespace Telegrator.Tests.Essentials;

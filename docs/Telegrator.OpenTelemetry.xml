@@ -4,62 +4,62 @@
         <name>Telegrator.OpenTelemetry</name>
     </assembly>
     <members>
-        <member name="T:Telegrator.OpenTelemetry.OpenTelemetryAwaitingProvider">
+        <member name="T:Telegrator.OpenTelemetryAwaitingProvider">
             <summary>
             Decorates an <see cref="T:Telegrator.Core.IAwaitingProvider"/> with OpenTelemetry tracing and metrics.
             </summary>
         </member>
-        <member name="M:Telegrator.OpenTelemetry.OpenTelemetryAwaitingProvider.#ctor(Telegrator.Core.IAwaitingProvider)">
+        <member name="M:Telegrator.OpenTelemetryAwaitingProvider.#ctor(Telegrator.Core.IAwaitingProvider)">
             <summary>
-            Initializes a new instance of the <see cref="T:Telegrator.OpenTelemetry.OpenTelemetryAwaitingProvider"/> class.
+            Initializes a new instance of the <see cref="T:Telegrator.OpenTelemetryAwaitingProvider"/> class.
             </summary>
             <param name="inner">The underlying provider to decorate.</param>
         </member>
-        <member name="P:Telegrator.OpenTelemetry.OpenTelemetryAwaitingProvider.AllowedTypes">
+        <member name="P:Telegrator.OpenTelemetryAwaitingProvider.AllowedTypes">
             <inheritdoc />
         </member>
-        <member name="M:Telegrator.OpenTelemetry.OpenTelemetryAwaitingProvider.TryGetDescriptorList(Telegram.Bot.Types.Enums.UpdateType,Telegrator.Core.Descriptors.HandlerDescriptorList@)">
+        <member name="M:Telegrator.OpenTelemetryAwaitingProvider.TryGetDescriptorList(Telegram.Bot.Types.Enums.UpdateType,Telegrator.Core.Descriptors.HandlerDescriptorList@)">
             <inheritdoc />
         </member>
-        <member name="M:Telegrator.OpenTelemetry.OpenTelemetryAwaitingProvider.GetHandlerInstance(Telegrator.Core.Descriptors.HandlerDescriptor,System.Threading.CancellationToken)">
+        <member name="M:Telegrator.OpenTelemetryAwaitingProvider.GetHandlerInstance(Telegrator.Core.Descriptors.HandlerDescriptor,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:Telegrator.OpenTelemetry.OpenTelemetryAwaitingProvider.IsEmpty">
+        <member name="M:Telegrator.OpenTelemetryAwaitingProvider.IsEmpty">
             <inheritdoc />
         </member>
-        <member name="M:Telegrator.OpenTelemetry.OpenTelemetryAwaitingProvider.UseHandler(Telegrator.Core.Descriptors.HandlerDescriptor)">
+        <member name="M:Telegrator.OpenTelemetryAwaitingProvider.UseHandler(Telegrator.Core.Descriptors.HandlerDescriptor)">
             <inheritdoc />
         </member>
-        <member name="T:Telegrator.OpenTelemetry.OpenTelemetryHandlersPool">
+        <member name="T:Telegrator.OpenTelemetryHandlersPool">
             <summary>
             Decorates an <see cref="T:Telegrator.Core.IUpdateHandlersPool"/> to emit OpenTelemetry metrics
             for handler execution duration, success, and errors.
             </summary>
         </member>
-        <member name="M:Telegrator.OpenTelemetry.OpenTelemetryHandlersPool.#ctor(Telegrator.Core.IUpdateHandlersPool)">
+        <member name="M:Telegrator.OpenTelemetryHandlersPool.#ctor(Telegrator.Core.IUpdateHandlersPool)">
             <summary>
-            Initializes a new instance of the <see cref="T:Telegrator.OpenTelemetry.OpenTelemetryHandlersPool"/> class.
+            Initializes a new instance of the <see cref="T:Telegrator.OpenTelemetryHandlersPool"/> class.
             </summary>
             <param name="inner">The underlying handlers pool to decorate.</param>
         </member>
-        <member name="E:Telegrator.OpenTelemetry.OpenTelemetryHandlersPool.HandlerEnqueued">
+        <member name="E:Telegrator.OpenTelemetryHandlersPool.HandlerEnqueued">
             <inheritdoc />
         </member>
-        <member name="E:Telegrator.OpenTelemetry.OpenTelemetryHandlersPool.HandlerExecuting">
+        <member name="E:Telegrator.OpenTelemetryHandlersPool.HandlerExecuting">
             <inheritdoc />
         </member>
-        <member name="M:Telegrator.OpenTelemetry.OpenTelemetryHandlersPool.Enqueue(System.Collections.Generic.IEnumerable{Telegrator.Core.Descriptors.DescribedHandlerDescriptor})">
+        <member name="M:Telegrator.OpenTelemetryHandlersPool.Enqueue(System.Collections.Generic.IEnumerable{Telegrator.Core.Descriptors.DescribedHandlerDescriptor})">
             <inheritdoc />
         </member>
-        <member name="M:Telegrator.OpenTelemetry.OpenTelemetryHandlersPool.Dispose">
+        <member name="M:Telegrator.OpenTelemetryHandlersPool.Dispose">
             <inheritdoc />
         </member>
-        <member name="T:Telegrator.OpenTelemetry.OpenTelemetryServiceCollectionExtensions">
+        <member name="T:Telegrator.OpenTelemetryServiceCollectionExtensions">
             <summary>
             Provides extension methods for registering Telegrator OpenTelemetry instrumentation.
             </summary>
         </member>
-        <member name="M:Telegrator.OpenTelemetry.OpenTelemetryServiceCollectionExtensions.AddTelegratorOpenTelemetry(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+        <member name="M:Telegrator.OpenTelemetryServiceCollectionExtensions.AddTelegratorOpenTelemetry(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
             <summary>
             Adds OpenTelemetry metrics and tracing instrumentation for the Telegrator framework.
             Decorates <see cref="T:Telegrator.Core.IUpdateHandlersPool"/>, <see cref="T:Telegrator.Core.IAwaitingProvider"/>, and <see cref="T:Telegrator.Core.States.IStateStorage"/>.
@@ -67,72 +67,79 @@
             <param name="services">The service collection.</param>
             <returns>The service collection for chaining.</returns>
         </member>
-        <member name="T:Telegrator.OpenTelemetry.OpenTelemetryStateStorage">
+        <member name="T:Telegrator.OpenTelemetryStateStorage">
             <summary>
             Decorates an <see cref="T:Telegrator.Core.States.IStateStorage"/> with OpenTelemetry tracing and metrics.
             </summary>
-        </member>
-        <member name="M:Telegrator.OpenTelemetry.OpenTelemetryStateStorage.#ctor(Telegrator.Core.States.IStateStorage)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Telegrator.OpenTelemetry.OpenTelemetryStateStorage"/> class.
-            </summary>
+            <remarks>
+            Initializes a new instance of the <see cref="T:Telegrator.OpenTelemetryStateStorage"/> class.
+            </remarks>
             <param name="inner">The underlying state storage to decorate.</param>
         </member>
-        <member name="M:Telegrator.OpenTelemetry.OpenTelemetryStateStorage.DeleteAsync(System.String,System.Threading.CancellationToken)">
+        <member name="M:Telegrator.OpenTelemetryStateStorage.#ctor(Telegrator.Core.States.IStateStorage)">
+            <summary>
+            Decorates an <see cref="T:Telegrator.Core.States.IStateStorage"/> with OpenTelemetry tracing and metrics.
+            </summary>
+            <remarks>
+            Initializes a new instance of the <see cref="T:Telegrator.OpenTelemetryStateStorage"/> class.
+            </remarks>
+            <param name="inner">The underlying state storage to decorate.</param>
+        </member>
+        <member name="M:Telegrator.OpenTelemetryStateStorage.DeleteAsync(System.String,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:Telegrator.OpenTelemetry.OpenTelemetryStateStorage.GetAsync``1(System.String,System.Threading.CancellationToken)">
+        <member name="M:Telegrator.OpenTelemetryStateStorage.GetAsync``1(System.String,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:Telegrator.OpenTelemetry.OpenTelemetryStateStorage.SetAsync``1(System.String,``0,System.Threading.CancellationToken)">
+        <member name="M:Telegrator.OpenTelemetryStateStorage.SetAsync``1(System.String,``0,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="T:Telegrator.OpenTelemetry.TelegratorActivitySource">
+        <member name="T:Telegrator.TelegratorActivitySource">
             <summary>
             Provides <see cref="T:System.Diagnostics.ActivitySource"/> instances for distributed tracing of Telegram bot operations.
             </summary>
         </member>
-        <member name="P:Telegrator.OpenTelemetry.TelegratorActivitySource.Instance">
+        <member name="P:Telegrator.TelegratorActivitySource.Instance">
             <summary>
             The primary <see cref="T:System.Diagnostics.ActivitySource"/> for Telegrator telemetry.
             </summary>
         </member>
-        <member name="T:Telegrator.OpenTelemetry.TelegratorMetrics">
+        <member name="T:Telegrator.TelegratorMetrics">
             <summary>
             Provides <see cref="T:System.Diagnostics.Metrics.Meter"/> instruments for Telegrator runtime metrics.
             </summary>
         </member>
-        <member name="P:Telegrator.OpenTelemetry.TelegratorMetrics.Instance">
+        <member name="P:Telegrator.TelegratorMetrics.Instance">
             <summary>
             The primary <see cref="T:System.Diagnostics.Metrics.Meter"/> for Telegrator metrics.
             </summary>
         </member>
-        <member name="P:Telegrator.OpenTelemetry.TelegratorMetrics.UpdatesReceived">
+        <member name="P:Telegrator.TelegratorMetrics.UpdatesReceived">
             <summary>
             Counter of incoming updates received by the bot.
             </summary>
         </member>
-        <member name="P:Telegrator.OpenTelemetry.TelegratorMetrics.HandlersExecuted">
+        <member name="P:Telegrator.TelegratorMetrics.HandlersExecuted">
             <summary>
             Counter of handler executions.
             </summary>
         </member>
-        <member name="P:Telegrator.OpenTelemetry.TelegratorMetrics.HandlerErrors">
+        <member name="P:Telegrator.TelegratorMetrics.HandlerErrors">
             <summary>
             Counter of handler execution failures.
             </summary>
         </member>
-        <member name="P:Telegrator.OpenTelemetry.TelegratorMetrics.HandlerDuration">
+        <member name="P:Telegrator.TelegratorMetrics.HandlerDuration">
             <summary>
             Histogram of handler execution duration in milliseconds.
             </summary>
         </member>
-        <member name="P:Telegrator.OpenTelemetry.TelegratorMetrics.AwaitingActive">
+        <member name="P:Telegrator.TelegratorMetrics.AwaitingActive">
             <summary>
             UpDownCounter of currently active awaiting handlers.
             </summary>
         </member>
-        <member name="P:Telegrator.OpenTelemetry.TelegratorMetrics.StateOperations">
+        <member name="P:Telegrator.TelegratorMetrics.StateOperations">
             <summary>
             Counter of state storage operations.
             </summary>

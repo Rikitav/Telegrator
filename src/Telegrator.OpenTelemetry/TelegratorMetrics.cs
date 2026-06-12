@@ -19,7 +19,7 @@
 
 using System.Diagnostics.Metrics;
 
-namespace Telegrator.OpenTelemetry;
+namespace Telegrator;
 
 /// <summary>
 /// Provides <see cref="Meter"/> instruments for Telegrator runtime metrics.

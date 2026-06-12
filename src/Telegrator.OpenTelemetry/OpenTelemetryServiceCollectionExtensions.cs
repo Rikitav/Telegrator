@@ -18,11 +18,10 @@
  */
 
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Telegrator.Core;
 using Telegrator.Core.States;
 
-namespace Telegrator.OpenTelemetry;
+namespace Telegrator;
 
 /// <summary>
 /// Provides extension methods for registering Telegrator OpenTelemetry instrumentation.

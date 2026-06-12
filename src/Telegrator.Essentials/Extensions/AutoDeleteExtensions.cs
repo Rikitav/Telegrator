@@ -1,8 +1,8 @@
 using Telegram.Bot.Types;
+using Telegrator.Aspects;
 using Telegrator.Core.Handlers;
-using Telegrator.Essentials.Aspects;
 
-namespace Telegrator.Essentials.Extensions;
+namespace Telegrator.Extensions;
 
 /// <summary>
 /// Extension methods for scheduling automatic message deletion.

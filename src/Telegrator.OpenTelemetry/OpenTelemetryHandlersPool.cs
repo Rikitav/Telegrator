@@ -21,7 +21,7 @@ using System.Diagnostics;
 using Telegrator.Core;
 using Telegrator.Core.Descriptors;
 
-namespace Telegrator.OpenTelemetry;
+namespace Telegrator;
 
 /// <summary>
 /// Decorates an <see cref="IUpdateHandlersPool"/> to emit OpenTelemetry metrics

@@ -1,9 +1,9 @@
 using FluentAssertions;
 using Moq;
 using Telegram.Bot.Types;
+using Telegrator.Aspects;
 using Telegrator.Core.Handlers;
 using Telegrator.Core.States;
-using Telegrator.Essentials.Aspects;
 using Telegrator.States;
 using Xunit;
 

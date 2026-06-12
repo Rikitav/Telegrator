@@ -20,23 +20,18 @@
 using System.Diagnostics;
 using Telegrator.Core.States;
 
-namespace Telegrator.OpenTelemetry;
+namespace Telegrator;
 
 /// <summary>
 /// Decorates an <see cref="IStateStorage"/> with OpenTelemetry tracing and metrics.
 /// </summary>
-public sealed class OpenTelemetryStateStorage : IStateStorage
+/// <remarks>
+/// Initializes a new instance of the <see cref="OpenTelemetryStateStorage"/> class.
+/// </remarks>
+/// <param name="inner">The underlying state storage to decorate.</param>
+public sealed class OpenTelemetryStateStorage(IStateStorage inner) : IStateStorage
 {
-    private readonly IStateStorage _inner;
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="OpenTelemetryStateStorage"/> class.
-    /// </summary>
-    /// <param name="inner">The underlying state storage to decorate.</param>
-    public OpenTelemetryStateStorage(IStateStorage inner)
-    {
-        _inner = inner ?? throw new ArgumentNullException(nameof(inner));
-    }
+    private readonly IStateStorage _inner = inner ?? throw new ArgumentNullException(nameof(inner));
 
     /// <inheritdoc />
     public Task DeleteAsync(string key, CancellationToken cancellation = default)

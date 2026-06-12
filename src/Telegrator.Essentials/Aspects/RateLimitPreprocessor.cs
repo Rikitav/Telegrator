@@ -1,8 +1,7 @@
 ﻿using Telegram.Bot.Types;
-using Telegrator.Aspects;
 using Telegrator.Core.Handlers;
 
-namespace Telegrator.Essentials.Aspects;
+namespace Telegrator.Aspects;
 
 /// <summary>
 /// Pre-processor that limits how many updates a single user can trigger within a sliding time window.

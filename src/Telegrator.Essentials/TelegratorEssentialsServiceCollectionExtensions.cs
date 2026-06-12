@@ -1,6 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Telegrator.Essentials;
+namespace Telegrator;
 
 /// <summary>
 /// Provides extension methods for registering Telegrator.Essentials services.

@@ -2,9 +2,9 @@ using FluentAssertions;
 using Moq;
 using Telegram.Bot;
 using Telegram.Bot.Types;
+using Telegrator.Aspects;
 using Telegrator.Core.Handlers;
-using Telegrator.Essentials.Aspects;
-using Telegrator.Essentials.Extensions;
+using Telegrator.Extensions;
 using Xunit;
 
 namespace Telegrator.Tests.Essentials;

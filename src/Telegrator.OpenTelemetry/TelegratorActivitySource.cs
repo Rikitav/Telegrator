@@ -19,7 +19,7 @@
 
 using System.Diagnostics;
 
-namespace Telegrator.OpenTelemetry;
+namespace Telegrator;
 
 /// <summary>
 /// Provides <see cref="ActivitySource"/> instances for distributed tracing of Telegram bot operations.

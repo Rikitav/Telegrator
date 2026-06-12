@@ -1,13 +1,13 @@
 using Telegram.Bot;
 using Telegram.Bot.Types;
-using Telegrator.Aspects;
 using Telegrator.Core.Handlers;
+using Telegrator.Extensions;
 
-namespace Telegrator.Essentials.Aspects;
+namespace Telegrator.Aspects;
 
 /// <summary>
 /// Post-processor that automatically deletes a bot message after a configured delay.
-/// The handler must schedule the message using <see cref="Extensions.AutoDeleteExtensions.ScheduleAutoDelete"/>.
+/// The handler must schedule the message using <see cref="AutoDeleteExtensions.ScheduleAutoDelete"/>.
 /// </summary>
 public class AutoDeletePostProcessor : IPostProcessor
 {

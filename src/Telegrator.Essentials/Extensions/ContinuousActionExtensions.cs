@@ -2,9 +2,8 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegrator.Core.Handlers;
-using Telegrator.Essentials.Extensions;
 
-namespace Telegrator.Essentials.Extensions;
+namespace Telegrator.Extensions;
 
 /// <summary>
 /// Extension methods for starting continuous chat actions.

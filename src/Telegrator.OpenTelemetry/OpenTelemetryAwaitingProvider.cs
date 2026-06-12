@@ -25,7 +25,7 @@ using Telegrator.Core.Descriptors;
 using Telegrator.Core.Handlers;
 using Telegrator.Core.Handlers.Building;
 
-namespace Telegrator.OpenTelemetry;
+namespace Telegrator;
 
 /// <summary>
 /// Decorates an <see cref="IAwaitingProvider"/> with OpenTelemetry tracing and metrics.
