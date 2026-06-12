@@ -28,7 +28,7 @@ namespace Telegrator.Handlers;
 /// <summary>
 /// Attribute that marks a handler to process EditedMessageHandler updates.
 /// </summary>
-public class EditedMessageHandlerAttribute(int importance = 0) : UpdateHandlerAttribute<EditedMessageHandler>(UpdateType.EditedMessage, importance)
+public class EditedMessageHandlerAttribute(int importance = 0) : UpdateHandlerAttribute<EditedMessageHandler>([typeof(BranchingEditedMessageHandler)], UpdateType.EditedMessage, importance)
 {
     /// <inheritdoc/>
     public override bool CanPass(FilterExecutionContext<Update> context) => context.Input is { EditedMessage: { } };

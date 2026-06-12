@@ -60,6 +60,11 @@
             When empty, any text after the prefix is accepted.
             </summary>
         </member>
+        <member name="P:Telegrator.Annotations.PrefixedTriggerWordAttribute.IgnoreExtraParameters">
+            <summary>
+            Gets or sets whether to ignore extra parameters after the trigger word.
+            </summary>
+        </member>
         <member name="P:Telegrator.Annotations.PrefixedTriggerWordAttribute.IgnoreCase">
             <summary>
             Gets or sets whether the comparison is case-insensitive.

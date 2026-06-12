@@ -29,7 +29,7 @@ namespace Telegrator.Handlers;
 /// <summary>
 /// Attribute that marks a handler to process PreCheckoutQueryHandler updates.
 /// </summary>
-public class PreCheckoutQueryHandlerAttribute(int importance = 0) : UpdateHandlerAttribute<PreCheckoutQueryHandler>(UpdateType.PreCheckoutQuery, importance)
+public class PreCheckoutQueryHandlerAttribute(int importance = 0) : UpdateHandlerAttribute<PreCheckoutQueryHandler>([typeof(BranchingPreCheckoutQueryHandler)], UpdateType.PreCheckoutQuery, importance)
 {
     /// <inheritdoc/>
     public override bool CanPass(FilterExecutionContext<Update> context) => context.Input is { PreCheckoutQuery: { } };

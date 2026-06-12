@@ -28,7 +28,7 @@ namespace Telegrator.Handlers;
 /// <summary>
 /// Attribute that marks a handler to process EditedChannelPostHandler updates.
 /// </summary>
-public class EditedChannelPostHandlerAttribute(int importance = 0) : UpdateHandlerAttribute<EditedChannelPostHandler>(UpdateType.EditedChannelPost, importance)
+public class EditedChannelPostHandlerAttribute(int importance = 0) : UpdateHandlerAttribute<EditedChannelPostHandler>([typeof(BranchingEditedChannelPostHandler)], UpdateType.EditedChannelPost, importance)
 {
     /// <inheritdoc/>
     public override bool CanPass(FilterExecutionContext<Update> context) => context.Input is { EditedChannelPost: { } };

@@ -28,7 +28,7 @@ namespace Telegrator.Handlers;
 /// <summary>
 /// Attribute that marks a handler to process ChannelPostHandler updates.
 /// </summary>
-public class ChannelPostHandlerAttribute(int importance = 0) : UpdateHandlerAttribute<ChannelPostHandler>(UpdateType.ChannelPost, importance)
+public class ChannelPostHandlerAttribute(int importance = 0) : UpdateHandlerAttribute<ChannelPostHandler>([typeof(BranchingChannelPostHandler)], UpdateType.ChannelPost, importance)
 {
     /// <inheritdoc/>
     public override bool CanPass(FilterExecutionContext<Update> context) => context.Input is { ChannelPost: { } };

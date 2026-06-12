@@ -31,7 +31,7 @@ namespace Telegrator.Handlers;
 /// This handler will be triggered when users interact with inline keyboards or other callback mechanisms.
 /// </summary>
 /// <param name="importance"></param>
-public sealed class CallbackQueryHandlerAttribute(int importance = 0) : UpdateHandlerAttribute<CallbackQueryHandler>(UpdateType.CallbackQuery, importance)
+public sealed class CallbackQueryHandlerAttribute(int importance = 0) : UpdateHandlerAttribute<CallbackQueryHandler>([typeof(BranchingCallbackQueryHandler)], UpdateType.CallbackQuery, importance)
 {
     /// <summary>
     /// Always returns true, allowing any callback query update to pass through this filter.

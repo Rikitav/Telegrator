@@ -27,7 +27,7 @@ namespace Telegrator.Handlers;
 /// <summary>
 /// Attribute that marks a handler to process text messages only.
 /// </summary>
-public class TextMessageHandlerAttribute(int importance = 0) : UpdateHandlerAttribute<TextMessageHandler>(UpdateType.Message, importance)
+public class TextMessageHandlerAttribute(int importance = 0) : UpdateHandlerAttribute<TextMessageHandler>([typeof(BranchingTextMessageHandler)], UpdateType.Message, importance)
 {
     /// <inheritdoc/>
     public override bool CanPass(FilterExecutionContext<Update> context) => context.Input.Message is { Type: MessageType.Text, Text.Length: > 0 };

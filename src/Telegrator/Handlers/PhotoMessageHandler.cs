@@ -27,7 +27,7 @@ namespace Telegrator.Handlers;
 /// <summary>
 /// Attribute that marks a handler to process photo messages only.
 /// </summary>
-public class PhotoMessageHandlerAttribute(int importance = 0) : UpdateHandlerAttribute<PhotoMessageHandler>(UpdateType.Message, importance)
+public class PhotoMessageHandlerAttribute(int importance = 0) : UpdateHandlerAttribute<PhotoMessageHandler>([typeof(BranchingPhotoMessageHandler)], UpdateType.Message, importance)
 {
     /// <inheritdoc/>
     public override bool CanPass(FilterExecutionContext<Update> context) => context.Input.Message is { Type: MessageType.Photo, Photo.Length: > 0 };

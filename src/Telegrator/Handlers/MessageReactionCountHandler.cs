@@ -28,7 +28,7 @@ namespace Telegrator.Handlers;
 /// <summary>
 /// Attribute that marks a handler to process MessageReactionCountHandler updates.
 /// </summary>
-public class MessageReactionCountHandlerAttribute(int importance = 0) : UpdateHandlerAttribute<MessageReactionCountHandler>(UpdateType.MessageReactionCount, importance)
+public class MessageReactionCountHandlerAttribute(int importance = 0) : UpdateHandlerAttribute<MessageReactionCountHandler>([typeof(BranchingMessageReactionCountHandler)], UpdateType.MessageReactionCount, importance)
 {
     /// <inheritdoc/>
     public override bool CanPass(FilterExecutionContext<Update> context) => context.Input is { MessageReactionCount: { } };

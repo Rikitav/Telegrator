@@ -30,7 +30,7 @@ namespace Telegrator.Handlers;
 /// Attribute that marks a handler to process inline queries.
 /// IMPORTANT! You can have only ONE instance of this handler.
 /// </summary>
-public class InlineQueryHandlerAttribute(int importance = 0) : UpdateHandlerAttribute<InlineQueryHandler>(UpdateType.InlineQuery, importance)
+public class InlineQueryHandlerAttribute(int importance = 0) : UpdateHandlerAttribute<InlineQueryHandler>([typeof(BranchingInlineQueryHandler)], UpdateType.InlineQuery, importance)
 {
     /// <inheritdoc/>
     public override bool CanPass(FilterExecutionContext<Update> context) => context.Input.InlineQuery is { } | context.Input.ChosenInlineResult is { };

@@ -28,7 +28,7 @@ namespace Telegrator.Handlers;
 /// Attribute that marks a handler to process command messages.
 /// This handler will be triggered when users send bot commands (messages starting with '/').
 /// </summary>
-public class CommandHandlerAttribute(int importance = 1) : UpdateHandlerAttribute<CommandHandler>(UpdateType.Message, importance)
+public class CommandHandlerAttribute(int importance = 1) : UpdateHandlerAttribute<CommandHandler>([typeof(BranchingCommandHandler)], UpdateType.Message, importance)
 {
     /// <summary>
     /// Gets the command that was extracted from the message (without the '/' prefix and bot username).

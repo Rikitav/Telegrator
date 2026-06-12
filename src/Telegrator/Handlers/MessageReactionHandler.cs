@@ -28,7 +28,7 @@ namespace Telegrator.Handlers;
 /// <summary>
 /// Attribute that marks a handler to process MessageReactionHandler updates.
 /// </summary>
-public class MessageReactionHandlerAttribute(int importance = 0) : UpdateHandlerAttribute<MessageReactionHandler>(UpdateType.MessageReaction, importance)
+public class MessageReactionHandlerAttribute(int importance = 0) : UpdateHandlerAttribute<MessageReactionHandler>([typeof(BranchingMessageReactionHandler)], UpdateType.MessageReaction, importance)
 {
     /// <inheritdoc/>
     public override bool CanPass(FilterExecutionContext<Update> context) => context.Input is { MessageReaction: { } };

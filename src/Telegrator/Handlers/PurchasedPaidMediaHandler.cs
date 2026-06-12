@@ -29,7 +29,7 @@ namespace Telegrator.Handlers;
 /// <summary>
 /// Attribute that marks a handler to process PurchasedPaidMediaHandler updates.
 /// </summary>
-public class PurchasedPaidMediaHandlerAttribute(int importance = 0) : UpdateHandlerAttribute<PurchasedPaidMediaHandler>(UpdateType.PurchasedPaidMedia, importance)
+public class PurchasedPaidMediaHandlerAttribute(int importance = 0) : UpdateHandlerAttribute<PurchasedPaidMediaHandler>([typeof(BranchingPurchasedPaidMediaHandler)], UpdateType.PurchasedPaidMedia, importance)
 {
     /// <inheritdoc/>
     public override bool CanPass(FilterExecutionContext<Update> context) => context.Input is { PurchasedPaidMedia: { } };

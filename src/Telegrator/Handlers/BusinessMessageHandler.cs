@@ -28,7 +28,7 @@ namespace Telegrator.Handlers;
 /// <summary>
 /// Attribute that marks a handler to process BusinessMessageHandler updates.
 /// </summary>
-public class BusinessMessageHandlerAttribute(int importance = 0) : UpdateHandlerAttribute<BusinessMessageHandler>(UpdateType.BusinessMessage, importance)
+public class BusinessMessageHandlerAttribute(int importance = 0) : UpdateHandlerAttribute<BusinessMessageHandler>([typeof(BranchingBusinessMessageHandler)], UpdateType.BusinessMessage, importance)
 {
     /// <inheritdoc/>
     public override bool CanPass(FilterExecutionContext<Update> context) => context.Input is { BusinessMessage: { } };

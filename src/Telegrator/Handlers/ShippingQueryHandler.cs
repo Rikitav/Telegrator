@@ -29,7 +29,7 @@ namespace Telegrator.Handlers;
 /// <summary>
 /// Attribute that marks a handler to process ShippingQueryHandler updates.
 /// </summary>
-public class ShippingQueryHandlerAttribute(int importance = 0) : UpdateHandlerAttribute<ShippingQueryHandler>(UpdateType.ShippingQuery, importance)
+public class ShippingQueryHandlerAttribute(int importance = 0) : UpdateHandlerAttribute<ShippingQueryHandler>([typeof(BranchingShippingQueryHandler)], UpdateType.ShippingQuery, importance)
 {
     /// <inheritdoc/>
     public override bool CanPass(FilterExecutionContext<Update> context) => context.Input is { ShippingQuery: { } };

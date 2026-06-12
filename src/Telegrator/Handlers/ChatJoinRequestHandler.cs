@@ -28,7 +28,7 @@ namespace Telegrator.Handlers;
 /// <summary>
 /// Attribute that marks a handler to process ChatJoinRequestHandler updates.
 /// </summary>
-public class ChatJoinRequestHandlerAttribute(int importance = 0) : UpdateHandlerAttribute<ChatJoinRequestHandler>(UpdateType.ChatJoinRequest, importance)
+public class ChatJoinRequestHandlerAttribute(int importance = 0) : UpdateHandlerAttribute<ChatJoinRequestHandler>([typeof(BranchingChatJoinRequestHandler)], UpdateType.ChatJoinRequest, importance)
 {
     /// <inheritdoc/>
     public override bool CanPass(FilterExecutionContext<Update> context) => context.Input is { ChatJoinRequest: { } };

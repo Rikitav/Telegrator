@@ -28,7 +28,7 @@ namespace Telegrator.Handlers;
 /// <summary>
 /// Attribute that marks a handler to process RemovedChatBoostHandler updates.
 /// </summary>
-public class RemovedChatBoostHandlerAttribute(int importance = 0) : UpdateHandlerAttribute<RemovedChatBoostHandler>(UpdateType.RemovedChatBoost, importance)
+public class RemovedChatBoostHandlerAttribute(int importance = 0) : UpdateHandlerAttribute<RemovedChatBoostHandler>([typeof(BranchingRemovedChatBoostHandler)], UpdateType.RemovedChatBoost, importance)
 {
     /// <inheritdoc/>
     public override bool CanPass(FilterExecutionContext<Update> context) => context.Input is { RemovedChatBoost: { } };

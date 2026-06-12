@@ -28,7 +28,7 @@ namespace Telegrator.Handlers;
 /// <summary>
 /// Attribute that marks a handler to process BusinessConnectionHandler updates.
 /// </summary>
-public class BusinessConnectionHandlerAttribute(int importance = 0) : UpdateHandlerAttribute<BusinessConnectionHandler>(UpdateType.BusinessConnection, importance)
+public class BusinessConnectionHandlerAttribute(int importance = 0) : UpdateHandlerAttribute<BusinessConnectionHandler>([typeof(BranchingBusinessConnectionHandler)], UpdateType.BusinessConnection, importance)
 {
     /// <inheritdoc/>
     public override bool CanPass(FilterExecutionContext<Update> context) => context.Input is { BusinessConnection: { } };

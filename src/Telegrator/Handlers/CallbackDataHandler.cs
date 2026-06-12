@@ -28,7 +28,7 @@ namespace Telegrator.Handlers;
 /// Attribute that marks a handler to process callback queries with specific data format.
 /// Similar to CommandHandler, it can extract the main action and its arguments.
 /// </summary>
-public class CallbackDataHandlerAttribute(int importance = 1) : UpdateHandlerAttribute<CallbackDataHandler>(UpdateType.CallbackQuery, importance)
+public class CallbackDataHandlerAttribute(int importance = 1) : UpdateHandlerAttribute<CallbackDataHandler>([typeof(BranchingCallbackDataHandler)], UpdateType.CallbackQuery, importance)
 {
     /// <summary>
     /// Gets the action string that was extracted from the callback data.

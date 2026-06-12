@@ -22,6 +22,11 @@ public class PrefixedTriggerWordAttribute : FilterAnnotation<Message>
     public string[]? Words { get; set; }
 
     /// <summary>
+    /// Gets or sets whether to ignore extra parameters after the trigger word.
+    /// </summary>
+    public bool IgnoreExtraParameters { get; set; } = false;
+
+    /// <summary>
     /// Gets or sets whether the comparison is case-insensitive.
     /// </summary>
     public bool IgnoreCase { get; set; } = true;

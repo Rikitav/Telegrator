@@ -28,7 +28,7 @@ namespace Telegrator.Handlers;
 /// <summary>
 /// Attribute that marks a handler to process MyChatMemberHandler updates.
 /// </summary>
-public class MyChatMemberHandlerAttribute(int importance = 0) : UpdateHandlerAttribute<MyChatMemberHandler>(UpdateType.MyChatMember, importance)
+public class MyChatMemberHandlerAttribute(int importance = 0) : UpdateHandlerAttribute<MyChatMemberHandler>([typeof(BranchingMyChatMemberHandler)], UpdateType.MyChatMember, importance)
 {
     /// <inheritdoc/>
     public override bool CanPass(FilterExecutionContext<Update> context) => context.Input is { MyChatMember: { } };

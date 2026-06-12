@@ -30,7 +30,7 @@ namespace Telegrator.Handlers;
 /// This handler will be triggered for all incoming updates regardless of their type.
 /// </summary>
 /// <param name="importance"></param>
-public class AnyUpdateHandlerAttribute(int importance = -1) : UpdateHandlerAttribute<AnyUpdateHandler>(UpdateType.Unknown, importance)
+public class AnyUpdateHandlerAttribute(int importance = -1) : UpdateHandlerAttribute<AnyUpdateHandler>([typeof(BranchingAnyUpdateHandler)], UpdateType.Unknown, importance)
 {
     /// <summary>
     /// Always returns true, allowing any update to pass through this filter.

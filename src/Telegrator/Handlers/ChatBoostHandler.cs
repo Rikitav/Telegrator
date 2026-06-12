@@ -28,7 +28,7 @@ namespace Telegrator.Handlers;
 /// <summary>
 /// Attribute that marks a handler to process ChatBoostHandler updates.
 /// </summary>
-public class ChatBoostHandlerAttribute(int importance = 0) : UpdateHandlerAttribute<ChatBoostHandler>(UpdateType.ChatBoost, importance)
+public class ChatBoostHandlerAttribute(int importance = 0) : UpdateHandlerAttribute<ChatBoostHandler>([typeof(BranchingChatBoostHandler)], UpdateType.ChatBoost, importance)
 {
     /// <inheritdoc/>
     public override bool CanPass(FilterExecutionContext<Update> context) => context.Input is { ChatBoost: { } };

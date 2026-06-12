@@ -28,7 +28,7 @@ namespace Telegrator.Handlers;
 /// <summary>
 /// Attribute that marks a handler to process PollHandler updates.
 /// </summary>
-public class PollHandlerAttribute(int importance = 0) : UpdateHandlerAttribute<PollHandler>(UpdateType.Poll, importance)
+public class PollHandlerAttribute(int importance = 0) : UpdateHandlerAttribute<PollHandler>([typeof(BranchingPollHandler)], UpdateType.Poll, importance)
 {
     /// <inheritdoc/>
     public override bool CanPass(FilterExecutionContext<Update> context) => context.Input is { Poll: { } };

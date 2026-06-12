@@ -27,7 +27,7 @@ namespace Telegrator.Handlers;
 /// <summary>
 /// Attribute that marks a handler to process document messages only.
 /// </summary>
-public class DocumentMessageHandlerAttribute(int importance = 0) : UpdateHandlerAttribute<DocumentMessageHandler>(UpdateType.Message, importance)
+public class DocumentMessageHandlerAttribute(int importance = 0) : UpdateHandlerAttribute<DocumentMessageHandler>([typeof(BranchingDocumentMessageHandler)], UpdateType.Message, importance)
 {
     /// <inheritdoc/>
     public override bool CanPass(FilterExecutionContext<Update> context) => context.Input.Message is { Type: MessageType.Document, Document: not null };
