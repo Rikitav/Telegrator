@@ -112,21 +112,6 @@
             <param name="metrics"></param>
             <exception cref="T:System.ArgumentNullException"></exception>
         </member>
-        <member name="T:Telegrator.Logging.MicrosoftLoggingAdapter">
-            <summary>
-            Adapter for Microsoft.Extensions.Logging to work with Telegrator logging system.
-            This allows seamless integration with ASP.NET Core logging infrastructure.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Logging.MicrosoftLoggingAdapter.#ctor(Microsoft.Extensions.Logging.ILogger)">
-            <summary>
-            Initializes a new instance of MicrosoftLoggingAdapter.
-            </summary>
-            <param name="logger">The Microsoft.Extensions.Logging logger instance.</param>
-        </member>
-        <member name="M:Telegrator.Logging.MicrosoftLoggingAdapter.Log(Telegrator.Logging.LogLevel,System.String,System.Exception)">
-            <inheritdoc/>
-        </member>
         <member name="T:Telegrator.Mediation.HostedUpdateReceiver">
             <summary>
             Service for receiving updates for Hosted telegram botsand queuing them to router

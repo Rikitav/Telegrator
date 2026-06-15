@@ -28,7 +28,7 @@ namespace Telegrator.Filters;
 /// Requires a <see cref="CommandHandlerAttribute"/> to be applied first to extract the command.
 /// </summary>
 /// <param name="alliases">The command aliases to check against.</param>
-public class CommandAlliasFilter(params string[] alliases) : Filter<Message>
+public class CommandAliasFilter(params string[] alliases) : Filter<Message>
 {
     /// <summary>
     /// Gets the command that was received and extracted by the <see cref="CommandHandlerAttribute"/>.

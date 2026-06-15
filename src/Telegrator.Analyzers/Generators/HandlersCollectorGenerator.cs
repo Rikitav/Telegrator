@@ -24,7 +24,7 @@ using Microsoft.CodeAnalysis.Text;
 using System.Collections.Immutable;
 using System.Text;
 
-namespace Telegrator.Analyzers;
+namespace Telegrator.Analyzers.Generators;
 
 [Generator(LanguageNames.CSharp)]
 public class HandlersCollectorGenerator : IIncrementalGenerator
@@ -85,15 +85,61 @@ public class HandlersCollectorGenerator : IIncrementalGenerator
             if (ns.StartsWith("System.Runtime") || ns.StartsWith("System.Diagnostics"))
                 continue;
 
+            string attrClassName = attr.AttributeClass.Name;
             string attrType = attr.AttributeClass.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+
+            // Generated handler attributes may not be resolved yet when this generator runs.
+            // In that case the shorthand attribute name (e.g. "CallbackQueryHandler") is reported
+            // without the "Attribute" suffix and without a namespace.
+            if (!attrClassName.EndsWith("Attribute", StringComparison.Ordinal)
+                && string.Equals(attrClassName, foundAttribute, StringComparison.Ordinal))
+            {
+                attrType = $"global::Telegrator.Handlers.{attrClassName}Attribute";
+            }
+
+            // Generated filter attributes (e.g. "ChatType", "TextContains") may also not be
+            // resolved yet because they are produced by AdaptiveFilterSourceGenerator.
+            // Map the shorthand name to the generated attribute type in Telegrator.Annotations.
+            if (!attrClassName.EndsWith("Attribute", StringComparison.Ordinal)
+                && !string.Equals(attrClassName, foundAttribute, StringComparison.Ordinal))
+            {
+                attrType = $"global::Telegrator.Annotations.{attrClassName}Attribute";
+            }
+
             if (attr.AttributeClass.Name is "MightAwaitAttribute" or "MightAwait")
                 hasMightAwait = true;
 
-            IEnumerable<TypedConstant> ctorArgs = attr.ConstructorArguments.IsDefault ? Enumerable.Empty<TypedConstant>() : attr.ConstructorArguments;
-            IEnumerable<KeyValuePair<string, TypedConstant>> namedArgs = attr.NamedArguments.IsDefault ? Enumerable.Empty<KeyValuePair<string, TypedConstant>>() : attr.NamedArguments;
+            string args;
+            string named;
+            AttributeSyntax? attributeSyntax = attr.ApplicationSyntaxReference?.GetSyntax(cancellationToken) as AttributeSyntax;
 
-            string args = string.Join(", ", ctorArgs.Select(FormatTypedConstant));
-            string named = string.Join(", ", namedArgs.Select(n => $"{n.Key} = {FormatTypedConstant(n.Value)}"));
+            if (attributeSyntax is not null
+                && attributeSyntax.ArgumentList is not null
+                && attributeSyntax.ArgumentList.Arguments.Count > 0
+                && attr.ConstructorArguments.IsDefaultOrEmpty
+                && attr.NamedArguments.IsDefaultOrEmpty)
+            {
+                AttributeArgumentListSyntax argumentList = attributeSyntax.ArgumentList;
+                IEnumerable<AttributeArgumentSyntax> positionalArgs = argumentList.Arguments
+                    .Where(a => a.NameEquals == null && a.NameColon == null);
+                IEnumerable<AttributeArgumentSyntax> namedArgs = argumentList.Arguments
+                    .Where(a => a.NameEquals != null || a.NameColon != null);
+
+                args = string.Join(", ", positionalArgs.Select(a => a.Expression.ToString()));
+                named = string.Join(", ", namedArgs.Select(a =>
+                {
+                    string name = a.NameEquals?.Name.ToString() ?? a.NameColon!.Name.ToString();
+                    return $"{name} = {a.Expression}";
+                }));
+            }
+            else
+            {
+                IEnumerable<TypedConstant> ctorArgs = attr.ConstructorArguments.IsDefault ? Enumerable.Empty<TypedConstant>() : attr.ConstructorArguments;
+                IEnumerable<KeyValuePair<string, TypedConstant>> namedArgs = attr.NamedArguments.IsDefault ? Enumerable.Empty<KeyValuePair<string, TypedConstant>>() : attr.NamedArguments;
+
+                args = string.Join(", ", ctorArgs.Select(FormatTypedConstant));
+                named = string.Join(", ", namedArgs.Select(n => $"{n.Key} = {FormatTypedConstant(n.Value)}"));
+            }
 
             string initString = $"new {attrType}({args})" + (string.IsNullOrEmpty(named) ? "" : $" {{ {named} }}");
             attributesList.Add(initString);
@@ -306,8 +352,13 @@ public class HandlersCollectorGenerator : IIncrementalGenerator
 
         SyntaxList<UsingDirectiveSyntax> usings = SyntaxFactory.List(new[]
         {
+            SyntaxFactory.UsingDirective(SyntaxFactory.ParseName("System")),
+            SyntaxFactory.UsingDirective(SyntaxFactory.ParseName("Telegram.Bot.Types")),
+            SyntaxFactory.UsingDirective(SyntaxFactory.ParseName("Telegram.Bot.Types.Enums")),
             SyntaxFactory.UsingDirective(SyntaxFactory.ParseName("Telegrator")),
-            SyntaxFactory.UsingDirective(SyntaxFactory.ParseName("Telegrator.Core"))
+            SyntaxFactory.UsingDirective(SyntaxFactory.ParseName("Telegrator.Annotations")),
+            SyntaxFactory.UsingDirective(SyntaxFactory.ParseName("Telegrator.Core")),
+            SyntaxFactory.UsingDirective(SyntaxFactory.ParseName("Telegrator.Handlers"))
         });
 
         SyntaxTriviaList fileTrivia = SyntaxFactory.ParseLeadingTrivia("// <auto-generated />\n#pragma warning disable CS1591\n");

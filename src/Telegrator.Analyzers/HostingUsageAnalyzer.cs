@@ -88,7 +88,7 @@ public class HostingUsageAnalyzer : DiagnosticAnalyzer
             compilationContext.RegisterOperationAction(operationContext =>
             {
                 IInvocationOperation invocation = (IInvocationOperation)operationContext.Operation;
-                var methodName = invocation.TargetMethod.Name;
+                string methodName = invocation.TargetMethod.Name;
                 ISymbol methodSymbol = operationContext.ContainingSymbol;
 
                 CallKind? kind = methodName switch

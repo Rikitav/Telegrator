@@ -17,13 +17,15 @@
  * SOFTWARE.
  */
 
+using Microsoft.Extensions.Logging;
+
 namespace Telegrator.Logging;
 
 /// <summary>
 /// Console logger implementation that writes to System.Console.
 /// This logger is optional and can be used for simple console output.
 /// </summary>
-public class ConsoleLogger : ITelegratorLogger
+public class ConsoleLogger : ILogger
 {
     private readonly LogLevel _minimumLevel;
     private readonly bool _includeTimestamp;
@@ -40,26 +42,26 @@ public class ConsoleLogger : ITelegratorLogger
     }
 
     /// <inheritdoc/>
-    public void Log(LogLevel level, string message, Exception? exception = null)
+    public IDisposable? BeginScope<TState>(TState state) where TState : notnull => null;
+
+    /// <inheritdoc/>
+    public bool IsEnabled(LogLevel logLevel) => logLevel >= _minimumLevel;
+
+    /// <inheritdoc/>
+    public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
     {
-        if (level < _minimumLevel)
+        if (!IsEnabled(logLevel))
             return;
 
-        var timestamp = _includeTimestamp ? $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss.fff}] " : "";
-        var levelStr = $"[{level.ToString().ToUpper()}] ";
-        var logMessage = $"{timestamp}{levelStr}{message}";
-
-        // Add exception if present
-        if (exception != null)
-        {
-            logMessage += $" | Exception: {exception.Message}";
-        }
+        string timestamp = _includeTimestamp ? $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss.fff}] " : "";
+        string levelStr = $"[{logLevel.ToString().ToUpper()}] ";
+        string logMessage = $"{timestamp}{levelStr}{formatter(state, exception)}";
 
         // Write to console with appropriate color
         ConsoleColor originalColor = Console.ForegroundColor;
         try
         {
-            Console.ForegroundColor = level switch
+            Console.ForegroundColor = logLevel switch
             {
                 LogLevel.Trace => ConsoleColor.Gray,
                 LogLevel.Debug => ConsoleColor.Cyan,

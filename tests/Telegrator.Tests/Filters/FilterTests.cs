@@ -51,7 +51,7 @@ public class FilterTests
         FilterExecutionContext<Update> context = new FilterExecutionContext<Update>(null, new TelegramBotInfo(null), new Update(), new Update(), new Dictionary<string, object>(), new CompletedFiltersList());
 
         // Act (When) - РІС‹РїРѕР»РЅРµРЅРёРµ С‚РµСЃС‚РёСЂСѓРµРјРѕРіРѕ РґРµР№СЃС‚РІРёСЏ
-        var result = anyFilter.CanPass(context);
+        bool result = anyFilter.CanPass(context);
 
         // Assert (Then) - РїСЂРѕРІРµСЂРєР° СЂРµР·СѓР»СЊС‚Р°С‚Р°
         result.Should().BeTrue();
@@ -71,7 +71,7 @@ public class FilterTests
         FilterExecutionContext<Update> context = new FilterExecutionContext<Update>(null, new TelegramBotInfo(null), new Update(), new Update(), new Dictionary<string, object>(), new CompletedFiltersList());
 
         // Act
-        var result = reverseFilter.CanPass(context);
+        bool result = reverseFilter.CanPass(context);
 
         // Assert
         result.Should().BeFalse();
@@ -96,7 +96,7 @@ public class FilterTests
         FilterExecutionContext<Update> context = new FilterExecutionContext<Update>(null, new TelegramBotInfo(null), new Update(), new Update(), new Dictionary<string, object>(), new CompletedFiltersList());
 
         // Act
-        var result = andFilter.CanPass(context);
+        bool result = andFilter.CanPass(context);
 
         // Assert
         result.Should().Be(expectedResult);
@@ -121,7 +121,7 @@ public class FilterTests
         FilterExecutionContext<Update> context = new FilterExecutionContext<Update>(null, new TelegramBotInfo(null), new Update(), new Update(), new Dictionary<string, object>(), new CompletedFiltersList());
 
         // Act
-        var result = orFilter.CanPass(context);
+        bool result = orFilter.CanPass(context);
 
         // Assert
         result.Should().Be(expectedResult);
@@ -145,7 +145,7 @@ public class FilterTests
         FilterExecutionContext<Update> context = new FilterExecutionContext<Update>(null, new TelegramBotInfo(null), new Update(), new Update(), data, new CompletedFiltersList());
 
         // Act
-        var result = compiledFilter.CanPass(context);
+        bool result = compiledFilter.CanPass(context);
 
         // Assert
         result.Should().BeFalse(); // Р”РѕР»Р¶РµРЅ РІРµСЂРЅСѓС‚СЊ false, С‚Р°Рє РєР°Рє filter3 РІРѕР·РІСЂР°С‰Р°РµС‚ false
@@ -163,7 +163,7 @@ public class FilterTests
         AnyFilter<Update> anyFilter = Filter<Update>.Any();
 
         // Act
-        var isCollectible = anyFilter.IsCollectible;
+        bool isCollectible = anyFilter.IsCollectible;
 
         // Assert
         isCollectible.Should().BeFalse();
@@ -178,7 +178,7 @@ public class FilterTests
     public void FunctionFilter_ShouldUseProvidedFunction()
     {
         // Arrange
-        var wasCalled = false;
+        bool wasCalled = false;
         Filter<Update> functionFilter = Filter<Update>.If(_ =>
         {
             wasCalled = true;
@@ -187,7 +187,7 @@ public class FilterTests
         FilterExecutionContext<Update> context = new FilterExecutionContext<Update>(null, new TelegramBotInfo(null), new Update(), new Update(), new Dictionary<string, object>(), new CompletedFiltersList());
 
         // Act
-        var result = functionFilter.CanPass(context);
+        bool result = functionFilter.CanPass(context);
 
         // Assert
         result.Should().BeTrue();

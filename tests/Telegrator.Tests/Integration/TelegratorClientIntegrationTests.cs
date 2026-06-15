@@ -180,7 +180,7 @@ public partial class TelegratorClientIntegrationTests
     }
 
     [CommandHandler]
-    [CommandAllias("ask")]
+    [CommandAlias("ask")]
     [MightAwait(UpdateType.Message)]
     public partial class AskNameHandler : CommandHandler
     {

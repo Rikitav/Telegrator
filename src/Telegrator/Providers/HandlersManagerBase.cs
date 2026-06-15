@@ -118,7 +118,7 @@ public abstract class HandlersManagerBase(TelegratorOptions options) : IHandlers
         if (Options?.ExceptIntersectingCommandAliases is not true)
             return;
 
-        CommandAlliasAttribute? alliasAttribute = descriptor.HandlerType.GetCustomAttribute<CommandAlliasAttribute>();
+        CommandAliasAttribute? alliasAttribute = descriptor.HandlerType.GetCustomAttribute<CommandAliasAttribute>();
         if (alliasAttribute == null)
             return;
 

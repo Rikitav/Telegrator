@@ -34,11 +34,11 @@
         </member>
         <member name="M:Telegrator.Annotations.CallbackDataFilterAttribute.WithPrefix(System.String,System.Boolean)">
             <summary>
-            Creates an attribute that matches callback data starting with the given prefix.
+            Creates a filter that matches callback queries whose data starts with the specified prefix.
             </summary>
             <param name="prefix">The prefix to match.</param>
             <param name="ignoreCase">Whether to ignore case when comparing.</param>
-            <returns>A configured <see cref="T:Telegrator.Annotations.CallbackDataFilterAttribute"/>.</returns>
+            <returns>A new <see cref="T:Telegrator.Annotations.CallbackDataFilterAttribute"/> configured for prefix matching.</returns>
         </member>
         <member name="M:Telegrator.Annotations.CallbackDataFilterAttribute.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.CallbackQuery})">
             <inheritdoc/>
@@ -163,6 +163,36 @@
             Resolves the user identifier from the incoming update.
             </summary>
         </member>
+        <member name="T:Telegrator.ContinuousAction">
+            <summary>
+            Represents a continuous chat action that runs in the background until cancelled or disposed.
+            </summary>
+        </member>
+        <member name="M:Telegrator.ContinuousAction.#ctor(Telegram.Bot.ITelegramBotClient,Telegram.Bot.Types.ChatId,Telegram.Bot.Types.Enums.ChatAction,System.Nullable{System.TimeSpan},System.Threading.CancellationToken)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Telegrator.ContinuousAction"/> class.
+            </summary>
+            <param name="client">The Telegram bot client.</param>
+            <param name="chat">The target chat.</param>
+            <param name="action">The action to perform continuously.</param>
+            <param name="delay">The delay between actions. Defaults to 4 seconds.</param>
+            <param name="cancellationToken">The cancellation token.</param>
+        </member>
+        <member name="M:Telegrator.ContinuousAction.Cancel">
+            <summary>
+            Cancels the continuous action.
+            </summary>
+        </member>
+        <member name="M:Telegrator.ContinuousAction.WaitAsync">
+            <summary>
+            Waits for the background worker task to complete.
+            </summary>
+        </member>
+        <member name="M:Telegrator.ContinuousAction.Dispose">
+            <summary>
+            Disposes the instance and stops the continuous action.
+            </summary>
+        </member>
         <member name="T:Telegrator.Extensions.AutoDeleteExtensions">
             <summary>
             Extension methods for scheduling automatic message deletion.
@@ -198,12 +228,12 @@
             Starts a continuous "typing" action in the current chat.
             </summary>
         </member>
-        <member name="T:Telegrator.TelegratorEssentialsServiceCollectionExtensions">
+        <member name="T:Telegrator.Extensions.TelegratorEssentialsServiceCollectionExtensions">
             <summary>
             Provides extension methods for registering Telegrator.Essentials services.
             </summary>
         </member>
-        <member name="M:Telegrator.TelegratorEssentialsServiceCollectionExtensions.AddTelegratorEssentials(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+        <member name="M:Telegrator.Extensions.TelegratorEssentialsServiceCollectionExtensions.AddTelegratorEssentials(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
             <summary>
             Registers Telegrator.Essentials supporting services.
             Current components (filters, pre-processors, post-processors) are attribute-driven

@@ -24,7 +24,7 @@ using Microsoft.CodeAnalysis.Text;
 using System.Collections.Immutable;
 using System.Text;
 
-namespace Telegrator.Analyzers;
+namespace Telegrator.Analyzers.Generators;
 
 [Generator(LanguageNames.CSharp)]
 public class KeyboardMarkupGenerator : IIncrementalGenerator

@@ -206,8 +206,8 @@ public class CollectionTests
 
         // Act
         list.Add(descriptor);
-        var containsExisting = list.Contains(descriptor);
-        var containsNonExistent = list.Contains(nonExistentDescriptor);
+        bool containsExisting = list.Contains(descriptor);
+        bool containsNonExistent = list.Contains(nonExistentDescriptor);
 
         // Assert
         containsExisting.Should().BeTrue();
@@ -228,7 +228,7 @@ public class CollectionTests
         list.Add(descriptor);
 
         // Act
-        var removed = list.Remove(descriptor);
+        bool removed = list.Remove(descriptor);
 
         // Assert
         removed.Should().BeTrue();
@@ -249,7 +249,7 @@ public class CollectionTests
         ClassHandlerDescriptor nonExistentDescriptor = CreateTestDescriptor();
 
         // Act
-        var removed = list.Remove(nonExistentDescriptor);
+        bool removed = list.Remove(nonExistentDescriptor);
 
         // Assert
         removed.Should().BeFalse();
@@ -282,7 +282,7 @@ public class CollectionTests
     {
         // Arrange
         HandlerDescriptorList list = new HandlerDescriptorList();
-        var itemsCount = 1000;
+        int itemsCount = 1000;
 
         // Act
         for (int i = 0; i < itemsCount; i++)

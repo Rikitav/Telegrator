@@ -44,8 +44,5 @@ public class StateAttribute<TKey, TValue>(TValue? value) : UpdateFilterAttribute
     public override UpdateType[] AllowedTypes => Update.AllTypes;
 
     /// <inheritdoc/>
-    public override Update? GetFilterringTarget(Update update)
-    {
-        return update;
-    }
+    public override Update? GetFilterringTarget(Update update) => update;
 }

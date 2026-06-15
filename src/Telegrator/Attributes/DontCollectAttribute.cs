@@ -17,15 +17,14 @@
  * SOFTWARE.
  */
 
-using Microsoft.CodeAnalysis;
+namespace Telegrator.Attributes;
 
-namespace Telegrator.RoslynGenerators.RoslynExtensions
+/// <summary>
+/// Attribute that prevents a class from being automatically collected by the handler collection system.
+/// When applied to a class, it will be excluded from domain-wide handler collection operations.
+/// </summary>
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
+public class DontCollectAttribute : Attribute
 {
-    public static class SyntaxTokenExtensions
-    {
-        public static bool HasModifiers(this SyntaxTokenList modifiers, params string[] expected)
-        {
-            return modifiers.Count(mod => expected.Contains(mod.ToString())) == expected.Length;
-        }
-    }
+
 }

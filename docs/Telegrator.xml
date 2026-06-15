@@ -4,287 +4,41 @@
         <name>Telegrator</name>
     </assembly>
     <members>
-        <member name="T:Telegrator.Annotations.BusinessConnectionFilterAttribute">
-            <summary>
-            Abstract base attribute for filtering BusinessConnection updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Annotations.BusinessConnectionFilterAttribute.#ctor(Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.BusinessConnection}[])">
-            <summary>
-            Abstract base attribute for filtering BusinessConnection updates.
-            </summary>
-        </member>
-        <member name="P:Telegrator.Annotations.BusinessConnectionFilterAttribute.AllowedTypes">
-            <inheritdoc/>
-        </member>
-        <member name="M:Telegrator.Annotations.BusinessConnectionFilterAttribute.GetFilterringTarget(Telegram.Bot.Types.Update)">
-            <inheritdoc/>
-        </member>
-        <member name="T:Telegrator.Annotations.BusinessMessageFilterAttribute">
-            <summary>
-            Abstract base attribute for filtering BusinessMessage updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Annotations.BusinessMessageFilterAttribute.#ctor(Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Message}[])">
-            <summary>
-            Abstract base attribute for filtering BusinessMessage updates.
-            </summary>
-        </member>
-        <member name="P:Telegrator.Annotations.BusinessMessageFilterAttribute.AllowedTypes">
-            <inheritdoc/>
-        </member>
-        <member name="M:Telegrator.Annotations.BusinessMessageFilterAttribute.GetFilterringTarget(Telegram.Bot.Types.Update)">
-            <inheritdoc/>
-        </member>
-        <member name="T:Telegrator.Annotations.BusinessMessagesDeletedFilterAttribute">
-            <summary>
-            Abstract base attribute for filtering BusinessMessagesDeleted updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Annotations.BusinessMessagesDeletedFilterAttribute.#ctor(Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.BusinessMessagesDeleted}[])">
-            <summary>
-            Abstract base attribute for filtering BusinessMessagesDeleted updates.
-            </summary>
-        </member>
-        <member name="P:Telegrator.Annotations.BusinessMessagesDeletedFilterAttribute.AllowedTypes">
-            <inheritdoc/>
-        </member>
-        <member name="M:Telegrator.Annotations.BusinessMessagesDeletedFilterAttribute.GetFilterringTarget(Telegram.Bot.Types.Update)">
-            <inheritdoc/>
-        </member>
-        <member name="T:Telegrator.Annotations.CallbackQueryAttribute">
-            <summary>
-            Abstract base attribute for filtering callback-based updates.
-            Supports various message types including regular messages, edited messages, channel posts, and business messages.
-            </summary>
-            <param name="filters">The filters to apply to messages</param>
-        </member>
-        <member name="M:Telegrator.Annotations.CallbackQueryAttribute.#ctor(Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.CallbackQuery}[])">
-            <summary>
-            Abstract base attribute for filtering callback-based updates.
-            Supports various message types including regular messages, edited messages, channel posts, and business messages.
-            </summary>
-            <param name="filters">The filters to apply to messages</param>
-        </member>
-        <member name="P:Telegrator.Annotations.CallbackQueryAttribute.AllowedTypes">
-            <summary>
-            Gets the allowed update types that this filter can process.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Annotations.CallbackQueryAttribute.GetFilterringTarget(Telegram.Bot.Types.Update)">
-            <summary>
-            Extracts the message from various types of updates.
-            </summary>
-            <param name="update">The Telegram update</param>
-            <returns>The message from the update, or null if not present</returns>
-        </member>
-        <member name="T:Telegrator.Annotations.CallbackDataAttribute">
-            <summary>
-            Attribute for filtering <see cref="T:Telegram.Bot.Types.CallbackQuery"/>'s data
-            </summary>
-            <param name="data"></param>
-        </member>
-        <member name="M:Telegrator.Annotations.CallbackDataAttribute.#ctor(System.String)">
-            <summary>
-            Attribute for filtering <see cref="T:Telegram.Bot.Types.CallbackQuery"/>'s data
-            </summary>
-            <param name="data"></param>
-        </member>
-        <member name="T:Telegrator.Annotations.CallbackDataContainsAttribute">
-            <summary>
-            Attribute for filtering <see cref="T:Telegram.Bot.Types.CallbackQuery"/>'s data that contains specific string
-            </summary>
-        </member>
-        <member name="M:Telegrator.Annotations.CallbackDataContainsAttribute.#ctor(System.String)">
-            <summary>
-            Attribute for filtering <see cref="T:Telegram.Bot.Types.CallbackQuery"/>'s data that contains specific string
-            </summary>
-        </member>
-        <member name="T:Telegrator.Annotations.CallbackDataStartsWithAttribute">
-            <summary>
-            Attribute for filtering <see cref="T:Telegram.Bot.Types.CallbackQuery"/>'s data that starts with specific string
-            </summary>
-        </member>
-        <member name="M:Telegrator.Annotations.CallbackDataStartsWithAttribute.#ctor(System.String)">
-            <summary>
-            Attribute for filtering <see cref="T:Telegram.Bot.Types.CallbackQuery"/>'s data that starts with specific string
-            </summary>
-        </member>
-        <member name="T:Telegrator.Annotations.CallbackDataEndsWithAttribute">
-            <summary>
-            Attribute for filtering <see cref="T:Telegram.Bot.Types.CallbackQuery"/>'s data that ends with specific string
-            </summary>
-        </member>
-        <member name="M:Telegrator.Annotations.CallbackDataEndsWithAttribute.#ctor(System.String)">
-            <summary>
-            Attribute for filtering <see cref="T:Telegram.Bot.Types.CallbackQuery"/>'s data that ends with specific string
-            </summary>
-        </member>
-        <member name="T:Telegrator.Annotations.CallbackDataRegexAttribute">
-            <summary>
-            Attribute for filtering <see cref="T:Telegram.Bot.Types.CallbackQuery"/>'s data with Regex
-            </summary>
-        </member>
-        <member name="M:Telegrator.Annotations.CallbackDataRegexAttribute.#ctor(System.String)">
-            <summary>
-            Attribute for filtering <see cref="T:Telegram.Bot.Types.CallbackQuery"/>'s data with Regex
-            </summary>
-        </member>
-        <member name="T:Telegrator.Annotations.CallbackInlineIdAttribute">
-            <summary>
-            Attribute to check if <see cref="T:Telegram.Bot.Types.CallbackQuery"/> belongs to a specific message by its ID
-            </summary>
-        </member>
-        <member name="M:Telegrator.Annotations.CallbackInlineIdAttribute.#ctor(System.String)">
-            <summary>
-            Attribute to check if <see cref="T:Telegram.Bot.Types.CallbackQuery"/> belongs to a specific message by its ID
-            </summary>
-        </member>
-        <member name="T:Telegrator.Annotations.ChannelPostFilterAttribute">
-            <summary>
-            Abstract base attribute for filtering ChannelPost updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Annotations.ChannelPostFilterAttribute.#ctor(Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Message}[])">
-            <summary>
-            Abstract base attribute for filtering ChannelPost updates.
-            </summary>
-        </member>
-        <member name="P:Telegrator.Annotations.ChannelPostFilterAttribute.AllowedTypes">
-            <inheritdoc/>
-        </member>
-        <member name="M:Telegrator.Annotations.ChannelPostFilterAttribute.GetFilterringTarget(Telegram.Bot.Types.Update)">
-            <inheritdoc/>
-        </member>
-        <member name="T:Telegrator.Annotations.ChatBoostFilterAttribute">
-            <summary>
-            Abstract base attribute for filtering ChatBoost updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Annotations.ChatBoostFilterAttribute.#ctor(Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.ChatBoostUpdated}[])">
-            <summary>
-            Abstract base attribute for filtering ChatBoost updates.
-            </summary>
-        </member>
-        <member name="P:Telegrator.Annotations.ChatBoostFilterAttribute.AllowedTypes">
-            <inheritdoc/>
-        </member>
-        <member name="M:Telegrator.Annotations.ChatBoostFilterAttribute.GetFilterringTarget(Telegram.Bot.Types.Update)">
-            <inheritdoc/>
-        </member>
-        <member name="T:Telegrator.Annotations.ChatJoinRequestFilterAttribute">
-            <summary>
-            Abstract base attribute for filtering ChatJoinRequest updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Annotations.ChatJoinRequestFilterAttribute.#ctor(Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.ChatJoinRequest}[])">
-            <summary>
-            Abstract base attribute for filtering ChatJoinRequest updates.
-            </summary>
-        </member>
-        <member name="P:Telegrator.Annotations.ChatJoinRequestFilterAttribute.AllowedTypes">
-            <inheritdoc/>
-        </member>
-        <member name="M:Telegrator.Annotations.ChatJoinRequestFilterAttribute.GetFilterringTarget(Telegram.Bot.Types.Update)">
-            <inheritdoc/>
-        </member>
-        <member name="T:Telegrator.Annotations.ChatJoinRequestInviteLinkAttribute">
-            <summary>
-            Attribute for filtering <see cref="T:Telegram.Bot.Types.ChatJoinRequest"/> by invite link used
-            </summary>
-        </member>
-        <member name="M:Telegrator.Annotations.ChatJoinRequestInviteLinkAttribute.#ctor(System.String)">
-            <summary>
-            Attribute for filtering <see cref="T:Telegram.Bot.Types.ChatJoinRequest"/> by invite link used
-            </summary>
-        </member>
-        <member name="T:Telegrator.Annotations.ChatMemberFilterAttribute">
-            <summary>
-            Abstract base attribute for filtering ChatMember updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Annotations.ChatMemberFilterAttribute.#ctor(Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.ChatMemberUpdated}[])">
-            <summary>
-            Abstract base attribute for filtering ChatMember updates.
-            </summary>
-        </member>
-        <member name="P:Telegrator.Annotations.ChatMemberFilterAttribute.AllowedTypes">
-            <inheritdoc/>
-        </member>
-        <member name="M:Telegrator.Annotations.ChatMemberFilterAttribute.GetFilterringTarget(Telegram.Bot.Types.Update)">
-            <inheritdoc/>
-        </member>
-        <member name="T:Telegrator.Annotations.ChosenInlineResultFilterAttribute">
-            <summary>
-            Abstract base attribute for filtering ChosenInlineResult updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Annotations.ChosenInlineResultFilterAttribute.#ctor(Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.ChosenInlineResult}[])">
-            <summary>
-            Abstract base attribute for filtering ChosenInlineResult updates.
-            </summary>
-        </member>
-        <member name="P:Telegrator.Annotations.ChosenInlineResultFilterAttribute.AllowedTypes">
-            <inheritdoc/>
-        </member>
-        <member name="M:Telegrator.Annotations.ChosenInlineResultFilterAttribute.GetFilterringTarget(Telegram.Bot.Types.Update)">
-            <inheritdoc/>
-        </member>
-        <member name="T:Telegrator.Annotations.ChosenInlineResultIdAttribute">
-            <summary>
-            Attribute for filtering <see cref="T:Telegram.Bot.Types.ChosenInlineResult"/>'s ID
-            </summary>
-        </member>
-        <member name="M:Telegrator.Annotations.ChosenInlineResultIdAttribute.#ctor(System.String)">
-            <summary>
-            Attribute for filtering <see cref="T:Telegram.Bot.Types.ChosenInlineResult"/>'s ID
-            </summary>
-        </member>
-        <member name="T:Telegrator.Annotations.ChosenInlineResultQueryAttribute">
-            <summary>
-            Attribute for filtering <see cref="T:Telegram.Bot.Types.ChosenInlineResult"/>'s original query
-            </summary>
-        </member>
-        <member name="M:Telegrator.Annotations.ChosenInlineResultQueryAttribute.#ctor(System.String)">
-            <summary>
-            Attribute for filtering <see cref="T:Telegram.Bot.Types.ChosenInlineResult"/>'s original query
-            </summary>
-        </member>
-        <member name="T:Telegrator.Annotations.CommandAlliasAttribute">
+        <member name="T:Telegrator.Annotations.CommandAliasAttribute">
             <summary>
             Attribute for filtering messages based on command aliases.
             Allows handlers to respond to multiple command variations using a single attribute.
             </summary>
         </member>
-        <member name="P:Telegrator.Annotations.CommandAlliasAttribute.AllowedTypes">
+        <member name="P:Telegrator.Annotations.CommandAliasAttribute.AllowedTypes">
             <summary>
             Gets the allowed update types for this filter.
             </summary>
         </member>
-        <member name="F:Telegrator.Annotations.CommandAlliasAttribute._description">
+        <member name="F:Telegrator.Annotations.CommandAliasAttribute._description">
             <summary>
             The description of the command (defaults to "no description provided").
             </summary>
         </member>
-        <member name="P:Telegrator.Annotations.CommandAlliasAttribute.Alliases">
+        <member name="P:Telegrator.Annotations.CommandAliasAttribute.Alliases">
             <summary>
             Gets the array of command aliases that this filter will match.
             </summary>
         </member>
-        <member name="P:Telegrator.Annotations.CommandAlliasAttribute.Description">
+        <member name="P:Telegrator.Annotations.CommandAliasAttribute.Description">
             <summary>
             Gets or sets the description of the command.
             Must be between 0 and 256 characters in length.
             </summary>
             <exception cref="T:System.ArgumentOutOfRangeException">Thrown when the description length is outside the allowed range.</exception>
         </member>
-        <member name="M:Telegrator.Annotations.CommandAlliasAttribute.#ctor(System.String[])">
+        <member name="M:Telegrator.Annotations.CommandAliasAttribute.#ctor(System.String[])">
             <summary>
             Initializes a new instance of the CommandAlliasAttribute with the specified command aliases.
             </summary>
             <param name="alliases">The command aliases to match against.</param>
         </member>
-        <member name="M:Telegrator.Annotations.CommandAlliasAttribute.GetFilterringTarget(Telegram.Bot.Types.Update)">
+        <member name="M:Telegrator.Annotations.CommandAliasAttribute.GetFilterringTarget(Telegram.Bot.Types.Update)">
             <summary>
             Gets the filtering target (Message) from the update.
             </summary>
@@ -382,60 +136,6 @@
             <param name="pattern">The regular expression pattern to match against the command argument.</param>
             <param name="options">The regex options to use for the pattern matching.</param>
             <param name="index">The index of the argument to check (0-based).</param>
-        </member>
-        <member name="T:Telegrator.Annotations.DontCollectAttribute">
-            <summary>
-            Attribute that prevents a class from being automatically collected by the handler collection system.
-            When applied to a class, it will be excluded from domain-wide handler collection operations.
-            </summary>
-        </member>
-        <member name="T:Telegrator.Annotations.EditedBusinessMessageFilterAttribute">
-            <summary>
-            Abstract base attribute for filtering EditedBusinessMessage updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Annotations.EditedBusinessMessageFilterAttribute.#ctor(Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Message}[])">
-            <summary>
-            Abstract base attribute for filtering EditedBusinessMessage updates.
-            </summary>
-        </member>
-        <member name="P:Telegrator.Annotations.EditedBusinessMessageFilterAttribute.AllowedTypes">
-            <inheritdoc/>
-        </member>
-        <member name="M:Telegrator.Annotations.EditedBusinessMessageFilterAttribute.GetFilterringTarget(Telegram.Bot.Types.Update)">
-            <inheritdoc/>
-        </member>
-        <member name="T:Telegrator.Annotations.EditedChannelPostFilterAttribute">
-            <summary>
-            Abstract base attribute for filtering EditedChannelPost updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Annotations.EditedChannelPostFilterAttribute.#ctor(Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Message}[])">
-            <summary>
-            Abstract base attribute for filtering EditedChannelPost updates.
-            </summary>
-        </member>
-        <member name="P:Telegrator.Annotations.EditedChannelPostFilterAttribute.AllowedTypes">
-            <inheritdoc/>
-        </member>
-        <member name="M:Telegrator.Annotations.EditedChannelPostFilterAttribute.GetFilterringTarget(Telegram.Bot.Types.Update)">
-            <inheritdoc/>
-        </member>
-        <member name="T:Telegrator.Annotations.EditedMessageFilterAttribute">
-            <summary>
-            Abstract base attribute for filtering EditedMessage updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Annotations.EditedMessageFilterAttribute.#ctor(Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Message}[])">
-            <summary>
-            Abstract base attribute for filtering EditedMessage updates.
-            </summary>
-        </member>
-        <member name="P:Telegrator.Annotations.EditedMessageFilterAttribute.AllowedTypes">
-            <inheritdoc/>
-        </member>
-        <member name="M:Telegrator.Annotations.EditedMessageFilterAttribute.GetFilterringTarget(Telegram.Bot.Types.Update)">
-            <inheritdoc/>
         </member>
         <member name="T:Telegrator.Annotations.EnvironmentFilterAttribute">
             <summary>
@@ -618,101 +318,6 @@
             <param name="mention">The specific mention text to match.</param>
             <param name="offset">The offset position where the mention should occur.</param>
         </member>
-        <member name="T:Telegrator.Annotations.ChatIsForumAttribute">
-            <summary>
-            Attribute for filtering messages sent in forum chats.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Annotations.ChatIsForumAttribute.#ctor">
-            <summary>
-            Attribute for filtering messages sent in forum chats.
-            </summary>
-        </member>
-        <member name="T:Telegrator.Annotations.ChatIdAttribute">
-            <summary>
-            Attribute for filtering messages sent in a specific chat by ID.
-            </summary>
-            <param name="id">The chat ID to match</param>
-        </member>
-        <member name="M:Telegrator.Annotations.ChatIdAttribute.#ctor(System.Int64)">
-            <summary>
-            Attribute for filtering messages sent in a specific chat by ID.
-            </summary>
-            <param name="id">The chat ID to match</param>
-        </member>
-        <member name="T:Telegrator.Annotations.ChatTypeAttribute">
-            <summary>
-            Attribute for filtering messages sent in chats of a specific type.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Annotations.ChatTypeAttribute.#ctor(Telegram.Bot.Types.Enums.ChatType)">
-            <summary>
-            Initialize new instance of <see cref="T:Telegrator.Annotations.ChatTypeAttribute"/> to filter messages from chat from specific chats
-            </summary>
-            <param name="type"></param>
-        </member>
-        <member name="M:Telegrator.Annotations.ChatTypeAttribute.#ctor(Telegrator.ChatTypeFlags)">
-            <summary>
-            Initialize new instance of <see cref="T:Telegrator.Annotations.ChatTypeAttribute"/> to filter messages from chat from specific chats (with flags)
-            </summary>
-            <param name="flags"></param>
-        </member>
-        <member name="T:Telegrator.Annotations.ChatTitleAttribute">
-            <summary>
-            Attribute for filtering messages based on the chat title.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Annotations.ChatTitleAttribute.#ctor(System.String,System.StringComparison)">
-            <summary>
-            Initializes the attribute to filter messages from chats with a specific title and comparison method.
-            </summary>
-            <param name="title">The chat title to match</param>
-            <param name="comparison">The string comparison method</param>
-        </member>
-        <member name="M:Telegrator.Annotations.ChatTitleAttribute.#ctor(System.String)">
-            <summary>
-            Initializes the attribute to filter messages from chats with a specific title.
-            </summary>
-            <param name="title">The chat title to match</param>
-        </member>
-        <member name="T:Telegrator.Annotations.ChatUsernameAttribute">
-            <summary>
-            Attribute for filtering messages based on the chat username.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Annotations.ChatUsernameAttribute.#ctor(System.String,System.StringComparison)">
-            <summary>
-            Initializes the attribute to filter messages from chats with a specific username and comparison method.
-            </summary>
-            <param name="userName">The chat username to match</param>
-            <param name="comparison">The string comparison method</param>
-        </member>
-        <member name="M:Telegrator.Annotations.ChatUsernameAttribute.#ctor(System.String)">
-            <summary>
-            Initializes the attribute to filter messages from chats with a specific username.
-            </summary>
-            <param name="userName">The chat username to match</param>
-        </member>
-        <member name="T:Telegrator.Annotations.ChatNameAttribute">
-            <summary>
-            Attribute for filtering messages based on the chat name (first name and optionally last name).
-            </summary>
-        </member>
-        <member name="M:Telegrator.Annotations.ChatNameAttribute.#ctor(System.String,System.String,System.StringComparison)">
-            <summary>
-            Initializes the attribute to filter messages from chats with specific first and last names.
-            </summary>
-            <param name="firstName">The first name to match</param>
-            <param name="lastName">The last name to match (optional)</param>
-            <param name="comparison">The string comparison method</param>
-        </member>
-        <member name="M:Telegrator.Annotations.ChatNameAttribute.#ctor(System.String,System.String)">
-            <summary>
-            Initializes the attribute to filter messages from chats with specific first and last names.
-            </summary>
-            <param name="firstName">The first name to match</param>
-            <param name="lastName">The last name to match (optional)</param>
-        </member>
         <member name="T:Telegrator.Annotations.MessageFilterAttribute">
             <summary>
             Abstract base attribute for filtering message-based updates.
@@ -852,249 +457,6 @@
             <param name="content">The content that the entity should contain</param>
             <param name="stringComparison">The string comparison method</param>
         </member>
-        <member name="T:Telegrator.Annotations.MessageReactionCountFilterAttribute">
-            <summary>
-            Abstract base attribute for filtering MessageReactionCount updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Annotations.MessageReactionCountFilterAttribute.#ctor(Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.MessageReactionCountUpdated}[])">
-            <summary>
-            Abstract base attribute for filtering MessageReactionCount updates.
-            </summary>
-        </member>
-        <member name="P:Telegrator.Annotations.MessageReactionCountFilterAttribute.AllowedTypes">
-            <inheritdoc/>
-        </member>
-        <member name="M:Telegrator.Annotations.MessageReactionCountFilterAttribute.GetFilterringTarget(Telegram.Bot.Types.Update)">
-            <inheritdoc/>
-        </member>
-        <member name="T:Telegrator.Annotations.MessageReactionFilterAttribute">
-            <summary>
-            Abstract base attribute for filtering MessageReaction updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Annotations.MessageReactionFilterAttribute.#ctor(Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.MessageReactionUpdated}[])">
-            <summary>
-            Abstract base attribute for filtering MessageReaction updates.
-            </summary>
-        </member>
-        <member name="P:Telegrator.Annotations.MessageReactionFilterAttribute.AllowedTypes">
-            <inheritdoc/>
-        </member>
-        <member name="M:Telegrator.Annotations.MessageReactionFilterAttribute.GetFilterringTarget(Telegram.Bot.Types.Update)">
-            <inheritdoc/>
-        </member>
-        <member name="T:Telegrator.Annotations.MeRepliedAttribute">
-            <summary>
-            Attribute for filtering messages with reply to messages of this bot.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Annotations.MeRepliedAttribute.#ctor">
-            <summary>
-            Attribute for filtering messages with reply to messages of this bot.
-            </summary>
-        </member>
-        <member name="T:Telegrator.Annotations.HasReplyAttribute">
-            <summary>
-            Attribute for checking message's reply chain.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Annotations.HasReplyAttribute.#ctor(System.Int32)">
-            <summary>
-            Attribute for checking message's reply chain.
-            </summary>
-        </member>
-        <member name="T:Telegrator.Annotations.FromReplyChainAttribute">
-            <summary>
-            Helper filter class for filters that operate on replied messages.
-            Provides functionality to traverse reply chains and access replied message content.
-            </summary>
-            <param name="replyDepth"></param>
-        </member>
-        <member name="M:Telegrator.Annotations.FromReplyChainAttribute.#ctor(System.Int32)">
-            <summary>
-            Helper filter class for filters that operate on replied messages.
-            Provides functionality to traverse reply chains and access replied message content.
-            </summary>
-            <param name="replyDepth"></param>
-        </member>
-        <member name="T:Telegrator.Annotations.FromUsernameAttribute">
-            <summary>
-            Attribute for filtering messages based on the sender's username.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Annotations.FromUsernameAttribute.#ctor(System.String)">
-            <summary>
-            Initializes the attribute to filter messages from a specific username.
-            </summary>
-            <param name="username">The username to match</param>
-        </member>
-        <member name="M:Telegrator.Annotations.FromUsernameAttribute.#ctor(System.String,System.StringComparison)">
-            <summary>
-            Initializes the attribute to filter messages from a specific username with custom comparison.
-            </summary>
-            <param name="username">The username to match</param>
-            <param name="comparison">The string comparison method</param>
-        </member>
-        <member name="T:Telegrator.Annotations.FromUserAttribute">
-            <summary>
-            Attribute for filtering messages based on the sender's name (first name and optionally last name).
-            </summary>
-        </member>
-        <member name="M:Telegrator.Annotations.FromUserAttribute.#ctor(System.String,System.String,System.StringComparison)">
-            <summary>
-            Initializes the attribute to filter messages from a user with specific first and last names.
-            </summary>
-            <param name="firstName">The first name to match</param>
-            <param name="lastName">The last name to match (optional)</param>
-            <param name="comparison">The string comparison method</param>
-        </member>
-        <member name="M:Telegrator.Annotations.FromUserAttribute.#ctor(System.String,System.String)">
-            <summary>
-            Initializes the attribute to filter messages from a user with specific first and last names.
-            </summary>
-            <param name="firstName">The first name to match</param>
-            <param name="lastName">The last name to match</param>
-        </member>
-        <member name="M:Telegrator.Annotations.FromUserAttribute.#ctor(System.String)">
-            <summary>
-            Initializes the attribute to filter messages from a user with a specific first name.
-            </summary>
-            <param name="firstName">The first name to match</param>
-        </member>
-        <member name="M:Telegrator.Annotations.FromUserAttribute.#ctor(System.String,System.StringComparison)">
-            <summary>
-            Initializes the attribute to filter messages from a user with a specific first name and custom comparison.
-            </summary>
-            <param name="firstName">The first name to match</param>
-            <param name="comparison">The string comparison method</param>
-        </member>
-        <member name="T:Telegrator.Annotations.FromUserIdAttribute">
-            <summary>
-            Attribute for filtering messages from a specific user ID.
-            </summary>
-            <param name="userId">The user ID to match</param>
-        </member>
-        <member name="M:Telegrator.Annotations.FromUserIdAttribute.#ctor(System.Int64)">
-            <summary>
-            Attribute for filtering messages from a specific user ID.
-            </summary>
-            <param name="userId">The user ID to match</param>
-        </member>
-        <member name="T:Telegrator.Annotations.NotFromBotAttribute">
-            <summary>
-            Attribute for filtering messages sent by not bots (users).
-            </summary>
-        </member>
-        <member name="M:Telegrator.Annotations.NotFromBotAttribute.#ctor">
-            <summary>
-            Attribute for filtering messages sent by not bots (users).
-            </summary>
-        </member>
-        <member name="T:Telegrator.Annotations.FromBotAttribute">
-            <summary>
-            Attribute for filtering messages sent by bots.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Annotations.FromBotAttribute.#ctor">
-            <summary>
-            Attribute for filtering messages sent by bots.
-            </summary>
-        </member>
-        <member name="T:Telegrator.Annotations.FromPremiumUserAttribute">
-            <summary>
-            Attribute for filtering messages sent by premium users.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Annotations.FromPremiumUserAttribute.#ctor">
-            <summary>
-            Attribute for filtering messages sent by premium users.
-            </summary>
-        </member>
-        <member name="T:Telegrator.Annotations.TextStartsWithAttribute">
-            <summary>
-            Attribute for filtering messages where the text starts with the specified content.
-            </summary>
-            <param name="content">The string that the message text should start with</param>
-            <param name="comparison">The string comparison type</param>
-        </member>
-        <member name="M:Telegrator.Annotations.TextStartsWithAttribute.#ctor(System.String,System.StringComparison)">
-            <summary>
-            Attribute for filtering messages where the text starts with the specified content.
-            </summary>
-            <param name="content">The string that the message text should start with</param>
-            <param name="comparison">The string comparison type</param>
-        </member>
-        <member name="T:Telegrator.Annotations.TextEndsWithAttribute">
-            <summary>
-            Attribute for filtering messages where the text ends with the specified content.
-            </summary>
-            <param name="content">The string that the message text should end with</param>
-            <param name="comparison">The string comparison type</param>
-        </member>
-        <member name="M:Telegrator.Annotations.TextEndsWithAttribute.#ctor(System.String,System.StringComparison)">
-            <summary>
-            Attribute for filtering messages where the text ends with the specified content.
-            </summary>
-            <param name="content">The string that the message text should end with</param>
-            <param name="comparison">The string comparison type</param>
-        </member>
-        <member name="T:Telegrator.Annotations.TextContainsAttribute">
-            <summary>
-            Attribute for filtering messages where the text contains the specified content.
-            </summary>
-            <param name="content">The string that the message text should contain</param>
-            <param name="comparison">The string comparison type</param>
-        </member>
-        <member name="M:Telegrator.Annotations.TextContainsAttribute.#ctor(System.String,System.StringComparison)">
-            <summary>
-            Attribute for filtering messages where the text contains the specified content.
-            </summary>
-            <param name="content">The string that the message text should contain</param>
-            <param name="comparison">The string comparison type</param>
-        </member>
-        <member name="T:Telegrator.Annotations.TextEqualsAttribute">
-            <summary>
-            Attribute for filtering messages where the text equals the specified content.
-            </summary>
-            <param name="content">The string that the message text should equal</param>
-            <param name="comparison">The string comparison type</param>
-        </member>
-        <member name="M:Telegrator.Annotations.TextEqualsAttribute.#ctor(System.String,System.StringComparison)">
-            <summary>
-            Attribute for filtering messages where the text equals the specified content.
-            </summary>
-            <param name="content">The string that the message text should equal</param>
-            <param name="comparison">The string comparison type</param>
-        </member>
-        <member name="T:Telegrator.Annotations.HasTextAttribute">
-            <summary>
-            Attribute for filtering messages that contain any non-empty text.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Annotations.HasTextAttribute.#ctor">
-            <summary>
-            Attribute for filtering messages that contain any non-empty text.
-            </summary>
-        </member>
-        <member name="T:Telegrator.Annotations.TextContainsWordAttribute">
-            <summary>
-            Attribute for filtering messages where the text contains a 'word'.
-            'Word' must be a separate member of the text, and not have any alphabetic characters next to it.
-            </summary>
-            <param name="word"></param>
-            <param name="comparison"></param>
-            <param name="startIndex"></param>
-        </member>
-        <member name="M:Telegrator.Annotations.TextContainsWordAttribute.#ctor(System.String,System.StringComparison,System.Int32)">
-            <summary>
-            Attribute for filtering messages where the text contains a 'word'.
-            'Word' must be a separate member of the text, and not have any alphabetic characters next to it.
-            </summary>
-            <param name="word"></param>
-            <param name="comparison"></param>
-            <param name="startIndex"></param>
-        </member>
         <member name="T:Telegrator.Annotations.MightAwaitAttribute">
             <summary>
             Attribute that says if this handler can await some of await types, that is not listed by its handler base.
@@ -1112,148 +474,6 @@
             main ctor of <see cref="T:Telegrator.Annotations.MightAwaitAttribute"/>
             </summary>
             <param name="updateTypes"></param>
-        </member>
-        <member name="T:Telegrator.Annotations.MyChatMemberFilterAttribute">
-            <summary>
-            Abstract base attribute for filtering MyChatMember updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Annotations.MyChatMemberFilterAttribute.#ctor(Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.ChatMemberUpdated}[])">
-            <summary>
-            Abstract base attribute for filtering MyChatMember updates.
-            </summary>
-        </member>
-        <member name="P:Telegrator.Annotations.MyChatMemberFilterAttribute.AllowedTypes">
-            <inheritdoc/>
-        </member>
-        <member name="M:Telegrator.Annotations.MyChatMemberFilterAttribute.GetFilterringTarget(Telegram.Bot.Types.Update)">
-            <inheritdoc/>
-        </member>
-        <member name="T:Telegrator.Annotations.PollAnswerFilterAttribute">
-            <summary>
-            Abstract base attribute for filtering PollAnswer updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Annotations.PollAnswerFilterAttribute.#ctor(Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.PollAnswer}[])">
-            <summary>
-            Abstract base attribute for filtering PollAnswer updates.
-            </summary>
-        </member>
-        <member name="P:Telegrator.Annotations.PollAnswerFilterAttribute.AllowedTypes">
-            <inheritdoc/>
-        </member>
-        <member name="M:Telegrator.Annotations.PollAnswerFilterAttribute.GetFilterringTarget(Telegram.Bot.Types.Update)">
-            <inheritdoc/>
-        </member>
-        <member name="T:Telegrator.Annotations.PollFilterAttribute">
-            <summary>
-            Abstract base attribute for filtering Poll updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Annotations.PollFilterAttribute.#ctor(Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Poll}[])">
-            <summary>
-            Abstract base attribute for filtering Poll updates.
-            </summary>
-        </member>
-        <member name="P:Telegrator.Annotations.PollFilterAttribute.AllowedTypes">
-            <inheritdoc/>
-        </member>
-        <member name="M:Telegrator.Annotations.PollFilterAttribute.GetFilterringTarget(Telegram.Bot.Types.Update)">
-            <inheritdoc/>
-        </member>
-        <member name="T:Telegrator.Annotations.PollTypeAttribute">
-            <summary>
-            Attribute for filtering <see cref="T:Telegram.Bot.Types.Poll"/>'s type
-            </summary>
-        </member>
-        <member name="M:Telegrator.Annotations.PollTypeAttribute.#ctor(Telegram.Bot.Types.Enums.PollType)">
-            <summary>
-            Attribute for filtering <see cref="T:Telegram.Bot.Types.Poll"/>'s type
-            </summary>
-        </member>
-        <member name="T:Telegrator.Annotations.PollIsClosedAttribute">
-            <summary>
-            Attribute for filtering <see cref="T:Telegram.Bot.Types.Poll"/> by closed status
-            </summary>
-        </member>
-        <member name="M:Telegrator.Annotations.PollIsClosedAttribute.#ctor(System.Boolean)">
-            <summary>
-            Attribute for filtering <see cref="T:Telegram.Bot.Types.Poll"/> by closed status
-            </summary>
-        </member>
-        <member name="T:Telegrator.Annotations.PollIsAnonymousAttribute">
-            <summary>
-            Attribute for filtering <see cref="T:Telegram.Bot.Types.Poll"/> by anonymous status
-            </summary>
-        </member>
-        <member name="M:Telegrator.Annotations.PollIsAnonymousAttribute.#ctor(System.Boolean)">
-            <summary>
-            Attribute for filtering <see cref="T:Telegram.Bot.Types.Poll"/> by anonymous status
-            </summary>
-        </member>
-        <member name="T:Telegrator.Annotations.PreCheckoutQueryFilterAttribute">
-            <summary>
-            Abstract base attribute for filtering PreCheckoutQuery updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Annotations.PreCheckoutQueryFilterAttribute.#ctor(Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Payments.PreCheckoutQuery}[])">
-            <summary>
-            Abstract base attribute for filtering PreCheckoutQuery updates.
-            </summary>
-        </member>
-        <member name="P:Telegrator.Annotations.PreCheckoutQueryFilterAttribute.AllowedTypes">
-            <inheritdoc/>
-        </member>
-        <member name="M:Telegrator.Annotations.PreCheckoutQueryFilterAttribute.GetFilterringTarget(Telegram.Bot.Types.Update)">
-            <inheritdoc/>
-        </member>
-        <member name="T:Telegrator.Annotations.PurchasedPaidMediaFilterAttribute">
-            <summary>
-            Abstract base attribute for filtering PurchasedPaidMedia updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Annotations.PurchasedPaidMediaFilterAttribute.#ctor(Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Payments.PaidMediaPurchased}[])">
-            <summary>
-            Abstract base attribute for filtering PurchasedPaidMedia updates.
-            </summary>
-        </member>
-        <member name="P:Telegrator.Annotations.PurchasedPaidMediaFilterAttribute.AllowedTypes">
-            <inheritdoc/>
-        </member>
-        <member name="M:Telegrator.Annotations.PurchasedPaidMediaFilterAttribute.GetFilterringTarget(Telegram.Bot.Types.Update)">
-            <inheritdoc/>
-        </member>
-        <member name="T:Telegrator.Annotations.RemovedChatBoostFilterAttribute">
-            <summary>
-            Abstract base attribute for filtering RemovedChatBoost updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Annotations.RemovedChatBoostFilterAttribute.#ctor(Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.ChatBoostRemoved}[])">
-            <summary>
-            Abstract base attribute for filtering RemovedChatBoost updates.
-            </summary>
-        </member>
-        <member name="P:Telegrator.Annotations.RemovedChatBoostFilterAttribute.AllowedTypes">
-            <inheritdoc/>
-        </member>
-        <member name="M:Telegrator.Annotations.RemovedChatBoostFilterAttribute.GetFilterringTarget(Telegram.Bot.Types.Update)">
-            <inheritdoc/>
-        </member>
-        <member name="T:Telegrator.Annotations.ShippingQueryFilterAttribute">
-            <summary>
-            Abstract base attribute for filtering ShippingQuery updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Annotations.ShippingQueryFilterAttribute.#ctor(Telegrator.Core.Filters.IFilter{Telegram.Bot.Types.Payments.ShippingQuery}[])">
-            <summary>
-            Abstract base attribute for filtering ShippingQuery updates.
-            </summary>
-        </member>
-        <member name="P:Telegrator.Annotations.ShippingQueryFilterAttribute.AllowedTypes">
-            <inheritdoc/>
-        </member>
-        <member name="M:Telegrator.Annotations.ShippingQueryFilterAttribute.GetFilterringTarget(Telegram.Bot.Types.Update)">
-            <inheritdoc/>
         </member>
         <member name="T:Telegrator.Annotations.StateAttribute`2">
             <summary>
@@ -1334,6 +554,12 @@
             <param name="cancellationToken"></param>
             <returns>A <see cref="T:Telegrator.Result"/> indicating whether execution should continue or be stopped.</returns>
         </member>
+        <member name="T:Telegrator.Attributes.DontCollectAttribute">
+            <summary>
+            Attribute that prevents a class from being automatically collected by the handler collection system.
+            When applied to a class, it will be excluded from domain-wide handler collection operations.
+            </summary>
+        </member>
         <member name="T:Telegrator.Attributes.FilterAnnotation`1">
             <summary>
             Reactive way to implement a new <see cref="T:Telegrator.Attributes.UpdateFilterAttribute`1"/> of type <typeparamref name="T"/>
@@ -1379,6 +605,24 @@
         <member name="F:Telegrator.Attributes.FilterModifier.Not">
             <summary>
             NOT modifier. The inverse of this filter should match.
+            </summary>
+        </member>
+        <member name="T:Telegrator.Attributes.GenerateHandlerProxyAttribute">
+            <summary>
+            Marks an extension method to be projected as a protected helper method
+            on generated Telegrator handler base classes.
+            </summary>
+        </member>
+        <member name="M:Telegrator.Attributes.GenerateHandlerProxyAttribute.#ctor(System.String)">
+            <summary>
+            Marks an extension method to be projected as a protected helper method
+            on generated Telegrator handler base classes.
+            </summary>
+        </member>
+        <member name="P:Telegrator.Attributes.GenerateHandlerProxyAttribute.Name">
+            <summary>
+            Gets or sets the optional name to use for the generated proxy method.
+            When <see langword="null"/>, the original method name is used.
             </summary>
         </member>
         <member name="T:Telegrator.Attributes.UpdateFilterAttribute`1">
@@ -1458,36 +702,6 @@
             <param name="types">Additional suported types.</param>
             <param name="updateType">The type of update that this handler can process.</param>
             <param name="importance">The importance level for this handler</param>
-        </member>
-        <member name="T:Telegrator.ContinuousAction">
-            <summary>
-            Represents a continuous chat action that runs in the background until cancelled or disposed.
-            </summary>
-        </member>
-        <member name="M:Telegrator.ContinuousAction.#ctor(Telegram.Bot.ITelegramBotClient,Telegram.Bot.Types.ChatId,Telegram.Bot.Types.Enums.ChatAction,System.Nullable{System.TimeSpan},System.Threading.CancellationToken)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Telegrator.ContinuousAction"/> class.
-            </summary>
-            <param name="client">The Telegram bot client.</param>
-            <param name="chat">The target chat.</param>
-            <param name="action">The action to perform continuously.</param>
-            <param name="delay">The delay between actions. Defaults to 4 seconds.</param>
-            <param name="cancellationToken">The cancellation token.</param>
-        </member>
-        <member name="M:Telegrator.ContinuousAction.Cancel">
-            <summary>
-            Cancels the continuous action.
-            </summary>
-        </member>
-        <member name="M:Telegrator.ContinuousAction.WaitAsync">
-            <summary>
-            Waits for the background worker task to complete.
-            </summary>
-        </member>
-        <member name="M:Telegrator.ContinuousAction.Dispose">
-            <summary>
-            Disposes the instance and stops the continuous action.
-            </summary>
         </member>
         <member name="T:Telegrator.Core.Attributes.UpdateFilterAttributeBase">
             <summary>
@@ -3841,26 +3055,26 @@
         <member name="M:Telegrator.Filters.ChosenInlineResultQueryFilter.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.ChosenInlineResult})">
             <inheritdoc/>
         </member>
-        <member name="T:Telegrator.Filters.CommandAlliasFilter">
+        <member name="T:Telegrator.Filters.CommandAliasFilter">
             <summary>
             Filter that checks if a command matches any of the specified aliases.
             Requires a <see cref="T:Telegrator.Handlers.CommandHandlerAttribute"/> to be applied first to extract the command.
             </summary>
             <param name="alliases">The command aliases to check against.</param>
         </member>
-        <member name="M:Telegrator.Filters.CommandAlliasFilter.#ctor(System.String[])">
+        <member name="M:Telegrator.Filters.CommandAliasFilter.#ctor(System.String[])">
             <summary>
             Filter that checks if a command matches any of the specified aliases.
             Requires a <see cref="T:Telegrator.Handlers.CommandHandlerAttribute"/> to be applied first to extract the command.
             </summary>
             <param name="alliases">The command aliases to check against.</param>
         </member>
-        <member name="P:Telegrator.Filters.CommandAlliasFilter.ReceivedCommand">
+        <member name="P:Telegrator.Filters.CommandAliasFilter.ReceivedCommand">
             <summary>
             Gets the command that was received and extracted by the <see cref="T:Telegrator.Handlers.CommandHandlerAttribute"/>.
             </summary>
         </member>
-        <member name="M:Telegrator.Filters.CommandAlliasFilter.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Message})">
+        <member name="M:Telegrator.Filters.CommandAliasFilter.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Message})">
             <summary>
             Checks if the received command matches any of the specified aliases.
             This filter requires a <see cref="T:Telegrator.Handlers.CommandHandlerAttribute"/> to be applied first
@@ -4481,12 +3695,12 @@
             <param name="context">The filter execution context for the chat.</param>
             <returns>True if the filter passes; otherwise, false.</returns>
         </member>
-        <member name="T:Telegrator.Filters.MessageChatIsForumFilter">
+        <member name="T:Telegrator.Filters.ChatIsForumFilter">
             <summary>
             Filters messages whose chat is a forum.
             </summary>
         </member>
-        <member name="M:Telegrator.Filters.MessageChatIsForumFilter.CanPassNext(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Chat})">
+        <member name="M:Telegrator.Filters.ChatIsForumFilter.CanPassNext(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Chat})">
             <inheritdoc/>
         </member>
         <member name="T:Telegrator.Filters.MessageChatIdFilter">
@@ -4502,89 +3716,89 @@
         <member name="M:Telegrator.Filters.MessageChatIdFilter.CanPassNext(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Chat})">
             <inheritdoc/>
         </member>
-        <member name="T:Telegrator.Filters.MessageChatTypeFilter">
+        <member name="T:Telegrator.Filters.ChatTypeFilter">
             <summary>
             Filters messages whose chat type matches the specified value.
             </summary>
         </member>
-        <member name="M:Telegrator.Filters.MessageChatTypeFilter.#ctor(Telegram.Bot.Types.Enums.ChatType)">
+        <member name="M:Telegrator.Filters.ChatTypeFilter.#ctor(Telegram.Bot.Types.Enums.ChatType)">
             <summary>
-            Initialize new instance of <see cref="T:Telegrator.Filters.MessageChatTypeFilter"/>
+            Initialize new instance of <see cref="T:Telegrator.Filters.ChatTypeFilter"/>
             </summary>
             <param name="type"></param>
         </member>
-        <member name="M:Telegrator.Filters.MessageChatTypeFilter.#ctor(Telegrator.ChatTypeFlags)">
+        <member name="M:Telegrator.Filters.ChatTypeFilter.#ctor(Telegrator.ChatTypeFlags)">
             <summary>
-            Initialize new instance of <see cref="T:Telegrator.Filters.MessageChatTypeFilter"/> with <see cref="T:Telegrator.ChatTypeFlags"/>
+            Initialize new instance of <see cref="T:Telegrator.Filters.ChatTypeFilter"/> with <see cref="T:Telegrator.ChatTypeFlags"/>
             </summary>
             <param name="type"></param>
         </member>
-        <member name="M:Telegrator.Filters.MessageChatTypeFilter.CanPassNext(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Chat})">
+        <member name="M:Telegrator.Filters.ChatTypeFilter.CanPassNext(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Chat})">
             <inheritdoc/>
         </member>
-        <member name="T:Telegrator.Filters.MessageChatTitleFilter">
+        <member name="T:Telegrator.Filters.ChatTitleFilter">
             <summary>
             Filters messages whose chat title matches the specified value.
             </summary>
         </member>
-        <member name="M:Telegrator.Filters.MessageChatTitleFilter.#ctor(System.String)">
+        <member name="M:Telegrator.Filters.ChatTitleFilter.#ctor(System.String)">
             <summary>
-            Initializes a new instance of the <see cref="T:Telegrator.Filters.MessageChatTitleFilter"/> class.
+            Initializes a new instance of the <see cref="T:Telegrator.Filters.ChatTitleFilter"/> class.
             </summary>
             <param name="title">The chat title to match.</param>
         </member>
-        <member name="M:Telegrator.Filters.MessageChatTitleFilter.#ctor(System.String,System.StringComparison)">
+        <member name="M:Telegrator.Filters.ChatTitleFilter.#ctor(System.String,System.StringComparison)">
             <summary>
-            Initializes a new instance of the <see cref="T:Telegrator.Filters.MessageChatTitleFilter"/> class with a specific string comparison.
+            Initializes a new instance of the <see cref="T:Telegrator.Filters.ChatTitleFilter"/> class with a specific string comparison.
             </summary>
             <param name="title">The chat title to match.</param>
             <param name="comparison">The string comparison to use.</param>
         </member>
-        <member name="M:Telegrator.Filters.MessageChatTitleFilter.CanPassNext(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Chat})">
+        <member name="M:Telegrator.Filters.ChatTitleFilter.CanPassNext(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Chat})">
             <inheritdoc/>
         </member>
-        <member name="T:Telegrator.Filters.MessageChatUsernameFilter">
+        <member name="T:Telegrator.Filters.ChatUsernameFilter">
             <summary>
             Filters messages whose chat username matches the specified value.
             </summary>
         </member>
-        <member name="M:Telegrator.Filters.MessageChatUsernameFilter.#ctor(System.String)">
+        <member name="M:Telegrator.Filters.ChatUsernameFilter.#ctor(System.String)">
             <summary>
-            Initializes a new instance of the <see cref="T:Telegrator.Filters.MessageChatUsernameFilter"/> class.
+            Initializes a new instance of the <see cref="T:Telegrator.Filters.ChatUsernameFilter"/> class.
             </summary>
             <param name="userName">The chat username to match.</param>
         </member>
-        <member name="M:Telegrator.Filters.MessageChatUsernameFilter.#ctor(System.String,System.StringComparison)">
+        <member name="M:Telegrator.Filters.ChatUsernameFilter.#ctor(System.String,System.StringComparison)">
             <summary>
-            Initializes a new instance of the <see cref="T:Telegrator.Filters.MessageChatUsernameFilter"/> class with a specific string comparison.
+            Initializes a new instance of the <see cref="T:Telegrator.Filters.ChatUsernameFilter"/> class with a specific string comparison.
             </summary>
             <param name="userName">The chat username to match.</param>
             <param name="comparison">The string comparison to use.</param>
         </member>
-        <member name="M:Telegrator.Filters.MessageChatUsernameFilter.CanPassNext(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Chat})">
+        <member name="M:Telegrator.Filters.ChatUsernameFilter.CanPassNext(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Chat})">
             <inheritdoc/>
         </member>
-        <member name="T:Telegrator.Filters.MessageChatNameFilter">
+        <member name="T:Telegrator.Filters.ChatNameFilter">
             <summary>
             Filters messages whose chat first and/or last name matches the specified values.
             </summary>
         </member>
-        <member name="M:Telegrator.Filters.MessageChatNameFilter.#ctor(System.String,System.String)">
+        <member name="M:Telegrator.Filters.ChatNameFilter.#ctor(System.String,System.String)">
             <summary>
-            Initializes a new instance of the <see cref="T:Telegrator.Filters.MessageChatNameFilter"/> class.
+            Initializes a new instance of the <see cref="T:Telegrator.Filters.ChatNameFilter"/> class.
             </summary>
             <param name="firstName">The chat first name to match.</param>
             <param name="lastName">The chat last name to match.</param>
         </member>
-        <member name="M:Telegrator.Filters.MessageChatNameFilter.#ctor(System.String,System.String,System.StringComparison)">
+        <member name="M:Telegrator.Filters.ChatNameFilter.#ctor(System.String,System.String,System.StringComparison)">
             <summary>
-            Initializes a new instance of the <see cref="T:Telegrator.Filters.MessageChatNameFilter"/> class with a specific string comparison.
+            Initializes a new instance of the <see cref="T:Telegrator.Filters.ChatNameFilter"/> class with a specific string comparison.
             </summary>
             <param name="firstName">The chat first name to match.</param>
             <param name="lastName">The chat last name to match.</param>
             <param name="comparison">The string comparison to use.</param>
         </member>
-        <member name="M:Telegrator.Filters.MessageChatNameFilter.CanPassNext(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Chat})">
+        <member name="M:Telegrator.Filters.ChatNameFilter.CanPassNext(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Chat})">
             <inheritdoc/>
         </member>
         <member name="T:Telegrator.Filters.MessageFilterBase">
@@ -5512,384 +4726,6 @@
             <param name="filters">The filters to add.</param>
             <returns>The builder instance.</returns>
         </member>
-        <member name="T:Telegrator.Handlers.BusinessConnectionHandlerAttribute">
-            <summary>
-            Attribute that marks a handler to process BusinessConnectionHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.BusinessConnectionHandlerAttribute.#ctor(System.Int32)">
-            <summary>
-            Attribute that marks a handler to process BusinessConnectionHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.BusinessConnectionHandlerAttribute.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Update})">
-            <inheritdoc/>
-        </member>
-        <member name="T:Telegrator.Handlers.BusinessConnectionHandler">
-            <summary>
-            Abstract base class for handlers that process BusinessConnectionHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.BusinessConnectionHandler.#ctor">
-            <summary>
-            Abstract base class for handlers that process BusinessConnectionHandler updates.
-            </summary>
-        </member>
-        <member name="T:Telegrator.Handlers.BranchingBusinessConnectionHandler">
-            <summary>
-            Abstract base class for branching handlers that process BusinessConnectionHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.BranchingBusinessConnectionHandler.#ctor">
-            <summary>
-            Abstract base class for branching handlers that process BusinessConnectionHandler updates.
-            </summary>
-        </member>
-        <member name="T:Telegrator.Handlers.BusinessMessageHandlerAttribute">
-            <summary>
-            Attribute that marks a handler to process BusinessMessageHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.BusinessMessageHandlerAttribute.#ctor(System.Int32)">
-            <summary>
-            Attribute that marks a handler to process BusinessMessageHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.BusinessMessageHandlerAttribute.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Update})">
-            <inheritdoc/>
-        </member>
-        <member name="T:Telegrator.Handlers.BusinessMessageHandler">
-            <summary>
-            Abstract base class for handlers that process BusinessMessageHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.BusinessMessageHandler.#ctor">
-            <summary>
-            Abstract base class for handlers that process BusinessMessageHandler updates.
-            </summary>
-        </member>
-        <member name="T:Telegrator.Handlers.BranchingBusinessMessageHandler">
-            <summary>
-            Abstract base class for branching handlers that process BusinessMessageHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.BranchingBusinessMessageHandler.#ctor">
-            <summary>
-            Abstract base class for branching handlers that process BusinessMessageHandler updates.
-            </summary>
-        </member>
-        <member name="T:Telegrator.Handlers.BusinessMessagesDeletedHandlerAttribute">
-            <summary>
-            Attribute that marks a handler to process BusinessMessagesDeletedHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.BusinessMessagesDeletedHandlerAttribute.#ctor(System.Int32)">
-            <summary>
-            Attribute that marks a handler to process BusinessMessagesDeletedHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.BusinessMessagesDeletedHandlerAttribute.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Update})">
-            <inheritdoc/>
-        </member>
-        <member name="T:Telegrator.Handlers.BusinessMessagesDeletedHandler">
-            <summary>
-            Abstract base class for handlers that process BusinessMessagesDeletedHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.BusinessMessagesDeletedHandler.#ctor">
-            <summary>
-            Abstract base class for handlers that process BusinessMessagesDeletedHandler updates.
-            </summary>
-        </member>
-        <member name="T:Telegrator.Handlers.BranchingBusinessMessagesDeletedHandler">
-            <summary>
-            Abstract base class for branching handlers that process BusinessMessagesDeletedHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.BranchingBusinessMessagesDeletedHandler.#ctor">
-            <summary>
-            Abstract base class for branching handlers that process BusinessMessagesDeletedHandler updates.
-            </summary>
-        </member>
-        <member name="T:Telegrator.Handlers.CallbackDataHandlerAttribute">
-            <summary>
-            Attribute that marks a handler to process callback queries with specific data format.
-            Similar to CommandHandler, it can extract the main action and its arguments.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.CallbackDataHandlerAttribute.#ctor(System.Int32)">
-            <summary>
-            Attribute that marks a handler to process callback queries with specific data format.
-            Similar to CommandHandler, it can extract the main action and its arguments.
-            </summary>
-        </member>
-        <member name="P:Telegrator.Handlers.CallbackDataHandlerAttribute.Action">
-            <summary>
-            Gets the action string that was extracted from the callback data.
-            </summary>
-        </member>
-        <member name="P:Telegrator.Handlers.CallbackDataHandlerAttribute.Arguments">
-            <summary>
-            Callback data split by a separator (e.g., ':')
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.CallbackDataHandlerAttribute.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Update})">
-            <inheritdoc/>
-        </member>
-        <member name="T:Telegrator.Handlers.CallbackDataHandler">
-            <summary>
-            Abstract base class for handlers that process structured callback query data.
-            </summary>
-        </member>
-        <member name="P:Telegrator.Handlers.CallbackDataHandler.Action">
-            <summary>
-            Gets the action that was extracted from the callback data.
-            </summary>
-        </member>
-        <member name="P:Telegrator.Handlers.CallbackDataHandler.Arguments">
-            <summary>
-            Gets the callback data arguments as an array of strings.
-            </summary>
-        </member>
-        <member name="T:Telegrator.Handlers.BranchingCallbackDataHandler">
-            <summary>
-            Abstract base class for branching handlers that process structured callback query data.
-            </summary>
-        </member>
-        <member name="P:Telegrator.Handlers.BranchingCallbackDataHandler.Action">
-            <summary>
-            Gets the action that was extracted from the callback data.
-            </summary>
-        </member>
-        <member name="P:Telegrator.Handlers.BranchingCallbackDataHandler.Arguments">
-            <summary>
-            Gets the callback data arguments as an array of strings.
-            </summary>
-        </member>
-        <member name="T:Telegrator.Handlers.CallbackQueryHandlerAttribute">
-            <summary>
-            Attribute that marks a handler to process callback query updates.
-            This handler will be triggered when users interact with inline keyboards or other callback mechanisms.
-            </summary>
-            <param name="importance"></param>
-        </member>
-        <member name="M:Telegrator.Handlers.CallbackQueryHandlerAttribute.#ctor(System.Int32)">
-            <summary>
-            Attribute that marks a handler to process callback query updates.
-            This handler will be triggered when users interact with inline keyboards or other callback mechanisms.
-            </summary>
-            <param name="importance"></param>
-        </member>
-        <member name="M:Telegrator.Handlers.CallbackQueryHandlerAttribute.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Update})">
-            <summary>
-            Always returns true, allowing any callback query update to pass through this filter.
-            </summary>
-            <param name="context">The filter execution context (unused).</param>
-            <returns>Always returns true to allow any callback query update.</returns>
-        </member>
-        <member name="T:Telegrator.Handlers.CallbackQueryHandler">
-            <summary>
-            Abstract base class for handlers that process callback query updates.
-            Provides a foundation for creating handlers that respond to user interactions with inline keyboards.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.CallbackQueryHandler.#ctor">
-            <summary>
-            Abstract base class for handlers that process callback query updates.
-            Provides a foundation for creating handlers that respond to user interactions with inline keyboards.
-            </summary>
-        </member>
-        <member name="P:Telegrator.Handlers.CallbackQueryHandler.TypeData">
-            <summary>
-            Gets the type-specific data from the callback query.
-            Returns the data string, chat instance, or game short name depending on the callback query type.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.CallbackQueryHandler.Responce(System.String,Telegram.Bot.Types.Enums.ParseMode,Telegram.Bot.Types.ReplyParameters,Telegram.Bot.Types.ReplyMarkups.ReplyMarkup,Telegram.Bot.Types.LinkPreviewOptions,System.Nullable{System.Int32},System.Collections.Generic.IEnumerable{Telegram.Bot.Types.MessageEntity},System.Boolean,System.Boolean,System.String,System.String,System.Boolean,System.Nullable{System.Int32},Telegram.Bot.Types.SuggestedPostParameters,System.Threading.CancellationToken)">
-            <summary>
-            Sends a response message to the current chat.
-            </summary>
-            <param name="text">The text of the message to send.</param>
-            <param name="parseMode">The parse mode for the message text.</param>
-            <param name="replyParameters">The reply parameters for the message.</param>
-            <param name="replyMarkup">The reply markup for the message.</param>
-            <param name="linkPreviewOptions">Options for link preview generation.</param>
-            <param name="messageThreadId">The thread ID for forum topics.</param>
-            <param name="entities">The message entities to include.</param>
-            <param name="disableNotification">Whether to disable notification for the message.</param>
-            <param name="protectContent">Whether to protect the message content.</param>
-            <param name="messageEffectId">The message effect ID.</param>
-            <param name="businessConnectionId">The business connection ID.</param>
-            <param name="allowPaidBroadcast">Whether to allow paid broadcast.</param>
-            <param name="directMessageTopicId"></param>
-            <param name="suggestedPostParameters"></param>
-            <param name="cancellationToken">The cancellation token.</param>
-            <returns>The sent message.</returns>
-        </member>
-        <member name="M:Telegrator.Handlers.CallbackQueryHandler.EditMessage(System.String,Telegram.Bot.Types.Enums.ParseMode,Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup,System.Collections.Generic.IEnumerable{Telegram.Bot.Types.MessageEntity},Telegram.Bot.Types.LinkPreviewOptions,System.Threading.CancellationToken)">
-            <summary>
-            Edits the current callback message with new text.
-            </summary>
-            <param name="text">The new text of the message.</param>
-            <param name="parseMode">The parse mode for the message text.</param>
-            <param name="replyMarkup">The reply markup for the message.</param>
-            <param name="entities">The message entities to include.</param>
-            <param name="linkPreviewOptions">Options for link preview generation.</param>
-            <param name="cancellationToken">The cancellation token.</param>
-            <returns>The edited message.</returns>
-        </member>
-        <member name="M:Telegrator.Handlers.CallbackQueryHandler.Answer(System.String,System.Boolean,System.String,System.Int32,System.Threading.CancellationToken)">
-            <summary>
-            Answers the current callback query with optional alert or message.
-            </summary>
-            <param name="text">The text to display in the callback answer.</param>
-            <param name="showAlert">Whether to show an alert popup instead of a toast.</param>
-            <param name="url">A URL that will be opened by the client.</param>
-            <param name="cacheTime">The maximum amount of time in seconds that the result of the callback query may be cached client-side.</param>
-            <param name="cancellationToken">The cancellation token.</param>
-        </member>
-        <member name="T:Telegrator.Handlers.BranchingCallbackQueryHandler">
-            <summary>
-            Abstract base class for branching handlers that process CallbackQueryHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.BranchingCallbackQueryHandler.#ctor">
-            <summary>
-            Abstract base class for branching handlers that process CallbackQueryHandler updates.
-            </summary>
-        </member>
-        <member name="T:Telegrator.Handlers.ChannelPostHandlerAttribute">
-            <summary>
-            Attribute that marks a handler to process ChannelPostHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.ChannelPostHandlerAttribute.#ctor(System.Int32)">
-            <summary>
-            Attribute that marks a handler to process ChannelPostHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.ChannelPostHandlerAttribute.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Update})">
-            <inheritdoc/>
-        </member>
-        <member name="T:Telegrator.Handlers.ChannelPostHandler">
-            <summary>
-            Abstract base class for handlers that process ChannelPostHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.ChannelPostHandler.#ctor">
-            <summary>
-            Abstract base class for handlers that process ChannelPostHandler updates.
-            </summary>
-        </member>
-        <member name="T:Telegrator.Handlers.BranchingChannelPostHandler">
-            <summary>
-            Abstract base class for branching handlers that process ChannelPostHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.BranchingChannelPostHandler.#ctor">
-            <summary>
-            Abstract base class for branching handlers that process ChannelPostHandler updates.
-            </summary>
-        </member>
-        <member name="T:Telegrator.Handlers.ChatBoostHandlerAttribute">
-            <summary>
-            Attribute that marks a handler to process ChatBoostHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.ChatBoostHandlerAttribute.#ctor(System.Int32)">
-            <summary>
-            Attribute that marks a handler to process ChatBoostHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.ChatBoostHandlerAttribute.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Update})">
-            <inheritdoc/>
-        </member>
-        <member name="T:Telegrator.Handlers.ChatBoostHandler">
-            <summary>
-            Abstract base class for handlers that process ChatBoostHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.ChatBoostHandler.#ctor">
-            <summary>
-            Abstract base class for handlers that process ChatBoostHandler updates.
-            </summary>
-        </member>
-        <member name="T:Telegrator.Handlers.BranchingChatBoostHandler">
-            <summary>
-            Abstract base class for branching handlers that process ChatBoostHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.BranchingChatBoostHandler.#ctor">
-            <summary>
-            Abstract base class for branching handlers that process ChatBoostHandler updates.
-            </summary>
-        </member>
-        <member name="T:Telegrator.Handlers.ChatJoinRequestHandlerAttribute">
-            <summary>
-            Attribute that marks a handler to process ChatJoinRequestHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.ChatJoinRequestHandlerAttribute.#ctor(System.Int32)">
-            <summary>
-            Attribute that marks a handler to process ChatJoinRequestHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.ChatJoinRequestHandlerAttribute.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Update})">
-            <inheritdoc/>
-        </member>
-        <member name="T:Telegrator.Handlers.ChatJoinRequestHandler">
-            <summary>
-            Abstract base class for handlers that process ChatJoinRequestHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.ChatJoinRequestHandler.#ctor">
-            <summary>
-            Abstract base class for handlers that process ChatJoinRequestHandler updates.
-            </summary>
-        </member>
-        <member name="T:Telegrator.Handlers.BranchingChatJoinRequestHandler">
-            <summary>
-            Abstract base class for branching handlers that process ChatJoinRequestHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.BranchingChatJoinRequestHandler.#ctor">
-            <summary>
-            Abstract base class for branching handlers that process ChatJoinRequestHandler updates.
-            </summary>
-        </member>
-        <member name="T:Telegrator.Handlers.ChatMemberHandlerAttribute">
-            <summary>
-            Attribute that marks a handler to process ChatMemberHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.ChatMemberHandlerAttribute.#ctor(System.Int32)">
-            <summary>
-            Attribute that marks a handler to process ChatMemberHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.ChatMemberHandlerAttribute.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Update})">
-            <inheritdoc/>
-        </member>
-        <member name="T:Telegrator.Handlers.ChatMemberHandler">
-            <summary>
-            Abstract base class for handlers that process ChatMemberHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.ChatMemberHandler.#ctor">
-            <summary>
-            Abstract base class for handlers that process ChatMemberHandler updates.
-            </summary>
-        </member>
-        <member name="T:Telegrator.Handlers.BranchingChatMemberHandler">
-            <summary>
-            Abstract base class for branching handlers that process ChatMemberHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.BranchingChatMemberHandler.#ctor">
-            <summary>
-            Abstract base class for branching handlers that process ChatMemberHandler updates.
-            </summary>
-        </member>
         <member name="T:Telegrator.Handlers.CommandHandlerAttribute">
             <summary>
             Attribute that marks a handler to process command messages.
@@ -6157,138 +4993,6 @@
         </member>
         <member name="M:Telegrator.Handlers.Diagnostics.ReportInspectorExtensions.Except``1(Telegrator.Handlers.Diagnostics.ReportInspector)">
             <inheritdoc cref="M:Telegrator.Handlers.Diagnostics.ReportInspector.Except(System.String)"/>
-        </member>
-        <member name="T:Telegrator.Handlers.DocumentMessageHandlerAttribute">
-            <summary>
-            Attribute that marks a handler to process document messages only.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.DocumentMessageHandlerAttribute.#ctor(System.Int32)">
-            <summary>
-            Attribute that marks a handler to process document messages only.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.DocumentMessageHandlerAttribute.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Update})">
-            <inheritdoc/>
-        </member>
-        <member name="T:Telegrator.Handlers.DocumentMessageHandler">
-            <summary>
-            Abstract base class for handlers that process document messages only.
-            </summary>
-        </member>
-        <member name="P:Telegrator.Handlers.DocumentMessageHandler.Document">
-            <summary>
-            Gets the document attached to the message.
-            </summary>
-        </member>
-        <member name="T:Telegrator.Handlers.BranchingDocumentMessageHandler">
-            <summary>
-            Abstract base class for branching handlers that process document messages only.
-            </summary>
-        </member>
-        <member name="P:Telegrator.Handlers.BranchingDocumentMessageHandler.Document">
-            <summary>
-            Gets the document attached to the message.
-            </summary>
-        </member>
-        <member name="T:Telegrator.Handlers.EditedBusinessMessageHandlerAttribute">
-            <summary>
-            Attribute that marks a handler to process EditedBusinessMessageHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.EditedBusinessMessageHandlerAttribute.#ctor(System.Int32)">
-            <summary>
-            Attribute that marks a handler to process EditedBusinessMessageHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.EditedBusinessMessageHandlerAttribute.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Update})">
-            <inheritdoc/>
-        </member>
-        <member name="T:Telegrator.Handlers.EditedBusinessMessageHandler">
-            <summary>
-            Abstract base class for handlers that process EditedBusinessMessageHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.EditedBusinessMessageHandler.#ctor">
-            <summary>
-            Abstract base class for handlers that process EditedBusinessMessageHandler updates.
-            </summary>
-        </member>
-        <member name="T:Telegrator.Handlers.BranchingEditedBusinessMessageHandler">
-            <summary>
-            Abstract base class for branching handlers that process EditedBusinessMessageHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.BranchingEditedBusinessMessageHandler.#ctor">
-            <summary>
-            Abstract base class for branching handlers that process EditedBusinessMessageHandler updates.
-            </summary>
-        </member>
-        <member name="T:Telegrator.Handlers.EditedChannelPostHandlerAttribute">
-            <summary>
-            Attribute that marks a handler to process EditedChannelPostHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.EditedChannelPostHandlerAttribute.#ctor(System.Int32)">
-            <summary>
-            Attribute that marks a handler to process EditedChannelPostHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.EditedChannelPostHandlerAttribute.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Update})">
-            <inheritdoc/>
-        </member>
-        <member name="T:Telegrator.Handlers.EditedChannelPostHandler">
-            <summary>
-            Abstract base class for handlers that process EditedChannelPostHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.EditedChannelPostHandler.#ctor">
-            <summary>
-            Abstract base class for handlers that process EditedChannelPostHandler updates.
-            </summary>
-        </member>
-        <member name="T:Telegrator.Handlers.BranchingEditedChannelPostHandler">
-            <summary>
-            Abstract base class for branching handlers that process EditedChannelPostHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.BranchingEditedChannelPostHandler.#ctor">
-            <summary>
-            Abstract base class for branching handlers that process EditedChannelPostHandler updates.
-            </summary>
-        </member>
-        <member name="T:Telegrator.Handlers.EditedMessageHandlerAttribute">
-            <summary>
-            Attribute that marks a handler to process EditedMessageHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.EditedMessageHandlerAttribute.#ctor(System.Int32)">
-            <summary>
-            Attribute that marks a handler to process EditedMessageHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.EditedMessageHandlerAttribute.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Update})">
-            <inheritdoc/>
-        </member>
-        <member name="T:Telegrator.Handlers.EditedMessageHandler">
-            <summary>
-            Abstract base class for handlers that process EditedMessageHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.EditedMessageHandler.#ctor">
-            <summary>
-            Abstract base class for handlers that process EditedMessageHandler updates.
-            </summary>
-        </member>
-        <member name="T:Telegrator.Handlers.BranchingEditedMessageHandler">
-            <summary>
-            Abstract base class for branching handlers that process EditedMessageHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.BranchingEditedMessageHandler.#ctor">
-            <summary>
-            Abstract base class for branching handlers that process EditedMessageHandler updates.
-            </summary>
         </member>
         <member name="T:Telegrator.Handlers.HandlerContainer`1">
             <summary>
@@ -6577,379 +5281,6 @@
             <param name="cancellationToken">The cancellation token.</param>
             <returns>The sent message.</returns>
         </member>
-        <member name="T:Telegrator.Handlers.MessageReactionCountHandlerAttribute">
-            <summary>
-            Attribute that marks a handler to process MessageReactionCountHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.MessageReactionCountHandlerAttribute.#ctor(System.Int32)">
-            <summary>
-            Attribute that marks a handler to process MessageReactionCountHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.MessageReactionCountHandlerAttribute.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Update})">
-            <inheritdoc/>
-        </member>
-        <member name="T:Telegrator.Handlers.MessageReactionCountHandler">
-            <summary>
-            Abstract base class for handlers that process MessageReactionCountHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.MessageReactionCountHandler.#ctor">
-            <summary>
-            Abstract base class for handlers that process MessageReactionCountHandler updates.
-            </summary>
-        </member>
-        <member name="T:Telegrator.Handlers.BranchingMessageReactionCountHandler">
-            <summary>
-            Abstract base class for branching handlers that process MessageReactionCountHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.BranchingMessageReactionCountHandler.#ctor">
-            <summary>
-            Abstract base class for branching handlers that process MessageReactionCountHandler updates.
-            </summary>
-        </member>
-        <member name="T:Telegrator.Handlers.MessageReactionHandlerAttribute">
-            <summary>
-            Attribute that marks a handler to process MessageReactionHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.MessageReactionHandlerAttribute.#ctor(System.Int32)">
-            <summary>
-            Attribute that marks a handler to process MessageReactionHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.MessageReactionHandlerAttribute.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Update})">
-            <inheritdoc/>
-        </member>
-        <member name="T:Telegrator.Handlers.MessageReactionHandler">
-            <summary>
-            Abstract base class for handlers that process MessageReactionHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.MessageReactionHandler.#ctor">
-            <summary>
-            Abstract base class for handlers that process MessageReactionHandler updates.
-            </summary>
-        </member>
-        <member name="T:Telegrator.Handlers.BranchingMessageReactionHandler">
-            <summary>
-            Abstract base class for branching handlers that process MessageReactionHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.BranchingMessageReactionHandler.#ctor">
-            <summary>
-            Abstract base class for branching handlers that process MessageReactionHandler updates.
-            </summary>
-        </member>
-        <member name="T:Telegrator.Handlers.MyChatMemberHandlerAttribute">
-            <summary>
-            Attribute that marks a handler to process MyChatMemberHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.MyChatMemberHandlerAttribute.#ctor(System.Int32)">
-            <summary>
-            Attribute that marks a handler to process MyChatMemberHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.MyChatMemberHandlerAttribute.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Update})">
-            <inheritdoc/>
-        </member>
-        <member name="T:Telegrator.Handlers.MyChatMemberHandler">
-            <summary>
-            Abstract base class for handlers that process MyChatMemberHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.MyChatMemberHandler.#ctor">
-            <summary>
-            Abstract base class for handlers that process MyChatMemberHandler updates.
-            </summary>
-        </member>
-        <member name="T:Telegrator.Handlers.BranchingMyChatMemberHandler">
-            <summary>
-            Abstract base class for branching handlers that process MyChatMemberHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.BranchingMyChatMemberHandler.#ctor">
-            <summary>
-            Abstract base class for branching handlers that process MyChatMemberHandler updates.
-            </summary>
-        </member>
-        <member name="T:Telegrator.Handlers.PhotoMessageHandlerAttribute">
-            <summary>
-            Attribute that marks a handler to process photo messages only.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.PhotoMessageHandlerAttribute.#ctor(System.Int32)">
-            <summary>
-            Attribute that marks a handler to process photo messages only.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.PhotoMessageHandlerAttribute.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Update})">
-            <inheritdoc/>
-        </member>
-        <member name="T:Telegrator.Handlers.PhotoMessageHandler">
-            <summary>
-            Abstract base class for handlers that process photo messages only.
-            </summary>
-        </member>
-        <member name="P:Telegrator.Handlers.PhotoMessageHandler.Photos">
-            <summary>
-            Gets the photos attached to the message.
-            </summary>
-        </member>
-        <member name="P:Telegrator.Handlers.PhotoMessageHandler.LargestPhoto">
-            <summary>
-            Gets the largest photo (best quality) attached to the message.
-            </summary>
-        </member>
-        <member name="T:Telegrator.Handlers.BranchingPhotoMessageHandler">
-            <summary>
-            Abstract base class for branching handlers that process photo messages only.
-            </summary>
-        </member>
-        <member name="P:Telegrator.Handlers.BranchingPhotoMessageHandler.Photos">
-            <summary>
-            Gets the photos attached to the message.
-            </summary>
-        </member>
-        <member name="P:Telegrator.Handlers.BranchingPhotoMessageHandler.LargestPhoto">
-            <summary>
-            Gets the largest photo (best quality) attached to the message.
-            </summary>
-        </member>
-        <member name="T:Telegrator.Handlers.PollAnswerHandlerAttribute">
-            <summary>
-            Attribute that marks a handler to process PollAnswerHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.PollAnswerHandlerAttribute.#ctor(System.Int32)">
-            <summary>
-            Attribute that marks a handler to process PollAnswerHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.PollAnswerHandlerAttribute.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Update})">
-            <inheritdoc/>
-        </member>
-        <member name="T:Telegrator.Handlers.PollAnswerHandler">
-            <summary>
-            Abstract base class for handlers that process PollAnswerHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.PollAnswerHandler.#ctor">
-            <summary>
-            Abstract base class for handlers that process PollAnswerHandler updates.
-            </summary>
-        </member>
-        <member name="T:Telegrator.Handlers.BranchingPollAnswerHandler">
-            <summary>
-            Abstract base class for branching handlers that process PollAnswerHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.BranchingPollAnswerHandler.#ctor">
-            <summary>
-            Abstract base class for branching handlers that process PollAnswerHandler updates.
-            </summary>
-        </member>
-        <member name="T:Telegrator.Handlers.PollHandlerAttribute">
-            <summary>
-            Attribute that marks a handler to process PollHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.PollHandlerAttribute.#ctor(System.Int32)">
-            <summary>
-            Attribute that marks a handler to process PollHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.PollHandlerAttribute.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Update})">
-            <inheritdoc/>
-        </member>
-        <member name="T:Telegrator.Handlers.PollHandler">
-            <summary>
-            Abstract base class for handlers that process PollHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.PollHandler.#ctor">
-            <summary>
-            Abstract base class for handlers that process PollHandler updates.
-            </summary>
-        </member>
-        <member name="T:Telegrator.Handlers.BranchingPollHandler">
-            <summary>
-            Abstract base class for branching handlers that process PollHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.BranchingPollHandler.#ctor">
-            <summary>
-            Abstract base class for branching handlers that process PollHandler updates.
-            </summary>
-        </member>
-        <member name="T:Telegrator.Handlers.PreCheckoutQueryHandlerAttribute">
-            <summary>
-            Attribute that marks a handler to process PreCheckoutQueryHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.PreCheckoutQueryHandlerAttribute.#ctor(System.Int32)">
-            <summary>
-            Attribute that marks a handler to process PreCheckoutQueryHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.PreCheckoutQueryHandlerAttribute.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Update})">
-            <inheritdoc/>
-        </member>
-        <member name="T:Telegrator.Handlers.PreCheckoutQueryHandler">
-            <summary>
-            Abstract base class for handlers that process PreCheckoutQueryHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.PreCheckoutQueryHandler.#ctor">
-            <summary>
-            Abstract base class for handlers that process PreCheckoutQueryHandler updates.
-            </summary>
-        </member>
-        <member name="T:Telegrator.Handlers.BranchingPreCheckoutQueryHandler">
-            <summary>
-            Abstract base class for branching handlers that process PreCheckoutQueryHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.BranchingPreCheckoutQueryHandler.#ctor">
-            <summary>
-            Abstract base class for branching handlers that process PreCheckoutQueryHandler updates.
-            </summary>
-        </member>
-        <member name="T:Telegrator.Handlers.PurchasedPaidMediaHandlerAttribute">
-            <summary>
-            Attribute that marks a handler to process PurchasedPaidMediaHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.PurchasedPaidMediaHandlerAttribute.#ctor(System.Int32)">
-            <summary>
-            Attribute that marks a handler to process PurchasedPaidMediaHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.PurchasedPaidMediaHandlerAttribute.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Update})">
-            <inheritdoc/>
-        </member>
-        <member name="T:Telegrator.Handlers.PurchasedPaidMediaHandler">
-            <summary>
-            Abstract base class for handlers that process PurchasedPaidMediaHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.PurchasedPaidMediaHandler.#ctor">
-            <summary>
-            Abstract base class for handlers that process PurchasedPaidMediaHandler updates.
-            </summary>
-        </member>
-        <member name="T:Telegrator.Handlers.BranchingPurchasedPaidMediaHandler">
-            <summary>
-            Abstract base class for branching handlers that process PurchasedPaidMediaHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.BranchingPurchasedPaidMediaHandler.#ctor">
-            <summary>
-            Abstract base class for branching handlers that process PurchasedPaidMediaHandler updates.
-            </summary>
-        </member>
-        <member name="T:Telegrator.Handlers.RemovedChatBoostHandlerAttribute">
-            <summary>
-            Attribute that marks a handler to process RemovedChatBoostHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.RemovedChatBoostHandlerAttribute.#ctor(System.Int32)">
-            <summary>
-            Attribute that marks a handler to process RemovedChatBoostHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.RemovedChatBoostHandlerAttribute.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Update})">
-            <inheritdoc/>
-        </member>
-        <member name="T:Telegrator.Handlers.RemovedChatBoostHandler">
-            <summary>
-            Abstract base class for handlers that process RemovedChatBoostHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.RemovedChatBoostHandler.#ctor">
-            <summary>
-            Abstract base class for handlers that process RemovedChatBoostHandler updates.
-            </summary>
-        </member>
-        <member name="T:Telegrator.Handlers.BranchingRemovedChatBoostHandler">
-            <summary>
-            Abstract base class for branching handlers that process RemovedChatBoostHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.BranchingRemovedChatBoostHandler.#ctor">
-            <summary>
-            Abstract base class for branching handlers that process RemovedChatBoostHandler updates.
-            </summary>
-        </member>
-        <member name="T:Telegrator.Handlers.ShippingQueryHandlerAttribute">
-            <summary>
-            Attribute that marks a handler to process ShippingQueryHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.ShippingQueryHandlerAttribute.#ctor(System.Int32)">
-            <summary>
-            Attribute that marks a handler to process ShippingQueryHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.ShippingQueryHandlerAttribute.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Update})">
-            <inheritdoc/>
-        </member>
-        <member name="T:Telegrator.Handlers.ShippingQueryHandler">
-            <summary>
-            Abstract base class for handlers that process ShippingQueryHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.ShippingQueryHandler.#ctor">
-            <summary>
-            Abstract base class for handlers that process ShippingQueryHandler updates.
-            </summary>
-        </member>
-        <member name="T:Telegrator.Handlers.BranchingShippingQueryHandler">
-            <summary>
-            Abstract base class for branching handlers that process ShippingQueryHandler updates.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.BranchingShippingQueryHandler.#ctor">
-            <summary>
-            Abstract base class for branching handlers that process ShippingQueryHandler updates.
-            </summary>
-        </member>
-        <member name="T:Telegrator.Handlers.TextMessageHandlerAttribute">
-            <summary>
-            Attribute that marks a handler to process text messages only.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.TextMessageHandlerAttribute.#ctor(System.Int32)">
-            <summary>
-            Attribute that marks a handler to process text messages only.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Handlers.TextMessageHandlerAttribute.CanPass(Telegrator.Core.Filters.FilterExecutionContext{Telegram.Bot.Types.Update})">
-            <inheritdoc/>
-        </member>
-        <member name="T:Telegrator.Handlers.TextMessageHandler">
-            <summary>
-            Abstract base class for handlers that process text messages only.
-            </summary>
-        </member>
-        <member name="P:Telegrator.Handlers.TextMessageHandler.Text">
-            <summary>
-            Gets the text of the message.
-            </summary>
-        </member>
-        <member name="T:Telegrator.Handlers.BranchingTextMessageHandler">
-            <summary>
-            Abstract base class for branching handlers that process text messages only.
-            </summary>
-        </member>
-        <member name="P:Telegrator.Handlers.BranchingTextMessageHandler.Text">
-            <summary>
-            Gets the text of the message.
-            </summary>
-        </member>
         <member name="T:Telegrator.Handlers.AbstractHandlerContainerExtensions">
             <summary>
             Provides usefull helper methods for abstract handler containers
@@ -7086,6 +5417,15 @@
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
+        <member name="M:Telegrator.Handlers.AbstractHandlerContainerExtensions.GetBotToken(Telegrator.Handlers.IHandlerContainer{Telegram.Bot.Types.ManagedBotUpdated},System.Int64,System.Threading.CancellationToken)">
+            <summary>
+            Use this method to get the token of a managed bot.
+            </summary>
+            <param name="container"></param>
+            <param name="userId">User identifier of the managed bot whose token will be returned</param>
+            <param name="cancellationToken"></param>
+            <returns>The token as String on success.</returns>
+        </member>
         <member name="T:Telegrator.ITelegratorBot">
             <summary>
             Interface for reactive Telegram bot implementations.
@@ -7111,72 +5451,20 @@
             This logger is optional and can be used for simple console output.
             </summary>
         </member>
-        <member name="M:Telegrator.Logging.ConsoleLogger.#ctor(Telegrator.Logging.LogLevel,System.Boolean)">
+        <member name="M:Telegrator.Logging.ConsoleLogger.#ctor(Microsoft.Extensions.Logging.LogLevel,System.Boolean)">
             <summary>
             Initializes a new instance of ConsoleLogger.
             </summary>
             <param name="minimumLevel">Minimum log level to output. Default is Information.</param>
             <param name="includeTimestamp">Whether to include timestamp in log messages. Default is true.</param>
         </member>
-        <member name="M:Telegrator.Logging.ConsoleLogger.Log(Telegrator.Logging.LogLevel,System.String,System.Exception)">
+        <member name="M:Telegrator.Logging.ConsoleLogger.BeginScope``1(``0)">
             <inheritdoc/>
         </member>
-        <member name="T:Telegrator.Logging.ITelegratorLogger">
-            <summary>
-            Interface for Telegrator logging system.
-            Provides abstraction for logging without external dependencies.
-            </summary>
+        <member name="M:Telegrator.Logging.ConsoleLogger.IsEnabled(Microsoft.Extensions.Logging.LogLevel)">
+            <inheritdoc/>
         </member>
-        <member name="M:Telegrator.Logging.ITelegratorLogger.Log(Telegrator.Logging.LogLevel,System.String,System.Exception)">
-            <summary>
-            Logs a message with specified level.
-            </summary>
-            <param name="level">The log level.</param>
-            <param name="message">The message to log.</param>
-            <param name="exception">Optional exception.</param>
-        </member>
-        <member name="T:Telegrator.Logging.LogLevel">
-            <summary>
-            Log levels for Telegrator logging system.
-            </summary>
-        </member>
-        <member name="F:Telegrator.Logging.LogLevel.Trace">
-            <summary>
-            Trace level - most detailed logging.
-            </summary>
-        </member>
-        <member name="F:Telegrator.Logging.LogLevel.Debug">
-            <summary>
-            Debug level - detailed debugging information.
-            </summary>
-        </member>
-        <member name="F:Telegrator.Logging.LogLevel.Information">
-            <summary>
-            Information level - general information.
-            </summary>
-        </member>
-        <member name="F:Telegrator.Logging.LogLevel.Warning">
-            <summary>
-            Warning level - warning messages.
-            </summary>
-        </member>
-        <member name="F:Telegrator.Logging.LogLevel.Error">
-            <summary>
-            Error level - error messages.
-            </summary>
-        </member>
-        <member name="T:Telegrator.Logging.NullLogger">
-            <summary>
-            Null logger implementation that does nothing.
-            Used when logging is not required or disabled.
-            </summary>
-        </member>
-        <member name="F:Telegrator.Logging.NullLogger.Instance">
-            <summary>
-            Singleton instance of NullLogger.
-            </summary>
-        </member>
-        <member name="M:Telegrator.Logging.NullLogger.Log(Telegrator.Logging.LogLevel,System.String,System.Exception)">
+        <member name="M:Telegrator.Logging.ConsoleLogger.Log``1(Microsoft.Extensions.Logging.LogLevel,Microsoft.Extensions.Logging.EventId,``0,System.Exception,System.Func{``0,System.Exception,System.String})">
             <inheritdoc/>
         </member>
         <member name="T:Telegrator.Logging.TelegratorLogging">
@@ -7196,13 +5484,13 @@
             Any messages below thi value will not be writen!
             </summary>
         </member>
-        <member name="M:Telegrator.Logging.TelegratorLogging.AddAdapter(Telegrator.Logging.ITelegratorLogger)">
+        <member name="M:Telegrator.Logging.TelegratorLogging.AddAdapter(Microsoft.Extensions.Logging.ILogger)">
             <summary>
             Adds a logger adapter to the centralized logging system.
             </summary>
             <param name="adapter">The logger adapter to add.</param>
         </member>
-        <member name="M:Telegrator.Logging.TelegratorLogging.RemoveAdapter(Telegrator.Logging.ITelegratorLogger)">
+        <member name="M:Telegrator.Logging.TelegratorLogging.RemoveAdapter(Microsoft.Extensions.Logging.ILogger)">
             <summary>
             Removes a logger adapter from the centralized logging system.
             </summary>
@@ -7213,14 +5501,17 @@
             Clears all logger adapters.
             </summary>
         </member>
-        <member name="M:Telegrator.Logging.TelegratorLogging.Log(Telegrator.Logging.LogLevel,System.String,System.Exception,System.Object[])">
-            <summary>
-            Logs a message to all registered adapters.
-            </summary>
-            <param name="level">The log level.</param>
-            <param name="message">The message to log.</param>
-            <param name="exception">Optional exception.</param>
-            <param name="args"></param>
+        <member name="M:Telegrator.Logging.TelegratorLogging.Enabled(Microsoft.Extensions.Logging.LogLevel)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Telegrator.Logging.TelegratorLogging.IsEnabled(Microsoft.Extensions.Logging.LogLevel)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Telegrator.Logging.TelegratorLogging.BeginScope``1(``0)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Telegrator.Logging.TelegratorLogging.Log``1(Microsoft.Extensions.Logging.LogLevel,Microsoft.Extensions.Logging.EventId,``0,System.Exception,System.Func{``0,System.Exception,System.String})">
+            <inheritdoc/>
         </member>
         <member name="M:Telegrator.Logging.TelegratorLogging.LogTrace(System.String)">
             <summary>
@@ -9432,753 +7723,36 @@
             <param name="updateType"></param>
             <returns></returns>
         </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.CallbackData``1(``0,System.String)">
+        <member name="T:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute">
             <summary>
-            Adds a CallbackDataAttribute target filter to the handler builder.
+            Specifies that when a method returns <see cref="P:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute.ReturnValue"/>, the parameter will not be null even if the corresponding type allows it.
             </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "data">The data.</param>
-            <returns>The same builder instance.</returns>
         </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.CallbackDataContains``1(``0,System.String)">
+        <member name="M:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute.#ctor(System.Boolean)">
             <summary>
-            Adds a CallbackDataContainsAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "data">The data.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.CallbackDataStartsWith``1(``0,System.String)">
-            <summary>
-            Adds a CallbackDataStartsWithAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "data">The data.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.CallbackDataEndsWith``1(``0,System.String)">
-            <summary>
-            Adds a CallbackDataEndsWithAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "data">The data.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.CallbackDataRegex``1(``0,System.String)">
-            <summary>
-            Adds a CallbackDataRegexAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "pattern">The pattern.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.CallbackInlineId``1(``0,System.String)">
-            <summary>
-            Adds a CallbackInlineIdAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "inlineMessageId">The inlineMessageId.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.ChatJoinRequestInviteLink``1(``0,System.String)">
-            <summary>
-            Adds a ChatJoinRequestInviteLinkAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "inviteLink">The inviteLink.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.ChosenInlineResultId``1(``0,System.String)">
-            <summary>
-            Adds a ChosenInlineResultIdAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "resultId">The resultId.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.ChosenInlineResultQuery``1(``0,System.String)">
-            <summary>
-            Adds a ChosenInlineResultQueryAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "query">The query.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.CommandAllias``1(``0,System.String[])">
-            <summary>
-            Adds a CommandAlliasAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "alliases">The alliases.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.ArgumentCount``1(``0,System.Int32)">
-            <summary>
-            Adds a ArgumentCountAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "count">The count.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.ArgumentStartsWith``1(``0,System.String,System.StringComparison,System.Int32)">
-            <summary>
-            Adds a ArgumentStartsWithAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "content">The content.</param>
-            <param name = "comparison">The comparison.</param>
-            <param name = "index">The index.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.ArgumentEndsWith``1(``0,System.String,System.StringComparison,System.Int32)">
-            <summary>
-            Adds a ArgumentEndsWithAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "content">The content.</param>
-            <param name = "comparison">The comparison.</param>
-            <param name = "index">The index.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.ArgumentContains``1(``0,System.String,System.StringComparison,System.Int32)">
-            <summary>
-            Adds a ArgumentContainsAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "content">The content.</param>
-            <param name = "comparison">The comparison.</param>
-            <param name = "index">The index.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.ArgumentEquals``1(``0,System.String,System.StringComparison,System.Int32)">
-            <summary>
-            Adds a ArgumentEqualsAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "content">The content.</param>
-            <param name = "comparison">The comparison.</param>
-            <param name = "index">The index.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.ArgumentRegex``1(``0,System.String,System.Text.RegularExpressions.RegexOptions,System.Int32)">
-            <summary>
-            Adds a ArgumentRegexAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "pattern">The pattern.</param>
-            <param name = "options">The options.</param>
-            <param name = "index">The index.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.IsDebugEnvironment``1(``0)">
-            <summary>
-            Adds a IsDebugEnvironmentAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.IsReleaseEnvironment``1(``0)">
-            <summary>
-            Adds a IsReleaseEnvironmentAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.EnvironmentVariable``1(``0,System.String,System.String,System.StringComparison)">
-            <summary>
-            Adds a EnvironmentVariableAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "variable">The variable.</param>
-            <param name = "value">The value.</param>
-            <param name = "comparison">The comparison.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.EnvironmentVariable``1(``0,System.String,System.String)">
-            <summary>
-            Adds a EnvironmentVariableAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "variable">The variable.</param>
-            <param name = "value">The value.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.EnvironmentVariable``1(``0,System.String)">
-            <summary>
-            Adds a EnvironmentVariableAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "variable">The variable.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.EnvironmentVariable``1(``0,System.String,System.StringComparison)">
-            <summary>
-            Adds a EnvironmentVariableAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "variable">The variable.</param>
-            <param name = "comparison">The comparison.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.InlineQueryText``1(``0,System.String)">
-            <summary>
-            Adds a InlineQueryTextAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "text">The text.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.InlineQueryContains``1(``0,System.String)">
-            <summary>
-            Adds a InlineQueryContainsAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "text">The text.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.InlineQueryStartsWith``1(``0,System.String)">
-            <summary>
-            Adds a InlineQueryStartsWithAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "text">The text.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.InlineQueryEndsWith``1(``0,System.String)">
-            <summary>
-            Adds a InlineQueryEndsWithAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "text">The text.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.InlineQueryRegex``1(``0,System.String)">
-            <summary>
-            Adds a InlineQueryRegexAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "pattern">The pattern.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.Mentioned``1(``0)">
-            <summary>
-            Adds a MentionedAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.Mentioned``1(``0,System.Int32)">
-            <summary>
-            Adds a MentionedAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "offset">The offset.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.Mentioned``1(``0,System.String)">
-            <summary>
-            Adds a MentionedAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "mention">The mention.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.Mentioned``1(``0,System.String,System.Int32)">
-            <summary>
-            Adds a MentionedAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "mention">The mention.</param>
-            <param name = "offset">The offset.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.ChatIsForum``1(``0)">
-            <summary>
-            Adds a ChatIsForumAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.ChatId``1(``0,System.Int64)">
-            <summary>
-            Adds a ChatIdAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "id">The id.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.InChatType``1(``0,Telegram.Bot.Types.Enums.ChatType)">
-            <summary>
-            Adds a ChatTypeAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "type">The type.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.InChatType``1(``0,Telegrator.ChatTypeFlags)">
-            <summary>
-            Adds a ChatTypeAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "flags">The flags.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.ChatTitle``1(``0,System.String,System.StringComparison)">
-            <summary>
-            Adds a ChatTitleAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "title">The title.</param>
-            <param name = "comparison">The comparison.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.ChatTitle``1(``0,System.String)">
-            <summary>
-            Adds a ChatTitleAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "title">The title.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.ChatUsername``1(``0,System.String,System.StringComparison)">
-            <summary>
-            Adds a ChatUsernameAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "userName">The userName.</param>
-            <param name = "comparison">The comparison.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.ChatUsername``1(``0,System.String)">
-            <summary>
-            Adds a ChatUsernameAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "userName">The userName.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.ChatName``1(``0,System.String,System.String,System.StringComparison)">
-            <summary>
-            Adds a ChatNameAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "firstName">The firstName.</param>
-            <param name = "lastName">The lastName.</param>
-            <param name = "comparison">The comparison.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.ChatName``1(``0,System.String,System.String)">
-            <summary>
-            Adds a ChatNameAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "firstName">The firstName.</param>
-            <param name = "lastName">The lastName.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.MessageRegex``1(``0,System.String,System.Text.RegularExpressions.RegexOptions)">
-            <summary>
-            Adds a MessageRegexAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "pattern">The pattern.</param>
-            <param name = "regexOptions">The regexOptions.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.MessageRegex``1(``0,System.Text.RegularExpressions.Regex)">
-            <summary>
-            Adds a MessageRegexAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "regex">The regex.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.DiceThrowed``1(``0,System.Int32)">
-            <summary>
-            Adds a DiceThrowedAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "value">The value.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.DiceThrowed``1(``0,Telegrator.DiceType,System.Int32)">
-            <summary>
-            Adds a DiceThrowedAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "diceType">The diceType.</param>
-            <param name = "value">The value.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.IsAutomaticFormwardMessage``1(``0)">
-            <summary>
-            Adds a IsAutomaticFormwardMessageAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.IsFromOfflineMessage``1(``0)">
-            <summary>
-            Adds a IsFromOfflineMessageAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.IsServiceMessageMessage``1(``0)">
-            <summary>
-            Adds a IsServiceMessageMessageAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.IsTopicMessageMessage``1(``0)">
-            <summary>
-            Adds a IsTopicMessageMessageAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.MessageHasEntity``1(``0,Telegram.Bot.Types.Enums.MessageEntityType)">
-            <summary>
-            Adds a MessageHasEntityAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "type">The type.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.MessageHasEntity``1(``0,Telegram.Bot.Types.Enums.MessageEntityType,System.Int32,System.Nullable{System.Int32})">
-            <summary>
-            Adds a MessageHasEntityAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "type">The type.</param>
-            <param name = "offset">The offset.</param>
-            <param name = "length">The length.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.MessageHasEntity``1(``0,Telegram.Bot.Types.Enums.MessageEntityType,System.String,System.StringComparison)">
-            <summary>
-            Adds a MessageHasEntityAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "type">The type.</param>
-            <param name = "content">The content.</param>
-            <param name = "stringComparison">The stringComparison.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.MessageHasEntity``1(``0,Telegram.Bot.Types.Enums.MessageEntityType,System.Int32,System.Nullable{System.Int32},System.String,System.StringComparison)">
-            <summary>
-            Adds a MessageHasEntityAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "type">The type.</param>
-            <param name = "offset">The offset.</param>
-            <param name = "length">The length.</param>
-            <param name = "content">The content.</param>
-            <param name = "stringComparison">The stringComparison.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.MeReplied``1(``0)">
-            <summary>
-            Adds a MeRepliedAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.HasReply``1(``0,System.Int32)">
-            <summary>
-            Adds a HasReplyAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "replyDepth">The replyDepth.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.FromReplyChain``1(``0,System.Int32)">
-            <summary>
-            Adds a FromReplyChainAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "replyDepth">The replyDepth.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.FromUsername``1(``0,System.String)">
-            <summary>
-            Adds a FromUsernameAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "username">The username.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.FromUsername``1(``0,System.String,System.StringComparison)">
-            <summary>
-            Adds a FromUsernameAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "username">The username.</param>
-            <param name = "comparison">The comparison.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.FromUser``1(``0,System.String,System.String,System.StringComparison)">
-            <summary>
-            Adds a FromUserAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "firstName">The firstName.</param>
-            <param name = "lastName">The lastName.</param>
-            <param name = "comparison">The comparison.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.FromUser``1(``0,System.String,System.String)">
-            <summary>
-            Adds a FromUserAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "firstName">The firstName.</param>
-            <param name = "lastName">The lastName.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.FromUser``1(``0,System.String)">
-            <summary>
-            Adds a FromUserAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "firstName">The firstName.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.FromUser``1(``0,System.String,System.StringComparison)">
-            <summary>
-            Adds a FromUserAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "firstName">The firstName.</param>
-            <param name = "comparison">The comparison.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.FromUserId``1(``0,System.Int64)">
-            <summary>
-            Adds a FromUserIdAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "userId">The userId.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.NotFromBot``1(``0)">
-            <summary>
-            Adds a NotFromBotAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.FromBot``1(``0)">
-            <summary>
-            Adds a FromBotAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.FromPremiumUser``1(``0)">
-            <summary>
-            Adds a FromPremiumUserAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.TextStartsWith``1(``0,System.String,System.StringComparison)">
-            <summary>
-            Adds a TextStartsWithAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "content">The content.</param>
-            <param name = "comparison">The comparison.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.TextEndsWith``1(``0,System.String,System.StringComparison)">
-            <summary>
-            Adds a TextEndsWithAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "content">The content.</param>
-            <param name = "comparison">The comparison.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.TextContains``1(``0,System.String,System.StringComparison)">
-            <summary>
-            Adds a TextContainsAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "content">The content.</param>
-            <param name = "comparison">The comparison.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.TextEquals``1(``0,System.String,System.StringComparison)">
-            <summary>
-            Adds a TextEqualsAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "content">The content.</param>
-            <param name = "comparison">The comparison.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.HasText``1(``0)">
-            <summary>
-            Adds a HasTextAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.TextContainsWord``1(``0,System.String,System.StringComparison,System.Int32)">
-            <summary>
-            Adds a TextContainsWordAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "word">The word.</param>
-            <param name = "comparison">The comparison.</param>
-            <param name = "startIndex">The startIndex.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.PollType``1(``0,Telegram.Bot.Types.Enums.PollType)">
-            <summary>
-            Adds a PollTypeAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "pollType">The pollType.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.PollIsClosed``1(``0,System.Boolean)">
-            <summary>
-            Adds a PollIsClosedAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "isClosed">The isClosed.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="M:Telegrator.HandlerBuilderExtensions.PollIsAnonymous``1(``0,System.Boolean)">
-            <summary>
-            Adds a PollIsAnonymousAttribute target filter to the handler builder.
-            </summary>
-            <typeparam name = "TBuilder">The builder type.</typeparam>
-            <param name = "builder">The handler builder.</param>
-            <param name = "isAnonymous">The isAnonymous.</param>
-            <returns>The same builder instance.</returns>
-        </member>
-        <member name="T:System.Diagnostics.CodeAnalysis.MemberNotNullWhenAttribute">
-            <summary>
-            Specifies that the method or property will ensure that the listed field and property
-            members have not-null values when returning with the specified return value condition.
-            </summary>
-        </member>
-        <member name="M:System.Diagnostics.CodeAnalysis.MemberNotNullWhenAttribute.#ctor(System.Boolean,System.String)">
-            <summary>
-            Initializes the attribute with the specified return value condition and a field or property member.
+            Initializes the attribute with the specified return value condition.
             </summary>
             <param name="returnValue">The return value condition. If the method returns this value, the associated parameter will not be null.</param>
-            <param name="member">The field or property member that is promised to be not-null.</param>
         </member>
-        <member name="M:System.Diagnostics.CodeAnalysis.MemberNotNullWhenAttribute.#ctor(System.Boolean,System.String[])">
+        <member name="P:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute.ReturnValue">
+            <summary>Gets the return value condition.</summary>
+        </member>
+        <member name="T:System.Diagnostics.CodeAnalysis.ConstantExpectedAttribute">
             <summary>
-            Initializes the attribute with the specified return value condition and list of field and property members.
+            Indicates that the specified method parameter expects a constant.
             </summary>
-            <param name="returnValue">The return value condition. If the method returns this value, the associated parameter will not be null.</param>
-            <param name="members">The list of field and property members that are promised to be not-null.</param>
+            <remarks>
+            This can be used to inform tooling that a constant should be used as an argument for the annotated parameter.
+            </remarks>
         </member>
-        <member name="P:System.Diagnostics.CodeAnalysis.MemberNotNullWhenAttribute.ReturnValue">
+        <member name="P:System.Diagnostics.CodeAnalysis.ConstantExpectedAttribute.Min">
             <summary>
-            Gets the return value condition.
-            </summary>
-        </member>
-        <member name="P:System.Diagnostics.CodeAnalysis.MemberNotNullWhenAttribute.Members">
-            <summary>
-            Gets field or property member names.
+            Indicates the minimum bound of the expected constant, inclusive.
             </summary>
         </member>
-        <member name="T:System.Diagnostics.CodeAnalysis.NotNullIfNotNullAttribute">
+        <member name="P:System.Diagnostics.CodeAnalysis.ConstantExpectedAttribute.Max">
             <summary>
-            Specifies that the output will be non-null if the named parameter is non-null.
-            </summary>
-        </member>
-        <member name="M:System.Diagnostics.CodeAnalysis.NotNullIfNotNullAttribute.#ctor(System.String)">
-            <summary>
-            Initializes the attribute with the associated parameter name.
-            </summary>
-            <param name="parameterName">The associated parameter name. The output will be non-null if the argument to the parameter specified is non-null.</param>
-        </member>
-        <member name="P:System.Diagnostics.CodeAnalysis.NotNullIfNotNullAttribute.ParameterName">
-            <summary>
-            Gets the associated parameter name.
+            Indicates the maximum bound of the expected constant, inclusive.
             </summary>
         </member>
         <member name="T:System.Diagnostics.CodeAnalysis.ExperimentalAttribute">
@@ -10215,15 +7789,121 @@
             <value>The format string that represents a URL to corresponding documentation.</value>
             <remarks>An example format string is <c>https://contoso.com/obsoletion-warnings/{0}</c>.</remarks>
         </member>
+        <member name="T:System.Diagnostics.CodeAnalysis.MaybeNullAttribute">
+            <summary>
+            Specifies that an output may be null even if the corresponding type disallows it.
+            </summary>
+        </member>
+        <member name="T:System.Diagnostics.CodeAnalysis.SetsRequiredMembersAttribute">
+            <summary>
+            Specifies that this constructor sets all required members for the current type,
+            and callers do not need to set any required members themselves.
+            </summary>
+        </member>
+        <member name="T:System.Diagnostics.CodeAnalysis.UnscopedRefAttribute">
+            <summary>
+            Used to indicate a byref escapes and is not scoped.
+            </summary>
+            <remarks>
+            <para>
+            There are several cases where the C# compiler treats a <see langword="ref"/> as implicitly
+            <see langword="scoped"/> - where the compiler does not allow the <see langword="ref"/> to escape the method.
+            </para>
+            <para>
+            For example:
+            <list type="number">
+                <item><see langword="this"/> for <see langword="struct"/> instance methods.</item>
+                <item><see langword="ref"/> parameters that refer to <see langword="ref"/> <see langword="struct"/> types.</item>
+                <item><see langword="out"/> parameters.</item>
+            </list>
+            </para>
+            <para>
+            This attribute is used in those instances where the <see langword="ref"/> should be allowed to escape.
+            </para>
+            <para>
+            Applying this attribute, in any form, has impact on consumers of the applicable API. It is necessary for
+            API authors to understand the lifetime implications of applying this attribute and how it may impact their users.
+            </para>
+            </remarks>
+        </member>
+        <member name="T:System.Diagnostics.CodeAnalysis.DoesNotReturnIfAttribute">
+            <summary>
+            Specifies that the method will not return if the associated Boolean parameter is passed the specified value.
+            </summary>
+        </member>
+        <member name="M:System.Diagnostics.CodeAnalysis.DoesNotReturnIfAttribute.#ctor(System.Boolean)">
+            <summary>
+            Initializes the attribute with the specified parameter value.
+            </summary>
+            <param name="parameterValue">
+            The condition parameter value. Code after the method will be considered unreachable
+            by diagnostics if the argument to the associated parameter matches this value.
+            </param>
+        </member>
+        <member name="P:System.Diagnostics.CodeAnalysis.DoesNotReturnIfAttribute.ParameterValue">
+            <summary>
+            Gets the condition parameter value.
+            </summary>
+        </member>
+        <member name="T:System.Diagnostics.CodeAnalysis.MemberNotNullWhenAttribute">
+            <summary>
+            Specifies that the method or property will ensure that the listed field and property
+            members have not-null values when returning with the specified return value condition.
+            </summary>
+        </member>
+        <member name="M:System.Diagnostics.CodeAnalysis.MemberNotNullWhenAttribute.#ctor(System.Boolean,System.String)">
+            <summary>
+            Initializes the attribute with the specified return value condition and a field or property member.
+            </summary>
+            <param name="returnValue">The return value condition. If the method returns this value, the associated parameter will not be null.</param>
+            <param name="member">The field or property member that is promised to be not-null.</param>
+        </member>
+        <member name="M:System.Diagnostics.CodeAnalysis.MemberNotNullWhenAttribute.#ctor(System.Boolean,System.String[])">
+            <summary>
+            Initializes the attribute with the specified return value condition and list of field and property members.
+            </summary>
+            <param name="returnValue">The return value condition. If the method returns this value, the associated parameter will not be null.</param>
+            <param name="members">The list of field and property members that are promised to be not-null.</param>
+        </member>
+        <member name="P:System.Diagnostics.CodeAnalysis.MemberNotNullWhenAttribute.ReturnValue">
+            <summary>
+            Gets the return value condition.
+            </summary>
+        </member>
+        <member name="P:System.Diagnostics.CodeAnalysis.MemberNotNullWhenAttribute.Members">
+            <summary>
+            Gets field or property member names.
+            </summary>
+        </member>
+        <member name="T:System.Diagnostics.CodeAnalysis.AllowNullAttribute">
+            <summary>
+            Specifies that null is allowed as an input even if the corresponding type disallows it.
+            </summary>
+        </member>
+        <member name="T:System.Diagnostics.CodeAnalysis.NotNullIfNotNullAttribute">
+            <summary>
+            Specifies that the output will be non-null if the named parameter is non-null.
+            </summary>
+        </member>
+        <member name="M:System.Diagnostics.CodeAnalysis.NotNullIfNotNullAttribute.#ctor(System.String)">
+            <summary>
+            Initializes the attribute with the associated parameter name.
+            </summary>
+            <param name="parameterName">The associated parameter name. The output will be non-null if the argument to the parameter specified is non-null.</param>
+        </member>
+        <member name="P:System.Diagnostics.CodeAnalysis.NotNullIfNotNullAttribute.ParameterName">
+            <summary>
+            Gets the associated parameter name.
+            </summary>
+        </member>
         <member name="T:System.Diagnostics.CodeAnalysis.DisallowNullAttribute">
             <summary>
             Specifies that null is disallowed as an input even if the corresponding type allows it.
             </summary>
         </member>
-        <member name="T:System.Diagnostics.CodeAnalysis.NotNullAttribute">
+        <member name="T:System.Diagnostics.CodeAnalysis.DoesNotReturnAttribute">
             <summary>
-            Specifies that an output will not be null even if the corresponding type allows it.
-            Specifies that an input argument was not null when the call returns.
+            Applied to a method that will never return under any circumstance.
             </summary>
         </member>
         <member name="T:System.Diagnostics.CodeAnalysis.MemberNotNullAttribute">
@@ -10306,46 +7986,10 @@
         <member name="F:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute.Xml">
             <summary>The syntax identifier for strings containing XML.</summary>
         </member>
-        <member name="T:System.Diagnostics.CodeAnalysis.MaybeNullAttribute">
+        <member name="T:System.Diagnostics.CodeAnalysis.NotNullAttribute">
             <summary>
-            Specifies that an output may be null even if the corresponding type disallows it.
-            </summary>
-        </member>
-        <member name="T:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute">
-            <summary>
-            Specifies that when a method returns <see cref="P:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute.ReturnValue"/>, the parameter will not be null even if the corresponding type allows it.
-            </summary>
-        </member>
-        <member name="M:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute.#ctor(System.Boolean)">
-            <summary>
-            Initializes the attribute with the specified return value condition.
-            </summary>
-            <param name="returnValue">The return value condition. If the method returns this value, the associated parameter will not be null.</param>
-        </member>
-        <member name="P:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute.ReturnValue">
-            <summary>Gets the return value condition.</summary>
-        </member>
-        <member name="T:System.Diagnostics.CodeAnalysis.DoesNotReturnAttribute">
-            <summary>
-            Applied to a method that will never return under any circumstance.
-            </summary>
-        </member>
-        <member name="T:System.Diagnostics.CodeAnalysis.ConstantExpectedAttribute">
-            <summary>
-            Indicates that the specified method parameter expects a constant.
-            </summary>
-            <remarks>
-            This can be used to inform tooling that a constant should be used as an argument for the annotated parameter.
-            </remarks>
-        </member>
-        <member name="P:System.Diagnostics.CodeAnalysis.ConstantExpectedAttribute.Min">
-            <summary>
-            Indicates the minimum bound of the expected constant, inclusive.
-            </summary>
-        </member>
-        <member name="P:System.Diagnostics.CodeAnalysis.ConstantExpectedAttribute.Max">
-            <summary>
-            Indicates the maximum bound of the expected constant, inclusive.
+            Specifies that an output will not be null even if the corresponding type allows it.
+            Specifies that an input argument was not null when the call returns.
             </summary>
         </member>
         <member name="T:System.Diagnostics.CodeAnalysis.MaybeNullWhenAttribute">
@@ -10364,65 +8008,79 @@
             Gets the return value condition.
             </summary>
         </member>
-        <member name="T:System.Diagnostics.CodeAnalysis.SetsRequiredMembersAttribute">
+        <member name="T:System.Runtime.CompilerServices.InterpolatedStringHandlerAttribute">
             <summary>
-            Specifies that this constructor sets all required members for the current type,
-            and callers do not need to set any required members themselves.
+            Indicates the attributed type is to be used as an interpolated string handler.
             </summary>
         </member>
-        <member name="T:System.Diagnostics.CodeAnalysis.DoesNotReturnIfAttribute">
+        <member name="T:System.Runtime.CompilerServices.CompilerLoweringPreserveAttribute">
             <summary>
-            Specifies that the method will not return if the associated Boolean parameter is passed the specified value.
-            </summary>
-        </member>
-        <member name="M:System.Diagnostics.CodeAnalysis.DoesNotReturnIfAttribute.#ctor(System.Boolean)">
-            <summary>
-            Initializes the attribute with the specified parameter value.
-            </summary>
-            <param name="parameterValue">
-            The condition parameter value. Code after the method will be considered unreachable
-            by diagnostics if the argument to the associated parameter matches this value.
-            </param>
-        </member>
-        <member name="P:System.Diagnostics.CodeAnalysis.DoesNotReturnIfAttribute.ParameterValue">
-            <summary>
-            Gets the condition parameter value.
-            </summary>
-        </member>
-        <member name="T:System.Diagnostics.CodeAnalysis.AllowNullAttribute">
-            <summary>
-            Specifies that null is allowed as an input even if the corresponding type disallows it.
-            </summary>
-        </member>
-        <member name="T:System.Diagnostics.CodeAnalysis.UnscopedRefAttribute">
-            <summary>
-            Used to indicate a byref escapes and is not scoped.
+            When applied to an attribute class, instructs the compiler to flow applications of that attribute,
+            from source code down to compiler-generated symbols. This can help IL-based analysis tools.
             </summary>
             <remarks>
-            <para>
-            There are several cases where the C# compiler treats a <see langword="ref"/> as implicitly
-            <see langword="scoped"/> - where the compiler does not allow the <see langword="ref"/> to escape the method.
-            </para>
-            <para>
-            For example:
-            <list type="number">
-                <item><see langword="this"/> for <see langword="struct"/> instance methods.</item>
-                <item><see langword="ref"/> parameters that refer to <see langword="ref"/> <see langword="struct"/> types.</item>
-                <item><see langword="out"/> parameters.</item>
-            </list>
-            </para>
-            <para>
-            This attribute is used in those instances where the <see langword="ref"/> should be allowed to escape.
-            </para>
-            <para>
-            Applying this attribute, in any form, has impact on consumers of the applicable API. It is necessary for
-            API authors to understand the lifetime implications of applying this attribute and how it may impact their users.
-            </para>
+            One example where this attribute applies is in C# primary constructor parameters. If an attribute
+            marked with <see cref="T:System.Runtime.CompilerServices.CompilerLoweringPreserveAttribute"/> gets applied to a primary constructor
+            parameter, the attribute will also be applied to any compiler-generated fields storing that parameter.
             </remarks>
+        </member>
+        <member name="M:System.Runtime.CompilerServices.CompilerLoweringPreserveAttribute.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Runtime.CompilerServices.CompilerLoweringPreserveAttribute"/> class.
+            </summary>
+        </member>
+        <member name="T:System.Runtime.CompilerServices.ModuleInitializerAttribute">
+             <summary>
+             Used to indicate to the compiler that a method should be called
+             in its containing module's initializer.
+             </summary>
+             <remarks>
+             When one or more valid methods
+             with this attribute are found in a compilation, the compiler will
+             emit a module initializer which calls each of the attributed methods.
+            
+             Certain requirements are imposed on any method targeted with this attribute:
+             - The method must be `static`.
+             - The method must be an ordinary member method, as opposed to a property accessor, constructor, local function, etc.
+             - The method must be parameterless.
+             - The method must return `void`.
+             - The method must not be generic or be contained in a generic type.
+             - The method's effective accessibility must be `internal` or `public`.
+            
+             The specification for module initializers in the .NET runtime can be found here:
+             https://github.com/dotnet/runtime/blob/main/docs/design/specs/Ecma-335-Augments.md#module-initializer
+             </remarks>
         </member>
         <member name="T:System.Runtime.CompilerServices.ParamCollectionAttribute">
             <summary>
             Indicates that a method will allow a variable number of arguments in its invocation.
+            </summary>
+        </member>
+        <member name="T:System.Runtime.CompilerServices.RequiresLocationAttribute">
+            <summary>
+            Reserved for use by a compiler for tracking metadata.
+            This attribute should not be used by developers in source code.
+            </summary>
+        </member>
+        <member name="T:System.Runtime.CompilerServices.CallerArgumentExpressionAttribute">
+            <summary>
+            An attribute that allows parameters to receive the expression of other parameters.
+            </summary>
+        </member>
+        <member name="M:System.Runtime.CompilerServices.CallerArgumentExpressionAttribute.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Runtime.CompilerServices.CallerArgumentExpressionAttribute"/> class.
+            </summary>
+            <param name="parameterName">The condition parameter value.</param>
+        </member>
+        <member name="P:System.Runtime.CompilerServices.CallerArgumentExpressionAttribute.ParameterName">
+            <summary>
+            Gets the parameter name the expression is retrieved from.
+            </summary>
+        </member>
+        <member name="T:System.Runtime.CompilerServices.RequiredMemberAttribute">
+            <summary>
+            Specifies that a type has required members or that a member is required.
             </summary>
         </member>
         <member name="T:System.Runtime.CompilerServices.CompilerFeatureRequiredAttribute">
@@ -10456,56 +8114,10 @@
             The <see cref="P:System.Runtime.CompilerServices.CompilerFeatureRequiredAttribute.FeatureName"/> used for the required members C# feature.
             </summary>
         </member>
-        <member name="T:System.Runtime.CompilerServices.InterpolatedStringHandlerArgumentAttribute">
+        <member name="T:System.Runtime.CompilerServices.IsExternalInit">
             <summary>
-            Indicates which arguments to a method involving an interpolated string handler should be passed to that handler.
-            </summary>
-        </member>
-        <member name="M:System.Runtime.CompilerServices.InterpolatedStringHandlerArgumentAttribute.#ctor(System.String)">
-            <summary>
-            Initializes a new instance of the <see cref="T:System.Runtime.CompilerServices.InterpolatedStringHandlerArgumentAttribute"/> class.
-            </summary>
-            <param name="argument">The name of the argument that should be passed to the handler.</param>
-            <remarks><see langword="null"/> may be used as the name of the receiver in an instance method.</remarks>
-        </member>
-        <member name="M:System.Runtime.CompilerServices.InterpolatedStringHandlerArgumentAttribute.#ctor(System.String[])">
-            <summary>
-            Initializes a new instance of the <see cref="T:System.Runtime.CompilerServices.InterpolatedStringHandlerArgumentAttribute"/> class.
-            </summary>
-            <param name="arguments">The names of the arguments that should be passed to the handler.</param>
-            <remarks><see langword="null"/> may be used as the name of the receiver in an instance method.</remarks>
-        </member>
-        <member name="P:System.Runtime.CompilerServices.InterpolatedStringHandlerArgumentAttribute.Arguments">
-            <summary>
-            Gets the names of the arguments that should be passed to the handler.
-            </summary>
-            <remarks><see langword="null"/> may be used as the name of the receiver in an instance method.</remarks>
-        </member>
-        <member name="T:System.Runtime.CompilerServices.ModuleInitializerAttribute">
-             <summary>
-             Used to indicate to the compiler that a method should be called
-             in its containing module's initializer.
-             </summary>
-             <remarks>
-             When one or more valid methods
-             with this attribute are found in a compilation, the compiler will
-             emit a module initializer which calls each of the attributed methods.
-            
-             Certain requirements are imposed on any method targeted with this attribute:
-             - The method must be `static`.
-             - The method must be an ordinary member method, as opposed to a property accessor, constructor, local function, etc.
-             - The method must be parameterless.
-             - The method must return `void`.
-             - The method must not be generic or be contained in a generic type.
-             - The method's effective accessibility must be `internal` or `public`.
-            
-             The specification for module initializers in the .NET runtime can be found here:
-             https://github.com/dotnet/runtime/blob/main/docs/design/specs/Ecma-335-Augments.md#module-initializer
-             </remarks>
-        </member>
-        <member name="T:System.Runtime.CompilerServices.SkipLocalsInitAttribute">
-            <summary>
-            Used to indicate to the compiler that the <c>.locals init</c> flag should not be set in method headers.
+            Reserved to be used by the compiler for tracking metadata.
+            This class should not be used by developers in source code.
             </summary>
         </member>
         <member name="M:System.Runtime.CompilerServices.CollectionBuilderAttribute.#ctor(System.Type,System.String)">
@@ -10534,18 +8146,10 @@
             For example, this might be ".ctor" if targeting the type's constructor.
             </remarks>
         </member>
-        <member name="T:System.Runtime.CompilerServices.ExtensionMarkerAttribute">
+        <member name="T:System.Runtime.CompilerServices.SkipLocalsInitAttribute">
             <summary>
-            This attribute is used to mark extension members and associate them with a specific marker type (which provides detailed information about an extension block and its receiver parameter).
-            This attribute should not be used by developers in source code.
+            Used to indicate to the compiler that the <c>.locals init</c> flag should not be set in method headers.
             </summary>
-        </member>
-        <member name="M:System.Runtime.CompilerServices.ExtensionMarkerAttribute.#ctor(System.String)">
-            <summary>Initializes a new instance of the <see cref="T:System.Runtime.CompilerServices.ExtensionMarkerAttribute"/> class.</summary>
-            <param name="name">The name of the marker type this extension member is associated with.</param>
-        </member>
-        <member name="P:System.Runtime.CompilerServices.ExtensionMarkerAttribute.Name">
-            <summary>The name of the marker type this extension member is associated with.</summary>
         </member>
         <member name="T:System.Runtime.CompilerServices.OverloadResolutionPriorityAttribute">
             <summary>
@@ -10563,59 +8167,43 @@
             The priority of the member.
             </summary>
         </member>
-        <member name="T:System.Runtime.CompilerServices.InterpolatedStringHandlerAttribute">
+        <member name="T:System.Runtime.CompilerServices.InterpolatedStringHandlerArgumentAttribute">
             <summary>
-            Indicates the attributed type is to be used as an interpolated string handler.
+            Indicates which arguments to a method involving an interpolated string handler should be passed to that handler.
             </summary>
         </member>
-        <member name="T:System.Runtime.CompilerServices.RequiresLocationAttribute">
+        <member name="M:System.Runtime.CompilerServices.InterpolatedStringHandlerArgumentAttribute.#ctor(System.String)">
             <summary>
-            Reserved for use by a compiler for tracking metadata.
+            Initializes a new instance of the <see cref="T:System.Runtime.CompilerServices.InterpolatedStringHandlerArgumentAttribute"/> class.
+            </summary>
+            <param name="argument">The name of the argument that should be passed to the handler.</param>
+            <remarks><see langword="null"/> may be used as the name of the receiver in an instance method.</remarks>
+        </member>
+        <member name="M:System.Runtime.CompilerServices.InterpolatedStringHandlerArgumentAttribute.#ctor(System.String[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Runtime.CompilerServices.InterpolatedStringHandlerArgumentAttribute"/> class.
+            </summary>
+            <param name="arguments">The names of the arguments that should be passed to the handler.</param>
+            <remarks><see langword="null"/> may be used as the name of the receiver in an instance method.</remarks>
+        </member>
+        <member name="P:System.Runtime.CompilerServices.InterpolatedStringHandlerArgumentAttribute.Arguments">
+            <summary>
+            Gets the names of the arguments that should be passed to the handler.
+            </summary>
+            <remarks><see langword="null"/> may be used as the name of the receiver in an instance method.</remarks>
+        </member>
+        <member name="T:System.Runtime.CompilerServices.ExtensionMarkerAttribute">
+            <summary>
+            This attribute is used to mark extension members and associate them with a specific marker type (which provides detailed information about an extension block and its receiver parameter).
             This attribute should not be used by developers in source code.
             </summary>
         </member>
-        <member name="T:System.Runtime.CompilerServices.CallerArgumentExpressionAttribute">
-            <summary>
-            An attribute that allows parameters to receive the expression of other parameters.
-            </summary>
+        <member name="M:System.Runtime.CompilerServices.ExtensionMarkerAttribute.#ctor(System.String)">
+            <summary>Initializes a new instance of the <see cref="T:System.Runtime.CompilerServices.ExtensionMarkerAttribute"/> class.</summary>
+            <param name="name">The name of the marker type this extension member is associated with.</param>
         </member>
-        <member name="M:System.Runtime.CompilerServices.CallerArgumentExpressionAttribute.#ctor(System.String)">
-            <summary>
-            Initializes a new instance of the <see cref="T:System.Runtime.CompilerServices.CallerArgumentExpressionAttribute"/> class.
-            </summary>
-            <param name="parameterName">The condition parameter value.</param>
-        </member>
-        <member name="P:System.Runtime.CompilerServices.CallerArgumentExpressionAttribute.ParameterName">
-            <summary>
-            Gets the parameter name the expression is retrieved from.
-            </summary>
-        </member>
-        <member name="T:System.Runtime.CompilerServices.RequiredMemberAttribute">
-            <summary>
-            Specifies that a type has required members or that a member is required.
-            </summary>
-        </member>
-        <member name="T:System.Runtime.CompilerServices.CompilerLoweringPreserveAttribute">
-            <summary>
-            When applied to an attribute class, instructs the compiler to flow applications of that attribute,
-            from source code down to compiler-generated symbols. This can help IL-based analysis tools.
-            </summary>
-            <remarks>
-            One example where this attribute applies is in C# primary constructor parameters. If an attribute
-            marked with <see cref="T:System.Runtime.CompilerServices.CompilerLoweringPreserveAttribute"/> gets applied to a primary constructor
-            parameter, the attribute will also be applied to any compiler-generated fields storing that parameter.
-            </remarks>
-        </member>
-        <member name="M:System.Runtime.CompilerServices.CompilerLoweringPreserveAttribute.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:System.Runtime.CompilerServices.CompilerLoweringPreserveAttribute"/> class.
-            </summary>
-        </member>
-        <member name="T:System.Runtime.CompilerServices.IsExternalInit">
-            <summary>
-            Reserved to be used by the compiler for tracking metadata.
-            This class should not be used by developers in source code.
-            </summary>
+        <member name="P:System.Runtime.CompilerServices.ExtensionMarkerAttribute.Name">
+            <summary>The name of the marker type this extension member is associated with.</summary>
         </member>
         <member name="M:System.Runtime.Versioning.RequiresPreviewFeaturesAttribute.#ctor">
             <summary>

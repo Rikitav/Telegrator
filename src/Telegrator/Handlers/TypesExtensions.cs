@@ -22,6 +22,7 @@ using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.InlineQueryResults;
 using Telegram.Bot.Types.ReplyMarkups;
+using Telegrator.Attributes;
 
 namespace Telegrator.Handlers;
 
@@ -38,6 +39,7 @@ public static class AbstractHandlerContainerExtensions
     /// <param name="isBig"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
+    [GenerateHandlerProxy("React")]
     public static async Task React(
         this IHandlerContainer<Message> container,
         ReactionType reaction,
@@ -56,6 +58,7 @@ public static class AbstractHandlerContainerExtensions
     /// <param name="isBig"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
+    [GenerateHandlerProxy("React")]
     public static async Task React(
         this IHandlerContainer<Message> container,
         IEnumerable<ReactionType> reactions,
@@ -85,6 +88,7 @@ public static class AbstractHandlerContainerExtensions
     /// <param name="suggestedPostParameters"></param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The sent message.</returns>
+    [GenerateHandlerProxy("Reply")]
     public static async Task<Message> Reply(
         this IHandlerContainer<Message> container,
         string text,
@@ -130,6 +134,7 @@ public static class AbstractHandlerContainerExtensions
     /// <param name="suggestedPostParameters"></param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The sent message.</returns>
+    [GenerateHandlerProxy("Responce")]
     public static async Task<Message> Responce(
         this IHandlerContainer<Message> container,
         string text,
@@ -177,6 +182,7 @@ public static class AbstractHandlerContainerExtensions
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     /// <exception cref="Exception"></exception>
+    [GenerateHandlerProxy("Responce")]
     public static async Task<Message> Responce(
         this IHandlerContainer<CallbackQuery> container,
         string text,
@@ -221,6 +227,7 @@ public static class AbstractHandlerContainerExtensions
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     /// <exception cref="Exception"></exception>
+    [GenerateHandlerProxy("EditMessage")]
     public static async Task<Message> EditMessage(
         this IHandlerContainer<CallbackQuery> container,
         string text,
@@ -261,6 +268,7 @@ public static class AbstractHandlerContainerExtensions
     /// <param name="cacheTime"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
+    [GenerateHandlerProxy("Answer")]
     public static async Task AnswerCallbackQuery(
         this IHandlerContainer<CallbackQuery> container,
         string? text = null,
@@ -287,6 +295,7 @@ public static class AbstractHandlerContainerExtensions
     /// <param name="button"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
+    [GenerateHandlerProxy("Answer")]
     public static async Task AnswerInlineQuery(
         this IHandlerContainer<InlineQuery> container,
         IEnumerable<InlineQueryResult> results,
@@ -298,5 +307,21 @@ public static class AbstractHandlerContainerExtensions
     {
         string id = container.ActualUpdate.Id;
         await container.Client.AnswerInlineQuery(id, results.Take(50), cacheTime, isPersonal, nextOffset, button, cancellationToken);
+    }
+
+    /// <summary>
+    /// Use this method to get the token of a managed bot.
+    /// </summary>
+    /// <param name="container"></param>
+    /// <param name="userId">User identifier of the managed bot whose token will be returned</param>
+    /// <param name="cancellationToken"></param>
+    /// <returns>The token as String on success.</returns>
+    [GenerateHandlerProxy("GetBotToken")]
+    public static async Task<string> GetBotToken(
+        this IHandlerContainer<ManagedBotUpdated> container,
+        long userId,
+        CancellationToken cancellationToken = default)
+    {
+        return await container.Client.GetManagedBotToken(userId, cancellationToken);
     }
 }

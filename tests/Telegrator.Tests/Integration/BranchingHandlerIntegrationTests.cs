@@ -215,7 +215,7 @@ public class BranchingHandlerIntegrationTests
             HelpExecuted = false;
         }
 
-        [CommandAllias("start")]
+        [CommandAlias("start")]
         public async Task<Result> HandleStart(IHandlerContainer<Message> container, CancellationToken cancellation)
         {
             StartExecuted = true;
@@ -223,7 +223,7 @@ public class BranchingHandlerIntegrationTests
             return Ok;
         }
 
-        [CommandAllias("help")]
+        [CommandAlias("help")]
         public async Task<Result> HandleHelp(IHandlerContainer<Message> container, CancellationToken cancellation)
         {
             HelpExecuted = true;

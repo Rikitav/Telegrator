@@ -24,6 +24,7 @@ using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.Payments;
 using Telegrator.Annotations;
+using Telegrator.Attributes;
 using Telegrator.Core;
 using Telegrator.Core.Descriptors;
 using Telegrator.Core.Handlers;
@@ -725,7 +726,7 @@ public static class HandlersProviderExtensions
 
         foreach (BotCommand botCommand in list
             .Select(descriptor => descriptor.HandlerType)
-            .SelectMany(handlerType => handlerType.GetCustomAttributes<CommandAlliasAttribute>()
+            .SelectMany(handlerType => handlerType.GetCustomAttributes<CommandAliasAttribute>()
             .SelectMany(attribute => attribute.Alliases.Select(alias => new BotCommand(alias, attribute.Description)))))
         {
             cancellationToken.ThrowIfCancellationRequested();

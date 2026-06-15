@@ -28,7 +28,7 @@ namespace Telegrator.Annotations;
 /// Attribute for filtering messages based on command aliases.
 /// Allows handlers to respond to multiple command variations using a single attribute.
 /// </summary>
-public class CommandAlliasAttribute : UpdateFilterAttribute<Message>
+public class CommandAliasAttribute : UpdateFilterAttribute<Message>
 {
     /// <summary>
     /// Gets the allowed update types for this filter.
@@ -65,8 +65,8 @@ public class CommandAlliasAttribute : UpdateFilterAttribute<Message>
     /// Initializes a new instance of the CommandAlliasAttribute with the specified command aliases.
     /// </summary>
     /// <param name="alliases">The command aliases to match against.</param>
-    public CommandAlliasAttribute(params string[] alliases)
-        : base(new CommandAlliasFilter(alliases.Select(c => c.TrimStart('/')).ToArray()))
+    public CommandAliasAttribute(params string[] alliases)
+        : base(new CommandAliasFilter(alliases.Select(c => c.TrimStart('/')).ToArray()))
         => Alliases = alliases.Select(c => c.TrimStart('/')).ToArray();
 
     /// <summary>

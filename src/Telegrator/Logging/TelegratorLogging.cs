@@ -17,15 +17,18 @@
  * SOFTWARE.
  */
 
+using Microsoft.Extensions.Logging;
+
 namespace Telegrator.Logging;
 
 /// <summary>
 /// Centralized logging system for Telegrator.
 /// Provides static access to logging functionality with adapter support.
 /// </summary>
-public static class TelegratorLogging
+public class TelegratorLogging : ILogger
 {
-    private static readonly List<ITelegratorLogger> _adapters = new();
+    private static readonly TelegratorLogging _instance = new TelegratorLogging();
+    private static readonly List<ILogger> _adapters = new();
     private static readonly object _lock = new();
 
     /// <summary>
@@ -43,7 +46,7 @@ public static class TelegratorLogging
     /// Adds a logger adapter to the centralized logging system.
     /// </summary>
     /// <param name="adapter">The logger adapter to add.</param>
-    public static void AddAdapter(ITelegratorLogger adapter)
+    public static void AddAdapter(ILogger adapter)
     {
         if (adapter == null)
             throw new ArgumentNullException(nameof(adapter));
@@ -61,7 +64,7 @@ public static class TelegratorLogging
     /// Removes a logger adapter from the centralized logging system.
     /// </summary>
     /// <param name="adapter">The logger adapter to remove.</param>
-    public static void RemoveAdapter(ITelegratorLogger adapter)
+    public static void RemoveAdapter(ILogger adapter)
     {
         if (adapter == null)
             return;
@@ -83,43 +86,53 @@ public static class TelegratorLogging
         }
     }
 
-    /// <summary>
-    /// Logs a message to all registered adapters.
-    /// </summary>
-    /// <param name="level">The log level.</param>
-    /// <param name="message">The message to log.</param>
-    /// <param name="exception">Optional exception.</param>
-    /// <param name="args"></param>
-    public static void Log(LogLevel level, string message, Exception? exception = null, params object[] args)
+    /// <inheritdoc/>
+    public static bool Enabled(LogLevel logLevel)
+    {
+        return _instance.IsEnabled(logLevel);
+    }
+
+    /// <inheritdoc/>
+    public bool IsEnabled(LogLevel logLevel)
+    {
+        return logLevel >= MinimalLevel;
+    }
+
+    /// <inheritdoc/>
+    public IDisposable? BeginScope<TState>(TState state) where TState : notnull
+    {
+        return null;
+    }
+
+    /// <inheritdoc/>
+    public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
     {
         // Fast path: if no adapters, do nothing
         if (_adapters.Count == 0)
             return;
 
-        if (level != LogLevel.Trace & level < MinimalLevel)
+        if (!IsEnabled(MinimalLevel))
             return;
 
         // Snapshot copy to prevent collection modification during iteration
-        ITelegratorLogger[] adaptersSnapshot;
+        ILogger[] adaptersSnapshot;
         lock (_lock)
         {
             adaptersSnapshot = _adapters.ToArray();
         }
 
-        foreach (ITelegratorLogger adapter in adaptersSnapshot)
+        Parallel.ForEach(adaptersSnapshot, adapter =>
         {
             try
             {
-                if (args != null)
-                    message = string.Format(message, args);
-
-                adapter.Log(level, message, exception);
+                adapter.Log(logLevel, eventId, state, exception, formatter);
             }
             catch
             {
-                _ = 0xBAD + 0xC0DE; // Ignore adapter errors to prevent logging failures
+                // Ignore adapter errors to prevent logging failures
+                _ = 0xBAD + 0xC0DE;
             }
-        }
+        });
     }
 
     /// <summary>
@@ -128,7 +141,7 @@ public static class TelegratorLogging
     /// <param name="message">The message to log.</param>
     public static void LogTrace(string message)
     {
-        Log(LogLevel.Trace, message);
+        _instance.Log(LogLevel.Trace, message);
     }
 
     /// <summary>
@@ -138,7 +151,7 @@ public static class TelegratorLogging
     /// <param name="args"></param>
     public static void LogTrace(string message, params object[] args)
     {
-        Log(LogLevel.Trace, message, args: args);
+        _instance.Log(LogLevel.Trace, message, args: args);
     }
 
     /// <summary>
@@ -147,7 +160,7 @@ public static class TelegratorLogging
     /// <param name="message">The message to log.</param>
     public static void LogDebug(string message)
     {
-        Log(LogLevel.Debug, message);
+        _instance.Log(LogLevel.Debug, message);
     }
 
     /// <summary>
@@ -157,7 +170,7 @@ public static class TelegratorLogging
     /// <param name="args"></param>
     public static void LogDebug(string message, params object[] args)
     {
-        Log(LogLevel.Debug, message, args: args);
+        _instance.Log(LogLevel.Debug, message, args: args);
     }
 
     /// <summary>
@@ -166,7 +179,7 @@ public static class TelegratorLogging
     /// <param name="message">The message to log.</param>
     public static void LogInformation(string message)
     {
-        Log(LogLevel.Information, message);
+        _instance.Log(LogLevel.Information, message);
     }
 
     /// <summary>
@@ -176,7 +189,7 @@ public static class TelegratorLogging
     /// <param name="args"></param>
     public static void LogInformation(string message, params object[] args)
     {
-        Log(LogLevel.Information, message, args: args);
+        _instance.Log(LogLevel.Information, message, args: args);
     }
 
     /// <summary>
@@ -185,7 +198,7 @@ public static class TelegratorLogging
     /// <param name="message">The message to log.</param>
     public static void LogWarning(string message)
     {
-        Log(LogLevel.Warning, message);
+        _instance.Log(LogLevel.Warning, message);
     }
 
     /// <summary>
@@ -195,7 +208,7 @@ public static class TelegratorLogging
     /// <param name="args"></param>
     public static void LogWarning(string message, params object[] args)
     {
-        Log(LogLevel.Warning, message, args: args);
+        _instance.Log(LogLevel.Warning, message, args: args);
     }
 
     /// <summary>
@@ -205,7 +218,7 @@ public static class TelegratorLogging
     /// <param name="exception">Optional exception.</param>
     public static void LogError(string message, Exception? exception = null)
     {
-        Log(LogLevel.Error, message, exception);
+        _instance.Log(LogLevel.Error, message, exception);
     }
 
     /// <summary>
@@ -215,7 +228,7 @@ public static class TelegratorLogging
     /// <param name="args"></param>
     public static void LogError(string message, params object[] args)
     {
-        Log(LogLevel.Error, message, args: args);
+        _instance.Log(LogLevel.Error, message, args: args);
     }
 
     /// <summary>
@@ -224,7 +237,7 @@ public static class TelegratorLogging
     /// <param name="exception">The exception to log.</param>
     public static void LogError(Exception exception)
     {
-        Log(LogLevel.Error, exception.Message, exception);
+        _instance.Log(LogLevel.Error, exception.Message, exception);
     }
 
     /// <summary>
@@ -235,6 +248,6 @@ public static class TelegratorLogging
     /// <param name="args"></param>
     public static void LogError(string message, Exception? exception = null, params object[] args)
     {
-        Log(LogLevel.Error, message, exception, args);
+        _instance.Log(LogLevel.Error, message, exception, args);
     }
 }

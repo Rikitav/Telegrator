@@ -135,7 +135,7 @@ public class HandlersCollection(TelegratorOptions? options) : IHandlersCollectio
         if (Options == null)
             return;
 
-        CommandAlliasAttribute? alliasAttribute = descriptor.HandlerType.GetCustomAttribute<CommandAlliasAttribute>();
+        CommandAliasAttribute? alliasAttribute = descriptor.HandlerType.GetCustomAttribute<CommandAliasAttribute>();
         if (alliasAttribute == null)
             return;
 

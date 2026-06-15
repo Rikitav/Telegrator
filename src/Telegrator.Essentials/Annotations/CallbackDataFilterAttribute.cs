@@ -39,18 +39,25 @@ public class CallbackDataFilterAttribute : FilterAnnotation<CallbackQuery>
         IgnoreCase = ignoreCase;
     }
 
+    private CallbackDataFilterAttribute(string data, string prefix, bool ignoreCase = true)
+    {
+        Data = data;
+        Prefix = prefix;
+        IgnoreCase = ignoreCase;
+    }
+
     /// <summary>
-    /// Creates an attribute that matches callback data starting with the given prefix.
+    /// Creates a filter that matches callback queries whose data starts with the specified prefix.
     /// </summary>
     /// <param name="prefix">The prefix to match.</param>
     /// <param name="ignoreCase">Whether to ignore case when comparing.</param>
-    /// <returns>A configured <see cref="CallbackDataFilterAttribute"/>.</returns>
+    /// <returns>A new <see cref="CallbackDataFilterAttribute"/> configured for prefix matching.</returns>
     public static CallbackDataFilterAttribute WithPrefix(string prefix, bool ignoreCase = true)
     {
         if (string.IsNullOrEmpty(prefix))
-            throw new ArgumentException("Callback data prefix cannot be null or empty.", nameof(prefix));
+            throw new ArgumentException("Prefix cannot be null or empty.", nameof(prefix));
 
-        return new CallbackDataFilterAttribute(prefix, ignoreCase) { Prefix = prefix };
+        return new CallbackDataFilterAttribute(string.Empty, prefix, ignoreCase);
     }
 
     /// <inheritdoc/>

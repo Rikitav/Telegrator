@@ -34,7 +34,7 @@ public class SimpleTypesExtensionsTests
     [Fact]
     public void ToReadOnlyDictionary_ShouldCreateDictionary()
     {
-        var items = new[] { "a", "bb", "ccc" };
+        string[] items = new[] { "a", "bb", "ccc" };
         ReadOnlyDictionary<int, string> dict = items.ToReadOnlyDictionary(x => x.Length);
 
         dict.Should().ContainKey(1).WhoseValue.Should().Be("a");
@@ -55,7 +55,7 @@ public class SimpleTypesExtensionsTests
     public void ForEach_ShouldExecuteAction()
     {
         List<int> items = new List<int> { 1, 2, 3 };
-        var sum = 0;
+        int sum = 0;
         items.ForEach(x => sum += x);
 
         sum.Should().Be(6);
@@ -92,7 +92,7 @@ public class SimpleTypesExtensionsTests
     public void Random_ShouldReturnElementFromCollection()
     {
         List<int> items = new List<int> { 1, 2, 3, 4, 5 };
-        var result = items.Random();
+        int result = items.Random();
 
         items.Should().Contain(result);
     }

@@ -172,7 +172,7 @@ public class MightAwaitAnalyzer : IIncrementalGenerator
             deepAccess.Expression is MemberAccessExpressionSyntax)
         {
             // Try to resolve the rightmost identifier
-            var rightmost = deepAccess.Name.Identifier.Text;
+            string rightmost = deepAccess.Name.Identifier.Text;
             if (!string.IsNullOrEmpty(rightmost))
                 return $"UpdateType.{rightmost}";
         }

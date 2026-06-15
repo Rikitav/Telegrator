@@ -51,7 +51,7 @@ public abstract class MessageChatFilter : MessageFilterBase
 /// <summary>
 /// Filters messages whose chat is a forum.
 /// </summary>
-public class MessageChatIsForumFilter : MessageChatFilter
+public class ChatIsForumFilter : MessageChatFilter
 {
     /// <inheritdoc/>
     protected override bool CanPassNext(FilterExecutionContext<Chat> _)
@@ -73,23 +73,23 @@ public class MessageChatIdFilter(long id) : MessageChatFilter
 /// <summary>
 /// Filters messages whose chat type matches the specified value.
 /// </summary>
-public class MessageChatTypeFilter : MessageChatFilter
+public class ChatTypeFilter : MessageChatFilter
 {
     private readonly ChatType? Type;
     private readonly ChatTypeFlags? Flags;
 
     /// <summary>
-    /// Initialize new instance of <see cref="MessageChatTypeFilter"/>
+    /// Initialize new instance of <see cref="ChatTypeFilter"/>
     /// </summary>
     /// <param name="type"></param>
-    public MessageChatTypeFilter(ChatType type)
+    public ChatTypeFilter(ChatType type)
         => Type = type;
 
     /// <summary>
-    /// Initialize new instance of <see cref="MessageChatTypeFilter"/> with <see cref="ChatTypeFlags"/>
+    /// Initialize new instance of <see cref="ChatTypeFilter"/> with <see cref="ChatTypeFlags"/>
     /// </summary>
     /// <param name="type"></param>
-    public MessageChatTypeFilter(ChatTypeFlags type)
+    public ChatTypeFilter(ChatTypeFlags type)
         => Flags = type;
 
     /// <inheritdoc/>
@@ -121,23 +121,23 @@ public class MessageChatTypeFilter : MessageChatFilter
 /// <summary>
 /// Filters messages whose chat title matches the specified value.
 /// </summary>
-public class MessageChatTitleFilter : MessageChatFilter
+public class ChatTitleFilter : MessageChatFilter
 {
     private readonly string? Title;
     private readonly StringComparison Comparison = StringComparison.InvariantCulture;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="MessageChatTitleFilter"/> class.
+    /// Initializes a new instance of the <see cref="ChatTitleFilter"/> class.
     /// </summary>
     /// <param name="title">The chat title to match.</param>
-    public MessageChatTitleFilter(string? title) => Title = title;
+    public ChatTitleFilter(string? title) => Title = title;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="MessageChatTitleFilter"/> class with a specific string comparison.
+    /// Initializes a new instance of the <see cref="ChatTitleFilter"/> class with a specific string comparison.
     /// </summary>
     /// <param name="title">The chat title to match.</param>
     /// <param name="comparison">The string comparison to use.</param>
-    public MessageChatTitleFilter(string? title, StringComparison comparison)
+    public ChatTitleFilter(string? title, StringComparison comparison)
         : this(title) => Comparison = comparison;
 
     /// <inheritdoc/>
@@ -153,23 +153,23 @@ public class MessageChatTitleFilter : MessageChatFilter
 /// <summary>
 /// Filters messages whose chat username matches the specified value.
 /// </summary>
-public class MessageChatUsernameFilter : MessageChatFilter
+public class ChatUsernameFilter : MessageChatFilter
 {
     private readonly string? UserName;
     private readonly StringComparison Comparison = StringComparison.InvariantCulture;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="MessageChatUsernameFilter"/> class.
+    /// Initializes a new instance of the <see cref="ChatUsernameFilter"/> class.
     /// </summary>
     /// <param name="userName">The chat username to match.</param>
-    public MessageChatUsernameFilter(string? userName) => UserName = userName;
+    public ChatUsernameFilter(string? userName) => UserName = userName;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="MessageChatUsernameFilter"/> class with a specific string comparison.
+    /// Initializes a new instance of the <see cref="ChatUsernameFilter"/> class with a specific string comparison.
     /// </summary>
     /// <param name="userName">The chat username to match.</param>
     /// <param name="comparison">The string comparison to use.</param>
-    public MessageChatUsernameFilter(string? userName, StringComparison comparison)
+    public ChatUsernameFilter(string? userName, StringComparison comparison)
         : this(userName) => Comparison = comparison;
 
     /// <inheritdoc/>
@@ -185,30 +185,30 @@ public class MessageChatUsernameFilter : MessageChatFilter
 /// <summary>
 /// Filters messages whose chat first and/or last name matches the specified values.
 /// </summary>
-public class MessageChatNameFilter : MessageChatFilter
+public class ChatNameFilter : MessageChatFilter
 {
     private readonly string? FirstName;
     private readonly string? LastName;
     private readonly StringComparison Comparison = StringComparison.InvariantCulture;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="MessageChatNameFilter"/> class.
+    /// Initializes a new instance of the <see cref="ChatNameFilter"/> class.
     /// </summary>
     /// <param name="firstName">The chat first name to match.</param>
     /// <param name="lastName">The chat last name to match.</param>
-    public MessageChatNameFilter(string? firstName, string? lastName)
+    public ChatNameFilter(string? firstName, string? lastName)
     {
         FirstName = firstName;
         LastName = lastName;
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="MessageChatNameFilter"/> class with a specific string comparison.
+    /// Initializes a new instance of the <see cref="ChatNameFilter"/> class with a specific string comparison.
     /// </summary>
     /// <param name="firstName">The chat first name to match.</param>
     /// <param name="lastName">The chat last name to match.</param>
     /// <param name="comparison">The string comparison to use.</param>
-    public MessageChatNameFilter(string? firstName, string? lastName, StringComparison comparison)
+    public ChatNameFilter(string? firstName, string? lastName, StringComparison comparison)
         : this(firstName, lastName) => Comparison = comparison;
 
     /// <inheritdoc/>

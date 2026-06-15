@@ -31,7 +31,7 @@ public class DefaultStateStorageTests
     public async Task SetAsync_ShouldStoreValue()
     {
         await _storage.SetAsync("key1", 42);
-        var value = await _storage.GetAsync<int>("key1");
+        int value = await _storage.GetAsync<int>("key1");
 
         value.Should().Be(42);
     }
@@ -39,7 +39,7 @@ public class DefaultStateStorageTests
     [Fact]
     public async Task GetAsync_ShouldReturnDefault_WhenKeyMissing()
     {
-        var value = await _storage.GetAsync<int>("missing");
+        int value = await _storage.GetAsync<int>("missing");
 
         value.Should().Be(0);
     }
@@ -47,7 +47,7 @@ public class DefaultStateStorageTests
     [Fact]
     public async Task GetAsync_ShouldReturnNull_WhenKeyMissingAndTypeIsReference()
     {
-        var value = await _storage.GetAsync<string>("missing");
+        string? value = await _storage.GetAsync<string>("missing");
 
         value.Should().BeNull();
     }
@@ -58,7 +58,7 @@ public class DefaultStateStorageTests
         await _storage.SetAsync("key2", "value");
         await _storage.DeleteAsync("key2");
 
-        var value = await _storage.GetAsync<string>("key2");
+        string? value = await _storage.GetAsync<string>("key2");
         value.Should().BeNull();
     }
 

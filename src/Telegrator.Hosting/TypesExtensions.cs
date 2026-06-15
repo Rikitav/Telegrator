@@ -378,8 +378,7 @@ public static class TelegramBotHostExtensions
         ILoggerFactory loggerFactory = host.Services.GetRequiredService<ILoggerFactory>();
         ILogger logger = loggerFactory.CreateLogger("Telegrator");
 
-        MicrosoftLoggingAdapter adapter = new MicrosoftLoggingAdapter(logger);
-        TelegratorLogging.AddAdapter(adapter);
+        TelegratorLogging.AddAdapter(logger);
         return host;
     }
 }
