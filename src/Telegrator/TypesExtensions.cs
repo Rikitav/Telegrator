@@ -1106,6 +1106,7 @@ public static partial class UpdateExtensions
         "Telegram.Bot.Types.BusinessConnection" => [UpdateType.BusinessConnection],
         "Telegram.Bot.Types.BusinessMessagesDeleted" => [UpdateType.DeletedBusinessMessages],
         "Telegram.Bot.Types.PaidMediaPurchased" => [UpdateType.PurchasedPaidMedia],
+        "Telegram.Bot.Types.ManagedBotUpdated" => [UpdateType.ManagedBot],
         "Telegram.Bot.Types.Update" => Update.AllTypes,
         _ => []
     };
@@ -1151,7 +1152,8 @@ public static partial class UpdateTypeExtensions
         UpdateType.BusinessMessage,
         UpdateType.EditedBusinessMessage,
         UpdateType.ChannelPost,
-        UpdateType.EditedChannelPost
+        UpdateType.EditedChannelPost,
+        UpdateType.GuestMessage,
     ];
 
     /// <summary>
@@ -1196,7 +1198,7 @@ public static partial class UpdateTypeExtensions
     {
         return updateType switch
         {
-            UpdateType.Message or UpdateType.EditedMessage or UpdateType.BusinessMessage or UpdateType.EditedBusinessMessage or UpdateType.ChannelPost or UpdateType.EditedChannelPost => typeof(Message),
+            UpdateType.Message or UpdateType.EditedMessage or UpdateType.BusinessMessage or UpdateType.EditedBusinessMessage or UpdateType.ChannelPost or UpdateType.EditedChannelPost or UpdateType.GuestMessage => typeof(Message),
             UpdateType.MyChatMember => typeof(ChatMemberUpdated),
             UpdateType.ChatMember => typeof(ChatMemberUpdated),
             UpdateType.InlineQuery => typeof(InlineQuery),
@@ -1214,6 +1216,7 @@ public static partial class UpdateTypeExtensions
             UpdateType.BusinessConnection => typeof(BusinessConnection),
             UpdateType.DeletedBusinessMessages => typeof(BusinessMessagesDeleted),
             UpdateType.PurchasedPaidMedia => typeof(PaidMediaPurchased),
+            UpdateType.ManagedBot => typeof(ManagedBotUpdated),
             _ or UpdateType.Unknown => typeof(Update)
         };
     }

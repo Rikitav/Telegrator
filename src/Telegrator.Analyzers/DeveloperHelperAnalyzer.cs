@@ -151,6 +151,9 @@ internal static class DeveloperHelperAnalyzerExtensions
         "PhotoMessageHandler",
         "DocumentMessageHandler",
         "CallbackDataHandler",
+        "ManagedBotUpdatedHandler",
+        "GuestMessageHandler",
+
         // Branching handlers
         "BranchingAnyUpdateHandler",
         "BranchingCallbackQueryHandler",
@@ -179,7 +182,9 @@ internal static class DeveloperHelperAnalyzerExtensions
         "BranchingTextMessageHandler",
         "BranchingPhotoMessageHandler",
         "BranchingDocumentMessageHandler",
-        "BranchingCallbackDataHandler"
+        "BranchingCallbackDataHandler",
+        "BranchingManagedBotUpdatedHandler",
+        "BranchingGuestMessageHandler",
     ];
 
     // Ищет атрибут и возвращает его нормализованное имя (без суффикса Attribute)
