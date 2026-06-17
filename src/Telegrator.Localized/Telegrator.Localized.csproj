@@ -7,7 +7,7 @@
 	<LangVersion>latest</LangVersion>
 	<RootNamespace>Telegrator</RootNamespace>
 	<BaseOutputPath>..\..\bin</BaseOutputPath>
-	<DocumentationFile>..\..\docs\$(AssemblyName).xml</DocumentationFile>
+	<DocumentationFile>..\..\docs\reference\$(AssemblyName).xml</DocumentationFile>
 	<!--IsAotCompatible>True</IsAotCompatible-->
 	  
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
@@ -19,7 +19,7 @@
     <SignAssembly>False</SignAssembly>
 	  
     <Title>Telegrator.Localized</Title>
-    <Version>18.7.1</Version>
+    <Version>18.7.2</Version>
 	<Authors>Rikitav Tim4ik</Authors>
     <Company>Rikitav Tim4ik</Company>
     <RepositoryUrl>https://github.com/Rikitav/Telegrator</RepositoryUrl>

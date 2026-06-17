@@ -833,7 +833,7 @@ public static class StateMachineExtensions
 /// </summary>
 public static partial class HandlersCollectionExtensions
 {
-    // TODO: rewrite collecting system, add certain hardcoded Type searching, generated automatically
+    // TO NOTDO: backward compatibility garbage
     private static readonly string[] skippingAssemblies = [
         "System", "Microsoft", "Windows", "Newtonsoft", "Serilog", "NLog",
         "AutoMapper", "MediatR", "Dapper", "RestSharp", "Polly", "FluentValidation",
@@ -1080,6 +1080,8 @@ public static partial class UpdateExtensions
         { ChatJoinRequest: { } chatJoinRequest } => chatJoinRequest,
         { ChatBoost: { } chatBoost } => chatBoost,
         { RemovedChatBoost: { } removedChatBoost } => removedChatBoost,
+        { GuestMessage: { } guestMessage } => guestMessage,
+        { ManagedBot: { } managedBot } => managedBot,
         _ => update
     };
 
