@@ -79,8 +79,7 @@ public interface IHandlerBuilder
     /// <param name="state">The state value.</param>
     /// <returns>The builder instance.</returns>
     public void SetState<TKey, TValue>(TValue? state)
-        where TKey : IStateKeyResolver, new()
-        where TValue : IEquatable<TValue>;
+        where TKey : IStateKeyResolver, new();
 
     /// <summary>
     /// Adds a targeted filter for a specific filter target type.

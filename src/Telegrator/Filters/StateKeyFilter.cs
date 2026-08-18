@@ -30,7 +30,6 @@ namespace Telegrator.Filters;
 /// <typeparam name="TValue">The type of the key used for state resolution.</typeparam>
 public class StateKeyFilter<TKey, TValue> : Filter<Update>
     where TKey : IStateKeyResolver, new()
-    where TValue : IEquatable<TValue>
 {
     private readonly TValue? TargetKey;
 
@@ -57,6 +56,6 @@ public class StateKeyFilter<TKey, TValue> : Filter<Update>
         if (TargetKey is null)
             return false;
 
-        return TargetKey.Equals(value);
+        return EqualityComparer<TValue>.Default.Equals(TargetKey, value);
     }
 }

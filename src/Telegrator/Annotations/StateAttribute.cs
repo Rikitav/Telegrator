@@ -33,7 +33,6 @@ namespace Telegrator.Annotations;
 /// <param name="value"></param>
 public class StateAttribute<TKey, TValue>(TValue? value) : UpdateFilterAttribute<Update>(new StateKeyFilter<TKey, TValue>(value))
     where TKey : IStateKeyResolver, new()
-    where TValue : IEquatable<TValue>
 {
     /// <summary>
     /// The targetting state value.

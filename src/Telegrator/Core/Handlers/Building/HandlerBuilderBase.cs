@@ -165,7 +165,6 @@ public abstract class HandlerBuilderBase(Type buildingHandlerType, UpdateType up
     /// <returns>The builder instance.</returns>
     public void SetState<TKey, TValue>(TValue? state)
         where TKey : IStateKeyResolver, new()
-        where TValue : IEquatable<TValue>
     {
         StateKeeper = new StateKeyFilter<TKey, TValue>(state);
     }
