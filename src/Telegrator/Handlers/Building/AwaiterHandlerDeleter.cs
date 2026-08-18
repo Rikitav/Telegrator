@@ -51,6 +51,6 @@ internal class AwaiterHandlerDeleter<TUpdate>(UpdateType updateType, Update hand
     public void SetConcurreny(int concurrency) => throw new NotImplementedException();
     public void SetIndexer(int concurrency, int priority) => throw new NotImplementedException();
     public void SetPriority(int priority) => throw new NotImplementedException();
-    public void SetState<TKey, TValue>(TValue? state) where TKey : IStateKeyResolver, new() where TValue : IEquatable<TValue> => throw new NotImplementedException();
+    public void SetState<TKey, TValue>(TValue? state) where TKey : IStateKeyResolver, new() => throw new NotImplementedException();
     public void SetUpdateValidating(UpdateValidateAction validateAction) => throw new NotImplementedException();
 }
